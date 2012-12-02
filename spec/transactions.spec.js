@@ -34,7 +34,7 @@ describe ("Getting and using transactions.", function() {
 				expect(data.results).toBeDefined();
 				expect(data.results.bindings).toBeDefined();
 				expect(data.results.bindings.length).toBeGreaterThan(0);
-				expect(data.results.bindings.length).toBe(2);
+				expect(data.results.bindings.length).toBe(3);
 
 				done();
 			});
