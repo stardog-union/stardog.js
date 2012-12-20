@@ -114,6 +114,14 @@
 		return this.credentials;
 	};
 
+	Connection.prototype.setReasoning = function(reasoning) {
+		return this.reasoning = reasoning;
+	};
+
+	Connection.prototype.getReasoning = function() {
+		return this.reasoning;
+	};
+
 	// Check if we're in node or in the browser.
 	// Execute a query to the endpoint provided with the 
 	// resource specified and the params.
@@ -196,6 +204,10 @@
 				reqJSON["multipart"] = multipart;
 			}
 
+			if (this.reasoning && this.reasoning != null) {
+				reqJSON['headers']['SD-Connection-String'] = 'reasoning=' + this.reasoning;
+			}
+
 			request(reqJSON, 
 				fnResponseHandler	
 			);
@@ -212,11 +224,17 @@
 
 			// console.log("Endpoint: "+ req_url);
 
+			var headers = {};
+			if (this.reasoning && this.reasoning != null) {
+				headers['SD-Connection-String'] = 'reasoning=' + this.reasoning;
+			}
+
 			$.ajax({
 				type: theMethod,
 				url: req_url,
 				dataType: 'json',
 				data: params,
+				headers: headers,
 				success: function(data) {
 					var return_obj;
 
