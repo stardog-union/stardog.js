@@ -1,0 +1,9 @@
+# Sample obtained from:
+# http://www.dotnetrdf.org/content.asp?pageID=Inference%20and%20Reasoning
+
+@prefix ex: <http://example.org/vehicles/> .
+@prefix : <http://myvehicledata.com/> .
+
+:FordFiesta a ex:Car .
+:AudiA8 a ex:Car .
+:FerrariEnzo a ex:SportsCar .
