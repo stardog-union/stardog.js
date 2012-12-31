@@ -1,0 +1,9 @@
+# Sample obtained from:
+# http://www.dotnetrdf.org/content.asp?pageID=Inference%20and%20Reasoning
+
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <http://example.org/vehicles/> .
+
+:Vehicle a rdfs:Class .
+:Car rdfs:subClassOf :Vehicle .
+:SportsCar rdfs:subClassOf :Car .
