@@ -37,6 +37,19 @@ That will run all the test cases in `spec/`
 
 All tests should pass.
 
+## Quick Example ##
+
+	var stardog = require("stardog");
+	 
+	var conn = new stardog.Connection();
+	 
+	conn.setEndpoint("http://myserver:myport/");
+	conn.setCredentials("username", "password");
+	 
+	conn.query("db-name", "select distinct * where { ?s ?p ?o } limit 5", null, 5, 0, function (data) {
+		console.log(data.results.bindings);
+	})
+
 ## NOTE ##
 
 This framework is in continuous development, please check the [issues](https://github.com/clarkparsia/stardog.js/issues) page. You're welcome to contribute.
