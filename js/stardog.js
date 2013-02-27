@@ -230,12 +230,23 @@
 			}
             headers['Accept'] = acceptH || "application/sparql-results+json";
 
+            function isCrossDomainRq(url) {
+                var a = document.createElement("a");
+                a.href=url;
+                return window.location.host != a.host;
+            }
+
+            var xhrFields = isCrossDomainRq(req_url) ? {
+                withCredentials: true
+            } : {};
+
 			$.ajax({
 				type: theMethod,
 				url: req_url,
 				dataType: 'json',
 				data: params,
 				headers: headers,
+                xhrFields : xhrFields,
 				success: function(data) {
 					var return_obj;
 
