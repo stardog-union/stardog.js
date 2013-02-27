@@ -216,7 +216,7 @@
 	else {
 		// Browser implementation usin jQuery's AJAX
 
-		Connection.prototype._httpRequest = function(theMethod, resource, params, callback) {
+		Connection.prototype._httpRequest = function(theMethod, resource, acceptH, params, callback) {
 			var req_url = this.endpoint + resource;
 
 			//if (typeof params['callback'] === 'undefined')
@@ -228,6 +228,7 @@
 			if (this.reasoning && this.reasoning != null) {
 				headers['SD-Connection-String'] = 'reasoning=' + this.reasoning;
 			}
+            headers['Accept'] = acceptH || "application/sparql-results+json";
 
 			$.ajax({
 				type: theMethod,
