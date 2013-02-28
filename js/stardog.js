@@ -217,28 +217,29 @@
 		// Browser implementation usin jQuery's AJAX
 
 		Connection.prototype._httpRequest = function(theMethod, resource, acceptH, params, callback) {
-			var req_url = this.endpoint + resource;
+			var req_url = this.endpoint + resource,
+			    headers = {},
+			    username, password;
 
-			//if (typeof params['callback'] === 'undefined')
-			//  req_url = req_url + "?callback=?"
-
-			// console.log("Endpoint: "+ req_url);
-
-			var headers = {};
 			if (this.reasoning && this.reasoning != null) {
 				headers['SD-Connection-String'] = 'reasoning=' + this.reasoning;
 			}
-            headers['Accept'] = acceptH || "application/sparql-results+json";
+			headers['Accept'] = acceptH || "application/sparql-results+json";
 
-            function isCrossDomainRq(url) {
-                var a = document.createElement("a");
-                a.href=url;
-                return window.location.host != a.host;
-            }
+			function isCrossDomainRq(url) {
+				var a = document.createElement("a");
+				a.href=url;
+				return window.location.host != a.host;
+			}
 
-            var xhrFields = isCrossDomainRq(req_url) ? {
-                withCredentials: true
-            } : {};
+			var xhrFields = isCrossDomainRq(req_url) ? {
+				withCredentials: true
+			} : {};
+
+			if (this.credentials) {
+			    username = this.credentials.username;
+			    password = this.credentials.password;
+			}
 
 			$.ajax({
 				type: theMethod,
@@ -246,7 +247,9 @@
 				dataType: 'json',
 				data: params,
 				headers: headers,
-                xhrFields : xhrFields,
+				xhrFields : xhrFields,
+			    username : username,
+			    password : password,
 				success: function(data) {
 					var return_obj;
 
