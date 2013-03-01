@@ -214,31 +214,48 @@
 		};
 	}
 	else {
-		// Browser implementation usin jQuery's AJAX
+		// Browser implementation using jQuery's AJAX
+		// In case of cross-domain requests, a pre-flight OPTIONS http request is sent by the browser and
+		// the response is scanned for CORS headers. As per the CORS spec, no authentication information should
+		// be included in the pre-flight request and the original request should only be sent if the pre-flight request
+		// succeeded and the required CORS headers are received.
+		//
+		// Unfortunately Stardog (up to 1.1.3) does enforce authentication on the pre-flight request,
+		// causing it to fail in all browsers (401). Webkit-based browsers ignore 401 on the pre-flight request
+		// and continue with sending the original request, if the correct CORS headers were received.
+		//
+		// It seems that jQuery doesn't send the HTTP Basic authentication information, when simply pass as
+		// parameter to the jQuery.ajax call. Here, we can manually inject the HTTP Authorization header, which seems
+		// to work for Chrome, Safari, Firefox(*)
+
+		// (*) Only if the pre-flight request succeeds.
+
+		// IE7-9 does not provide a native btoa (Base64 encoding) function
+		// One can fall back to a JS implementation, e.g. http://www.webtoolkit.info/javascript-base64.html
+		// jQuery does not natively provide support for IE's XDomainRequest object, although jQuery plugins exist that
+		// provide this extension and are reported to work.
+		Connection.prototype._base64Encode = typeof(btoa) == "function" ? function(x){return btoa(x)} : null;
 
 		Connection.prototype._httpRequest = function(theMethod, resource, acceptH, params, callback) {
 			var req_url = this.endpoint + resource,
-			    headers = {},
-			    username, password;
+				headers = {},
+				username, password;
 
 			if (this.reasoning && this.reasoning != null) {
 				headers['SD-Connection-String'] = 'reasoning=' + this.reasoning;
 			}
 			headers['Accept'] = acceptH || "application/sparql-results+json";
 
-			function isCrossDomainRq(url) {
-				var a = document.createElement("a");
-				a.href=url;
-				return window.location.host != a.host;
-			}
-
-			var xhrFields = isCrossDomainRq(req_url) ? {
-				withCredentials: true
-			} : {};
-
 			if (this.credentials) {
-			    username = this.credentials.username;
-			    password = this.credentials.password;
+				username = this.credentials.username;
+				password = this.credentials.password;
+				if (this._base64Encode) {
+					var userPassBase64 = this._base64Encode(username.concat(":",password));
+				} else {
+					throw new Error("Your browser does not support btoa() natively.\n" +
+						" Please provide a javascript implementation for Connection.prototype._base64Encode")
+				}
+				headers["Authorization"] = "Basic ".concat(userPassBase64);
 			}
 
 			$.ajax({
@@ -247,9 +264,7 @@
 				dataType: 'json',
 				data: params,
 				headers: headers,
-				xhrFields : xhrFields,
-			    username : username,
-			    password : password,
+
 				success: function(data) {
 					var return_obj;
 
