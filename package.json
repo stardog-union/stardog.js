@@ -1,6 +1,6 @@
 {
   "name"          : "stardog",
-  "version"       : "0.0.3",
+  "version"       : "0.0.2",
   "description"   : "Stardog.js JavaScript Framework for Node.js to develop apps with the Stardog RDF Database.",
   "homepage"      : "http://clarkparsia.github.com/stardog.js",
   "keywords"      : ["stardog", "rdf", "sparql", "library", "semantic web", "linked data"],
