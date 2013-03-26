@@ -97,7 +97,11 @@
 	};
 
 	Connection.prototype.setEndpoint = function (endpoint) {
-		this.endpoint = endpoint;
+		if (endpoint.charAt(endpoint.length-1) != '/') {
+			this.endpoint = endpoint + '/';
+		} else {
+			this.endpoint = endpoint;
+		}
 	};
 
 	Connection.prototype.getEndpoint = function () {
