@@ -289,8 +289,12 @@
 					console.log("Call on error");
 					console.log(textStatus);
 					console.log(errorThrown);
+					console.log(jqXHR.responseText);
 
-					callback({ 'message':'Error retrieving information from the Server.'});
+					callback({
+						'status': jqXHR.status,
+						'statusText' : jqXHR.statusCode,
+						'error': jqXHR.responseText});
 				}
 			});
 		};
