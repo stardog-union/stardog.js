@@ -122,7 +122,7 @@ describe ("Getting and using transactions.", function() {
 		});
 	});
 
-	it ("Should be able to clean a DB during a transaction.", function(done) {
+	it ("Should be able to clean and insert all data in the DB using a transaction.", function(done) {
 
 		var dbContent = '<http://localhost/publications/articles/Journal1/1940/Article1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://localhost/vocabulary/bench/Article> .\n'+
 			'<http://localhost/publications/articles/Journal1/1940/Article1> <http://purl.org/dc/elements/1.1/creator> <http://localhost/persons/Paul_Erdoes> .\n'+
@@ -186,7 +186,18 @@ describe ("Getting and using transactions.", function() {
 								conn.commit("nodeDB", txId, function (dataCom2, responseCom2) {
 									expect(responseCom2.statusCode).toBe(200);
 
-									done();
+									// check that the data is stored
+									conn.getDBSize("nodeDB", function (dataS2, responseS2) {
+										expect(responseS2.statusCode).toBe(200);
+										expect(dataS2).toBeDefined();
+										expect(dataS2).not.toBe(null);
+
+										var sizeNum = parseInt(dataS2);
+										expect(sizeNum).not.toBe(0);
+										expect(sizeNum).toBeGreaterThan(1);
+
+										done();
+									});
 								});
 
 							}, "text/plain");
