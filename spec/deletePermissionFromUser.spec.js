@@ -32,25 +32,28 @@ describe ("Delete Permissions to Users Test Suite", function() {
 
 	it ("should pass deleting a Permissions to a new user.", function (done) {
 
-		var aNewUser = 'newpermuser';
+		var aNewUser = aNewUserPwd = 'newpermuser';
 		var aNewPermission = {
 			'action' : 'write',
 			'resource_type' : 'db',
 			'resource' : 'nodeDB'
 		};
 
-		conn.createUser(aNewUser, true, function (data, response1) {
+		conn.createUser(aNewUser, aNewUserPwd, true, function (data1, response1) {
 			expect(response1.statusCode).toBe(201);
 
-			conn.deletePermissionFromUser(aNewUser, aNewPermission, function (data, response2) {
+			conn.assignPermissionToUser(aNewUser, aNewPermission, function (data2, response2) {
+				expect(response2.statusCode).toBe(201);
 
-				expect(response2.statusCode).toBe(200);
-
-				// delete role
-				conn.deleteUser(aNewUser, function (data, response3) {
+				conn.deletePermissionFromUser(aNewUser, aNewPermission, function (data3, response3) {
 					expect(response3.statusCode).toBe(200);
 
-					done();
+					// delete role
+					conn.deleteUser(aNewUser, function (data4, response4) {
+						expect(response4.statusCode).toBe(200);
+
+						done();
+					});
 				});
 			});
 		});

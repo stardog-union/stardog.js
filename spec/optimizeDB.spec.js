@@ -31,15 +31,12 @@ describe ("Optimize DBs Test Suite", function() {
 	it ("should optimize an offline DB", function(done) {
 
 		conn.offlineDB('nodeDB', 'WAIT', 5, function (data, response1) {
-
 			expect(response1.statusCode).toBe(200);
 
 			conn.copyDB('nodeDB', 'nodeDB_optimize', function (data, response2) {
-
 				expect(response2.statusCode).toBe(200);
 
 				conn.optimizeDB('nodeDB_optimize', function (data, response3) {
-
 					expect(response3.statusCode).toBe(200);
 
 					// Clean everything

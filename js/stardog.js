@@ -642,9 +642,10 @@
 	// Create new user
 	// -------------------------
 
-	Connection.prototype.createUser = function (username, superuser, callback) {
+	Connection.prototype.createUser = function (username, password, superuser, callback) {
 		var options = {
-			"username" : username
+			"username" : username,
+			"password" : password.split('')
 		}
 
 		if (superuser && superuser != null) {

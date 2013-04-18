@@ -24,14 +24,14 @@ describe ("List User permissions Test Suite", function() {
 	});
 
 	it ("should list permissions assigned to a new user.", function (done) {
-		var aNewUser = 'newtestuser';
+		var aNewUser = aNewUserPwd = 'newtestuser';
 		var aNewPermission = {
 			'action' : 'write',
 			'resource_type' : 'db',
 			'resource' : 'nodeDB'
 		};
 
-		conn.createUser(aNewUser, true, function (data1, response1) {
+		conn.createUser(aNewUser, aNewUserPwd, true, function (data1, response1) {
 			expect(response1.statusCode).toBe(201);
 
 			conn.assignPermissionToUser(aNewUser, aNewPermission, function (data2, response2) {

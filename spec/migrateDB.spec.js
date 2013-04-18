@@ -29,29 +29,37 @@ describe ("Migrate DBs Test Suite", function() {
 	});
 
 	it ("should migrate an offline DB", function(done) {
+		var dbOrigin = "nodeDB";
+		var dbToMigrate = "nodeDB_migrate";
 
-		conn.offlineDB('nodeDB', 'WAIT', 5, function (data, response1) {
-
+		conn.offlineDB(dbOrigin, 'WAIT', 5, function (data, response1) {
 			expect(response1.statusCode).toBe(200);
 
-			conn.copyDB('nodeDB', 'nodeDB_migrate', function (data, response2) {
-
+			conn.copyDB(dbOrigin, dbToMigrate, function (data, response2) {
+				console.log(data);
 				expect(response2.statusCode).toBe(200);
 
-				conn.migrateDB('nodeDB_migrate', function (data, response3) {
+				// Check that the DB is actually in the DB list
+				conn.listDBs(function (data, responseX) {
+					console.log(data);
+					expect(data.databases).toContain(dbToMigrate);
 
-					expect(response3.statusCode).toBe(200);
+					conn.migrateDB(dbToMigrate, function (data, response3) {
+						console.log(data);
+						expect(response3.statusCode).toBe(200);
 
-					// Clean everything
-					conn.dropDB('nodeDB_migrate', function (data, response4) {
-						expect(response4.statusCode).toBe(200);
+						// Clean everything
+						conn.dropDB(dbToMigrate, function (data, response4) {
+							expect(response4.statusCode).toBe(200);
 
-						conn.onlineDB('nodeDB', 'NO_WAIT', function (data, response5) {
-							expect(response5.statusCode).toBe(200);
+							conn.onlineDB(dbOrigin, 'NO_WAIT', function (data, response5) {
+								expect(response5.statusCode).toBe(200);
 
-							done();
-						})
+								done();
+							})
+						});
 					});
+
 				});
 			})
 		});
