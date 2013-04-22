@@ -1,7 +1,7 @@
 # load main test data
-stardog-admin drop -n nodeDB
-stardog-admin create -n nodeDB -e data/api_tests.nt
+stardog-admin db drop -n nodeDB
+stardog-admin db create -n nodeDB --searchable data/api_tests.nt
 
 # load reasoning test data
-stardog-admin drop -n nodeDBReasoning
-stardog-admin create -n nodeDBReasoning -e data/reasoning/tbox.ttl data/reasoning/abox.ttl
+stardog-admin db drop -n nodeDBReasoning
+stardog-admin db create -n nodeDBReasoning --searchable data/reasoning/tbox.ttl data/reasoning/abox.ttl

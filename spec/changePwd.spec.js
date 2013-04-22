@@ -28,7 +28,7 @@ describe ("Change User Password Test Suite", function() {
 
 	it ("should change the password and allow calls with new credentials", function (done) {
 
-		conn.createUser('newuser', true, function (data, response) {
+		conn.createUser('newuser', 'newuser', true, function (data, response) {
 
 			// It should be 201 (CREATED)
 			expect(response.statusCode).toBe(201);

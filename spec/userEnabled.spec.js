@@ -27,7 +27,7 @@ describe ("Enable Users Test Suite", function() {
 	it ("should enable a user recently created.", function (done) {
 		// create a new user (this is supposed to change in a future version of the API)
 
-		conn.createUser('newuser', true, function (data1, response1) {
+		conn.createUser('newuser', 'newuser', true, function (data1, response1) {
 
 			// It should be 201 (CREATED)
 			expect(response1.statusCode).toBe(201);

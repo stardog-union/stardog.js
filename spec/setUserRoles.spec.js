@@ -25,7 +25,7 @@ describe ("Set User Roles Test Suite", function() {
 
 	it ("should assign roles to a newly created user.", function (done) {
 
-		conn.createUser("roletestuser", true, function (data1, response1) {
+		conn.createUser("roletestuser", "roletestuser", true, function (data1, response1) {
 			expect(response1.statusCode).toBe(201);
 
 			conn.setUserRoles("roletestuser", ["reader"], function (data2, response2) {

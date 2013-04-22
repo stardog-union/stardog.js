@@ -26,7 +26,7 @@ describe ("Delete Users Test Suite", function() {
 	it ("should delete a supplied user recently created.", function (done) {
 		// create a new user (this is supposed to change in a future version of the API)
 
-		conn.createUser('newuser', true, function (data, response) {
+		conn.createUser('newuser', 'newuser', true, function (data, response) {
 
 			// It should be 201 (CREATED)
 			expect(response.statusCode).toBe(201);
