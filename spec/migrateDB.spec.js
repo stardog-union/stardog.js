@@ -36,16 +36,13 @@ describe ("Migrate DBs Test Suite", function() {
 			expect(response1.statusCode).toBe(200);
 
 			conn.copyDB(dbOrigin, dbToMigrate, function (data, response2) {
-				console.log(data);
 				expect(response2.statusCode).toBe(200);
 
 				// Check that the DB is actually in the DB list
 				conn.listDBs(function (data, responseX) {
-					console.log(data);
 					expect(data.databases).toContain(dbToMigrate);
 
 					conn.migrateDB(dbToMigrate, function (data, response3) {
-						console.log(data);
 						expect(response3.statusCode).toBe(200);
 
 						// Clean everything
