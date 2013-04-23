@@ -8,6 +8,8 @@ Stardog.js JavaScript Framework for Node.js to develop apps with the [Stardog RD
 
 ![Stardog](http://stardog.com/_/img/sdog.png)   
 
+For detailed documentation, see the [annotated source](http://clarkparsia.github.io/stardog.js/docs/stardog.html).
+
 ## What is it? ##
 
 This framework wraps all the functionality of a client for the Stardog DBMS, and provides access to a full set of functions such as executing SPARQL Queries, administration tasks on Stardog, and the use of the Reasoning API.
@@ -36,6 +38,16 @@ This will install all the dependencies using npm, once this is done, run the tes
 That will run all the test cases in `spec/`
 
 All tests should pass.
+
+## Version details ##
+
+Stardog.js depends of the Stardog HTTP API, and any change in this API will be supported by Stardog.js. Here's a list of version compatibility between __Stardog__ and  __Stardog.js__:
+
+| Stardog Version | Stardog.js Version |
+| --------------- | ------------------ |
+| <= 1.1.5        | <= 0.0.3           |
+| 1.2             | 0.0.4              |
+
 
 ## Quick Example ##
 
