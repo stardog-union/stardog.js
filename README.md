@@ -66,12 +66,14 @@ Stardog.js depends of the Stardog HTTP API, and any change in this API will be s
 	
 ### Browser
 
+__NOTE__: the Endpoint is a proxy to the Stardog HTTP interface in order to avoid CORS issues.
+
     <script src="js/stardog.js" type="text/javascript"></script>
     …
     <script type="text/javascript">
         var conn = new Stardog.Connection();
-        conn.setEndpoint("/stardog/endpoint/");
-        conn.setReasoning("RDFS");
+        conn.setEndpoint("/stardog");
+        conn.setReasoning("QL");
         conn.setCredentials("browser", "secret");
     </script>
 
