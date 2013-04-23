@@ -32,14 +32,14 @@ describe ("Assign Permissions to Users Test Suite", function() {
 
 	it ("should pass assinging a Permissions to a new user.", function (done) {
 
-		var aNewUser = 'newpermuser';
+		var aNewUser = aNewUserPwd = 'newpermuser';
 		var aNewPermission = {
 			'action' : 'write',
 			'resource_type' : 'db',
 			'resource' : 'nodeDB'
 		};
 
-		conn.createUser(aNewUser, true, function (data, response1) {
+		conn.createUser(aNewUser, aNewUserPwd, true, function (data, response1) {
 			expect(response1.statusCode).toBe(201);
 
 			conn.assignPermissionToUser(aNewUser, aNewPermission, function (data, response2) {

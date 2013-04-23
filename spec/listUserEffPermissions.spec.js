@@ -24,18 +24,17 @@ describe ("List User effective permissions Test Suite", function() {
 	});
 
 	it ("should list effective permissions assigned to a new user.", function (done) {
-		var aNewUser = 'newtestuser';
+		var aNewUser = aNewUserPwd = 'newtestuser';
 		var aNewPermission = {
 			'action' : 'write',
 			'resource_type' : 'db',
 			'resource' : 'nodeDB'
 		};
 
-		conn.createUser(aNewUser, true, function (data1, response1) {
+		conn.createUser(aNewUser, aNewUserPwd, true, function (data1, response1) {
 			expect(response1.statusCode).toBe(201);
 
 			conn.assignPermissionToUser(aNewUser, aNewPermission, function (data2, response2) {
-
 				expect(response2.statusCode).toBe(201);
 
 				// list permissions to new role should include recently added.
@@ -43,8 +42,7 @@ describe ("List User effective permissions Test Suite", function() {
 
 					expect(data3.permissions).toBeDefined();
 					expect(data3.permissions).not.toBeNull();
-
-					expect(data3.permissions).toContain('stardog:*');
+					expect(data3.permissions).toContain('stardog:*:*:*');
 
 					// delete role
 					conn.deleteUser(aNewUser, function (data, response) {
