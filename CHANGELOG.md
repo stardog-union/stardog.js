@@ -5,6 +5,7 @@
 
 * __ADDED:__ support for Stardog 1.2
 * __MODIFIED:__ function `Connection.createUser` now requires a password for the creation of the user in Stardog, see [Stardog 1.2 HTTP docs](http://stardog.com/docs/network/)
+* __ADDED:__ annotated source documentation
 
 
 ## v0.0.3
