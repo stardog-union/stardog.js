@@ -19,6 +19,14 @@ All the implementation uses the HTTP protocol, since most of Stardog functionali
 The framework is currently targeted to Node.js (the latest version) and it has not been fully tested in the browser, but future versions will be have browser compatibility.
 You'll also need [npm](https://npmjs.org) to run the test cases and install the dependencies.
 
+## Installation
+
+To install stardog.js locally from the npm registry simply execute:
+
+    npm install stardog
+    
+That will fetch the latest version of stardog.js in the npm registry, [more details](https://npmjs.org/package/stardog).
+
 ## Development ##
 
 To get started, just clone the project. You'll need a local copy of Stardog to be able to run the tests. For more information on starting the Stardog DB service and how it works, go to [Stardog's documentation](http://stardog.com/docs/), where you'll find everything you need to get up and running with Stardog.
