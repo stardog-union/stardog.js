@@ -39,6 +39,8 @@ All tests should pass.
 
 ## Quick Example ##
 
+### Node.js
+
 	var stardog = require("stardog");
 	 
 	var conn = new stardog.Connection();
@@ -49,6 +51,17 @@ All tests should pass.
 	conn.query("db-name", "select distinct * where { ?s ?p ?o } limit 5", null, 5, 0, function (data) {
 		console.log(data.results.bindings);
 	})
+	
+### Browser
+
+    <script src="js/stardog.js" type="text/javascript"></script>
+    …
+    <script type="text/javascript">
+        var conn = new Stardog.Connection();
+        conn.setEndpoint("/stardog/endpoint/");
+        conn.setReasoning("RDFS");
+        conn.setCredentials("browser", "secret");
+    </script>
 
 ## NOTE ##
 
