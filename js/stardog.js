@@ -1,4 +1,4 @@
-//     Stardog.js 0.0.1
+//     Stardog.js 0.0.3
 //
 // Copyright 2012 Clark & Parsia LLC
 
@@ -43,7 +43,7 @@
 	}
 
 	// Current version of the library. Keep in sync with 'package.json'
-	Stardog.VERSION = '0.0.1';
+	Stardog.VERSION = '0.0.3';
 
 	// Require jsonld, if we're on the server, and it's not already present
 	var jsonld = root.jsonld;
