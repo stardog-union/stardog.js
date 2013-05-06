@@ -20,11 +20,13 @@ describe ("Getting the DB info", function() {
 
 	it ("A response of the DB info should not be empty", function(done) {
 		
-		conn.getDB("nodeDB", function (response) {
+		conn.getDB("nodeDB", function (data, response) {
 			// console.log(data);
+			expect(data).toBeDefined();
+			expect(data).not.toBe(null);
 			expect(response).toBeDefined();
 			expect(response).not.toBe(null);
-			expect(response).toBe("nodeDB");  // right now Stardog implementation only returns the DB name.
+			expect(response.statusCode).toBe(200);
 
 			done();
 		});

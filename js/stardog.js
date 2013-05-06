@@ -37,7 +37,6 @@
 		if (typeof module !== 'undefined' && module.exports) {
 			exports = module.exports = Stardog;
 		}
-		//exports.Stardog = Stardog;
 	} else {
 		root['Stardog'] = Stardog;
 	}
