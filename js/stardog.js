@@ -14,8 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-(function() {
-
+(function(factory) {
 	// ## Initial Setup
 	// -------------
 	//
@@ -27,19 +26,28 @@
 	// restored later on, if 'noConflict' is used.
 	var previousStardog = root.Stardog;
 
-	// Create top-level namespace
-	var Stardog = {};
 	// Export the Underscore object for **Node.js**, with
-	// backwards-compatibility for the old `require()` API. If we're in
+	// backward compatibility for the old `require()` API. If we're in
 	// the browser, add `_` as a global object via a string identifier,
 	// for Closure Compiler "advanced" mode.
-	if (typeof exports !== 'undefined') {
-		if (typeof module !== 'undefined' && module.exports) {
-			exports = module.exports = Stardog;
-		}
-	} else {
-		root['Stardog'] = Stardog;
+	if (typeof exports !== 'undefined' && typeof module !== 'undefined' && module.exports) {
+		exports = module.exports = factory();
 	}
+	else if (typeof define === 'function' && define.amd) {
+		// load Stardog via AMD
+		define(['stardog'], function() {
+			// Export to global for backward compatibility
+			root['Stardog'] = factory();
+			return root.Stardog();
+		});
+	}
+	else {
+		// Browser global
+		root['Stardog'] = factory();
+	}
+}).call(this, function() {
+	// Create top-level namespace
+	var Stardog = {};
 
 	// Current version of the library. Keep in sync with 'package.json'
 	Stardog.VERSION = '0.0.4';
@@ -576,7 +584,7 @@
 			'http://www.w3.org/2002/07/owl#' : 'owl',
 			'http://www.w3.org/2000/01/rdf-schema#' : 'rdfs',
 			'http://www.w3.org/1999/02/22-rdf-syntax-ns#' : 'rdf',
-			'http://www.w3.org/2001/XMLSchema#' : 'xsd',
+			'http://www.w3.org/2001/xmlnschema#' : 'xsd',
 			'http://www.w3.org/2004/02/skos/core#' : 'skos',
 			'http://purl.org/dc/elements/1.1/' : 'dc',
 			'http://xmlns.com/foaf/0.1/' : 'foaf',
@@ -989,4 +997,5 @@
 			);
 	};
 
-}).call(this);
+	return Stardog;
+});
