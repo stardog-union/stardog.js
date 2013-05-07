@@ -52,10 +52,6 @@
 	// Current version of the library. Keep in sync with 'package.json'
 	Stardog.VERSION = '0.0.4';
 
-	// Require jsonld, if we're on the server, and it's not already present
-	var jsonld = root.jsonld;
-	if (!jsonld && (typeof require !== 'undefined')) jsonld = require('jsonld');
-
 	// Require request, if we're on the server, and it's not already present
 	var request = root.request;
 	if (!request && (typeof require !== 'undefined')) request = require('request');
