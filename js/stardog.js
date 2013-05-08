@@ -38,7 +38,7 @@
 		define(['stardog'], function() {
 			// Export to global for backward compatibility
 			root['Stardog'] = factory();
-			return root.Stardog();
+			return root.Stardog;
 		});
 	}
 	else {
@@ -52,13 +52,15 @@
 	// Current version of the library. Keep in sync with 'package.json'
 	Stardog.VERSION = '0.0.4';
 
-	// Require request, if we're on the server, and it's not already present
-	var request = root.request;
-	if (!request && (typeof require !== 'undefined')) request = require('request');
+	if (typeof exports !== 'undefined') {
+		// Require request, if we're on the server, and it's not already present
+		var request = root.request;
+		if (!request && (typeof require !== 'undefined')) request = require('request');
 
-	// Require querystring, if we're on the server, and it's not already present
-	var qs = root.qs;
-	if (!qs && (typeof require !== 'undefined')) qs = require('querystring');
+		// Require querystring, if we're on the server, and it's not already present
+		var qs = root.qs;
+		if (!qs && (typeof require !== 'undefined')) qs = require('querystring');
+	}
 
 	// For AJAX's purposes, jQuery owns the `$` variable.
 	// jQuery is only required when using the library in the browser.
