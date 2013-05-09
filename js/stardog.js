@@ -1020,111 +1020,214 @@
 	// Adds a new user to the system; allows a configuration option for superuser as a JSON object. 
 	// Superuser configuration is set as default to false. The password __must__ be provided for the user.
 	// 
-	// __Parameters__:  
-	// `username`: the username of the user to create.  
-	// `password`: the initial password of the newly created user.  
-	// `superuser`: boolean flag indicating if the created user will have super-user privileges.  
+	// __Parameters__:
+	// `options`: an object with one the following attributes: 
+	// 				`username`: the username of the user to create.  
+	// 				`password`: the initial password of the newly created user.  
+	// 				`superuser`: boolean flag indicating if the created user will have super-user privileges.
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.createUser = function (username, password, superuser, callback) {
-		var options = {
-			"username" : username,
-			"password" : password.split('')
+	Connection.prototype.createUser = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "POST",
+			resource: "admin/users",
+			acceptHeader: "application/json",
+			msgBody: { "username" : options.username, "password" : options.password.split('') },
+			isJsonBody: true,
+			params: options.params || ""
+
 		}
 
 		if (superuser && superuser != null) {
-			options["superuser"] = superuser;
+			reqOptions["superuser"] = superuser;
 		}
 
-		this._httpRequest(
-			"POST", "admin/users", "application/json", "", callback, options, true
-		);
+		this._httpRequest(reqOptions, callback);
+
+		// this._httpRequest( TODO: remove
+		// 	"POST", "admin/users", "application/json", "", callback, options, true
+		// );
 	};
 
 	// #### Change user's password
 	// Changes `user` password in the system. Receives input of new password as a JSON Object.
 	//
 	// __Parameters__:  
-	// `user`: the user to change the password.  
-	// `newPwd`: the new password of `user`.  
+	// `options`: an object with one the following attributes: 
+	// 				`user`: the user to change the password.  
+	// 				`newPwd`: the new password of `user`.
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.changePwd = function (user, newPwd, callback) {
-		this._httpRequest(
-			"PUT", "admin/users/"+ user +"/pwd", "application/json", "", callback, { "password" : newPwd }, true
-		);
+	Connection.prototype.changePwd = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "PUT",
+			resource: "admin/users/" + options.user + "/pwd",
+			acceptHeader: "application/json",
+			msgBody: { "password" : options.newPwd },
+			isJsonBody: true,
+			params: options.params || ""
+
+		}
+
+		this._httpRequest(reqOptions, callback);
+
+		// this._httpRequest( TODO: remove
+		// 	"PUT", "admin/users/"+ user +"/pwd", "application/json", "", callback, { "password" : newPwd }, true
+		// );
 	};
 
 	// #### Check if user is enabled.
 	// Verifies if user is enabled in the system.
 	// 
 	// __Parameters__:  
-	// `user`: the user name to verify if enabled.  
+	// `options`: an object with one the following attributes: 
+	// 				`user`: the user name to verify if enabled.  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.isUserEnabled = function (user, callback) {
-		this._httpRequest("GET", "admin/users/"+ user +"/enabled", "application/json", "", callback);
+	Connection.prototype.isUserEnabled = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "GET",
+			resource: "admin/users/" + options.user + "/enabled",
+			acceptHeader: "application/json",
+			params: options.params || ""
+		}
+
+		this._httpRequest(reqOptions, callback);
+
+		// this._httpRequest("GET", "admin/users/"+ user +"/enabled", "application/json", "", callback); TODO: remove
 	};
 
 	// #### Check if user is superuser.
 	// Verifies if the user is a superuser.
 	//
 	// __Parameters__:  
-	// `user`: the user to verify if is superuser.  
+	// `options`: an object with one the following attributes: 
+	// 				`user`: the user to verify if is superuser.  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.isSuperUser = function (user, callback) {
-		this._httpRequest("GET", "admin/users/"+ user +"/superuser", "application/json", "", callback);
+	Connection.prototype.isSuperUser = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "GET",
+			resource: "admin/users/" + options.user + "/superuser",
+			acceptHeader: "application/json",
+			params: options.params || ""
+		}
+
+		this._httpRequest(reqOptions, callback);
+
+		// this._httpRequest("GET", "admin/users/"+ user +"/superuser", "application/json", "", callback); TODO : remove
 	};
 
 	// #### List user roles.
 	// Retrieves the list of the roles assigned to user.
 	//
 	// __Parameters__:  
-	// `user`: the user used to list roles.  
+	// `options`: an object with one the following attributes: 
+	// 				`user`: the user used to list roles.  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.listUserRoles = function (user, callback) {
-		this._httpRequest("GET", "admin/users/"+ user +"/roles", "application/json", "", callback);
+	Connection.prototype.listUserRoles = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "GET",
+			resource: "admin/users/" + options.user + "/roles",
+			acceptHeader: "application/json",
+			params: options.params || ""
+		}
+
+		this._httpRequest(reqOptions, callback);
+
+		// this._httpRequest("GET", "admin/users/"+ user +"/roles", "application/json", "", callback); TODO : remove
 	};
 
 	// #### List users (GET)
 	// Retrieves a list of users available in the system.
 	//
-	// __Parameters__:  
+	// __Parameters__:
+	// `options`: (optional) an object with one the following attributes: 
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.  
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.listUsers = function (callback) {
-		this._httpRequest("GET", "admin/users", "application/json", "", callback);
+	Connection.prototype.listUsers = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "GET",
+			resource: "admin/users",
+			acceptHeader: "application/json",
+			params: options.params || ""
+		}
+
+		this._httpRequest(reqOptions, callback);
+
+		// this._httpRequest("GET", "admin/users", "application/json", "", callback);
 	};
 
 	// #### Delete user
 	// 
 	// __Parameters__:  
-	// `user`: the name of the user to delete from the system.  
+	// `options`: an object with one the following attributes: 
+	// 				`user`: the name of the user to delete from the system.  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.  
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.deleteUser = function (user, callback) {
-		this._httpRequest("DELETE", "admin/users/"+ user, "application/json", "", callback);
+	Connection.prototype.deleteUser = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "DELETE",
+			resource: "admin/users/" + options.user,
+			acceptHeader: "application/json",
+			params: options.params || ""
+		}
+
+		this._httpRequest(reqOptions, callback);
+		// this._httpRequest("DELETE", "admin/users/"+ user, "application/json", "", callback); TODO: remove
 	};
 
 	// #### Enable users.
 	// Enables/Disables an existing user in the system.
 	// 
-	// __Parameters__:  
-	// `user`: the name of the user to set enable.  
-	// `enableFlag`: boolean flag, if `true` user is enabled; `false` to disable it.  
+	// __Parameters__:
+	// `options`: an object with one the following attributes: 
+	// 				`user`: the name of the user to set enable.
+	// 				`enableFlag`: boolean flag, if `true` user is enabled; `false` to disable it.  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.  
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.userEnabled = function (user, enableFlag, callback) {
-		this._httpRequest(
-			"PUT", "admin/users/"+ user +"/enabled", "application/json", "", callback, { "enabled" : enableFlag }, true
-		);
+	Connection.prototype.userEnabled = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "PUT",
+			resource: "admin/users/" + options.user + "/enabled",
+			acceptHeader: "application/json",
+			params: options.params || "",
+			msgBody: { "enabled" : options.enableFlag},
+			isJsonBody: true
+		}
+
+		this._httpRequest(reqOptions, callback);
+
+		// this._httpRequest(
+		// 	"PUT", "admin/users/"+ user +"/enabled", "application/json", "", callback, { "enabled" : enableFlag }, true TODO: remove
+		// );
 	};
 
 	// #### Setting user roles.
 	// Sets roles for a given user.
 	//
 	// __Parameters__:  
-	// `user`: the name of the user to set the roles.  
-	// `rolesArray`: an array containing the roles to assign to the user, [more info](http://stardog.com/docs/network/#extended-http).  
+	// `options`: an object with one the following attributes: 
+	// 				`user`: the name of the user to set the roles.  
+	// 				`rolesArray`: an array containing the roles to assign to the user, [more info](http://stardog.com/docs/network/#extended-http).  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.  
 	// `callback`: the callback to execute once the request is done.  
 	Connection.prototype.setUserRoles = function (user, rolesArray, callback) {
-		this._httpRequest(
-			"PUT", "admin/users/"+ user +"/roles", "application/json", "", callback, { "roles" : rolesArray }, true
-		);
+		var reqOptions = {
+			httpMethod: "PUT",
+			resource: "admin/users/" + options.user + "/roles",
+			acceptHeader: "application/json",
+			params: options.params || "",
+			msgBody: { "roles" : options.rolesArray},
+			isJsonBody: true
+		}
+
+		this._httpRequest(reqOptions, callback);
+
+		// this._httpRequest( TODO: remove
+		// 	"PUT", "admin/users/"+ user +"/roles", "application/json", "", callback, { "roles" : rolesArray }, true
+		// );
 	};
 
 	// ### Role operations.
