@@ -20,10 +20,11 @@ describe ("Getting the query plan of a Query", function() {
 
 	it ("A response with the query plan should not be empty", function(done) {
 		
-		conn.queryExplain("nodeDB", "select ?s where { ?s ?p ?o } limit 10", null, function (response) {
-			//console.log(response);
+		conn.queryExplain({ database: "nodeDB", query: "select ?s where { ?s ?p ?o } limit 10" }, function (response) {
+			// console.log(response);
 			expect(response).toBeDefined();
 			expect(response).not.toBe(null);
+			expect(response).toBe("Slice(offset=0, limit=10)\n  Projection(s)\n    Scan(subject='s', predicate='p', object='o')\n");
 
 			done();
 		});

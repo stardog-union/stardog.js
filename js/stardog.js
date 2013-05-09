@@ -62,6 +62,9 @@
 		if (!qs && (typeof require !== 'undefined')) qs = require('querystring');
 	}
 
+	var _ = root._;
+	if (!_ && (typeof require !== 'undefined')) _ = require('underscore');
+
 	// For AJAX's purposes, jQuery owns the `$` variable.
 	// jQuery is only required when using the library in the browser.
 
@@ -155,13 +158,33 @@
 	// Needs a callback to process results in a function receiving a 
 	// JSONLD object.
 	if (typeof exports !== 'undefined') {
+		
+		// TODO: remove
+		// Connection.prototype._httpRequest = function(theMethod, 
+		// 	resource, acceptH, params, callback, msgBody, isJsonBody, contentType, multipart) {
+
 		// Node.js implementation of the HTTP request using `request` npm module.
-
-		Connection.prototype._httpRequest = function(theMethod, 
-			resource, acceptH, params, callback, msgBody, isJsonBody, contentType, multipart) {
-
-			var req_url = this.endpoint + resource,
-				strParams = qs.stringify(params);
+		// __Parameters__:  
+		// `options`: an object with the following attributes: 
+		//				`httpMethod`: the name of the database;
+		//				`resource`: the resource;
+		//				`acceptHeader`: the accept header;
+		//				`params`: any other parameters to pass to the SPARQL endpoint;
+		//				`msgBody`: the message body;
+		//				`isJsonBody`: whether the body is a JSON object;
+		//				`contentType`: the content type;
+		//				`multipart`: the multipart;
+		// `callback`: the callback to execute once the request is done. 
+		Connection.prototype._httpRequest = function(options, callback) {
+			console.log("\n-->args: ", options, callback); // TODO: remove
+			var theMethod = options.httpMethod,
+				req_url = this.endpoint + options.resource,
+				strParams = qs.stringify(options.params),
+				msgBody = options.msgBody,
+				acceptH = options.acceptHeader,
+				isJsonBody = options.isJsonBody,
+				contentType = options.contentType,
+				multipart = options.multipart;
 
 			if (strParams && strParams.length > 0)
 				req_url += "?" + strParams;
@@ -188,14 +211,14 @@
 							jsonData = arrLinkedJson;
 						}
 						else if (jsonData.hasOwnProperty('@id') ||
-                            jsonData.hasOwnProperty('@context')) {
+							jsonData.hasOwnProperty('@context')) {
                             
-                            jsonData = new LinkedJson(jsonData);
+							jsonData = new LinkedJson(jsonData);
 						}
 					}
 					catch (err) {
-                        // If parsing throws an error just leave it as is.
-                        jsonData = body;
+						// If parsing throws an error just leave it as is.
+						jsonData = body;
 					}
 
 					callback(jsonData, response);
@@ -269,7 +292,7 @@
 		Connection.prototype._base64Encode = typeof(btoa) == "function" ? function(x){return btoa(x)} : null;
 
 		// Low level HTTP request method to use in the Browser, using an AJAX implementation.
-		Connection.prototype._httpRequest = function(theMethod, resource, acceptH, params, callback) {
+		Connection.prototype._httpRequest = function(theMethod, resource, acceptH, params, callback) { // TODO: refactor this
 			var req_url = this.endpoint + resource,
 				headers = {},
 				username, password;
@@ -324,12 +347,22 @@
     // `Connection.getProperty` retrieves the values for a specific property of a URI individual in a 
     // Stardog DB. This function is a direct access to provide easy out-of-the-box functionality
     // for retrieving common properties such as rdfs:label, etc
-	Connection.prototype.getProperty = function(database, uri, property, callback) {
-		var strQuery = 'select ?val where { '+ uri +' '+ property +' ?val }' ;
-		var val = uri;
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`uri`: the individual URI;
+	//				`property`: the specific property.
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint
+	// `callback`: the callback to execute once the request is done.  
+	Connection.prototype.getProperty = function(options, callback) {
+		var val = options.uri,
+			reqOptions = { 
+				database: options.database,
+				query:  'select ?val where { '+ options.uri +' '+ options.property +' ?val }',
+				params: options.params
+			};
 
-		this.query(database, strQuery, function (jsonRes) {
-
+		this.query(reqOptions, function (jsonRes) {
 			if (jsonRes.results && jsonRes.results.bindings.length > 0) {
 				val = jsonRes.results.bindings[0].val.value;
 			}
@@ -340,151 +373,328 @@
 
 	// Performs a GET to the root endpoint of the DB `database`
 	//
-	// __Parameters__:  
-	// `database`: the name of the database verify its size.
+	// __Parameters__:
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	// 				`params`: (optional) any other parameters to pass to the SPARQL endpoint
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.getDB = function (database, callback) {
-		this._httpRequest("GET", database, "*/*", "", callback);
+	Connection.prototype.getDB = function (options, callback) {
+		var reqOptions = {
+				resource : options.database,
+				acceptHeader: "*/*",
+				httpMethod: "GET",
+				params: options.params ? options.params : ""
+			 };
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Retrieve the DB size.
 	// Returns a single numeric value representing the number of triples in the database.
 	//
-	// __Parameters__:  
-	// `database`: the name of the database verify its size.
+	// __Parameters__:
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database to verify its size;
+	// 				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.getDBSize = function (database, callback) {
-		this._httpRequest("GET", database + "/size", "*/*", "", callback);
+	Connection.prototype.getDBSize = function (options, callback) {
+		var reqOptions = {
+				resource: options.database + "/size",
+				httpMethod: "GET",
+				acceptHeader: "*/*",
+				params: options.params ? options.params : ""
+			};
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Evaluate a SPARQL query specifying `database`, `query`, `baseURI`, `limit`, `offset` and the `mimetype`
 	// for the Accept header. This method is designed for `select` & `ask` queries, where the result type will 
 	// be a set of bindings.
-	Connection.prototype.query = function(database, query, baseURI, limit, offset, callback, acceptMIME) {
-		var acceptH = (acceptMIME) ? acceptMIME : 'application/sparql-results+json';
-		var options = {
-			"query" : query
-		};
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`query`: the query;
+	//				`baseURI`: the base URI;
+	//				`limit`: the limit;
+	//				`offset`: the offset;
+	//				`mimetype`: the mimetype;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.  
+	Connection.prototype.query = function(options, callback) {
+		var reqOptions = {
+				acceptHeader : options.mimetype ? options.mimetype : 'application/sparql-results+json',
+				resource: options.database + "/query",
+				httpMethod: "GET",
+				params : _.extend({ "query" : options.query }, options.params)
+			};
 
-		if (baseURI && baseURI != null)
-			options["baseURI"] = baseURI;
+		if (options.baseURI && options.baseURI != null) {
+			reqOptions["params"]["baseURI"] = options.baseURI;
+		}
 
-		if (limit && limit != null)
-			options["limit"] = limit;
+		if (options.limit && options.limit != null) {
+			reqOptions["params"]["limit"] = options.limit;
+		}
 
-		if (offset && offset != null)
-			options["offset"] = offset;
+		if (options.offset && options.offset != null) {
+			reqOptions["params"]["offset"] = options.offset;
+		}
 
-		this._httpRequest("GET", database + "/query", acceptH, options, callback);
+		this._httpRequest(reqOptions, callback);
 	};
 
 
 	// Evaluate a SPARQL query specifying `database`, `query`, `baseURI`, `limit`, `offset` and the `mimetype`
 	// for the Accept header. This method is designed for `describe` & `construct` queries, where the result type will 
 	// be a set of triples.
-	Connection.prototype.queryGraph = function (database, query, baseURI, limit, offset, callback, acceptMIME) {
-		var acceptH = (acceptMIME) ? acceptMIME : 'application/ld+json';
-		var options = {
-			"query" : query
-		};
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`query`: the query;
+	//				`baseURI`: the base URI;
+	//				`limit`: the limit;
+	//				`offset`: the offset;
+	//				`mimetype`: the mimetype;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.  
+	Connection.prototype.queryGraph = function (options, callback) {
+		var reqOptions = {
+				acceptHeader : options.mimetype ? options.mimetype : 'application/ld+json',
+				resource: options.database + "/query",
+				httpMethod: "GET",
+				params : _.extend({ "query" : options.query }, options.params)
+			};
 
-		if (baseURI && baseURI != null)
-			options["baseURI"] = baseURI;
+		if (options.baseURI && options.baseURI != null) {
+			reqOptions["params"]["baseURI"] = options.baseURI;
+		}
 
-		if (limit && limit != null)
-			options["limit"] = limit;
+		if (options.limit && options.limit != null) {
+			reqOptions["params"]["limit"] = options.limit;
+		}
 
-		if (offset && offset != null)
-			options["offset"] = offset;
+		if (options.offset && options.offset != null) {
+			reqOptions["params"]["offset"] = options.offset;
+		}
 
-		this._httpRequest("GET", database + "/query", acceptH, options, callback);
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Returns the query plan generated by Stardog given a SPARQL query.
-	Connection.prototype.queryExplain = function (database, query, baseURI, callback) {
-		var options = {
-			"query" : query
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`query`: the query;
+	//				`baseURI`: (optional) the base URI;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.  
+	Connection.prototype.queryExplain = function (options, callback) {
+		var reqOptions = {
+				resource: options.database + "/explain",
+				httpMethod: "GET",
+				acceptHeader: "text/plain",
+				params : _.extend({ "query" : options.query }, options.params)
+			};
+
+		if (options.baseURI) {
+			reqOptions["params"]["baseURI"] = options.baseURI;
 		}
 
-		if (baseURI)
-			options["baseURI"] = baseURI;
-
-		this._httpRequest("GET", database + "/explain", "text/plain", options, callback);
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Start a new transaction in the database.
-	Connection.prototype.begin = function (database, callback) {
-		this._httpRequest("POST", database + "/transaction/begin", "text/plain", "", callback);
+	//
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done. 
+	Connection.prototype.begin = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "POST",
+				resource: options.database + "/transaction/begin",
+				acceptHeader: "text/plain",
+				params: options.params
+			};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Commit the transaction `txId` in the database. This will remove the transaction and the `txId` will not 
 	// be valid anymore. All function calls using a transaction to mutate the contents of a database must call this 
 	// function in order to make the changes permanent.
-	Connection.prototype.commit = function (database, txId, callback) {
-		this._httpRequest("POST", database + "/transaction/commit/" + txId, "text/plain", "", callback);
+	//
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`txId`: the transaction id;
+	// 				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done. 
+	Connection.prototype.commit = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "POST",
+				resource:  options.database + "/transaction/commit/" + options.txId,
+				acceptHeader: "text/plain",
+				params: options.params
+			};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Perform a rollback given within a trasaction, providing the transaction id `txId`.
-	Connection.prototype.rollback = function (database, txId, callback) {
-		this._httpRequest("POST", database + "/transaction/rollback/"+ txId, "text/plain", "", callback);
+	//
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`txId`: the transaction id;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	Connection.prototype.rollback = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "POST",
+				resource:  options.database + "/transaction/rollback/" + options.txId,
+				acceptHeader: "text/plain",
+				params: options.params
+			};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Evaluate a SPARQL query using a transaction `txId`.
-	Connection.prototype.queryInTransaction = 
-		function (database, txId, query, baseURI, limit, offset, callback, acceptMIME) {
-		var acceptH = (acceptMIME) ? acceptMIME : 'application/sparql-results+json';
-		var options = {
-			"query" : query
-		};
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`query`: the query;
+	//				`txId`: the transaction id;
+	//				`baseURI`: the base URI;
+	//				`limit`: the limit;
+	//				`offset`: the offset;
+	//				`mimetype`: the mimetype;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.  
+	Connection.prototype.queryInTransaction = function(options, callback) {
+		// function (database, txId, query, baseURI, limit, offset, callback, acceptMIME) {
+		var reqOptions = {
+				acceptHeader : options.mimetype ? options.mimetype : 'application/sparql-results+json',
+				resource: options.database + "/" + options.txId +"/query",
+				httpMethod: "GET",
+				params : _.extend({ "query" : options.query }, options.params)
+			};
 
-		if (baseURI && baseURI != null)
-			options["baseURI"] = baseURI;
+		if (options.baseURI && options.baseURI != null) {
+			reqOptions["params"]["baseURI"] = options.baseURI;
+		}
 
-		if (limit && limit != null)
-			options["limit"] = limit;
+		if (options.limit && options.limit != null) {
+			reqOptions["params"]["limit"] = options.limit;
+		}
 
-		if (offset && offset != null)
-			options["offset"] = offset;
+		if (options.offset && options.offset != null) {
+			reqOptions["params"]["offset"] = options.offset;
+		}
 
-		this._httpRequest("GET", database + "/" + txId +"/query", acceptH, options,	callback);
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Add a set of statements included in the `body` request, using a transaction `txId`. Note that after calling this function 
 	// to add the statements, `Connection.commit` must be performed to make the changes persistent in the DB.
-	Connection.prototype.addInTransaction = function (database, txId, body, callback, contentType, graph_uri) {
-		var options;
-		if (graph_uri && graph_uri != null) {
-			options = {
-				"graph-uri" : graph_uri
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`txId`: the transaction id;
+	//				`body`: the request body;
+	//				`contentType`: the request content type;
+	//				`graphUri`: (optional) the graph URI;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	Connection.prototype.addInTransaction = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "POST",
+				resource: options.database + "/" + options.txId + "/add",
+				acceptHeader: "*/*",
+				params: options.params || { },
+				msgBody: options.body,
+				contentType: options.contentType,
+				isJsonBody: false,
+				multipart: null
 			};
+
+		if (options.graphUri && options.graphUri != null) {
+			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
-		this._httpRequest("POST", database + "/" + txId + "/add", "*/*", options, callback, body, false, contentType, null);
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Remove a set of statements included in the `body` request, using a transaction `txId`. Note that after calling this function 
 	// to add the statements, `Connection.commit` must be performed to make the changes persistent in the DB.
-	Connection.prototype.removeInTransaction = function (database, txId, body, callback, contentType, graph_uri) {
-		var options;
-		if (graph_uri) {
-			options = {
-				"graph-uri" : graph_uri
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`txId`: the transaction id;
+	//				`body`: the request body;
+	//				`contentType`: the request content type;
+	//				`graphUri`: the graph URI;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	Connection.prototype.removeInTransaction = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "POST",
+				resource: options.database + "/" + options.txId + "/remove",
+				acceptHeader: "text/plain",
+				params: options.params || { },
+				msgBody: options.body,
+				contentType: options.contentType,
+				isJsonBody: false,
+				multipart: null
 			};
+
+		if (options.graphUri && options.graphUri != null) {
+			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
-		this._httpRequest("POST", database + "/" + txId + "/remove", "text/plain", options, callback, body, false, contentType, null);
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Clears the content of the DB.
-	Connection.prototype.clearDB = function (database, txId, callback, graph_uri) {
-		var options;
-		if (graph_uri) {
-			options = {
-				"graph-uri" : graph_uri
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`txId`: the transaction id;
+	//				`graphUri`: the graph URI;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	// Connection.prototype.clearDB = function (database, txId, callback, graph_uri) {
+	Connection.prototype.clearDB = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "POST",
+				resource: options.database + "/" + options.txId + "/clear",
+				acceptHeader: "text/plain",
+				params: options.params || {}
 			};
+
+		if (options.graphUri && options.graphUri != null) {
+			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
-		this._httpRequest("POST", database + "/" + txId + "/clear", "text/plain", options, callback);
+		this._httpRequest(reqOptions, callback);
+		
+		// var options;
+		// if (graph_uri) {
+		// 	options = {
+		// 		"graph-uri" : graph_uri
+		// 	};
+		// }
+
+		// this._httpRequest("POST", database + "/" + txId + "/clear", "text/plain", options, callback);
 	};
 
 	// ## Reasoning API

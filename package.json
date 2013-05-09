@@ -22,8 +22,8 @@
   },
   "dependencies"  : {
     "request"      : "2.9.x",
-    "jsonld" : ">=0.0.1",
-    "querystring" : ">=0.1.0"
+    "querystring" : ">=0.1.0",
+    "underscore": ">=1.4.4"
   },
   "devDependencies" : {
     "jasmine-node" : ">=1.0.26"

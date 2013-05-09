@@ -20,8 +20,8 @@ describe ("Getting the DB info", function() {
 
 	it ("A response of the DB info should not be empty", function(done) {
 		
-		conn.getDB("nodeDB", function (data, response) {
-			// console.log(data);
+		conn.getDB({ database: "nodeDB" }, function (data, response) {
+			// console.log("data: ", data);
 			expect(data).toBeDefined();
 			expect(data).not.toBe(null);
 			expect(response).toBeDefined();
