@@ -686,7 +686,7 @@
 		}
 
 		this._httpRequest(reqOptions, callback);
-		
+
 		// var options;
 		// if (graph_uri) {
 		// 	options = {
@@ -819,72 +819,117 @@
 	// #### List databases (GET)
 	// Get a List of the existing databases in the system.
 	//
-	// __Parameters__:  
+	// __Parameters__:
+	// `options`: an object with one the following attributes: 
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
 	// `callback`: the callback to execute once the request is done. 
-	Connection.prototype.listDBs = function (callback) {
-		this._httpRequest("GET", "admin/databases", "application/json", "", callback);
+	Connection.prototype.listDBs = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "GET",
+				resource: "admin/databases",
+				acceptHeader: "application/json",
+				params: (options && typeof options !== 'function') ? options.params : ""
+			};
+		this._httpRequest(
+			reqOptions,
+			typeof options === 'function' ? options /* no options passed, so this is the callback */ 
+					: callback /* options is an object, callback might be a function */);
 	};
 
 	// #### Copy database (PUT)
 	// Copy an existing database.
 	//
-	// __Parameters__:  
-	// `dbsource`: the name of the database to copy.  
-	// `dbtarget`: the name of the new copied database.  
+	// __Parameters__: 
+	// `options`: an object with one the following attributes: 
+	// 				`dbsource`: the name of the database to copy.  
+	// 				`dbtarget`: the name of the new copied database.
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.copyDB = function (dbsource, dbtarget, callback) {
-		this._httpRequest(
-			"PUT", "admin/databases/"+ dbsource + "/copy", "application/json", { "to" : dbtarget }, callback
-		);
+	Connection.prototype.copyDB = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "PUT",
+				resource: "admin/databases/" + options.dbsource + "/copy",
+				acceptHeader: "application/json",
+				params: _.extend({ "to" : options.dbtarget }, options.params)
+			};
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Drop an existing database.
 	// Drops an existing database `dbname` and all the information that it contains.
 	//
-	// __Parameters__:  
-	// `dbname`: the name of the database to drop.  
+	// __Parameters__: 
+	// `options`: an object with one the following attributes: 
+	// 				`database`: the name of the database to drop.
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint. 
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.dropDB = function (dbname, callback) {
-		this._httpRequest(
-			"DELETE", "admin/databases/"+ dbname, "application/json", "", callback
-		);
+	Connection.prototype.dropDB = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "DELETE",
+				resource: "admin/databases/" + options.database,
+				acceptHeader: "application/json",
+				params: options.params || ""
+			};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Migrate an existing database.
 	// Migrates the existing content of a legacy database to new format.
 	// 
-	// __Parameters__:  
-	// `dbname`: the name of the database to migrate.
+	// __Parameters__: 
+	// `options`: an object with one the following attributes: 
+	// 				`database`: the name of the database to migrate.
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint. 
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.migrateDB = function (dbname, callback) {
-		this._httpRequest(
-			"PUT", "admin/databases/"+ dbname +"/migrate", "application/json", "", callback
-		);
+	Connection.prototype.migrateDB = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "PUT",
+				resource: "admin/databases/" + options.database + "/migrate",
+				acceptHeader: "application/json",
+				params: options.params || ""
+			};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Optimize an existing database.
 	// Optimize an existing database.
 	//
-	// __Parameters__:  
-	// `dbname`: the name of the database to optimize.  
+	// __Parameters__:
+	// `options`: an object with one the following attributes: 
+	// 				`database`: the name of the database to optimize.
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint. 
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.optimizeDB = function (dbname, callback) {
-		this._httpRequest(
-			"PUT", "admin/databases/"+ dbname +"/optimize", "application/json", "", callback
-		);
+	Connection.prototype.optimizeDB = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "PUT",
+				resource: "admin/databases/" + options.database +"/optimize",
+				acceptHeader: "application/json",
+				params: options.params || ""
+			};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Set database on-line.
 	// Request message to set an existing database `dbname` on-line.
 	//
 	// __Parameters__:  
-	// `dbname`: the name of the database to set on-line.  
-	// `strategyOp`: the strategy options, [more info](http://stardog.com/docs/network/#extended-http).  
+	// `options`: an object with one the following attributes: 
+	// 				`database`: the name of the database to set on-line.  
+	// 				`strategyOp`: the strategy options, [more info](http://stardog.com/docs/network/#extended-http).
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.   
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.onlineDB = function (dbname, strategyOp, callback) {
-		this._httpRequest(
-			"PUT", "admin/databases/"+ dbname +"/online", "application/json", { "strategy" : strategyOp }, callback
-		);
+	Connection.prototype.onlineDB = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "PUT",
+				resource: "admin/databases/" + options.database +"/online",
+				acceptHeader: "application/json",
+				params: _.extend({ "strategy": options.strategyOp }, options.params)
+			};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Set database off-line.
@@ -896,15 +941,27 @@
 	// This will allow open transaction to commit/rollback, open queries to complete, etc. 
 	// After the timeout has expired, all remaining open connections are closed and the database goes off-line.
 	//
-	// __Parameters__:  
-	// `dbname`: the name of the database to set off-line.  
-	// `strategyOp`: the strategy options, [more info](http://stardog.com/docs/network/#extended-http).  
-	// `timeoutMS`: timeout in milliseconds.  
+	// __Parameters__:
+	// `options`: an object with one the following attributes: 
+	// 				`database`: the name of the database to set off-line.  
+	//				`strategyOp`: the strategy options, [more info](http://stardog.com/docs/network/#extended-http).  
+	//				`timeout`: timeout in milliseconds.
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.offlineDB = function (dbname, strategyOp, timeoutMS, callback) {
-		this._httpRequest(
-			"PUT", "admin/databases/"+ dbname +"/offline", "application/json", { "strategy" : strategyOp }, callback
-		);
+	Connection.prototype.offlineDB = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "PUT",
+				resource: "admin/databases/" + options.database +"/offline",
+				acceptHeader: "application/json",
+				params: _.extend({ "strategy": options.strategyOp }, options.params)
+			};
+
+		if (options.timeoutMS) {
+			reqOptions.msgBody = JSON.stringify({ timeout: options.timeout });
+			reqOptions.isJsonBody = true;
+		}
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Set option values to an existing database.

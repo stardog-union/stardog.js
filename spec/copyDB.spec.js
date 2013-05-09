@@ -20,9 +20,9 @@ describe ("Copy DBs Test Suite", function() {
 
 	it ("should not copy an online DB", function(done) {
 		
-		conn.copyDB('nodeDB', 'nodeDB_copy', function (data) {
+		conn.copyDB({ dbsource: 'nodeDB', dbtarget: 'nodeDB_copy'}, function (data) {
 			
-			conn.listDBs( function (data) {
+			conn.listDBs(function (data) {
 
 				expect(data.databases).not.toContain('nodeDB_copy');
 				expect(data.databases).toContain('nodeDB');
@@ -35,10 +35,10 @@ describe ("Copy DBs Test Suite", function() {
 
 	it ("should copy an offline DB", function(done) {
 
-		conn.offlineDB('nodeDB', "WAIT", 3, function (data) {
+		conn.offlineDB({ database: 'nodeDB', strategy: "WAIT", timeout: 3 }, function (data) {
 
 			// Once the DB is offline, copy it.
-			conn.copyDB('nodeDB', 'nodeDB_copy', function (data) {
+			conn.copyDB({ dbsource: 'nodeDB', dbtarget: 'nodeDB_copy' }, function (data) {
 				
 				conn.listDBs( function (data) {
 
@@ -46,10 +46,10 @@ describe ("Copy DBs Test Suite", function() {
 					expect(data.databases).toContain('nodeDB');
 					
 					// set database online again and drop copied DB.
-					conn.onlineDB('nodeDB', '', function (data, response1) {
+					conn.onlineDB({ database: 'nodeDB' }, function (data, response1) {
 						expect(response1.statusCode).toBe(200);
 						
-						conn.dropDB('nodeDB_copy', function (data, response2) {
+						conn.dropDB({ database: 'nodeDB_copy' }, function (data, response2) {
 							expect(response2.statusCode).toBe(200);
 
 							done();
