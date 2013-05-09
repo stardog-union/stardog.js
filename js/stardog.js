@@ -957,7 +957,7 @@
 			};
 
 		if (options.timeoutMS) {
-			reqOptions.msgBody = JSON.stringify({ timeout: options.timeout });
+			reqOptions.msgBody = { timeout: options.timeout };
 			reqOptions.isJsonBody = true;
 		}
 
@@ -969,13 +969,22 @@
 	// Database options can be found [here](http://stardog.com/docs/admin/#admin-db).
 	//
 	// __Parameters__:  
-	// `dbname`: the name of the database to set the options.  
-	// `optionsObj`: the options JSON object, indicating the options and values to set, [more info](http://stardog.com/docs/network/#extended-http).  
+	// `options`: an object with one the following attributes: 
+	// 				`database`: the name of the database to set the options.  
+	// 				`optionsObj`: the options JSON object, indicating the options and values to set, [more info](http://stardog.com/docs/network/#extended-http).
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
 	// `callback`: the callback to execute once the request is done.
-	Connection.prototype.setDBOptions = function(dbname, optionsObj, callback) {
-		this._httpRequest(
-			"POST", "admin/databases/"+ dbname +"/options", "application/json", "", callback, optionsObj, true
-		);
+	Connection.prototype.setDBOptions = function(options, callback) {
+		var reqOptions = {
+				httpMethod: "POST",
+				resource: "admin/databases/" + options.database +"/options",
+				acceptHeader: "application/json",
+				params: options.params,
+				msgBody: options.optionsObj,
+				isJsonBody: true
+			};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Get option values from an existing database.
@@ -984,13 +993,22 @@
 	// values in the database when the call returns.
 	//
 	// __Parameters__:  
-	// `dbname`: the name of the db to retrieve the option values.  
-	// `optionsObj`: the options JSON object seed, indicating the options to retrieve, [more info](http://stardog.com/docs/network/#extended-http).  
+	// `options`: an object with one the following attributes: 
+	// 				`database`: the name of the db to retrieve the option values.  
+	// 				`optionsObj`: the options JSON object seed, indicating the options to retrieve, [more info](http://stardog.com/docs/network/#extended-http).  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.getDBOptions = function(dbname, optionsObj, callback) {
-		this._httpRequest(
-			"PUT", "admin/databases/"+ dbname +"/options", "application/json", "", callback, optionsObj, true
-		);
+	Connection.prototype.getDBOptions = function(options, callback) {
+		var reqOptions = {
+				httpMethod: "PUT",
+				resource: "admin/databases/" + options.database +"/options",
+				acceptHeader: "application/json",
+				params: options.params || "",
+				msgBody: options.optionsObj,
+				isJsonBody: true
+			};
+
+		this._httpRequest(reqOptions, callback);
 	};
 	
 	// ### User operations.

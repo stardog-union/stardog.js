@@ -20,7 +20,7 @@ describe ("Get DB Options Test Suite", function() {
 
 	it ("should get NOT_FOUND status code trying to get the options of a non-existent DB.", function (done) {
 			
-		conn.getDBOptions('nodeDB_test', { }, function (data, response) {
+		conn.getDBOptions({ database: 'nodeDB_test', optionsObj: { } }, function (data, response) {
 
 			expect(response.statusCode).toBe(404);
 			done();
@@ -34,7 +34,7 @@ describe ("Get DB Options Test Suite", function() {
 			"icv.enabled" : ""
 		};
 
-			conn.getDBOptions('nodeDB', optionsObj, function (data, respose2) {
+			conn.getDBOptions({ database: 'nodeDB', optionsObj: optionsObj }, function (data, respose2) {
 				expect(respose2.statusCode).toBe(200);
 
 				// check options retrieved
