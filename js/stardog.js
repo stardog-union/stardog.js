@@ -1038,8 +1038,8 @@
 
 		}
 
-		if (superuser && superuser != null) {
-			reqOptions["superuser"] = superuser;
+		if (options.superuser && options.superuser != null) {
+			reqOptions.msgBody.superuser = options.superuser;
 		}
 
 		this._httpRequest(reqOptions, callback);
