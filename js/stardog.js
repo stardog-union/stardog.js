@@ -172,7 +172,6 @@
 		//				`multipart`: the multipart;
 		// `callback`: the callback to execute once the request is done. 
 		Connection.prototype._httpRequest = function(options, callback) {
-			console.log("\n-->args: ", options, callback); // TODO: remove
 			var theMethod = options.httpMethod,
 				req_url = this.endpoint + options.resource,
 				strParams = qs.stringify(options.params),
@@ -288,8 +287,18 @@
 		Connection.prototype._base64Encode = typeof(btoa) == "function" ? function(x){return btoa(x)} : null;
 
 		// Low level HTTP request method to use in the Browser, using an AJAX implementation.
-		Connection.prototype._httpRequest = function(theMethod, resource, acceptH, params, callback) { // TODO: refactor this
-			var req_url = this.endpoint + resource,
+		// __Parameters__:  
+		// `options`: an object with the following attributes: 
+		//				`httpMethod`: the name of the database;
+		//				`resource`: the resource;
+		//				`acceptHeader`: the accept header;
+		//				`params`: any other parameters to pass to the SPARQL endpoint;
+		// `callback`: the callback to execute once the request is done. 
+		Connection.prototype._httpRequest = function(options, callback) {
+			var theMethod = options.httpMethod,
+				acceptH = options.acceptHeader,
+				req_url = this.endpoint + options.resource,
+				params = options.params,
 				headers = {},
 				username, password;
 
