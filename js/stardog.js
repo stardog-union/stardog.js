@@ -668,7 +668,6 @@
 	//				`graphUri`: the graph URI;
 	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
 	// `callback`: the callback to execute once the request is done.
-	// Connection.prototype.clearDB = function (database, txId, callback, graph_uri) {
 	Connection.prototype.clearDB = function (options, callback) {
 		var reqOptions = {
 				httpMethod: "POST",
@@ -682,15 +681,6 @@
 		}
 
 		this._httpRequest(reqOptions, callback);
-
-		// var options;
-		// if (graph_uri) {
-		// 	options = {
-		// 		"graph-uri" : graph_uri
-		// 	};
-		// }
-
-		// this._httpRequest("POST", database + "/" + txId + "/clear", "text/plain", options, callback);
 	};
 
 	// ## Reasoning API
@@ -698,86 +688,173 @@
 	
 	// API call to get explanation of the inferences in `axioms` using a transaction `txId` with the content type 
 	// `contentType` of the axioms.
-	Connection.prototype.reasoningExplain = function (database, axioms, callback, contentType, txId) {
-		var url = database + "/reasoning";
-		if (txId && txId != null) {
-			url = url + "/" + txId;
-		}
-		url + url + "/explain";
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`txId`: the transaction;
+	//				`axioms`: the axioms;
+	//				`contentType`: the content-type;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	Connection.prototype.reasoningExplain = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "POST",
+				resource: options.database + "/reasoning/" 
+							+ (options.txId && options.txId != null ? "/" + options.txId : ""),
+				acceptHeader: "application/x-turtle",
+				params: options.params || null,
+				msgBody: options.axioms,
+				isJsonBody: false,
+				contentType: options.contentType || "text/plain"
+			};
 
-		// set default content-type to "text/plain" (N-Triples)
-		if (!contentType || contentType === null) {
-			contentType = "text/plain";
-		}
-
-		this._httpRequest("POST", url, "application/x-turtle", null, callback, axioms, false, contentType);
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Checks the logical consistency of database. If using a named graph provide the `graph_uri` parameter.
 	// Returns a boolean response as `true` if the database is consistent. 
 	// See [stardog-reasoning consistency](http://stardog.com/docs/man/reasoning-consistency.html)
-	Connection.prototype.isConsistent = function (database, callback, graph_uri) {
-		var options;
-		if (graph_uri) {
-			options = {
-				"graph-uri" : graph_uri
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`graphUri`: the graph URI;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	Connection.prototype.isConsistent = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "GET",
+				resource: options.database + "/reasoning/consistency",
+				acceptHeader: "text/boolean",
+				params: options.params || {}
 			};
+
+		if (options.graphUri && options.graphUri != null) {
+			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
-		this._httpRequest("GET", database + "/reasoning/consistency", "text/boolean", options, callback);
-	}
+		this._httpRequest(reqOptions, callback);
+	};
 
 	// ### Integrity Constraint Validation
 	// Listing the Integrity Constraints. Returns the integrity constraints for the specified database serialized in any supported RDF format.
-	Connection.prototype.getICV = function (database, acceptH, callback) {
-		var acceptH = (acceptMIME) ? acceptMIME : 'text/plain';
-		this._httpRequest("GET", database + "/icv", acceptH, null, callback);
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`acceptMime`: the MIME type;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	Connection.prototype.getICV = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "GET",
+				resource: options.database + "/icv",
+				acceptHeader: options.acceptMime || 'text/plain',
+				params: options.params || null,
+				contentType: options.contentType || "text/plain"
+			};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Accepts a set of valid Integrity constraints serialized in any RDF format supported by Stardog and adds them to the database in an atomic action. 
 	// 200 return code indicates the constraints were added successfully, 500 indicates that the constraints were not valid or unable to be added.
-	Connection.prototype.setICV = function (database, icv_axioms, callback, contentType) {
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`icvAxioms`: the ICV axioms;
+	//				`contentType`: the content-type;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	Connection.prototype.setICV = function (options, callback) {
 		// set default content-type to "text/plain" (N-Triples)
-		if (!contentType || contentType === null) {
-			contentType = "text/plain";
-		}
+		var reqOptions = {
+				httpMethod: "POST",
+				resource: options.database + "/icv/add",
+				acceptHeader: "text/boolean",
+				params: options.params || null,
+				contentType: options.contentType || "text/plain",
+				msgBody: options.icvAxioms,
+				isJsonBody: false
+			};
 
-		this._httpRequest("POST", database + "/icv/add", "text/boolean", null, callback, icv_axioms, false, contentType);
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Accepts a set of valid Integrity constraints serialized in any RDF format supported by Stardog and removes them from the database in a single atomic action. 
 	// 200 indicates the constraints were successfully remove; 500 indicates an error.
-	Connection.prototype.removeICV = function (database, icv_axioms, callback, contentType) {
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`icvAxioms`: the ICV axioms;
+	//				`contentType`: the content-type;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	Connection.prototype.removeICV = function (options, callback) {
 		// set default content-type to "text/plain" (N-Triples)
-		if (!contentType || contentType === null) {
-			contentType = "text/plain";
-		}
+		var reqOptions = {
+				httpMethod: "POST",
+				resource: options.database + "/icv/remove",
+				acceptHeader: "text/boolean",
+				params: options.params || null,
+				contentType: options.contentType || "text/plain",
+				msgBody: options.icvAxioms,
+				isJsonBody: false
+			};
 
-		this._httpRequest("POST", database + "/icv/remove", "text/boolean", null, callback, icv_axioms, false, contentType);
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Drops ALL integrity constraints for a database. 200 indicates all constraints were successfully dropped; 500 indicates an error.
-	Connection.prototype.clearICV = function (database, callback) {
-		this._httpRequest("POST", database + "/icv/clear", "text/boolean", null, callback);
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	Connection.prototype.clearICV = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "POST",
+				resource: options.database + "/icv/clear",
+				acceptHeader: "text/boolean",
+				params: options.params || null
+			};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Only works for one constraint, if more than 1 are provided returns 400 code status. The body of the POST is a single Integrity Constraint, 
 	// serialized in any supported RDF format, with Content-type set appropriately. Returns either a text/plain result containing a single SPARQL query; 
 	// or it returns 400 if more than one constraint was included in the input.
-	Connection.prototype.fromICVtoSPARQL = function (database, icv_axiom, callback, contentType, graph_uri) {
-		var options;
-		if (graph_uri) {
-			options = {
-				"graph-uri" : graph_uri
-			};
-		}
-
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`icvAxiom`: the ICV axiom;
+	//				`contentType`: the content-type;
+	//				`graphUri`: the graph URI;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	Connection.prototype.fromICVtoSPARQL = function (options, callback) {
 		// set default content-type to "text/plain" (N-Triples)
-		if (!contentType || contentType === null) {
-			contentType = "text/plain";
+		var reqOptions = {
+				httpMethod: "POST",
+				resource: options.database + "/icv/convert",
+				acceptHeader: "text/plain",
+				params: options.params || {},
+				msgBody: icvAxiom,
+				isJsonBody: false,
+				contentType: options.contentType || "text/plain"
+			};
+
+		if (options.graphUri && options.graphUri != null) {
+			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
-		this._httpRequest("POST", database + "/icv/convert", "text/plain", options, callback, icv_axiom, false, contentType);
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// -----------------------------------------
