@@ -16,7 +16,7 @@ describe ("Delete Roles Test Suite", function() {
 
 
 	it ("should return NOT_FOUND trying to delete a non-existent role.", function (done) {
-		conn.deleteRole('no-writer', function (data, response) {
+		conn.deleteRole({ role: 'no-writer' }, function (data, response) {
 			expect(response.statusCode).toBe(404);
 
 			done();
@@ -26,13 +26,13 @@ describe ("Delete Roles Test Suite", function() {
 	it ("should delete a 'writer' role recently created.", function (done) {
 		// create a new user (this is supposed to change in a future version of the API)
 
-		conn.createRole('writer', function (data1, response1) {
+		conn.createRole({ rolename: 'writer' }, function (data1, response1) {
 
 			// It should be 201 (CREATED)
 			expect(response1.statusCode).toBe(201);
 
 			// Once created then lets delete it.
-			conn.deleteRole('writer', function (data2, response2) {
+			conn.deleteRole({ role: 'writer' }, function (data2, response2) {
 
 				expect(response2.statusCode).toBe(200);
 

@@ -21,7 +21,8 @@ describe ("Getting and using transactions.", function() {
 
 	it ("Should be able to get a transaction and make a query", function(done) {
 		
-		conn.begin("nodeDB", function (body, response) {
+		conn.begin({ database: "nodeDB" }, function (body, response) {
+			// console.log("body: ", body);
 			expect(response.statusCode).toBe(200);
 			expect(body).toBeDefined();
 			expect(body).not.toBeNull();
@@ -29,14 +30,21 @@ describe ("Getting and using transactions.", function() {
 			txId = body;
 
 			// execute a query with the transaction ID
-			conn.queryInTransaction('nodeDB', txId, "select distinct ?s where { ?s ?p ?o }", null, 10, 0, function (data) {
-				expect(data).not.toBeNull();
-				expect(data.results).toBeDefined();
-				expect(data.results.bindings).toBeDefined();
-				expect(data.results.bindings.length).toBeGreaterThan(0);
-				expect(data.results.bindings.length).toBe(3);
+			conn.queryInTransaction({ 
+					database: 'nodeDB', 
+					"txId": txId, 
+					query: "select distinct ?s where { ?s ?p ?o }", 
+					limit: 10, 
+					offset: 0
+				},
+				function (data) {
+					expect(data).not.toBeNull();
+					expect(data.results).toBeDefined();
+					expect(data.results.bindings).toBeDefined();
+					expect(data.results.bindings.length).toBeGreaterThan(0);
+					expect(data.results.bindings.length).toBe(3);
 
-				done();
+					done();
 			});
 		});
 
@@ -48,23 +56,29 @@ describe ("Getting and using transactions.", function() {
 			'<http://purl.org/dc/elements/1.1/subject> '+
 			'"A very interesting subject"^^<http://www.w3.org/2001/XMLSchema#string> .';
 
-		conn.begin("nodeDB", function (body, response) {
+		conn.begin({ database: "nodeDB" }, function (body, response) {
 			expect(response.statusCode).toBe(200);
 			expect(body).toBeDefined();
 			expect(body).not.toBeNull();
 
 			txId = body;
 
-			conn.addInTransaction("nodeDB", txId, aTriple, function (body2, response2) {
-				expect(response2.statusCode).toBe(200);
-				//console.log(body2);
+			conn.addInTransaction(
+				{ 
+					database: "nodeDB",
+					"txId": txId,
+					"body": aTriple,
+					contentType: "text/plain"
+				},
+				function (body2, response2) {
+					expect(response2.statusCode).toBe(200);
 
-				conn.rollback("nodeDB", txId, function (body3, response3) {
-					expect(response3.statusCode).toBe(200);
-					done();
-				});
-			},
-			"text/plain");
+					conn.rollback({ database: "nodeDB", "txId": txId }, function (body3, response3) {
+						expect(response3.statusCode).toBe(200);
+						done();
+					});
+				}
+			);
 		});
 	});
 
@@ -74,51 +88,63 @@ describe ("Getting and using transactions.", function() {
 			'<http://purl.org/dc/elements/1.1/subject> '+
 			'"A very interesting subject"^^<http://www.w3.org/2001/XMLSchema#string> .';
 
-		conn.begin("nodeDB", function (body, response) {
+		conn.begin({ database: "nodeDB" }, function (body, response) {
 			expect(response.statusCode).toBe(200);
 			expect(body).toBeDefined();
 			expect(body).not.toBeNull();
 
 			txId = body;
+			conn.addInTransaction(
+				{ database: "nodeDB", "txId": txId, "body": aTriple, contentType: "text/plain" },
+				function (body2, response2) {
+					expect(response2.statusCode).toBe(200);
 
-			conn.addInTransaction("nodeDB", txId, aTriple, function (body2, response2) {
-				expect(response2.statusCode).toBe(200);
-				//console.log(body2);
+					conn.commit({ database: "nodeDB", "txId": txId }, function (body3, response3) {
+						expect(response3.statusCode).toBe(200);
+						// query for the triple added.
+						conn.query(
+							{ 
+								database: "nodeDB",
+								"query": 'ask where { '+
+											'<http://localhost/publications/articles/Journal1/1940/Article2> '+
+											'<http://purl.org/dc/elements/1.1/subject> '+
+											'"A very interesting subject"^^<http://www.w3.org/2001/XMLSchema#string> .}',
+								mimetype: "text/boolean"
+							},
+							function (dataQ, responseQ) {
+								//console.log(data);
+								expect(responseQ.statusCode).toBe(200);
+								expect(dataQ).not.toBe(null);
+								expect(dataQ).toBe(true);
 
-				conn.commit("nodeDB", txId, function (body3, response3) {
-					expect(response3.statusCode).toBe(200);
+								// restore database state
+								conn.begin({ database: "nodeDB" }, function (bodyB, responseB) {
+									expect(responseB.statusCode).toBe(200);
+									expect(bodyB).toBeDefined();
+									expect(bodyB).not.toBeNull()
+									
+									var txId2 = bodyB;
 
-					// query for the triple added.
-					conn.query("nodeDB", 'ask where { '+
-						'<http://localhost/publications/articles/Journal1/1940/Article2> '+
-						'<http://purl.org/dc/elements/1.1/subject> '+
-						'"A very interesting subject"^^<http://www.w3.org/2001/XMLSchema#string> .}', null, null, null, function (dataQ, responseQ) {
-						//console.log(data);
-						expect(responseQ.statusCode).toBe(200);
-						expect(dataQ).not.toBe(null);
-						expect(dataQ).toBe(true);
-						
-						// restore database state
-						conn.begin("nodeDB", function (bodyB, responseB) {
-							expect(responseB.statusCode).toBe(200);
-							expect(bodyB).toBeDefined();
-							expect(bodyB).not.toBeNull();
+									conn.removeInTransaction(
+										{ database: "nodeDB", "txId": txId2, "body": aTriple, contentType: "text/plain" },
+										function (bodyR, responseR) {
+											expect(responseR.statusCode).toBe(200);
 
-							var txId2 = bodyB;
+											conn.commit(
+												{ database: "nodeDB", "txId": txId2 },
+												function (bodyCD, responseCD) {
+												expect(responseCD.statusCode).toBe(200);
 
-							conn.removeInTransaction("nodeDB", txId2, aTriple, function (bodyR, responseR) {
-								expect(responseR.statusCode).toBe(200);
-
-								conn.commit("nodeDB", txId2, function (bodyCD, responseCD) {
-									expect(responseCD.statusCode).toBe(200);
-
-									done();
+												done();
+											});
+										}
+									);
 								});
-							}, "text/plain");
-						});
-					}, "text/boolean");
-				});
-			}, "text/plain");
+							}
+						);
+					});
+				}
+			);
 		});
 	});
 
@@ -148,7 +174,7 @@ describe ("Getting and using transactions.", function() {
 				'<http://localhost/publications/articles/Journal1/1940/Article2> <http://purl.org/dc/elements/1.1/title> "richer dwelling scrapped"^^<http://www.w3.org/2001/XMLSchema#string> .\n'+
 				'<http://localhost/publications/articles/Journal1/1940/Article2> <http://xmlns.com/foaf/0.1/homepage> "http://www.succories.tld/scrapped/prat2.html"^^<http://www.w3.org/2001/XMLSchema#string> .\n';
 
-		conn.begin("nodeDB", function (dataB, responseB) {
+		conn.begin({ database: "nodeDB" }, function (dataB, responseB) {
 
 			expect(responseB.statusCode).toBe(200);
 			expect(dataB).toBeDefined();
@@ -156,14 +182,14 @@ describe ("Getting and using transactions.", function() {
 
 			txId = dataB;
 
-			conn.clearDB("nodeDB", txId, function (dataC, responseC) {
+			conn.clearDB({ database: "nodeDB", "txId": txId }, function (dataC, responseC) {
 				expect(responseC.statusCode).toBe(200);
 
 				// once cleared let's commit and then ask for the db size
-				conn.commit("nodeDB", txId, function (dataCom, responseCom) {
+				conn.commit({ database: "nodeDB", "txId": txId }, function (dataCom, responseCom) {
 					expect(responseCom.statusCode).toBe(200);
 
-					conn.getDBSize("nodeDB", function (dataS, responseS) {
+					conn.getDBSize({ database: "nodeDB"}, function (dataS, responseS) {
 						expect(responseS.statusCode).toBe(200);
 						expect(dataS).toBeDefined();
 						expect(dataS).not.toBe(null);
@@ -172,35 +198,38 @@ describe ("Getting and using transactions.", function() {
 						expect(sizeNum).toBe(0);
 						
 						// restore the db content
-						conn.begin("nodeDB", function (bodyB2, responseB2) {
+						conn.begin({ database: "nodeDB" }, function (bodyB2, responseB2) {
 							expect(responseB2.statusCode).toBe(200);
 							expect(bodyB2).toBeDefined();
 							expect(bodyB2).not.toBeNull();
 
 							txId = bodyB2;
 
-							conn.addInTransaction("nodeDB", txId, dbContent, function (dataA, responseA) {
-								expect(responseA.statusCode).toBe(200);
+							conn.addInTransaction(
+								{ database: "nodeDB", "txId": txId, body: dbContent, contentType: "text/plain" },
+								function (dataA, responseA) {
+									expect(responseA.statusCode).toBe(200);
 
-								// commit
-								conn.commit("nodeDB", txId, function (dataCom2, responseCom2) {
-									expect(responseCom2.statusCode).toBe(200);
+									// commit
+									conn.commit({ database: "nodeDB", "txId": txId }, function (dataCom2, responseCom2) {
+										expect(responseCom2.statusCode).toBe(200);
 
-									// check that the data is stored
-									conn.getDBSize("nodeDB", function (dataS2, responseS2) {
-										expect(responseS2.statusCode).toBe(200);
-										expect(dataS2).toBeDefined();
-										expect(dataS2).not.toBe(null);
+										// check that the data is stored
+										conn.getDBSize({ database: "nodeDB" }, function (dataS2, responseS2) {
+											expect(responseS2.statusCode).toBe(200);
+											expect(dataS2).toBeDefined();
+											expect(dataS2).not.toBe(null);
 
-										var sizeNum = parseInt(dataS2);
-										expect(sizeNum).not.toBe(0);
-										expect(sizeNum).toBeGreaterThan(1);
+											var sizeNum = parseInt(dataS2);
+											expect(sizeNum).not.toBe(0);
+											expect(sizeNum).toBeGreaterThan(1);
 
-										done();
+											done();
+										});
 									});
-								});
 
-							}, "text/plain");
+								}
+							);
 						});
 					});
 				});

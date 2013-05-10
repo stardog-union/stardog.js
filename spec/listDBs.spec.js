@@ -20,7 +20,7 @@ describe ("Listing DBs Test Suite", function() {
 
 	it ("should not be empty", function(done) {
 		
-		conn.listDBs( function (data) {
+		conn.listDBs(function (data) {
 			expect(data).not.toBe(null);
 			expect(data.databases).toBeDefined();
 			expect(data.databases).not.toBeNull();
@@ -32,7 +32,7 @@ describe ("Listing DBs Test Suite", function() {
 
 	it ("should contain nodeDB db (previously loaded)", function(done) {
 		
-		conn.listDBs( function (data) {
+		conn.listDBs(function (data) {
 			expect(data.databases).toContain('nodeDB');
 			done();
 		});

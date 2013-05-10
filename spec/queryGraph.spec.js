@@ -20,7 +20,7 @@ describe ("Query a DB receiving a Graph in JSON-LD", function() {
 
 	it ("A graph query for ALL result should not be empty", function(done) {
 		
-		conn.queryGraph("nodeDB", "describe ?s", null, null, null, function (data) {
+		conn.queryGraph({ database: "nodeDB", query: "describe ?s" }, function (data) {
 			// console.log(data);
 
 			expect(data).toBeDefined();
@@ -43,7 +43,7 @@ describe ("Query a DB receiving a Graph in JSON-LD", function() {
 
 	it ("A graph query could be limited too", function(done) {
 		
-		conn.queryGraph("nodeDB", "describe ?s", null, 1, null, function (data) {
+		conn.queryGraph({ database: "nodeDB", query: "describe ?s", limit: 1 }, function (data) {
 			// console.log(data);
 
 			expect(data).toBeDefined();

@@ -20,7 +20,7 @@ describe ("Set DB Options Test Suite", function() {
 
 	it ("should get NOT_FOUND status code trying to set the options of a non-existent DB.", function(done) {
 			
-		conn.setDBOptions('nodeDB_test', { }, function (data, response) {
+		conn.setDBOptions({ database: 'nodeDB_test', optionsObj: { } }, function (data, response) {
 
 			expect(response.statusCode).toBe(404);
 			done();
@@ -34,15 +34,15 @@ describe ("Set DB Options Test Suite", function() {
 			"icv.enabled" : false
 		};
 
-		conn.offlineDB('nodeDB', 'WAIT', 7, function (data, response1) {
+		conn.offlineDB({ database: 'nodeDB', strategy: 'WAIT', timeout: 700 }, function (data, response1) {
 			expect(response1.statusCode).toBe(200);
 
-			conn.setDBOptions('nodeDB', optionsObj, function (data, respose2) {
-				expect(respose2.statusCode).toBe(200);
+			conn.setDBOptions({ database: 'nodeDB', optionsObj: optionsObj }, function (data, response2) {
+				expect(response2.statusCode).toBe(200);
 
 				// set db back online
 
-				conn.onlineDB('nodeDB', 'NO_WAIT', function (data, response3) {
+				conn.onlineDB({ database: 'nodeDB', strategy: 'NO_WAIT' }, function (data, response3) {
 					expect(response3.statusCode).toBe(200);
 					done();
 				});

@@ -20,7 +20,7 @@ describe ("Getting the size of the DB", function() {
 
 	it ("A response with the size of the DB should not be empty", function(done) {
 		
-		conn.getDBSize("nodeDB", function (response) {
+		conn.getDBSize({ database: "nodeDB" }, function (response) {
 			// console.log(data);
 			expect(response).toBeDefined();
 			expect(response).not.toBe(null);

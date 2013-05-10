@@ -20,15 +20,17 @@ describe ("Query a DB receiving a bind of results.", function() {
 
 	it ("A query result should not be empty", function(done) {
 		
-		conn.query("nodeDB", "select distinct ?s where { ?s ?p ?o }", null, 20, 0, function (data) {
-			//console.log(data);
+		conn.query(
+			{ database: "nodeDB", query: "select distinct ?s where { ?s ?p ?o }",  limit: 20, offset: 0 },
+			function (data) {
+				//console.log(data);
 
-			expect(data).not.toBe(null);
-			expect(data.results).toBeDefined();
-			expect(data.results.bindings).toBeDefined();
-			expect(data.results.bindings.length).toBeGreaterThan(0);
-			expect(data.results.bindings.length).toBe(3);
-			done();
+				expect(data).not.toBe(null);
+				expect(data.results).toBeDefined();
+				expect(data.results.bindings).toBeDefined();
+				expect(data.results.bindings.length).toBeGreaterThan(0);
+				expect(data.results.bindings.length).toBe(3);
+				done();
 		});
 
 	});
@@ -51,45 +53,66 @@ describe ("Query a DB with QL reasoning receiving a bind of results.", function(
 
 	it ("A query to Vehicles must have result count to 3", function(done) {
 		
-		conn.query("nodeDBReasoning", "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :Vehicle }", null, 20, 0, function (data) {
-			//console.log(data);
+		conn.query(
+			{ 
+				database: "nodeDBReasoning", 
+				query: "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :Vehicle }", 
+				limit: 20, 
+				offset: 0 
+			},
+			function (data) {
+				//console.log(data);
 
-			expect(data).not.toBe(null);
-			expect(data.results).toBeDefined();
-			expect(data.results.bindings).toBeDefined();
-			expect(data.results.bindings.length).toBeGreaterThan(0);
-			expect(data.results.bindings.length).toBe(3);
-			done();
+				expect(data).not.toBe(null);
+				expect(data.results).toBeDefined();
+				expect(data.results.bindings).toBeDefined();
+				expect(data.results.bindings.length).toBeGreaterThan(0);
+				expect(data.results.bindings.length).toBe(3);
+				done();
 		});
 
 	});
 
 	it ("A query to Car must have result count to 3", function(done) {
 		
-		conn.query("nodeDBReasoning", "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :Car }", null, 20, 0, function (data) {
-			//console.log(data);
+		conn.query(
+			{ 
+				database: "nodeDBReasoning", 
+				query: "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :Car }", 
+				limit: 20, 
+				offset: 0 
+			},
+			function (data) {
+				//console.log(data);
 
-			expect(data).not.toBe(null);
-			expect(data.results).toBeDefined();
-			expect(data.results.bindings).toBeDefined();
-			expect(data.results.bindings.length).toBeGreaterThan(0);
-			expect(data.results.bindings.length).toBe(3);
-			done();
+				expect(data).not.toBe(null);
+				expect(data.results).toBeDefined();
+				expect(data.results.bindings).toBeDefined();
+				expect(data.results.bindings.length).toBeGreaterThan(0);
+				expect(data.results.bindings.length).toBe(3);
+				done();
 		});
 
 	});
 
 	it ("A query to SportsCar must have result count to 3", function(done) {
 		
-		conn.query("nodeDBReasoning", "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :SportsCar }", null, 20, 0, function (data) {
-			//console.log(data);
+		conn.query(
+			{ 
+				database: "nodeDBReasoning", 
+				query: "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :SportsCar }", 
+				limit: 20, 
+				offset: 0 
+			},
+			function (data) {
+				//console.log(data);
 
-			expect(data).not.toBe(null);
-			expect(data.results).toBeDefined();
-			expect(data.results.bindings).toBeDefined();
-			expect(data.results.bindings.length).toBeGreaterThan(0);
-			expect(data.results.bindings.length).toBe(1);
-			done();
+				expect(data).not.toBe(null);
+				expect(data.results).toBeDefined();
+				expect(data.results.bindings).toBeDefined();
+				expect(data.results.bindings.length).toBeGreaterThan(0);
+				expect(data.results.bindings.length).toBe(1);
+				done();
 		});
 
 	});
@@ -112,45 +135,66 @@ describe ("Query a DB with RL reasoning receiving a bind of results.", function(
 
 	it ("A query to Vehicles must have result count to 3", function(done) {
 		
-		conn.query("nodeDBReasoning", "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :Vehicle }", null, 20, 0, function (data) {
-			//console.log(data);
+		conn.query(
+			{ 
+				database: "nodeDBReasoning",
+				query: "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :Vehicle }", 
+				limit: 20,
+				offset: 0
+			}, 
+			function (data) {
+				//console.log(data);
 
-			expect(data).not.toBe(null);
-			expect(data.results).toBeDefined();
-			expect(data.results.bindings).toBeDefined();
-			expect(data.results.bindings.length).toBeGreaterThan(0);
-			expect(data.results.bindings.length).toBe(3);
-			done();
+				expect(data).not.toBe(null);
+				expect(data.results).toBeDefined();
+				expect(data.results.bindings).toBeDefined();
+				expect(data.results.bindings.length).toBeGreaterThan(0);
+				expect(data.results.bindings.length).toBe(3);
+				done();
 		});
 
 	});
 
 	it ("A query to Car must have result count to 3", function(done) {
 		
-		conn.query("nodeDBReasoning", "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :Car }", null, 20, 0, function (data) {
-			//console.log(data);
+		conn.query(
+			{ 
+				database: "nodeDBReasoning",
+				query: "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :Car }",
+				limit: 20,
+				offset: 0
+			}, 
+			function (data) {
+				//console.log(data);
 
-			expect(data).not.toBe(null);
-			expect(data.results).toBeDefined();
-			expect(data.results.bindings).toBeDefined();
-			expect(data.results.bindings.length).toBeGreaterThan(0);
-			expect(data.results.bindings.length).toBe(3);
-			done();
+				expect(data).not.toBe(null);
+				expect(data.results).toBeDefined();
+				expect(data.results.bindings).toBeDefined();
+				expect(data.results.bindings.length).toBeGreaterThan(0);
+				expect(data.results.bindings.length).toBe(3);
+				done();
 		});
 
 	});
 
 	it ("A query to SportsCar must have result count to 3", function(done) {
 		
-		conn.query("nodeDBReasoning", "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :SportsCar }", null, 20, 0, function (data) {
-			//console.log(data);
+		conn.query(
+			{
+				database: "nodeDBReasoning", 
+				query: "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :SportsCar }",
+				limit: 20,
+				offset: 0
+			}, 
+			function (data) {
+				//console.log(data);
 
-			expect(data).not.toBe(null);
-			expect(data.results).toBeDefined();
-			expect(data.results.bindings).toBeDefined();
-			expect(data.results.bindings.length).toBeGreaterThan(0);
-			expect(data.results.bindings.length).toBe(1);
-			done();
+				expect(data).not.toBe(null);
+				expect(data.results).toBeDefined();
+				expect(data.results.bindings).toBeDefined();
+				expect(data.results.bindings.length).toBeGreaterThan(0);
+				expect(data.results.bindings.length).toBe(1);
+				done();
 		});
 
 	});
@@ -173,45 +217,66 @@ describe ("Query a DB with EL reasoning receiving a bind of results.", function(
 
 	it ("A query to Vehicles must have result count to 3", function(done) {
 		
-		conn.query("nodeDBReasoning", "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :Vehicle }", null, 20, 0, function (data) {
-			//console.log(data);
+		conn.query(
+			{
+				database: "nodeDBReasoning", 
+				query: "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :Vehicle }", 
+				limit: 20,
+				offset: 0
+			}, 
+			function (data) {
+				//console.log(data);
 
-			expect(data).not.toBe(null);
-			expect(data.results).toBeDefined();
-			expect(data.results.bindings).toBeDefined();
-			expect(data.results.bindings.length).toBeGreaterThan(0);
-			expect(data.results.bindings.length).toBe(3);
-			done();
+				expect(data).not.toBe(null);
+				expect(data.results).toBeDefined();
+				expect(data.results.bindings).toBeDefined();
+				expect(data.results.bindings.length).toBeGreaterThan(0);
+				expect(data.results.bindings.length).toBe(3);
+				done();
 		});
 
 	});
 
 	it ("A query to Car must have result count to 3", function(done) {
 		
-		conn.query("nodeDBReasoning", "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :Car }", null, 20, 0, function (data) {
-			//console.log(data);
+		conn.query(
+			{
+				database: "nodeDBReasoning", 
+				query: "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :Car }",
+				limit: 20,
+				offset: 0
+			}, 
+			function (data) {
+				//console.log(data);
 
-			expect(data).not.toBe(null);
-			expect(data.results).toBeDefined();
-			expect(data.results.bindings).toBeDefined();
-			expect(data.results.bindings.length).toBeGreaterThan(0);
-			expect(data.results.bindings.length).toBe(3);
-			done();
+				expect(data).not.toBe(null);
+				expect(data.results).toBeDefined();
+				expect(data.results.bindings).toBeDefined();
+				expect(data.results.bindings.length).toBeGreaterThan(0);
+				expect(data.results.bindings.length).toBe(3);
+				done();
 		});
 
 	});
 
 	it ("A query to SportsCar must have result count to 3", function(done) {
 		
-		conn.query("nodeDBReasoning", "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :SportsCar }", null, 20, 0, function (data) {
-			//console.log(data);
+		conn.query(
+			{
+				database: "nodeDBReasoning",
+				query: "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :SportsCar }",
+				limit: 20,
+				offset: 0
+			}, 
+			function (data) {
+				//console.log(data);
 
-			expect(data).not.toBe(null);
-			expect(data.results).toBeDefined();
-			expect(data.results.bindings).toBeDefined();
-			expect(data.results.bindings.length).toBeGreaterThan(0);
-			expect(data.results.bindings.length).toBe(1);
-			done();
+				expect(data).not.toBe(null);
+				expect(data.results).toBeDefined();
+				expect(data.results.bindings).toBeDefined();
+				expect(data.results.bindings.length).toBeGreaterThan(0);
+				expect(data.results.bindings.length).toBe(1);
+				done();
 		});
 
 	});

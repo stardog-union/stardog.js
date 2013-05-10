@@ -16,7 +16,7 @@ describe ("Set User Roles Test Suite", function() {
 
 	it ("should return NOT_FOUND trying to set roles to a non-existent user.", function (done) {
 
-		conn.setUserRoles("roletestuser", ["reader"], function (data, response) {
+		conn.setUserRoles({ user: "roletestuser", roles: ["reader"] }, function (data, response) {
 			expect(response.statusCode).toBe(404);
 
 			done();
@@ -25,15 +25,15 @@ describe ("Set User Roles Test Suite", function() {
 
 	it ("should assign roles to a newly created user.", function (done) {
 
-		conn.createUser("roletestuser", "roletestuser", true, function (data1, response1) {
+		conn.createUser({ username: "roletestuser", password: "roletestuser", superuser: true }, function (data1, response1) {
 			expect(response1.statusCode).toBe(201);
 
-			conn.setUserRoles("roletestuser", ["reader"], function (data2, response2) {
+			conn.setUserRoles({ user: "roletestuser", roles: ["reader"] }, function (data2, response2) {
 
 				expect(response2.statusCode).toBe(200);
 
 				// clean and delete the user
-				conn.deleteUser("roletestuser", function (data, response3) {
+				conn.deleteUser({ user: "roletestuser" }, function (data, response3) {
 					expect(response3.statusCode).toBe(200);
 
 					done();

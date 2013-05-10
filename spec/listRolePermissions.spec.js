@@ -17,7 +17,7 @@ describe ("List Role permissions Test Suite", function() {
 
 	it ("should fail trying to get the list of permissions of a non-existent role.", function (done) {
 
-		conn.listRolePermissions('myrole', function (data, response) {
+		conn.listRolePermissions({ role: 'myrole' }, function (data, response) {
 			expect(response.statusCode).toBe(404);
 			done();
 		});
@@ -31,23 +31,23 @@ describe ("List Role permissions Test Suite", function() {
 			'resource' : 'nodeDB'
 		};
 
-		conn.createRole(aNewRole, function (data1, response1) {
+		conn.createRole({ rolename: aNewRole }, function (data1, response1) {
 			expect(response1.statusCode).toBe(201);
 
-			conn.assignPermissionToRole(aNewRole, aNewPermission, function (data2, response2) {
+			conn.assignPermissionToRole({ role: aNewRole, permissionObj: aNewPermission }, function (data2, response2) {
 
 				expect(response2.statusCode).toBe(201);
 
 				// list permissions to new role should include recently added.
-				conn.listRolePermissions(aNewRole, function (data3, response3) {
+				conn.listRolePermissions({ role: aNewRole }, function (data3, response3) {
+					expect(response3.statusCode).toBe(200);
 
 					expect(data3.permissions).toBeDefined();
 					expect(data3.permissions).not.toBeNull();
-
 					expect(data3.permissions).toContain('stardog:write:db:nodeDB');
 
 					// delete role
-					conn.deleteRole(aNewRole, function (data, response) {
+					conn.deleteRole({ role: aNewRole }, function (data, response) {
 						expect(response3.statusCode).toBe(200);
 
 						done();

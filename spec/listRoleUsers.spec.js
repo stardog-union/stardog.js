@@ -17,7 +17,7 @@ describe ("List Users with role Test Suite", function() {
 
 	it ("should return a list of users assigned to the 'reader' role in the system.", function (done) {
 
-		conn.listRoleUsers("reader", function (data, response) {
+		conn.listRoleUsers({ role: "reader" }, function (data, response) {
 			expect(response.statusCode).toBe(200);
 
 			expect(data.users).toBeDefined();

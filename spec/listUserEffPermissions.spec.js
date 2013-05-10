@@ -17,7 +17,7 @@ describe ("List User effective permissions Test Suite", function() {
 
 	it ("should fail trying to get the list of effective permissions of a non-existent user.", function (done) {
 
-		conn.listUserEffPermissions('myuser', function (data, response) {
+		conn.listUserEffPermissions({ user: 'myuser' }, function (data, response) {
 			expect(response.statusCode).toBe(404);
 			done();
 		});
@@ -31,21 +31,21 @@ describe ("List User effective permissions Test Suite", function() {
 			'resource' : 'nodeDB'
 		};
 
-		conn.createUser(aNewUser, aNewUserPwd, true, function (data1, response1) {
+		conn.createUser({ username: aNewUser, password: aNewUserPwd, superuser: true }, function (data1, response1) {
 			expect(response1.statusCode).toBe(201);
 
-			conn.assignPermissionToUser(aNewUser, aNewPermission, function (data2, response2) {
+			conn.assignPermissionToUser({ user: aNewUser, permissionObj: aNewPermission }, function (data2, response2) {
 				expect(response2.statusCode).toBe(201);
 
 				// list permissions to new role should include recently added.
-				conn.listUserEffPermissions(aNewUser, function (data3, response3) {
+				conn.listUserEffPermissions({ user: aNewUser }, function (data3, response3) {
 
 					expect(data3.permissions).toBeDefined();
 					expect(data3.permissions).not.toBeNull();
 					expect(data3.permissions).toContain('stardog:*:*:*');
 
-					// delete role
-					conn.deleteUser(aNewUser, function (data, response) {
+					// delete user
+					conn.deleteUser({ user: aNewUser }, function (data, response) {
 						expect(response3.statusCode).toBe(200);
 
 						done();
