@@ -159,10 +159,6 @@
 	// JSONLD object.
 	if (typeof exports !== 'undefined') {
 		
-		// TODO: remove
-		// Connection.prototype._httpRequest = function(theMethod, 
-		// 	resource, acceptH, params, callback, msgBody, isJsonBody, contentType, multipart) {
-
 		// Node.js implementation of the HTTP request using `request` npm module.
 		// __Parameters__:  
 		// `options`: an object with the following attributes: 
@@ -1036,17 +1032,13 @@
 			isJsonBody: true,
 			params: options.params || ""
 
-		}
+		};
 
 		if (options.superuser && options.superuser != null) {
 			reqOptions.msgBody.superuser = options.superuser;
 		}
 
 		this._httpRequest(reqOptions, callback);
-
-		// this._httpRequest( TODO: remove
-		// 	"POST", "admin/users", "application/json", "", callback, options, true
-		// );
 	};
 
 	// #### Change user's password
@@ -1066,14 +1058,9 @@
 			msgBody: { "password" : options.newPwd },
 			isJsonBody: true,
 			params: options.params || ""
-
-		}
+		};
 
 		this._httpRequest(reqOptions, callback);
-
-		// this._httpRequest( TODO: remove
-		// 	"PUT", "admin/users/"+ user +"/pwd", "application/json", "", callback, { "password" : newPwd }, true
-		// );
 	};
 
 	// #### Check if user is enabled.
@@ -1090,11 +1077,9 @@
 			resource: "admin/users/" + options.user + "/enabled",
 			acceptHeader: "application/json",
 			params: options.params || ""
-		}
+		};
 
 		this._httpRequest(reqOptions, callback);
-
-		// this._httpRequest("GET", "admin/users/"+ user +"/enabled", "application/json", "", callback); TODO: remove
 	};
 
 	// #### Check if user is superuser.
@@ -1111,11 +1096,9 @@
 			resource: "admin/users/" + options.user + "/superuser",
 			acceptHeader: "application/json",
 			params: options.params || ""
-		}
+		};
 
 		this._httpRequest(reqOptions, callback);
-
-		// this._httpRequest("GET", "admin/users/"+ user +"/superuser", "application/json", "", callback); TODO : remove
 	};
 
 	// #### List user roles.
@@ -1132,11 +1115,9 @@
 			resource: "admin/users/" + options.user + "/roles",
 			acceptHeader: "application/json",
 			params: options.params || ""
-		}
+		};
 
 		this._httpRequest(reqOptions, callback);
-
-		// this._httpRequest("GET", "admin/users/"+ user +"/roles", "application/json", "", callback); TODO : remove
 	};
 
 	// #### List users (GET)
@@ -1152,11 +1133,9 @@
 			resource: "admin/users",
 			acceptHeader: "application/json",
 			params: options.params || ""
-		}
+		};
 
-		this._httpRequest(reqOptions, callback);
-
-		// this._httpRequest("GET", "admin/users", "application/json", "", callback);
+		this._httpRequest(reqOptions, typeof options === 'function' ? options : callback);
 	};
 
 	// #### Delete user
@@ -1172,10 +1151,9 @@
 			resource: "admin/users/" + options.user,
 			acceptHeader: "application/json",
 			params: options.params || ""
-		}
+		};
 
 		this._httpRequest(reqOptions, callback);
-		// this._httpRequest("DELETE", "admin/users/"+ user, "application/json", "", callback); TODO: remove
 	};
 
 	// #### Enable users.
@@ -1195,13 +1173,9 @@
 			params: options.params || "",
 			msgBody: { "enabled" : options.enableFlag},
 			isJsonBody: true
-		}
+		};
 
 		this._httpRequest(reqOptions, callback);
-
-		// this._httpRequest(
-		// 	"PUT", "admin/users/"+ user +"/enabled", "application/json", "", callback, { "enabled" : enableFlag }, true TODO: remove
-		// );
 	};
 
 	// #### Setting user roles.
@@ -1210,24 +1184,20 @@
 	// __Parameters__:  
 	// `options`: an object with one the following attributes: 
 	// 				`user`: the name of the user to set the roles.  
-	// 				`rolesArray`: an array containing the roles to assign to the user, [more info](http://stardog.com/docs/network/#extended-http).  
+	// 				`roles`: an array containing the roles to assign to the user, [more info](http://stardog.com/docs/network/#extended-http).  
 	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.  
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.setUserRoles = function (user, rolesArray, callback) {
+	Connection.prototype.setUserRoles = function (options, callback) {
 		var reqOptions = {
 			httpMethod: "PUT",
 			resource: "admin/users/" + options.user + "/roles",
 			acceptHeader: "application/json",
 			params: options.params || "",
-			msgBody: { "roles" : options.rolesArray},
+			msgBody: { "roles" : options.roles },
 			isJsonBody: true
-		}
+		};
 
 		this._httpRequest(reqOptions, callback);
-
-		// this._httpRequest( TODO: remove
-		// 	"PUT", "admin/users/"+ user +"/roles", "application/json", "", callback, { "roles" : rolesArray }, true
-		// );
 	};
 
 	// ### Role operations.
@@ -1238,31 +1208,58 @@
 	// #### Create a new role
 	// 
 	// __Parameters__:  
-	// `rolename`: the name of the role to create.  
+	// `options`: an object with one the following attributes: 
+	// 				`rolename`: the name of the role to create.  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.  
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.createRole = function(rolename, callback) {
-		this._httpRequest(
-			"POST", "admin/roles", "application/json", "", callback, { "rolename" : rolename }, true
-		);
+	Connection.prototype.createRole = function(options, callback) {
+		var reqOptions = {
+			httpMethod: "POST",
+			resource: "admin/roles",
+			acceptHeader: "application/json",
+			params: options.params || "",
+			msgBody: { "rolename" : options.rolename },
+			isJsonBody: true
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### List roles (GET)
 	// Retrieves the list of roles registered in the system.
 	// 
-	// __Parameters__:  
+	// __Parameters__:
+	// `options`: an object with one the following attributes: 
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.  
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.listRoles = function (callback) {
-		this._httpRequest("GET", "admin/roles", "application/json", "", callback);
+	Connection.prototype.listRoles = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "GET",
+			resource: "admin/roles",
+			acceptHeader: "application/json",
+			params: options.params || ""
+		};
+
+		this._httpRequest(reqOptions, (typeof options === 'function') ? options : callback);
 	};
 
 	// #### List users with a specified role.
 	// Retrieves users that have the role assigned.
 	//
-	// __Parameters__:  
-	// `role`: the role to look for in the set of users defined in Stardog.  
+	// __Parameters__:
+	// `options`: an object with one the following attributes: 
+	// 				`role`: the role to look for in the set of users defined in Stardog.  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.  
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.listRoleUsers = function (role, callback) {
-		this._httpRequest("GET", "admin/roles/"+ role +"/users", "application/json", "", callback);
+	Connection.prototype.listRoleUsers = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "GET",
+			resource: "admin/roles/" + options.role + "/users",
+			acceptHeader: "application/json",
+			params: options.params || ""
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Delete role
@@ -1270,11 +1267,20 @@
 	// flag which indicates if the delete call for the role must be forced, 
 	// [more info](http://stardog.com/docs/network/#extended-http)
 	//
-	// __Parameters__:  
-	// `role`: the role to delete.  
+	// __Parameters__:
+	// `options`: an object with one the following attributes: 
+	// 				`role`: the role to delete.  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint. 
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.deleteRole = function (role, callback) {
-		this._httpRequest("DELETE", "admin/roles/"+ role, "application/json", "", callback);
+	Connection.prototype.deleteRole = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "DELETE",
+			resource: "admin/roles/" + options.role,
+			acceptHeader: "application/json",
+			params: options.params || ""
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// ### Permissions operations.
@@ -1287,88 +1293,145 @@
 	// Creates a new permission for a given role over a specified resource.
 	//
 	// __Parameters__:  
-	// `role`: the role to whom the permission will be assigned.  
-	// `permissionObj`: the permission descriptor object, [more info](http://stardog.com/docs/network/#extended-http).  
+	// `options`: an object with one the following attributes: 
+	// 				`role`: the role to whom the permission will be assigned.  
+	// 				`permissionObj`: the permission descriptor object, [more info](http://stardog.com/docs/network/#extended-http).  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint. 
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.assignPermissionToRole = function (role, permissionObj, callback) {
-		this._httpRequest(
-			"PUT", "admin/permissions/role/"+ role, "application/json", "", callback, permissionObj, true
-		);
+	Connection.prototype.assignPermissionToRole = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "PUT",
+			resource: "admin/permissions/role/" + options.role,
+			acceptHeader: "application/json",
+			params: options.params || "",
+			msgBody: options.permissionObj,
+			isJsonBody: true
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Assign permission to user.
 	// Creates a new permission for a given user over a specified resource.
 	//
-	// __Parameters__:  
-	// `user`: the user to whom the permission will be assigned.  
-	// `permissionObj`: the permission descriptor object, [more info](http://stardog.com/docs/network/#extended-http).  
+	// __Parameters__:
+	// `options`: an object with one the following attributes: 
+	// 				`user`: the user to whom the permission will be assigned.  
+	// 				`permissionObj`: the permission descriptor object, [more info](http://stardog.com/docs/network/#extended-http).  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint. 
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.assignPermissionToUser = function (user, permissionObj, callback) {
-		this._httpRequest(
-			"PUT", "admin/permissions/user/"+ user, "application/json", "", callback, permissionObj, true
-		);
+	Connection.prototype.assignPermissionToUser = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "PUT",
+			resource: "admin/permissions/user/" + options.user,
+			acceptHeader: "application/json",
+			params: options.params || "",
+			msgBody: options.permissionObj,
+			isJsonBody: true
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Delete permission from role.
 	// Deletes a permission for a given role over a specified resource.
 	//
-	// __Parameters__:  
-	// `role`: the role to whom the permission will be removed.  
-	// `permissionObj`: the permission descriptor object, [more info](http://stardog.com/docs/network/#extended-http).  
+	// __Parameters__:
+	// `options`: an object with one the following attributes: 
+	// 				`role`: the role to whom the permission will be removed.  
+	// 				`permissionObj`: the permission descriptor object, [more info](http://stardog.com/docs/network/#extended-http).  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint. 
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.deletePermissionFromRole = function (role, permissionObj, callback) {
-		this._httpRequest(
-			"POST", "admin/permissions/role/"+ role + "/delete", "application/json", "", callback, permissionObj, true
-		);
+	Connection.prototype.deletePermissionFromRole = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "POST",
+			resource: "admin/permissions/role/" + options.role + "/delete",
+			acceptHeader: "application/json",
+			params: options.params || "",
+			msgBody: options.permissionObj,
+			isJsonBody: true
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Delete permission from user.
 	// Deletes a permission for a given user over a specified resource.
 	//
-	// __Parameters__:  
-	// `user`: the user to whom the permission will be removed.  
-	// `permissionObj`: the permission descriptor object, [more info](http://stardog.com/docs/network/#extended-http).  
+	// __Parameters__: 
+	// `options`: an object with one the following attributes: 
+	// 				`user`: the user to whom the permission will be removed.  
+	// 				`permissionObj`: the permission descriptor object, [more info](http://stardog.com/docs/network/#extended-http).  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint. 
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.deletePermissionFromUser = function (user, permissionObj, callback) {
-		this._httpRequest(
-			"POST", "admin/permissions/user/"+ user + "/delete", "application/json", "", callback, permissionObj, true
-		);
+	Connection.prototype.deletePermissionFromUser = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "POST",
+			resource: "admin/permissions/user/" + options.user + "/delete",
+			acceptHeader: "application/json",
+			params: options.params || "",
+			msgBody: options.permissionObj,
+			isJsonBody: true
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### List role permissions.
 	// Retrieves permissions assigned to the role.
 	//
 	// __Parameters__:  
-	// `role`: the role to check for its permissions.  
+	// `options`: an object with one the following attributes: 
+	// 				`role`: the role to check for its permissions.  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint. 
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.listRolePermissions = function (role, callback) {
-		this._httpRequest(
-			"GET", "admin/permissions/role/"+ role, "application/json", "", callback
-		);
+	Connection.prototype.listRolePermissions = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "GET",
+			resource: "admin/permissions/role/" + options.role,
+			acceptHeader: "application/json",
+			params: options.params || ""
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### List user permissions.
 	// Retrieves permissions assigned to the user.
 	//
 	// __Parameters__:  
-	// `user`: the user to check for its permissions.  
+	// `options`: an object with one the following attributes: 
+	// 				`user`: the user to check for its permissions.  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint. 
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.listUserPermissions = function (user, callback) {
-		this._httpRequest(
-			"GET", "admin/permissions/user/"+ user, "application/json", "", callback
-		);
+	Connection.prototype.listUserPermissions = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "GET",
+			resource: "admin/permissions/user/" + options.user,
+			acceptHeader: "application/json",
+			params: options.params || ""
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### List user effective permissions.
 	// Retrieves effective permissions assigned to the user.
 	//
 	// __Parameters__:  
-	// `user`: the user to check for its effective permissions.  
+	// `options`: an object with one the following attributes: 
+	// 				`user`: the user to check for its effective permissions.  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint. 
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.listUserEffPermissions = function (user, callback) {
-		this._httpRequest(
-			"GET", "admin/permissions/effective/user/"+ user, "application/json", "", callback
-			);
+	Connection.prototype.listUserEffPermissions = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "GET",
+			resource: "admin/permissions/effective/user/" + options.user,
+			acceptHeader: "application/json",
+			params: options.params || ""
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// ### Shutdown server.
@@ -1376,11 +1439,18 @@
 	// request was received and that the server will be shut down shortly.
 	//
 	// __Parameters__:  
+	// `options`: an object with one the following attributes: 
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint. 
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.shutdownServer = function (callback) {
-		this._httpRequest(
-			"POST", "admin/shutdown", "application/json", "", callback
-			);
+	Connection.prototype.shutdownServer = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "POST",
+			resource: "admin/shutdown",
+			acceptHeader: "application/json",
+			params: options.params || ""
+		};
+
+		this._httpRequest(reqOptions, (typeof options === 'function') ? options : callback);
 	};
 
 	return Stardog;

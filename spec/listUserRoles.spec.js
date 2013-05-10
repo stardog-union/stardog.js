@@ -15,14 +15,14 @@ describe ("List user roles Test Suite", function() {
 	});
 
 	it ("should return NOT_FOUND if trying to list roles from non-existent user", function (done) {
-		conn.listUserRoles('someuser', function (data, response) {
+		conn.listUserRoles({ user: 'someuser' }, function (data, response) {
 			expect(response.statusCode).toBe(404);
 			done();
 		});
 	});
 
 	it ("should return a non-empty list with the roles of the user", function (done) {
-		conn.listUserRoles("anonymous", function (data, response) {
+		conn.listUserRoles({ user: "anonymous" }, function (data, response) {
 			expect(response.statusCode).toBe(200);
 
 			expect(data.roles).toBeDefined();

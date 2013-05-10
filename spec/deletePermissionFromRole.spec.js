@@ -22,7 +22,7 @@ describe ("Delete Permissions to Roles Test Suite", function() {
 			'resource' : 'nodeDB'
 		};
 
-		conn.deletePermissionFromRole('myrole', aNewPermission, function (data, response) {
+		conn.deletePermissionFromRole({ role: 'myrole', permissionObj: aNewPermission }, function (data, response) {
 
 			expect(response.statusCode).toBe(404);
 			done();
@@ -39,18 +39,18 @@ describe ("Delete Permissions to Roles Test Suite", function() {
 			'resource' : 'nodeDB'
 		};
 
-		conn.createRole(aNewRole, function (data1, response1) {
+		conn.createRole({ rolename: aNewRole }, function (data1, response1) {
 			expect(response1.statusCode).toBe(201);
 
 			// Add permissions to role
-			conn.assignPermissionToRole(aNewRole, aNewPermission, function (data2, response2) {
+			conn.assignPermissionToRole({ role: aNewRole, permissionObj: aNewPermission }, function (data2, response2) {
 				expect(response2.statusCode).toBe(201);
 
-				conn.deletePermissionFromRole(aNewRole, aNewPermission, function (data3, response3) {
+				conn.deletePermissionFromRole({ role: aNewRole, permissionObj: aNewPermission }, function (data3, response3) {
 					expect(response3.statusCode).toBe(200);
 
 					// delete role
-					conn.deleteRole(aNewRole, function (data4, response4) {
+					conn.deleteRole({ role: aNewRole }, function (data4, response4) {
 						expect(response4.statusCode).toBe(200);
 
 						done();

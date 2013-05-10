@@ -20,7 +20,7 @@ describe ("Check if user is enabled Test Suite", function() {
 
 	it ("should get NOT_FOUND for a non-existent user", function (done) {
 
-		conn.isUserEnabled('someuser', function (data, response) {
+		conn.isUserEnabled({ user: 'someuser' }, function (data, response) {
 			expect(response.statusCode).toBe(404);
 			done();
 		});
@@ -28,7 +28,7 @@ describe ("Check if user is enabled Test Suite", function() {
 
 	it ("should return the value with the user's enabled flag", function (done) {
 
-		conn.isUserEnabled('admin', function (data, response) {
+		conn.isUserEnabled({ user: 'admin' }, function (data, response) {
 			expect(response.statusCode).toBe(200);
 			expect(data.enabled).toBe(true);
 

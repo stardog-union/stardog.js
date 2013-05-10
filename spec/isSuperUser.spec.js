@@ -20,7 +20,7 @@ describe ("Check if user is superuser Test Suite", function() {
 
 	it ("should get NOT_FOUND for a non-existent user", function (done) {
 
-		conn.isSuperUser('someuser', function (data, response) {
+		conn.isSuperUser({ user: 'someuser' }, function (data, response) {
 			expect(response.statusCode).toBe(404);
 			done();
 		});
@@ -28,7 +28,7 @@ describe ("Check if user is superuser Test Suite", function() {
 
 	it ("should return the value with the user's superuser flag", function (done) {
 
-		conn.isSuperUser('admin', function (data, response) {
+		conn.isSuperUser({ user: 'admin' }, function (data, response) {
 			expect(response.statusCode).toBe(200);
 			expect(data.superuser).toBe(true);
 

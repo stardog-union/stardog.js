@@ -22,7 +22,7 @@ describe ("Assign Permissions to Users Test Suite", function() {
 			'resource' : 'nodeDB'
 		};
 
-		conn.assignPermissionToUser('myuser', aNewPermission, function (data, response) {
+		conn.assignPermissionToUser({ user: 'myuser', permissionObj: aNewPermission }, function (data, response) {
 
 			expect(response.statusCode).toBe(404);
 			done();
@@ -39,15 +39,15 @@ describe ("Assign Permissions to Users Test Suite", function() {
 			'resource' : 'nodeDB'
 		};
 
-		conn.createUser(aNewUser, aNewUserPwd, true, function (data, response1) {
+		conn.createUser({ username: aNewUser, password: aNewUserPwd, superuser: true }, function (data, response1) {
 			expect(response1.statusCode).toBe(201);
 
-			conn.assignPermissionToUser(aNewUser, aNewPermission, function (data, response2) {
+			conn.assignPermissionToUser({ user: aNewUser, permissionObj: aNewPermission }, function (data, response2) {
 
 				expect(response2.statusCode).toBe(201);
 
 				// delete role
-				conn.deleteUser(aNewUser, function (data, response3) {
+				conn.deleteUser({ user: aNewUser }, function (data, response3) {
 					expect(response3.statusCode).toBe(200);
 
 					done();
