@@ -50,7 +50,7 @@
 	var Stardog = {};
 
 	// Current version of the library. Keep in sync with 'package.json'
-	Stardog.VERSION = '0.0.4';
+	Stardog.VERSION = '0.0.5';
 
 	if (typeof exports !== 'undefined') {
 		// Require request, if we're on the server, and it's not already present
