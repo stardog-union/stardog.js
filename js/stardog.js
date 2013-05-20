@@ -288,23 +288,32 @@
 
 		// Low level HTTP request method to use in the Browser, using an AJAX implementation.
 		// __Parameters__:  
-		// `options`: an object with the following attributes: 
-		//				`httpMethod`: the name of the database;
+		// `options`: an object with the following attributes:
+		// 				`httpMethod`: the name of the database;
 		//				`resource`: the resource;
 		//				`acceptHeader`: the accept header;
 		//				`params`: any other parameters to pass to the SPARQL endpoint;
+		//				`msgBody`: the message body;
+		//				`isJsonBody`: whether the body is a JSON object;
+		//				`contentType`: the content type;
+		//				`multipart`: the multipart;
 		// `callback`: the callback to execute once the request is done. 
 		Connection.prototype._httpRequest = function(options, callback) {
 			var theMethod = options.httpMethod,
 				acceptH = options.acceptHeader,
 				req_url = this.endpoint + options.resource,
-				params = options.params,
+				params = options.params ? ("?" + $.param(options.params)) : '',
+				contentType = options.contentType,
+				body = options.msgBody ? options.msgBody : null,
+				isJsonBody = options.isJsonBody,
+				multipart = options.multipart,
 				headers = {},
 				username, password;
 
 			if (this.reasoning && this.reasoning != null) {
 				headers['SD-Connection-String'] = 'reasoning=' + this.reasoning;
 			}
+
 			headers['Accept'] = acceptH || "application/sparql-results+json";
 
 			if (this.credentials) {
@@ -319,30 +328,38 @@
 				headers["Authorization"] = "Basic ".concat(userPassBase64);
 			}
 
+			if(contentType) {
+				headers['Content-Type'] = contentType;
+			}
+
 			$.ajax({
 				type: theMethod,
-				url: req_url,
-				dataType: 'json',
-				data: params,
+				url: req_url + params,
+				processData: false,
+				dataType: 'text',
+				data:  body,
 				headers: headers,
 
-				success: function(data) {
+				success: function(data, status, jqXHR) {
 					var return_obj;
 
 					// check if the returned object is a JSONLD object
-					if (data.hasOwnProperty('@id') || data.hasOwnProperty('@context')) {
+					if (data && data != null && (data.hasOwnProperty('@id') || data.hasOwnProperty('@context'))) {
 						return_obj = Connection._convertToLinkedJson(data);
 					}
 					else {
 						return_obj = data;
 					}
 
-					callback(return_obj);
+					callback({ 
+						'status' : jqXHR.status,
+						'statusText': return_obj
+					});
 				},
-				error: function(jqXHR, textStatus, errorThrown) {
+				error: function(jqXHR, statusText, errorThrown) {
 					callback({
 						'status': jqXHR.status,
-						'statusText' : jqXHR.statusCode,
+						'statusText' : statusText,
 						'error': jqXHR.responseText});
 				}
 			});
