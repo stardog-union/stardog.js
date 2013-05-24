@@ -233,7 +233,7 @@
 				}
 			};
 
-			if (msgBody && msgBody != null) {
+			if (msgBody) {
 				if (isJsonBody) {
 					reqJSON["json"] = msgBody;
 				}
