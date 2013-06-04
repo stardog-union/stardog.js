@@ -31,21 +31,21 @@
 	// the browser, add `_` as a global object via a string identifier,
 	// for Closure Compiler "advanced" mode.
 	if (typeof exports !== 'undefined' && typeof module !== 'undefined' && module.exports) {
-		exports = module.exports = factory();
+		exports = module.exports = factory(root);
 	}
 	else if (typeof define === 'function' && define.amd) {
 		// load Stardog via AMD
 		define(['stardog'], function() {
 			// Export to global for backward compatibility
-			root['Stardog'] = factory();
+			root['Stardog'] = factory(root);
 			return root.Stardog;
 		});
 	}
 	else {
 		// Browser global
-		root['Stardog'] = factory();
+		root['Stardog'] = factory(root);
 	}
-}).call(this, function() {
+}).call(this, function(root) {
 	// Create top-level namespace
 	var Stardog = {};
 
