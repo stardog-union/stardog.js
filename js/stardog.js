@@ -221,6 +221,8 @@
 				else {
 					console.log('Error found!');
 					console.log(error);
+					// TODO: maybe wrap the error with stardog specific info
+					callback(body, response, error); 
 				}
 			};
 
@@ -338,30 +340,27 @@
 				processData: false,
 				dataType: 'text',
 				data:  body,
-				headers: headers,
+				headers: headers
 
-				success: function(data, status, jqXHR) {
-					var return_obj;
-
-					// check if the returned object is a JSONLD object
-					if (data && data != null && (data.hasOwnProperty('@id') || data.hasOwnProperty('@context'))) {
-						return_obj = Connection._convertToLinkedJson(data);
-					}
-					else {
-						return_obj = data;
-					}
-
-					callback({ 
-						'status' : jqXHR.status,
-						'statusText': return_obj
-					});
-				},
-				error: function(jqXHR, statusText, errorThrown) {
-					callback({
-						'status': jqXHR.status,
-						'statusText' : statusText,
-						'error': jqXHR.responseText});
+			}).done(function(data, status, jqXHR) {
+				var return_obj;
+				// check if the returned object is a JSONLD object
+				if (data && (data.hasOwnProperty('@id') || data.hasOwnProperty('@context'))) {
+					return_obj = Connection._convertToLinkedJson(data);
+				} else {
+					return_obj = data;
 				}
+				callback(return_obj, jqXHR);
+			}).fail(function(jqXHR, textStatus, errorThrown) {
+				callback(
+					textStatus,
+					{
+						responseText: jqXHR.responseText,
+						statusCode: jqXHR.status,
+						statusText: jqXHR.statusText
+					},
+					errorThrown
+				);
 			});
 		};
 	}

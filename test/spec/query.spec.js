@@ -3,22 +3,23 @@
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like enviroments that support module.exports,
         // like Node.
-        module.exports = factory(require('../../js/stardog.js'));
+        module.exports = factory(require('../../js/stardog.js'), require('../lib/async.js'));
     } else if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
-        define(['stardog'], factory);
+        define(['stardog', 'async'], factory);
     } else {
         // Browser globals (root is window)
-        root.returnExports = factory(root.b);
+        root.returnExports = factory(root.Stardog, async);
     }
-}(this, function (Stardog) {
+}(this, function (Stardog, Async) {
 
 	// -----------------------------------
 	// Describes the query test methods
 	// -----------------------------------
 
 	describe ("Query a DB receiving a bind of results.", function() {
-		var conn;
+		var conn,
+			checkDone = (new Async()).done;
 
 		beforeEach(function() {
 			conn = new Stardog.Connection();
@@ -42,15 +43,19 @@
 					expect(data.results.bindings).toBeDefined();
 					expect(data.results.bindings.length).toBeGreaterThan(0);
 					expect(data.results.bindings.length).toBe(3);
-					done();
+					if (done) { // node.js
+						done() 
+					}
 			});
 
+			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
 	});
 
 	describe ("Query a DB with QL reasoning receiving a bind of results.", function() {
-		var conn;
+		var conn,
+			checkDone = (new Async()).done;
 
 		beforeEach(function() {
 			conn = new Stardog.Connection();
@@ -80,9 +85,12 @@
 					expect(data.results.bindings).toBeDefined();
 					expect(data.results.bindings.length).toBeGreaterThan(0);
 					expect(data.results.bindings.length).toBe(3);
-					done();
+					if (done) { // node.js
+						done() 
+					}
 			});
 
+			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
 		it ("A query to Car must have result count to 3", function(done) {
@@ -102,9 +110,12 @@
 					expect(data.results.bindings).toBeDefined();
 					expect(data.results.bindings.length).toBeGreaterThan(0);
 					expect(data.results.bindings.length).toBe(3);
-					done();
+					if (done) { // node.js
+						done() 
+					}
 			});
 
+			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
 		it ("A query to SportsCar must have result count to 3", function(done) {
@@ -124,15 +135,19 @@
 					expect(data.results.bindings).toBeDefined();
 					expect(data.results.bindings.length).toBeGreaterThan(0);
 					expect(data.results.bindings.length).toBe(1);
-					done();
+					if (done) { // node.js
+						done() 
+					}
 			});
 
+			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
 	});
 
 	describe ("Query a DB with RL reasoning receiving a bind of results.", function() {
-		var conn;
+		var conn,
+			checkDone = (new Async()).done;
 
 		beforeEach(function() {
 			conn = new Stardog.Connection();
@@ -162,9 +177,12 @@
 					expect(data.results.bindings).toBeDefined();
 					expect(data.results.bindings.length).toBeGreaterThan(0);
 					expect(data.results.bindings.length).toBe(3);
-					done();
+					if (done) { // node.js
+						done() 
+					}
 			});
 
+			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
 		it ("A query to Car must have result count to 3", function(done) {
@@ -184,9 +202,12 @@
 					expect(data.results.bindings).toBeDefined();
 					expect(data.results.bindings.length).toBeGreaterThan(0);
 					expect(data.results.bindings.length).toBe(3);
-					done();
+					if (done) { // node.js
+						done() 
+					}
 			});
 
+			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
 		it ("A query to SportsCar must have result count to 3", function(done) {
@@ -206,15 +227,19 @@
 					expect(data.results.bindings).toBeDefined();
 					expect(data.results.bindings.length).toBeGreaterThan(0);
 					expect(data.results.bindings.length).toBe(1);
-					done();
+					if (done) { // node.js
+						done() 
+					}
 			});
 
+			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
 	});
 
 	describe ("Query a DB with EL reasoning receiving a bind of results.", function() {
-		var conn;
+		var conn,
+			checkDone = (new Async()).done;
 
 		beforeEach(function() {
 			conn = new Stardog.Connection();
@@ -244,9 +269,12 @@
 					expect(data.results.bindings).toBeDefined();
 					expect(data.results.bindings.length).toBeGreaterThan(0);
 					expect(data.results.bindings.length).toBe(3);
-					done();
+					if (done) { // node.js
+						done() 
+					}
 			});
 
+			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
 		it ("A query to Car must have result count to 3", function(done) {
@@ -266,9 +294,12 @@
 					expect(data.results.bindings).toBeDefined();
 					expect(data.results.bindings.length).toBeGreaterThan(0);
 					expect(data.results.bindings.length).toBe(3);
-					done();
+					if (done) { // node.js
+						done() 
+					}
 			});
 
+			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
 		it ("A query to SportsCar must have result count to 3", function(done) {
@@ -288,9 +319,12 @@
 					expect(data.results.bindings).toBeDefined();
 					expect(data.results.bindings.length).toBeGreaterThan(0);
 					expect(data.results.bindings.length).toBe(1);
-					done();
+					if (done) { // node.js
+						done() 
+					}
 			});
-
+			
+			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
 	});

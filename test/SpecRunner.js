@@ -8,6 +8,7 @@ require.config({
     'jasmine-html': 'lib/jasmine-html',
     spec: 'spec/',
     stardog : "../js/stardog",
+    async: "lib/async"
   },
   shim: {
     underscore: {
@@ -24,7 +25,9 @@ require.config({
 });
 
 
-require(['underscore', 'jquery', 'jasmine-html', 'stardog'], function(_, $, jasmine){
+require(['underscore', 'jquery', 'jasmine-html', 'stardog', 'async'], function(_, $, jasmine){
+
+
 
   var jasmineEnv = jasmine.getEnv();
   jasmineEnv.updateInterval = 1000;
@@ -39,7 +42,39 @@ require(['underscore', 'jquery', 'jasmine-html', 'stardog'], function(_, $, jasm
 
   var specs = [];
 
+  specs.push('spec/assignPermissionToRole.spec');
+  specs.push('spec/assignPermissionToUser.spec');
+  specs.push('spec/changePwd.spec');
+  specs.push('spec/copyDB.spec');
+  specs.push('spec/deletePermissionFromRole.spec');
+  specs.push('spec/deletePermissionFromUser.spec');
+  specs.push('spec/deleteRole.spec');
+  specs.push('spec/deleteUser.spec');
+  specs.push('spec/dropDB.spec');
+  specs.push('spec/explain.spec');
+  specs.push('spec/getDB.spec');
+  specs.push('spec/getDBOptions.spec');
   specs.push('spec/getDBSize.spec');
+  specs.push('spec/getProperty.spec');
+  specs.push('spec/isSuperUser.spec');
+  specs.push('spec/isUserEnabled.spec');
+  specs.push('spec/listDBs.spec');
+  specs.push('spec/listRolePermissions.spec');
+  specs.push('spec/listRoles.spec');
+  specs.push('spec/listRoleUsers.spec');
+  specs.push('spec/listUserEffPermissions.spec');
+  specs.push('spec/listUserPermissions.spec');
+  specs.push('spec/listUserRoles.spec');
+  specs.push('spec/listUsers.spec');
+  specs.push('spec/migrateDB.spec');
+  specs.push('spec/optimizeDB.spec');
+  specs.push('spec/query.spec');
+  specs.push('spec/queryGraph.spec');
+  specs.push('spec/setDBOptions.spec');
+  specs.push('spec/setUserRoles.spec');
+  specs.push('spec/testSetEndpoint.spec');
+  specs.push('spec/transactions.spec');
+  specs.push('spec/userEnabled.spec');
 
   $(function(){
     require(specs, function(){

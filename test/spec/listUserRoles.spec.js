@@ -3,18 +3,19 @@
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like enviroments that support module.exports,
         // like Node.
-        module.exports = factory(require('../../js/stardog.js'));
+        module.exports = factory(require('../../js/stardog.js'), require('../lib/async.js'));
     } else if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
-        define(['stardog'], factory);
+        define(['stardog', 'async'], factory);
     } else {
         // Browser globals (root is window)
-        root.returnExports = factory(root.Stardog);
+        root.returnExports = factory(root.Stardog, async);
     }
-}(this, function (Stardog) {
+}(this, function (Stardog, Async) {
 
 	describe ("List user roles Test Suite", function() {
-		var conn;
+		var conn,
+			checkDone = (new Async()).done;
 
 		beforeEach(function() {
 			conn = new Stardog.Connection();
@@ -29,8 +30,12 @@
 		it ("should return NOT_FOUND if trying to list roles from non-existent user", function (done) {
 			conn.listUserRoles({ user: 'someuser' }, function (data, response) {
 				expect(response.statusCode).toBe(404);
-				done();
+				if (done) { // node.js
+					done() 
+				}
 			});
+
+			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
 		it ("should return a non-empty list with the roles of the user", function (done) {
@@ -42,8 +47,12 @@
 				expect(data.roles.length).toBeGreaterThan(0);
 				expect(data.roles).toContain('reader');
 
-				done();
+				if (done) { // node.js
+					done() 
+				}
 			});
+
+			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
 	});

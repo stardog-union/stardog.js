@@ -3,22 +3,23 @@
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like enviroments that support module.exports,
         // like Node.
-        module.exports = factory(require('../../js/stardog.js'));
+        module.exports = factory(require('../../js/stardog.js'), require('../lib/async.js'));
     } else if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
-        define(['stardog'], factory);
+        define(['stardog', 'async'], factory);
     } else {
         // Browser globals (root is window)
-        root.returnExports = factory(root.Stardog);
+        root.returnExports = factory(root.Stardog, async);
     }
-}(this, function (Stardog) {
+}(this, function (Stardog, Async) {
 
 	// -----------------------------------
 	// Tests for transactions.
 	// -----------------------------------
 
 	describe ("Getting and using transactions.", function() {
-		var conn;
+		var conn,
+			checkDone = (new Async()).done;
 		var txId;
 
 		beforeEach(function() {
@@ -56,10 +57,13 @@
 						expect(data.results.bindings.length).toBeGreaterThan(0);
 						expect(data.results.bindings.length).toBe(3);
 
-						done();
+						if (done) { // node.js
+							done() 
+						}
 				});
 			});
 
+			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
 		it ("Should be able to get a transaction, add a triple and rollback", function(done) {
@@ -87,11 +91,15 @@
 
 						conn.rollback({ database: "nodeDB", "txId": txId }, function (body3, response3) {
 							expect(response3.statusCode).toBe(200);
-							done();
+							if (done) { // node.js
+								done() 
+							}
 						});
 					}
 				);
 			});
+
+			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
 		it ("Should be able to get a transaction, add a triple, commit that and query.", function(done) {
@@ -147,7 +155,9 @@
 													function (bodyCD, responseCD) {
 													expect(responseCD.statusCode).toBe(200);
 
-													done();
+													if (done) { // node.js
+														done() 
+													}
 												});
 											}
 										);
@@ -158,6 +168,8 @@
 					}
 				);
 			});
+
+			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
 		it ("Should be able to clean and insert all data in the DB using a transaction.", function(done) {
@@ -236,7 +248,9 @@
 												expect(sizeNum).not.toBe(0);
 												expect(sizeNum).toBeGreaterThan(1);
 
-												done();
+												if (done) { // node.js
+													done() 
+												}
 											});
 										});
 
@@ -247,6 +261,8 @@
 					});
 				});
 			});
+			
+			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
 	});
