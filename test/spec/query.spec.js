@@ -32,20 +32,22 @@
 		});
 
 		it ("A query result should not be empty", function(done) {
-			
-			conn.query(
-				{ database: "nodeDB", query: "select distinct ?s where { ?s ?p ?o }",  limit: 20, offset: 0 },
-				function (data) {
-					//console.log(data);
+			conn.onlineDB({ database: 'nodeDB', strategy: 'NO_WAIT' }, function (data2, response) {
 
-					expect(data).not.toBe(null);
-					expect(data.results).toBeDefined();
-					expect(data.results.bindings).toBeDefined();
-					expect(data.results.bindings.length).toBeGreaterThan(0);
-					expect(data.results.bindings.length).toBe(3);
-					if (done) { // node.js
-						done() 
-					}
+				conn.query(
+					{ database: "nodeDB", query: "select distinct ?s where { ?s ?p ?o }",  limit: 20, offset: 0 },
+					function (data) {
+						//console.log(data);
+
+						expect(data).not.toBe(null);
+						expect(data.results).toBeDefined();
+						expect(data.results.bindings).toBeDefined();
+						expect(data.results.bindings.length).toBeGreaterThan(0);
+						expect(data.results.bindings.length).toBe(3);
+						if (done) { // node.js
+							done() 
+						}
+				});
 			});
 
 			waitsFor(checkDone, 5000); // does nothing in node.js
@@ -91,10 +93,11 @@
 			});
 
 			waitsFor(checkDone, 5000); // does nothing in node.js
+
+			// 
 		});
 
 		it ("A query to Car must have result count to 3", function(done) {
-			
 			conn.query(
 				{ 
 					database: "nodeDBReasoning", 
@@ -103,7 +106,7 @@
 					offset: 0 
 				},
 				function (data) {
-					//console.log(data);
+					console.log(data);
 
 					expect(data).not.toBe(null);
 					expect(data.results).toBeDefined();
@@ -210,7 +213,7 @@
 			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
-		it ("A query to SportsCar must have result count to 3", function(done) {
+		it ("A query to SportsCar must have result count to 1", function(done) {
 			
 			conn.query(
 				{
@@ -302,7 +305,7 @@
 			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
-		it ("A query to SportsCar must have result count to 3", function(done) {
+		it ("A query to SportsCar must have result count to 1", function(done) {
 			
 			conn.query(
 				{

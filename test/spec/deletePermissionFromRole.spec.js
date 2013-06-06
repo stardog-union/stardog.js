@@ -27,7 +27,7 @@
 			conn = null;
 		});
 
-		it ("should fail trying to delete a permssion to a non-existent role.", function (done) {
+		it ("should fail trying to delete a permssion from a non-existent role.", function (done) {
 
 			var aNewPermission = {
 				'action' : 'write',
@@ -46,7 +46,7 @@
 			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
-		it ("should pass deleting Permissions to a new role.", function (done) {
+		it ("should pass deleting Permissions from a new role.", function (done) {
 
 			var aNewRole = 'newtestrole';
 			var aNewPermission = {
@@ -55,27 +55,35 @@
 				'resource' : 'nodeDB'
 			};
 
-			conn.createRole({ rolename: aNewRole }, function (data1, response1) {
-				expect(response1.statusCode).toBe(201);
+			conn.deletePermissionFromRole({ role: aNewRole, permissionObj: aNewPermission }, function (data6, response6) {
+				// delete if exists
+				conn.deleteRole({ role: aNewRole }, function (data5, response5) {
+					// delete if exists
 
-				// Add permissions to role
-				conn.assignPermissionToRole({ role: aNewRole, permissionObj: aNewPermission }, function (data2, response2) {
-					expect(response2.statusCode).toBe(201);
+					conn.createRole({ rolename: aNewRole }, function (data1, response1) {
+						expect(response1.statusCode).toBe(201);
 
-					conn.deletePermissionFromRole({ role: aNewRole, permissionObj: aNewPermission }, function (data3, response3) {
-						expect(response3.statusCode).toBe(200);
+						// Add permissions to role
+						conn.assignPermissionToRole({ role: aNewRole, permissionObj: aNewPermission }, function (data2, response2) {
+							expect(response2.statusCode).toBe(201);
 
-						// delete role
-						conn.deleteRole({ role: aNewRole }, function (data4, response4) {
-							expect(response4.statusCode).toBe(200);
+							conn.deletePermissionFromRole({ role: aNewRole, permissionObj: aNewPermission }, function (data3, response3) {
+								expect(response3.statusCode).toBe(200);
 
-							if (done) { // node.js
-								done() 
-							}
+								// delete role
+								conn.deleteRole({ role: aNewRole }, function (data4, response4) {
+									expect(response4.statusCode).toBe(200);
+
+									if (done) { // node.js
+										done() 
+									}
+								});
+							});
+
 						});
 					});
-
 				});
+
 			});
 
 			waitsFor(checkDone, 5000); // does nothing in node.js

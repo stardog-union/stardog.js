@@ -48,28 +48,32 @@
 				'resource' : 'nodeDB'
 			};
 
-			conn.createUser({ username: aNewUser, password: aNewUserPwd, superuser: true }, function (data1, response1) {
-				expect(response1.statusCode).toBe(201);
+			// delete user
+			conn.deleteUser({ user: aNewUser }, function (data, response) {
+				
+				conn.createUser({ username: aNewUser, password: aNewUserPwd, superuser: true }, function (data1, response1) {
+					expect(response1.statusCode).toBe(201);
 
-				conn.assignPermissionToUser({ user: aNewUser, permissionObj: aNewPermission }, function (data2, response2) {
-					expect(response2.statusCode).toBe(201);
+					conn.assignPermissionToUser({ user: aNewUser, permissionObj: aNewPermission }, function (data2, response2) {
+						expect(response2.statusCode).toBe(201);
 
-					// list permissions to new role should include recently added.
-					conn.listUserEffPermissions({ user: aNewUser }, function (data3, response3) {
+						// list permissions to new role should include recently added.
+						conn.listUserEffPermissions({ user: aNewUser }, function (data3, response3) {
 
-						expect(data3.permissions).toBeDefined();
-						expect(data3.permissions).not.toBeNull();
-						expect(data3.permissions).toContain('stardog:*:*:*');
+							expect(data3.permissions).toBeDefined();
+							expect(data3.permissions).not.toBeNull();
+							expect(data3.permissions).toContain('stardog:*:*:*');
 
-						// delete user
-						conn.deleteUser({ user: aNewUser }, function (data, response) {
-							expect(response3.statusCode).toBe(200);
+							// delete user
+							conn.deleteUser({ user: aNewUser }, function (data, response) {
+								expect(response3.statusCode).toBe(200);
 
-							if (done) { // node.js
-								done() 
-							}
+								if (done) { // node.js
+									done() 
+								}
+							});
+
 						});
-
 					});
 				});
 			});

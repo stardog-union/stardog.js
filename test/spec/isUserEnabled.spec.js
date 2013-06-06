@@ -44,14 +44,17 @@
 		});
 
 		it ("should return the value with the user's enabled flag", function (done) {
+			conn.onlineDB({ database: 'nodeDB' }, function (data3, response3) {
+				// put online if it's not
+				
+				conn.isUserEnabled({ user: 'admin' }, function (data, response) {
+					expect(response.statusCode).toBe(200);
+					expect(data.enabled).toBe(true);
 
-			conn.isUserEnabled({ user: 'admin' }, function (data, response) {
-				expect(response.statusCode).toBe(200);
-				expect(data.enabled).toBe(true);
-
-				if (done) { // node.js
-					done() 
-				}
+					if (done) { // node.js
+						done() 
+					}
+				});
 			});
 
 			waitsFor(checkDone, 5000); // does nothing in node.js

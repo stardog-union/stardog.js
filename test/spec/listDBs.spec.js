@@ -33,7 +33,8 @@
 
 		it ("should not be empty", function(done) {
 			
-			conn.listDBs(function (data) {
+			conn.listDBs(function (data, response) {
+				// console.log("data:", data, "response:", response);
 				expect(data).not.toBe(null);
 				expect(data.databases).toBeDefined();
 				expect(data.databases).not.toBeNull();

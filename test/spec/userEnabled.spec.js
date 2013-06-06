@@ -43,32 +43,36 @@
 		it ("should enable a user recently created.", function (done) {
 			// create a new user (this is supposed to change in a future version of the API)
 
-			conn.createUser({ username: 'newuser', password: 'newuser', superuser: true }, function (data1, response1) {
+			// delete the created user.
+			conn.deleteUser({ user: 'newuser' }, function (data4, response4) {
 
-				// It should be 201 (CREATED)
-				expect(response1.statusCode).toBe(201);
+				conn.createUser({ username: 'newuser', password: 'newuser', superuser: true }, function (data1, response1) {
 
-				// Once created then lets delete it.
-				conn.userEnabled({ user: 'newuser', enableFlag: true }, function (data2, response2) {
+					// It should be 201 (CREATED)
+					expect(response1.statusCode).toBe(201);
 
-					expect(response2.statusCode).toBe(200);
+					// Once created then lets delete it.
+					conn.userEnabled({ user: 'newuser', enableFlag: true }, function (data2, response2) {
 
-					conn.isUserEnabled({ user: 'newuser' }, function (data3, response3) {
-						expect(response3.statusCode).toBe(200);
+						expect(response2.statusCode).toBe(200);
 
-						expect(data3.enabled).toBeDefined();
-						expect(data3.enabled).toBe(true);
+						conn.isUserEnabled({ user: 'newuser' }, function (data3, response3) {
+							expect(response3.statusCode).toBe(200);
 
-						// delete the created user.
-						conn.deleteUser({ user: 'newuser' }, function (data4, response4) {
+							expect(data3.enabled).toBeDefined();
+							expect(data3.enabled).toBe(true);
 
-							expect(response4.statusCode).toBe(200);
+							// delete the created user.
+							conn.deleteUser({ user: 'newuser' }, function (data4, response4) {
 
-							if (done) { // node.js
-								done() 
-							}
-						});
-					})
+								expect(response4.statusCode).toBe(200);
+
+								if (done) { // node.js
+									done() 
+								}
+							});
+						})
+					});
 				});
 			});
 

@@ -330,18 +330,20 @@
 				headers["Authorization"] = "Basic ".concat(userPassBase64);
 			}
 
-			if(contentType) {
+			if (isJsonBody) {
+				headers['Content-Type'] = 'application/json';
+			} else if (contentType) {
 				headers['Content-Type'] = contentType;
 			}
 
+			$.support.cors = true;
 			$.ajax({
 				type: theMethod,
 				url: req_url + params,
 				processData: false,
-				dataType: 'text',
-				data:  body,
+				dataType: acceptH.match(/json/gi) ? 'json' : 'text',
+				data:  isJsonBody ? JSON.stringify(body) : body,
 				headers: headers
-
 			}).done(function(data, status, jqXHR) {
 				var return_obj;
 				// check if the returned object is a JSONLD object
@@ -350,10 +352,15 @@
 				} else {
 					return_obj = data;
 				}
-				callback(return_obj, jqXHR);
+				callback(return_obj, {
+					responseText: jqXHR.responseText,
+					statusCode: jqXHR.status,
+					statusText: jqXHR.statusText
+				});
 			}).fail(function(jqXHR, textStatus, errorThrown) {
+				console.log("fail!");
 				callback(
-					textStatus,
+					jqXHR.responseText,
 					{
 						responseText: jqXHR.responseText,
 						statusCode: jqXHR.status,

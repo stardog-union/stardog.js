@@ -47,23 +47,27 @@
 
 		it ("should drop a just created database", function (done) {
 
-			conn.offlineDB({ database: 'nodeDB', strategy: 'WAIT', timeout: 1 }, function (data, response) {
-				expect(response.statusCode).toBe(200);
+			conn.dropDB({ database: 'nodeDB_drop' }, function (data1, response1) {
+				// drop if exists
 
-				conn.copyDB({ dbsource: 'nodeDB', dbtarget: 'nodeDB_drop' }, function (data, response) {
-					expect(response.statusCode).toBe(200);
+				conn.offlineDB({ database: 'nodeDB', strategy: 'WAIT', timeout: 1 }, function (data2, response2) {
+					expect(response2.statusCode).toBe(200);
 
-					// Clean just created DB.
-					conn.dropDB({ database: 'nodeDB_drop' }, function (data, response) {
-						expect(response.statusCode).toBe(200);
+					conn.copyDB({ dbsource: 'nodeDB', dbtarget: 'nodeDB_drop' }, function (data3, response3) {
+						expect(response3.statusCode).toBe(200);
 
-						// set nodeDB back online
-						conn.onlineDB( { database: 'nodeDB', strategy: 'NO_WAIT' }, function (data, response) {
-							expect(response.statusCode).toBe(200);
+						// Clean just created DB.
+						conn.dropDB({ database: 'nodeDB_drop' }, function (data4, response4) {
+							expect(response4.statusCode).toBe(200);
 
-							if (done) { // node.js
-								done() 
-							}
+							// set nodeDB back online
+							conn.onlineDB( { database: 'nodeDB', strategy: 'NO_WAIT' }, function (data5, response5) {
+								expect(response5.statusCode).toBe(200);
+
+								if (done) { // node.js
+									done() 
+								}
+							});
 						});
 					});
 				});

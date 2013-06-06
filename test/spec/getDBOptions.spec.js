@@ -50,19 +50,23 @@
 				"icv.enabled" : ""
 			};
 
-			conn.getDBOptions({ database: 'nodeDB', optionsObj: optionsObj }, function (data, respose2) {
-				expect(respose2.statusCode).toBe(200);
+			conn.onlineDB({ database: 'nodeDB' }, function (data3, response3) {
+				// put online if it's not
+				
+				conn.getDBOptions({ database: 'nodeDB', optionsObj: optionsObj }, function (data, respose2) {
+					expect(respose2.statusCode).toBe(200);
 
-				// check options retrieved
-				expect(data["search.enabled"]).toBeDefined();
-				expect(data["search.enabled"]).toBe(true);
+					// check options retrieved
+					expect(data["search.enabled"]).toBeDefined();
+					expect(data["search.enabled"]).toBe(true);
 
-				expect(data["icv.enabled"]).toBeDefined();
-				expect(data["icv.enabled"]).toBe(false);
+					expect(data["icv.enabled"]).toBeDefined();
+					expect(data["icv.enabled"]).toBe(false);
 
-				if (done) { // node.js
-					done() 
-				}
+					if (done) { // node.js
+						done() 
+					}
+				});
 			});
 			
 			waitsFor(checkDone, 5000); // does nothing in node.js

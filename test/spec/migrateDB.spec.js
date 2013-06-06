@@ -48,35 +48,39 @@
 			var dbOrigin = "nodeDB";
 			var dbToMigrate = "nodeDB_migrate";
 
-			conn.offlineDB({ database: dbOrigin, strategy: 'WAIT', timeout: 5 }, function (data, response1) {
-				expect(response1.statusCode).toBe(200);
+			// Clean everything
+			conn.dropDB({ database: dbToMigrate }, function (data, response6) {
 
-				conn.copyDB({ dbsource: dbOrigin, dbtarget: dbToMigrate }, function (data, response2) {
-					expect(response2.statusCode).toBe(200);
+				conn.offlineDB({ database: dbOrigin, strategy: 'WAIT', timeout: 5 }, function (data, response1) {
+					expect(response1.statusCode).toBe(200);
 
-					// Check that the DB is actually in the DB list
-					conn.listDBs(function (data, responseX) {
-						expect(data.databases).toContain(dbToMigrate);
+					conn.copyDB({ dbsource: dbOrigin, dbtarget: dbToMigrate }, function (data, response2) {
+						expect(response2.statusCode).toBe(200);
 
-						conn.migrateDB({ database: dbToMigrate }, function (data, response3) {
-							expect(response3.statusCode).toBe(200);
+						// Check that the DB is actually in the DB list
+						conn.listDBs(function (data, responseX) {
+							expect(data.databases).toContain(dbToMigrate);
 
-							// Clean everything
-							conn.dropDB({ database: dbToMigrate }, function (data, response4) {
-								expect(response4.statusCode).toBe(200);
+							conn.migrateDB({ database: dbToMigrate }, function (data, response3) {
+								expect(response3.statusCode).toBe(200);
 
-								conn.onlineDB({ database: dbOrigin, strategy: 'NO_WAIT' }, function (data, response5) {
-									expect(response5.statusCode).toBe(200);
+								// Clean everything
+								conn.dropDB({ database: dbToMigrate }, function (data, response4) {
+									expect(response4.statusCode).toBe(200);
 
-									if (done) { // node.js
-										done() 
-									}
-								})
+									conn.onlineDB({ database: dbOrigin, strategy: 'NO_WAIT' }, function (data, response5) {
+										expect(response5.statusCode).toBe(200);
+
+										if (done) { // node.js
+											done() 
+										}
+									})
+								});
 							});
-						});
 
-					});
-				})
+						});
+					})
+				});
 			});
 
 			waitsFor(checkDone, 5000); // does nothing in node.js

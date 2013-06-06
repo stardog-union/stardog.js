@@ -45,12 +45,10 @@ require(['underscore', 'jquery', 'jasmine-html', 'stardog', 'async'], function(_
   specs.push('spec/assignPermissionToRole.spec');
   specs.push('spec/assignPermissionToUser.spec');
   specs.push('spec/changePwd.spec');
-  specs.push('spec/copyDB.spec');
   specs.push('spec/deletePermissionFromRole.spec');
   specs.push('spec/deletePermissionFromUser.spec');
   specs.push('spec/deleteRole.spec');
   specs.push('spec/deleteUser.spec');
-  specs.push('spec/dropDB.spec');
   specs.push('spec/explain.spec');
   specs.push('spec/getDB.spec');
   specs.push('spec/getDBOptions.spec');
@@ -66,20 +64,41 @@ require(['underscore', 'jquery', 'jasmine-html', 'stardog', 'async'], function(_
   specs.push('spec/listUserPermissions.spec');
   specs.push('spec/listUserRoles.spec');
   specs.push('spec/listUsers.spec');
-  specs.push('spec/migrateDB.spec');
-  specs.push('spec/optimizeDB.spec');
+  
+  // specs.push('spec/optimizeDB.spec');
   specs.push('spec/query.spec');
   specs.push('spec/queryGraph.spec');
   specs.push('spec/setDBOptions.spec');
   specs.push('spec/setUserRoles.spec');
   specs.push('spec/testSetEndpoint.spec');
-  specs.push('spec/transactions.spec');
+  // specs.push('spec/transactions.spec');
   specs.push('spec/userEnabled.spec');
 
+  // specs.push('spec/migrateDB.spec');
+  // specs.push('spec/copyDB.spec');
+  // specs.push('spec/dropDB.spec');
+
   $(function(){
-    require(specs, function(){
-      jasmineEnv.execute();
-    });
+    // TODO: figure out how to load the tests synchronously
+    function runTest(i) {
+      if (i < specs.length) {
+        require([ specs[i] ], function(){
+          jasmineEnv.execute();
+        });
+        var nextTimeout = i == (specs.length - 5) ? 10000 : 2000;
+        window.setTimeout(runTest, nextTimeout, i + 1);  
+      }
+    }
+    runTest(0);
+    // require(specs, function() {
+    //   jasmineEnv.execute();
+    // });
+    
+    // $.each(specs, function(i, spec) {
+    //   console.log("spec", spec);
+    //   require(spec + ".js");
+    //   jasmineEnv.execute();
+    // });
   });
 
 });

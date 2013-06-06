@@ -54,20 +54,24 @@
 				'resource' : 'nodeDB'
 			};
 
-			conn.createUser({ username: aNewUser, password: aNewUserPwd, superuser: true }, function (data, response1) {
-				expect(response1.statusCode).toBe(201);
+			conn.deleteUser({ user: aNewUser }, function (data, res) {
+				// delete user if exists
 
-				conn.assignPermissionToUser({ user: aNewUser, permissionObj: aNewPermission }, function (data, response2) {
+				conn.createUser({ username: aNewUser, password: aNewUserPwd, superuser: true }, function (data, response1) {
+					expect(response1.statusCode).toBe(201);
 
-					expect(response2.statusCode).toBe(201);
+					conn.assignPermissionToUser({ user: aNewUser, permissionObj: aNewPermission }, function (data, response2) {
 
-					// delete role
-					conn.deleteUser({ user: aNewUser }, function (data, response3) {
-						expect(response3.statusCode).toBe(200);
+						expect(response2.statusCode).toBe(201);
 
-						if (done) { // node.js
-							done() 
-						}
+						// delete role
+						conn.deleteUser({ user: aNewUser }, function (data, response3) {
+							expect(response3.statusCode).toBe(200);
+
+							if (done) { // node.js
+								done() 
+							}
+						});
 					});
 				});
 			});

@@ -55,22 +55,30 @@
 				'resource' : 'nodeDB'
 			};
 
-			conn.createUser({ username: aNewUser, password: aNewUserPwd, superuser: true }, function (data1, response1) {
-				expect(response1.statusCode).toBe(201);
+			conn.deletePermissionFromUser({ user: aNewUser, permissionObj: aNewPermission }, function (data3, response3) {
+				// delete permission if exists
+				// delete role if exists
+				conn.deleteUser({ user: aNewUser }, function (data4, response4) {
 
-				conn.assignPermissionToUser({ user: aNewUser, permissionObj: aNewPermission }, function (data2, response2) {
-					expect(response2.statusCode).toBe(201);
+					// actual test
+					conn.createUser({ username: aNewUser, password: aNewUserPwd, superuser: true }, function (data1, response1) {
+						expect(response1.statusCode).toBe(201);
 
-					conn.deletePermissionFromUser({ user: aNewUser, permissionObj: aNewPermission }, function (data3, response3) {
-						expect(response3.statusCode).toBe(200);
+						conn.assignPermissionToUser({ user: aNewUser, permissionObj: aNewPermission }, function (data2, response2) {
+							expect(response2.statusCode).toBe(201);
 
-						// delete role
-						conn.deleteUser({ user: aNewUser }, function (data4, response4) {
-							expect(response4.statusCode).toBe(200);
+							conn.deletePermissionFromUser({ user: aNewUser, permissionObj: aNewPermission }, function (data3, response3) {
+								expect(response3.statusCode).toBe(200);
 
-							if (done) { // node.js
-								done() 
-							}
+								// delete role
+								conn.deleteUser({ user: aNewUser }, function (data4, response4) {
+									expect(response4.statusCode).toBe(200);
+
+									if (done) { // node.js
+										done() 
+									}
+								});
+							});
 						});
 					});
 				});

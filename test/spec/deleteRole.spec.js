@@ -43,19 +43,23 @@
 		it ("should delete a 'writer' role recently created.", function (done) {
 			// create a new user (this is supposed to change in a future version of the API)
 
-			conn.createRole({ rolename: 'writer' }, function (data1, response1) {
+			// delete if exists
+			conn.deleteRole({ role: 'writer' }, function (data2, response2) {
 
-				// It should be 201 (CREATED)
-				expect(response1.statusCode).toBe(201);
+				conn.createRole({ rolename: 'writer' }, function (data1, response1) {
 
-				// Once created then lets delete it.
-				conn.deleteRole({ role: 'writer' }, function (data2, response2) {
+					// It should be 201 (CREATED)
+					expect(response1.statusCode).toBe(201);
 
-					expect(response2.statusCode).toBe(200);
+					// Once created then lets delete it.
+					conn.deleteRole({ role: 'writer' }, function (data2, response2) {
 
-					if (done) { // node.js
-						done() 
-					}
+						expect(response2.statusCode).toBe(200);
+
+						if (done) { // node.js
+							done() 
+						}
+					});
 				});
 			});
 

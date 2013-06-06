@@ -32,24 +32,27 @@
 		});
 
 		it ("Gets a specific property from the database", function(done) {
-			
-			conn.getProperty(
-				{ 
-					database: "nodeDB",
-					uri: "<http://localhost/publications/articles/Journal1/1940/Article1>",
-					property: "<http://localhost/vocabulary/bench/cdrom>"
-				}, 
-				function (response) {
-					// console.log(response);
-					expect(response).toBeDefined();
-					expect(response).not.toBe(null);
+			conn.onlineDB({ database: 'nodeDB' }, function (data3, response3) {
+				// put online if it's not
 
-					expect(response).toBe("http://www.hogfishes.tld/richer/succories.html");
-					if (done) { // node.js
-						done() 
+				conn.getProperty(
+					{ 
+						database: "nodeDB",
+						uri: "<http://localhost/publications/articles/Journal1/1940/Article1>",
+						property: "<http://localhost/vocabulary/bench/cdrom>"
+					}, 
+					function (response) {
+						// console.log(response);
+						expect(response).toBeDefined();
+						expect(response).not.toBe(null);
+
+						expect(response).toBe("http://www.hogfishes.tld/richer/succories.html");
+						if (done) { // node.js
+							done() 
+						}
 					}
-				}
-			);
+				);
+			});
 
 			waitsFor(checkDone, 5000); // does nothing in node.js
 		});

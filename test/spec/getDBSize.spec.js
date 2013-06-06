@@ -32,18 +32,22 @@
     	});
 
     	it ("A response with the size of the DB should not be empty", function(done) {
-    		
-    		conn.getDBSize({ database: "nodeDB" }, function (response) {
-    			console.log(response);
-    			expect(response).toBeDefined();
-    			expect(response).not.toBe(null);
+    		conn.onlineDB({ database: 'nodeDB' }, function (data3, response3) {
+                // put online if it's not
 
-    			var sizeNum = parseInt(response);
-    			expect(sizeNum).toBeGreaterThan(0);
-    			if (done) { // node.js
-                    done() 
-                }
-    		});
+        		conn.getDBSize({ database: "nodeDB" }, function (response) {
+        			console.log(response);
+        			expect(response).toBeDefined();
+        			expect(response).not.toBe(null);
+
+        			var sizeNum = parseInt(response);
+        			expect(sizeNum).toBeGreaterThan(0);
+        			if (done) { // node.js
+                        done() 
+                    }
+        		});
+                
+            });
 
             waitsFor(checkDone, 5000); // does nothing in node.js
     	});

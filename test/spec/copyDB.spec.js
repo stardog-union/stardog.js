@@ -51,30 +51,34 @@
 
 		it ("should copy an offline DB", function(done) {
 
-			conn.offlineDB({ database: 'nodeDB', strategy: "WAIT", timeout: 3 }, function (data) {
+			conn.dropDB({ database: 'nodeDB_copy' }, function (data, response2) {
+				// drop if exists
+				
+				conn.offlineDB({ database: 'nodeDB', strategy: "WAIT", timeout: 3 }, function (data) {
 
-				// Once the DB is offline, copy it.
-				conn.copyDB({ dbsource: 'nodeDB', dbtarget: 'nodeDB_copy' }, function (data) {
-					
-					conn.listDBs( function (data) {
-
-						expect(data.databases).toContain('nodeDB_copy');
-						expect(data.databases).toContain('nodeDB');
+					// Once the DB is offline, copy it.
+					conn.copyDB({ dbsource: 'nodeDB', dbtarget: 'nodeDB_copy' }, function (data) {
 						
-						// set database online again and drop copied DB.
-						conn.onlineDB({ database: 'nodeDB' }, function (data, response1) {
-							expect(response1.statusCode).toBe(200);
+						conn.listDBs( function (data) {
+
+							expect(data.databases).toContain('nodeDB_copy');
+							expect(data.databases).toContain('nodeDB');
 							
-							conn.dropDB({ database: 'nodeDB_copy' }, function (data, response2) {
-								expect(response2.statusCode).toBe(200);
+							// set database online again and drop copied DB.
+							conn.onlineDB({ database: 'nodeDB' }, function (data, response1) {
+								expect(response1.statusCode).toBe(200);
+								
+								conn.dropDB({ database: 'nodeDB_copy' }, function (data, response2) {
+									expect(response2.statusCode).toBe(200);
 
-								if (done) { // node.js
-									done() 
-								}
-							});
-						})
+									if (done) { // node.js
+										done() 
+									}
+								});
+							})
+						});
+
 					});
-
 				});
 			});
 

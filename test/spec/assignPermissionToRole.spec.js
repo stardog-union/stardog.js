@@ -54,19 +54,23 @@
 				'resource' : 'nodeDB'
 			};
 
-			conn.createRole({ rolename: aNewRole }, function (data, response1) {
-				expect(response1.statusCode).toBe(201);
+			conn.deleteRole({ role: aNewRole}, function(data, response) {
+				// delete role if exists
 
-				conn.assignPermissionToRole({ role: aNewRole, permissionObj: aNewPermission }, function (data, response2) {
+				conn.createRole({ rolename: aNewRole }, function (data, response1) {
+					expect(response1.statusCode).toBe(201);
 
-					expect(response2.statusCode).toBe(201);
+					conn.assignPermissionToRole({ role: aNewRole, permissionObj: aNewPermission }, function (data, response2) {
 
-					// delete role
-					conn.deleteRole({ role: aNewRole }, function (data, response3) {
-						expect(response3.statusCode).toBe(200);
-						if (done) { // node.js
-							done() 
-						}
+						expect(response2.statusCode).toBe(201);
+
+						// delete role
+						conn.deleteRole({ role: aNewRole }, function (data, response3) {
+							expect(response3.statusCode).toBe(200);
+							if (done) { // node.js
+								done() 
+							}
+						});
 					});
 				});
 			});

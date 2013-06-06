@@ -32,18 +32,21 @@
 		});
 
 		it ("A response of the DB info should not be empty", function(done) {
-			
-			conn.getDB({ database: "nodeDB" }, function (data, response) {
-				// console.log("data: ", data);
-				expect(data).toBeDefined();
-				expect(data).not.toBe(null);
-				expect(response).toBeDefined();
-				expect(response).not.toBe(null);
-				expect(response.statusCode).toBe(200);
+			conn.onlineDB({ database: 'nodeDB' }, function (data3, response3) {
+				// put online if it's not
 
-				if (done) { // node.js
-					done() 
-				}
+				conn.getDB({ database: "nodeDB" }, function (data, response) {
+					// console.log("data: ", data);
+					expect(data).toBeDefined();
+					expect(data).not.toBe(null);
+					expect(response).toBeDefined();
+					expect(response).not.toBe(null);
+					expect(response.statusCode).toBe(200);
+
+					if (done) { // node.js
+						done() 
+					}
+				});
 			});
 
 			waitsFor(checkDone, 5000); // does nothing in node.js

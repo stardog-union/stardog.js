@@ -43,19 +43,23 @@
 		it ("should delete a supplied user recently created.", function (done) {
 			// create a new user (this is supposed to change in a future version of the API)
 
-			conn.createUser({ username: 'newuser', password: 'newuser', superuser: true }, function (data, response) {
+			conn.deleteUser({ user: 'newuser' }, function (data, response) {
+				// delete if exists
 
-				// It should be 201 (CREATED)
-				expect(response.statusCode).toBe(201);
+				conn.createUser({ username: 'newuser', password: 'newuser', superuser: true }, function (data, response) {
 
-				// Once created then lets delete it.
-				conn.deleteUser({ user: 'newuser' }, function (data, response) {
+					// It should be 201 (CREATED)
+					expect(response.statusCode).toBe(201);
 
-					expect(response.statusCode).toBe(200);
+					// Once created then lets delete it.
+					conn.deleteUser({ user: 'newuser' }, function (data, response) {
 
-					if (done) { // node.js
-						done() 
-					}
+						expect(response.statusCode).toBe(200);
+
+						if (done) { // node.js
+							done() 
+						}
+					});
 				});
 			});
 

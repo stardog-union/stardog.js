@@ -42,20 +42,24 @@
 
 		it ("should assign roles to a newly created user.", function (done) {
 
-			conn.createUser({ username: "roletestuser", password: "roletestuser", superuser: true }, function (data1, response1) {
-				expect(response1.statusCode).toBe(201);
+			// clean and delete the user
+			conn.deleteUser({ user: "roletestuser" }, function (data, response3) {
 
-				conn.setUserRoles({ user: "roletestuser", roles: ["reader"] }, function (data2, response2) {
+				conn.createUser({ username: "roletestuser", password: "roletestuser", superuser: true }, function (data1, response1) {
+					expect(response1.statusCode).toBe(201);
 
-					expect(response2.statusCode).toBe(200);
+					conn.setUserRoles({ user: "roletestuser", roles: ["reader"] }, function (data2, response2) {
 
-					// clean and delete the user
-					conn.deleteUser({ user: "roletestuser" }, function (data, response3) {
-						expect(response3.statusCode).toBe(200);
+						expect(response2.statusCode).toBe(200);
 
-						if (done) { // node.js
-							done() 
-						}
+						// clean and delete the user
+						conn.deleteUser({ user: "roletestuser" }, function (data, response3) {
+							expect(response3.statusCode).toBe(200);
+
+							if (done) { // node.js
+								done() 
+							}
+						});
 					});
 				});
 			});

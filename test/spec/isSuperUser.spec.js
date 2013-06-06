@@ -44,14 +44,17 @@
 		});
 
 		it ("should return the value with the user's superuser flag", function (done) {
+			conn.onlineDB({ database: 'nodeDB' }, function (data3, response3) {
+				// put online if it's not
 
-			conn.isSuperUser({ user: 'admin' }, function (data, response) {
-				expect(response.statusCode).toBe(200);
-				expect(data.superuser).toBe(true);
+				conn.isSuperUser({ user: 'admin' }, function (data, response) {
+					expect(response.statusCode).toBe(200);
+					expect(data.superuser).toBe(true);
 
-				if (done) { // node.js
-					done() 
-				}
+					if (done) { // node.js
+						done() 
+					}
+				});
 			});
 
 			waitsFor(checkDone, 5000); // does nothing in node.js

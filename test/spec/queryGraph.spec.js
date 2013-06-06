@@ -32,55 +32,60 @@
 		});
 
 		it ("A graph query for ALL result should not be empty", function(done) {
+			conn.onlineDB({ database: 'nodeDB', strategy: 'NO_WAIT' }, function (data2, response) {
 			
-			conn.queryGraph({ database: "nodeDB", query: "describe ?s" }, function (data) {
-				// console.log(data);
+				conn.queryGraph({ database: "nodeDB", query: "describe ?s" }, function (data) {
+					// console.log(data);
 
-				expect(data).toBeDefined();
-				expect(data).not.toBe(null);
+					expect(data).toBeDefined();
+					expect(data).not.toBe(null);
 
-				// Could be an array of JSON-LD objects
-				if (data instanceof Array) {
-					for (var i=0; i < data.length; i++) {
-						expect(data[i].get('@id')).toBeDefined();
-						//expect(data[i].get('@type')).toBeDefined();
+					// Could be an array of JSON-LD objects
+					if (data instanceof Array) {
+						for (var i=0; i < data.length; i++) {
+							expect(data[i].get('@id')).toBeDefined();
+							//expect(data[i].get('@type')).toBeDefined();
+						}
 					}
-				}
-				else {
-					expect(data.get('@context')).toBeDefined();
-				}
+					else {
+						expect(data.get('@context')).toBeDefined();
+					}
 
-				if (done) { // node.js
-					done() 
-				}
+					if (done) { // node.js
+						done() 
+					}
+				});
+
 			});
 
 			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
 		it ("A graph query could be limited too", function(done) {
-			
-			conn.queryGraph({ database: "nodeDB", query: "describe ?s", limit: 1 }, function (data) {
-				// console.log(data);
+			conn.onlineDB({ database: 'nodeDB', strategy: 'NO_WAIT' }, function (data2, response) {
 
-				expect(data).toBeDefined();
-				expect(data).not.toBe(null);
+				conn.queryGraph({ database: "nodeDB", query: "describe ?s", limit: 1 }, function (data) {
+					// console.log(data);
 
-				// Could be an array of JSON-LD objects
-				if (data instanceof Array) {
-					for (var i=0; i < data.length; i++) {
-						expect(data[i].get('@id')).toBeDefined();
+					expect(data).toBeDefined();
+					expect(data).not.toBe(null);
+
+					// Could be an array of JSON-LD objects
+					if (data instanceof Array) {
+						for (var i=0; i < data.length; i++) {
+							expect(data[i].get('@id')).toBeDefined();
+						}
 					}
-				}
-				else {
-					// At leat must have the context and an id.
-					expect(data.get('@context')).toBeDefined();
-					expect(data.get('@id')).toBeDefined();
-				}
+					else {
+						// At leat must have the context and an id.
+						expect(data.get('@context')).toBeDefined();
+						expect(data.get('@id')).toBeDefined();
+					}
 
-				if (done) { // node.js
-					done() 
-				}
+					if (done) { // node.js
+						done() 
+					}
+				});
 			});
 
 			waitsFor(checkDone, 5000); // does nothing in node.js

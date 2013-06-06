@@ -31,6 +31,7 @@
 		it ("should return a list of current registered roles in the system.", function (done) {
 
 			conn.listRoles(function (data, response) {
+				console.log("data:", data, "response:", response);
 				expect(response.statusCode).toBe(200);
 
 				expect(data.roles).toBeDefined();

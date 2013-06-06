@@ -32,16 +32,18 @@
 		});
 
 		it ("A response with the query plan should not be empty", function(done) {
-			
-			conn.queryExplain({ database: "nodeDB", query: "select ?s where { ?s ?p ?o } limit 10" }, function (data, response) {
-				// console.log(response);
-				expect(data).toBeDefined();
-				expect(data).not.toBe(null);
-				expect(data).toBe("Slice(offset=0, limit=10)\n  Projection(s)\n    Scan(subject='s', predicate='p', object='o')\n");
+			conn.onlineDB({ database: 'nodeDB' }, function (data3, response3) {
+				// put online if it's not
 
-				if (done) { // node.js
-					done() 
-				}
+				conn.queryExplain({ database: "nodeDB", query: "select ?s where { ?s ?p ?o } limit 10" }, function (data, response) {
+					expect(data).toBeDefined();
+					expect(data).not.toBe(null);
+					expect(data).toBe("Slice(offset=0, limit=10)\n  Projection(s)\n    Scan(subject='s', predicate='p', object='o')\n");
+
+					if (done) { // node.js
+						done() 
+					}
+				});
 			});
 
 			waitsFor(checkDone, 5000); // does nothing in node.js
