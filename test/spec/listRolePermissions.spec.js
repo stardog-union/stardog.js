@@ -3,7 +3,7 @@
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like enviroments that support module.exports,
         // like Node.
-        module.exports = factory(require('../../js/stardog.js'), require('../lib/async.js'));
+        module.exports = factory(require('../../js/stardog.js'));
     } else if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
         define(['stardog', 'async'], factory);
@@ -12,11 +12,15 @@
         root.returnExports = factory(root.Stardog, async);
     }
 }(this, function (Stardog, Async) {
+	var self = this;
 
 
 	describe ("List Role permissions Test Suite", function() {
-		var conn,
-			checkDone = (new Async()).done;
+		var conn;
+
+		if (typeof Async !== 'undefined') {
+			self = new Async(this);
+		}
 
 		beforeEach(function() {
 			conn = new Stardog.Connection();
@@ -29,19 +33,15 @@
 		});
 
 
-		it ("should fail trying to get the list of permissions of a non-existent role.", function (done) {
+		self.it ("should fail trying to get the list of permissions of a non-existent role.", function (done) {
 
 			conn.listRolePermissions({ role: 'myrole' }, function (data, response) {
 				expect(response.statusCode).toBe(404);
-				if (done) { // node.js
-					done() 
-				}
+				done();
 			});
-
-			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
-		it ("should list permissions assigned to a new role.", function (done) {
+		self.it ("should list permissions assigned to a new role.", function (done) {
 			var aNewRole = 'newtestrole';
 			var aNewPermission = {
 				'action' : 'write',
@@ -68,16 +68,12 @@
 						conn.deleteRole({ role: aNewRole }, function (data, response) {
 							expect(response3.statusCode).toBe(200);
 
-							if (done) { // node.js
-								done() 
-							}
+							done();
 						});
 
 					});
 				});
 			});
-
-			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 	});
 

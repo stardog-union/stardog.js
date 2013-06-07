@@ -3,7 +3,7 @@
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like enviroments that support module.exports,
         // like Node.
-        module.exports = factory(require('../../js/stardog.js'), require('../lib/async.js'));
+        module.exports = factory(require('../../js/stardog.js'));
     } else if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
         define(['stardog', 'async'], factory);
@@ -12,10 +12,14 @@
         root.returnExports = factory(root.Stardog, async);
     }
 }(this, function (Stardog, Async) {
+	var self = this;
 
 	describe ("List Users with role Test Suite", function() {
-		var conn,
-			checkDone = (new Async()).done;
+		var conn;
+
+		if (typeof Async !== 'undefined') {
+			self = new Async(this);
+		}
 
 		beforeEach(function() {
 			conn = new Stardog.Connection();
@@ -28,7 +32,7 @@
 		});
 
 
-		it ("should return a list of users assigned to the 'reader' role in the system.", function (done) {
+		self.it ("should return a list of users assigned to the 'reader' role in the system.", function (done) {
 
 			conn.listRoleUsers({ role: "reader" }, function (data, response) {
 				expect(response.statusCode).toBe(200);
@@ -38,12 +42,8 @@
 				expect(data.users.length).toBeGreaterThan(0);
 				expect(data.users).toContain('anonymous');
 
-				if (done) { // node.js
-					done() 
-				}
+				done();
 			});
-
-			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 	});
 

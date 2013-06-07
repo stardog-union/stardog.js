@@ -3,7 +3,7 @@
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like enviroments that support module.exports,
         // like Node.
-        module.exports = factory(require('../../js/stardog.js'), require('../lib/async.js'));
+        module.exports = factory(require('../../js/stardog.js'));
     } else if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
         define(['stardog', 'async'], factory);
@@ -12,10 +12,14 @@
         root.returnExports = factory(root.Stardog, async);
     }
 }(this, function (Stardog, Async) {
+	var self = this;
 
 	describe ("Set User Roles Test Suite", function() {
-		var conn,
-			checkDone = (new Async()).done;
+		var conn;
+
+		if (typeof Async !== 'undefined') {
+			self = new Async(this);
+		}
 
 		beforeEach(function() {
 			conn = new Stardog.Connection();
@@ -27,20 +31,16 @@
 			conn = null;
 		});
 
-		it ("should return NOT_FOUND trying to set roles to a non-existent user.", function (done) {
+		self.it("should return NOT_FOUND trying to set roles to a non-existent user.", function (done) {
 
 			conn.setUserRoles({ user: "roletestuser", roles: ["reader"] }, function (data, response) {
+
 				expect(response.statusCode).toBe(404);
-
-				if (done) { // node.js
-					done() 
-				}
+				done();
 			});
-
-			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
-		it ("should assign roles to a newly created user.", function (done) {
+		self.it("should assign roles to a newly created user.", function (done) {
 
 			// clean and delete the user
 			conn.deleteUser({ user: "roletestuser" }, function (data, response3) {
@@ -56,15 +56,11 @@
 						conn.deleteUser({ user: "roletestuser" }, function (data, response3) {
 							expect(response3.statusCode).toBe(200);
 
-							if (done) { // node.js
-								done() 
-							}
+							done();
 						});
 					});
 				});
 			});
-
-			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 		
 	});

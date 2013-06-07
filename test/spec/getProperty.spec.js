@@ -3,7 +3,7 @@
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like enviroments that support module.exports,
         // like Node.
-        module.exports = factory(require('../../js/stardog.js'), require('../lib/async.js'));
+        module.exports = factory(require('../../js/stardog.js'));
     } else if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
         define(['stardog', 'async'], factory);
@@ -12,14 +12,18 @@
         root.returnExports = factory(root.Stardog, async);
     }
 }(this, function (Stardog, Async) {
+	var self = this;
 
 	// -----------------------------------
 	// Describes the getProperty test methods
 	// -----------------------------------
 
 	describe ("Querying properties from individuals", function() {
-		var conn,
-			checkDone = (new Async()).done;
+		var conn;
+
+		if (typeof Async !== 'undefined') {
+			self = new Async(this);
+		}
 
 		beforeEach(function() {
 			conn = new Stardog.Connection();
@@ -31,7 +35,7 @@
 			conn = null;
 		});
 
-		it ("Gets a specific property from the database", function(done) {
+		self.it ("Gets a specific property from the database", function(done) {
 			conn.onlineDB({ database: 'nodeDB' }, function (data3, response3) {
 				// put online if it's not
 
@@ -47,14 +51,10 @@
 						expect(response).not.toBe(null);
 
 						expect(response).toBe("http://www.hogfishes.tld/richer/succories.html");
-						if (done) { // node.js
-							done() 
-						}
+						done();
 					}
 				);
 			});
-
-			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
 	});

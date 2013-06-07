@@ -336,7 +336,6 @@
 				headers['Content-Type'] = contentType;
 			}
 
-			$.support.cors = true;
 			$.ajax({
 				type: theMethod,
 				url: req_url + params,
@@ -358,7 +357,6 @@
 					statusText: jqXHR.statusText
 				});
 			}).fail(function(jqXHR, textStatus, errorThrown) {
-				console.log("fail!");
 				callback(
 					jqXHR.responseText,
 					{

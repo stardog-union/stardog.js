@@ -3,7 +3,7 @@
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like enviroments that support module.exports,
         // like Node.
-        module.exports = factory(require('../../js/stardog.js'), require('../lib/async.js'));
+        module.exports = factory(require('../../js/stardog.js'));
     } else if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
         define(['stardog', 'async'], factory);
@@ -12,14 +12,18 @@
         root.returnExports = factory(root.Stardog, async);
     }
 }(this, function (Stardog, Async) {
+	var self = this;
 
 	// -----------------------------------
 	// Describes the getDB test methods
 	// -----------------------------------
 
 	describe ("Getting the DB info", function() {
-		var conn,
-			checkDone = (new Async()).done;
+		var conn;
+
+		if (typeof Async !== 'undefined') {
+			self = new Async(this);
+		}
 
 		beforeEach(function() {
 			conn = new Stardog.Connection();
@@ -31,7 +35,7 @@
 			conn = null;
 		});
 
-		it ("A response of the DB info should not be empty", function(done) {
+		self.it ("A response of the DB info should not be empty", function(done) {
 			conn.onlineDB({ database: 'nodeDB' }, function (data3, response3) {
 				// put online if it's not
 
@@ -42,14 +46,9 @@
 					expect(response).toBeDefined();
 					expect(response).not.toBe(null);
 					expect(response.statusCode).toBe(200);
-
-					if (done) { // node.js
-						done() 
-					}
+					done();
 				});
 			});
-
-			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
 	});

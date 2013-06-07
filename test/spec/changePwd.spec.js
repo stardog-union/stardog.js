@@ -3,7 +3,7 @@
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like enviroments that support module.exports,
         // like Node.
-        module.exports = factory(require('../../js/stardog.js'), require('../lib/async.js'));
+        module.exports = factory(require('../../js/stardog.js'));
     } else if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
         define(['stardog', 'async'], factory);
@@ -12,14 +12,18 @@
         root.returnExports = factory(root.Stardog, async);
     }
 }(this, function (Stardog, Async) {
+	var self = this;
 
 	// -----------------------------------
 	// Describes the listDB test methods
 	// -----------------------------------
 
 	describe ("Change User Password Test Suite", function() {
-		var conn,
-			checkDone = (new Async()).done;
+		var conn;
+
+		if (typeof Async !== 'undefined') {
+			self = new Async(this);
+		}
 
 		beforeEach(function() {
 			conn = new Stardog.Connection();
@@ -31,19 +35,15 @@
 			conn = null;
 		});
 
-		it ("should fail trying to change a password (char[]) from an non-existent user", function (done) {
+		self.it ("should fail trying to change a password (char[]) from an non-existent user", function (done) {
 
 			conn.changePwd({ user: "someuser", newPwd: 'somepwd' }, function (data, response) {
 				expect(response.statusCode).toBe(404);
-				if (done) { // node.js
-					done() 
-				}
+				done();
 			});
-
-			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
-		it ("should change the password and allow calls with new credentials", function (done) {
+		self.it ("should change the password and allow calls with new credentials", function (done) {
 
 			conn.deleteUser({ user: 'newuser' }, function (d, r) {
 				// delete user if it exists
@@ -68,17 +68,12 @@
 							conn.deleteUser({ user: 'newuser' }, function (data3, response3) {
 
 								expect(response3.statusCode).toBe(200);
-
-								if (done) { // node.js
-									done() 
-								}
+								done();
 							});
 						});
 					});
 				});
 			});
-
-			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
 	});

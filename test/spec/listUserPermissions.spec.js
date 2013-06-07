@@ -3,7 +3,7 @@
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like enviroments that support module.exports,
         // like Node.
-        module.exports = factory(require('../../js/stardog.js'), require('../lib/async.js'));
+        module.exports = factory(require('../../js/stardog.js'));
     } else if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
         define(['stardog', 'async'], factory);
@@ -12,10 +12,14 @@
         root.returnExports = factory(root.Stardog, async);
     }
 }(this, function (Stardog, Async) {
+	var self = this;
 
 	describe ("List User permissions Test Suite", function() {
-		var conn,
-			checkDone = (new Async()).done;
+		var conn;
+
+		if (typeof Async !== 'undefined') {
+			self = new Async(this);
+		}
 
 		beforeEach(function() {
 			conn = new Stardog.Connection();
@@ -28,19 +32,15 @@
 		});
 
 
-		it ("should fail trying to get the list of permissions of a non-existent user.", function (done) {
+		self.it ("should fail trying to get the list of permissions of a non-existent user.", function (done) {
 
 			conn.listUserPermissions({ user: 'myuser' }, function (data, response) {
 				expect(response.statusCode).toBe(404);
-				if (done) { // node.js
-					done() 
-				}
+				done();
 			});
-
-			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
-		it ("should list permissions assigned to a new user.", function (done) {
+		self.it ("should list permissions assigned to a new user.", function (done) {
 			var aNewUser = aNewUserPwd = 'newtestuser';
 			var aNewPermission = {
 				'action' : 'write',
@@ -68,18 +68,13 @@
 							// delete user
 							conn.deleteUser({ user: aNewUser }, function (data4, response4) {
 								expect(response4.statusCode).toBe(200);
-
-								if (done) { // node.js
-									done() 
-								}
+								done();
 							});
 
 						});
 					});
 				});
 			});
-
-			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 	});
 

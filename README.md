@@ -2,7 +2,7 @@ Stardog.js
 ==========
 
 Licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)  
-_Current Version **0.0.4**_ 
+_Current Version **0.0.5**_ 
 
 Stardog.js JavaScript Framework for Node.js to develop apps with the [Stardog RDF Database](http://stardog.com).  
 
@@ -39,13 +39,33 @@ Once you have the testing database in your Stardog copy, run the following comma
 
     $ npm install
 
-This will install all the dependencies using npm, once this is done, run the test cases:
-
-    $ npm test
-
-That will run all the test cases in `spec/`
+This will install all the dependencies using npm, once this is done, run the test cases.
 
 All tests should pass.
+
+###Running Tests
+
+This will run all the test cases in `spec/`.
+
+#### In the Browser
+1\. Start Stardog with the `http` port on `5823`:
+
+    stardog-admin server start --http 5823
+
+2\. Start the proxy via:
+
+    node test/testCORS.js
+    
+3\. Open the file `test/index.html` in your browser.
+
+
+#### In node.js
+
+Just execute:
+
+    npm test
+    
+
 
 ## Version details ##
 
@@ -54,27 +74,33 @@ Stardog.js depends of the Stardog HTTP API, and any change in this API will be s
 | Stardog Version | Stardog.js Version |
 | --------------- | ------------------ |
 | <= 1.1.5        | <= 0.0.3           |
-| 1.2             | 0.0.4              |
+| 1.2             | >=0.0.4            |
 
 
 ## Quick Example ##
 
 ### Node.js
 
-	var stardog = require("stardog");
-	 
-	var conn = new stardog.Connection();
-	 
-	conn.setEndpoint("http://myserver:myport/");
-	conn.setCredentials("username", "password");
-	 
-	conn.query("db-name", "select distinct * where { ?s ?p ?o } limit 5", null, 5, 0, function (data) {
-		console.log(data.results.bindings);
-	})
-	
+    var stardog = require("stardog");
+     
+    var conn = new stardog.Connection();
+     
+    conn.setEndpoint("http://myserver:myport/");
+    conn.setCredentials("username", "password");
+     
+    conn.query({ 
+            database: "myDB", 
+            query: "select distinct ?s where { ?s ?p ?o }",  
+            limit: 10, 
+            offset: 0 
+        },
+        function (data) {
+            console.log(data.results.bindings);
+    });
+    
 ### Browser
 
-__NOTE__: the Endpoint is a proxy to the Stardog HTTP interface in order to avoid CORS issues.
+__NOTE__: the Endpoint is a proxy to the Stardog HTTP interface in order to avoid CORS issues (an example can be fount in `test/testCORS.js`.
 
     <script src="js/stardog.js" type="text/javascript"></script>
     …
@@ -88,4 +114,3 @@ __NOTE__: the Endpoint is a proxy to the Stardog HTTP interface in order to avoi
 ## NOTE ##
 
 This framework is in continuous development, please check the [issues](https://github.com/clarkparsia/stardog.js/issues) page. You're welcome to contribute.
-

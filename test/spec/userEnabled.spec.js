@@ -3,7 +3,7 @@
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like enviroments that support module.exports,
         // like Node.
-        module.exports = factory(require('../../js/stardog.js'), require('../lib/async.js'));
+        module.exports = factory(require('../../js/stardog.js'));
     } else if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
         define(['stardog', 'async'], factory);
@@ -12,10 +12,14 @@
         root.returnExports = factory(root.Stardog, async);
     }
 }(this, function (Stardog, Async) {
+	var self = this;
 
 	describe ("Enable Users Test Suite", function() {
-		var conn,
-			checkDone = (new Async()).done;
+		var conn;
+
+		if (typeof Async !== 'undefined') {
+			self = new Async(this);
+		}
 
 		beforeEach(function() {
 			conn = new Stardog.Connection();
@@ -27,20 +31,16 @@
 			conn = null;
 		});
 
-		it ("should return NOT_FOUND trying to enable a non-existent user.", function (done) {
+		self.it("should return NOT_FOUND trying to enable a non-existent user.", function (done) {
 
 			conn.userEnabled({ user: 'someuser', enableFlag: true }, function (data, response) {
 				expect(response.statusCode).toBe(404);
 
-				if (done) { // node.js
-					done() 
-				}
+				done();
 			});
-
-			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
-		it ("should enable a user recently created.", function (done) {
+		self.it("should enable a user recently created.", function (done) {
 			// create a new user (this is supposed to change in a future version of the API)
 
 			// delete the created user.
@@ -67,16 +67,12 @@
 
 								expect(response4.statusCode).toBe(200);
 
-								if (done) { // node.js
-									done() 
-								}
+								done();
 							});
 						})
 					});
 				});
 			});
-
-			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 	});
 

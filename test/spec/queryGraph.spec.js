@@ -3,7 +3,7 @@
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like enviroments that support module.exports,
         // like Node.
-        module.exports = factory(require('../../js/stardog.js'), require('../lib/async.js'));
+        module.exports = factory(require('../../js/stardog.js'));
     } else if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
         define(['stardog', 'async'], factory);
@@ -12,14 +12,18 @@
         root.returnExports = factory(root.Stardog, async);
     }
 }(this, function (Stardog, Async) {
+	var self = this;
 
 	// -----------------------------------
 	// Describes the queryGraph test methods
 	// -----------------------------------
 
 	describe ("Query a DB receiving a Graph in JSON-LD", function() {
-		var conn,
-			checkDone = (new Async()).done;
+		var conn;
+
+		if (typeof Async !== 'undefined') {
+			self = new Async(this);
+		}
 
 		beforeEach(function() {
 			conn = new Stardog.Connection();
@@ -31,41 +35,46 @@
 			conn = null;
 		});
 
-		it ("A graph query for ALL result should not be empty", function(done) {
+		self.it("A graph query for ALL result should not be empty", function(done) {
 			conn.onlineDB({ database: 'nodeDB', strategy: 'NO_WAIT' }, function (data2, response) {
 			
 				conn.queryGraph({ database: "nodeDB", query: "describe ?s" }, function (data) {
-					// console.log(data);
-
 					expect(data).toBeDefined();
 					expect(data).not.toBe(null);
 
 					// Could be an array of JSON-LD objects
 					if (data instanceof Array) {
 						for (var i=0; i < data.length; i++) {
-							expect(data[i].get('@id')).toBeDefined();
-							//expect(data[i].get('@type')).toBeDefined();
+							expect(data[i]).toBeDefined();							
+							if (data[i]['attributes']) {
+								// node.js
+								expect(data[i].get('@id')).toBeDefined();
+							} else {
+								// browser
+								expect(data[i]['@id']).toBeDefined();
+							}
 						}
 					}
 					else {
-						expect(data.get('@context')).toBeDefined();
+						if (data['attributes']) {
+							// node.js
+							expect(data.get('@context')).toBeDefined();
+						} else {
+							// browser
+							expect(data['@context']).toBeDefined();
+						}
 					}
 
-					if (done) { // node.js
-						done() 
-					}
+					done();
 				});
 
 			});
-
-			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
-		it ("A graph query could be limited too", function(done) {
+		self.it("A graph query could be limited too", function(done) {
 			conn.onlineDB({ database: 'nodeDB', strategy: 'NO_WAIT' }, function (data2, response) {
 
 				conn.queryGraph({ database: "nodeDB", query: "describe ?s", limit: 1 }, function (data) {
-					// console.log(data);
 
 					expect(data).toBeDefined();
 					expect(data).not.toBe(null);
@@ -73,22 +82,32 @@
 					// Could be an array of JSON-LD objects
 					if (data instanceof Array) {
 						for (var i=0; i < data.length; i++) {
-							expect(data[i].get('@id')).toBeDefined();
+							expect(data[i]).toBeDefined();							
+							if (data[i]['attributes']) {
+								// node.js
+								expect(data[i].get('@id')).toBeDefined();
+							} else {
+								// browser
+								expect(data[i]['@id']).toBeDefined();
+							}
 						}
 					}
 					else {
 						// At leat must have the context and an id.
-						expect(data.get('@context')).toBeDefined();
-						expect(data.get('@id')).toBeDefined();
+						if (data['attributes']) {
+							// node.js
+							expect(data.get('@context')).toBeDefined();
+							expect(data.get('@id')).toBeDefined();
+						} else {
+							// browser
+							expect(data['@context']).toBeDefined();
+							expect(data['@id']).toBeDefined();
+						}
 					}
 
-					if (done) { // node.js
-						done() 
-					}
+					done();
 				});
 			});
-
-			waitsFor(checkDone, 5000); // does nothing in node.js
 		});
 
 	});
