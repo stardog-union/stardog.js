@@ -37,6 +37,6 @@
   "engines"       : "*",
   "main"          : "js/stardog.js",
   "scripts"       : { 
-    "test" : "sh load_test_data.sh && node_modules/jasmine-node/bin/jasmine-node spec" 
+    "test" : "sh load_test_data.sh && node_modules/jasmine-node/bin/jasmine-node test/spec" 
   }
 }

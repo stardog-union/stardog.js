@@ -31,21 +31,21 @@
 	// the browser, add `_` as a global object via a string identifier,
 	// for Closure Compiler "advanced" mode.
 	if (typeof exports !== 'undefined' && typeof module !== 'undefined' && module.exports) {
-		exports = module.exports = factory();
+		exports = module.exports = factory(root);
 	}
 	else if (typeof define === 'function' && define.amd) {
 		// load Stardog via AMD
 		define(['stardog'], function() {
 			// Export to global for backward compatibility
-			root['Stardog'] = factory();
+			root['Stardog'] = factory(root);
 			return root.Stardog;
 		});
 	}
 	else {
 		// Browser global
-		root['Stardog'] = factory();
+		root['Stardog'] = factory(root);
 	}
-}).call(this, function() {
+}).call(this, function(root) {
 	// Create top-level namespace
 	var Stardog = {};
 
@@ -221,6 +221,8 @@
 				else {
 					console.log('Error found!');
 					console.log(error);
+					// TODO: maybe wrap the error with stardog specific info
+					callback(body, response, error); 
 				}
 			};
 
@@ -328,7 +330,9 @@
 				headers["Authorization"] = "Basic ".concat(userPassBase64);
 			}
 
-			if(contentType) {
+			if (isJsonBody) {
+				headers['Content-Type'] = 'application/json';
+			} else if (contentType) {
 				headers['Content-Type'] = contentType;
 			}
 
@@ -336,32 +340,32 @@
 				type: theMethod,
 				url: req_url + params,
 				processData: false,
-				dataType: 'text',
-				data:  body,
-				headers: headers,
-
-				success: function(data, status, jqXHR) {
-					var return_obj;
-
-					// check if the returned object is a JSONLD object
-					if (data && data != null && (data.hasOwnProperty('@id') || data.hasOwnProperty('@context'))) {
-						return_obj = Connection._convertToLinkedJson(data);
-					}
-					else {
-						return_obj = data;
-					}
-
-					callback({ 
-						'status' : jqXHR.status,
-						'statusText': return_obj
-					});
-				},
-				error: function(jqXHR, statusText, errorThrown) {
-					callback({
-						'status': jqXHR.status,
-						'statusText' : statusText,
-						'error': jqXHR.responseText});
+				dataType: acceptH.match(/json/gi) ? 'json' : 'text',
+				data:  isJsonBody ? JSON.stringify(body) : body,
+				headers: headers
+			}).done(function(data, status, jqXHR) {
+				var return_obj;
+				// check if the returned object is a JSONLD object
+				if (data && (data.hasOwnProperty('@id') || data.hasOwnProperty('@context'))) {
+					return_obj = Connection._convertToLinkedJson(data);
+				} else {
+					return_obj = data;
 				}
+				callback(return_obj, {
+					responseText: jqXHR.responseText,
+					statusCode: jqXHR.status,
+					statusText: jqXHR.statusText
+				});
+			}).fail(function(jqXHR, textStatus, errorThrown) {
+				callback(
+					jqXHR.responseText,
+					{
+						responseText: jqXHR.responseText,
+						statusCode: jqXHR.status,
+						statusText: jqXHR.statusText
+					},
+					errorThrown
+				);
 			});
 		};
 	}
