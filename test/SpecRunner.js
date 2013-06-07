@@ -1,6 +1,4 @@
 require.config({
-  // baseUrl: "../../js/",
-  // urlArgs: 'cb=' + Math.random(),
   paths: {
     jquery: 'lib/jquery-1.10.1.min',
     underscore: '../node_modules/underscore/underscore-min',
@@ -8,7 +6,6 @@ require.config({
     'jasmine-html': 'lib/jasmine-html',
     spec: 'spec/',
     stardog : "../js/stardog",
-    // async: "lib/async"
     async: "lib/jasmine.async"
   },
   shim: {
