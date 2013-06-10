@@ -40,6 +40,8 @@
   "ignore": [
     "**/.*",
     "data",
+    "load_test_data.sh",
+    "package.json",
     "test",
     "node_modules",
     "components"
