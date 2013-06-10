@@ -1,4 +1,4 @@
-//     Stardog.js 0.0.4
+//     Stardog.js 0.0.5
 //
 // Copyright 2012 Clark & Parsia LLC
 

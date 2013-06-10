@@ -1,5 +1,14 @@
 # Stardog.js - Change Log
 
+## v0.0.5
+---
+
+* __ADDED:__ AMD support for stardog.js in the browser
+* __ADDED:__ bower package description - now stardog.js is also available in bower as a client library for the browser
+* __ADDED:__ test cases for the stardog.js browser version
+* __ADDED:__ proxy utility for stardog usign nodejs - thanks to @laczoka (https://gist.github.com/laczoka/5065270)
+* __MODIFIED:__ stardog.js API calls - changed parameters to options hash in most of the calls - see annotated code
+
 ## v0.0.4
 ---
 

@@ -31,40 +31,40 @@ That will fetch the latest version of stardog.js in the npm registry, [more deta
 
 To get started, just clone the project. You'll need a local copy of Stardog to be able to run the tests. For more information on starting the Stardog DB service and how it works, go to [Stardog's documentation](http://stardog.com/docs/), where you'll find everything you need to get up and running with Stardog.
 
-Go to [http://stardog.com](http://stardog.com), download and install the database and load the data provided in `data/` using the script in the repository. Having the Stardog service running load the data with the following command:
+Go to [http://stardog.com](http://stardog.com), download and install the database and load the data provided in `data/` using the script in the repository. Start Stardog with the `http` port on `5823` with the following command:
 
-    $ ./load_test_data.sh
+	$ stardog-admin server start --http 5823
 
-Once you have the testing database in your Stardog copy, run the following command:
+Once you have Stardog running, execute the following command:
 
     $ npm install
+    $ bower install
 
-This will install all the dependencies using npm, once this is done, run the test cases.
+This will install all the dependencies using npm (for node) and bower (for browser), once this is done, run the test cases.
 
 All tests should pass.
 
-###Running Tests
+### Running Tests
 
-This will run all the test cases in `spec/`.
+Run all the test cases in `test/spec`. Having the Stardog server running, execute the following commands:
 
-#### In the Browser
-1\. Start Stardog with the `http` port on `5823`:
+1\. Load the test data using the provided script:
 
-    stardog-admin server start --http 5823
+    $ ./load_test_data.sh
 
 2\. Start the proxy via:
 
-    node test/testCORS.js
-    
-3\. Open the file `test/index.html` in your browser.
+    $ node test/testCORS.js
 
+3.\ Run the test suite:
+
+#### In the Browser
+
+    open test/index.html
 
 #### In node.js
 
-Just execute:
-
-    npm test
-    
+    $ npm test    
 
 
 ## Version details ##
@@ -74,7 +74,7 @@ Stardog.js depends of the Stardog HTTP API, and any change in this API will be s
 | Stardog Version | Stardog.js Version |
 | --------------- | ------------------ |
 | <= 1.1.5        | <= 0.0.3           |
-| 1.2             | >=0.0.4            |
+| 1.2             | >= 0.0.4           |
 
 
 ## Quick Example ##
