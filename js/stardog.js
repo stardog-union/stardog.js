@@ -1,4 +1,4 @@
-//     Stardog.js 0.0.4
+//     Stardog.js 0.0.5
 //
 // Copyright 2012 Clark & Parsia LLC
 
@@ -14,8 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-(function() {
-
+(function(factory) {
 	// ## Initial Setup
 	// -------------
 	//
@@ -27,35 +26,44 @@
 	// restored later on, if 'noConflict' is used.
 	var previousStardog = root.Stardog;
 
-	// Create top-level namespace
-	var Stardog = {};
 	// Export the Underscore object for **Node.js**, with
-	// backwards-compatibility for the old `require()` API. If we're in
+	// backward compatibility for the old `require()` API. If we're in
 	// the browser, add `_` as a global object via a string identifier,
 	// for Closure Compiler "advanced" mode.
-	if (typeof exports !== 'undefined') {
-		if (typeof module !== 'undefined' && module.exports) {
-			exports = module.exports = Stardog;
-		}
-		//exports.Stardog = Stardog;
-	} else {
-		root['Stardog'] = Stardog;
+	if (typeof exports !== 'undefined' && typeof module !== 'undefined' && module.exports) {
+		exports = module.exports = factory(root);
 	}
+	else if (typeof define === 'function' && define.amd) {
+		// load Stardog via AMD
+		define(['stardog'], function() {
+			// Export to global for backward compatibility
+			root['Stardog'] = factory(root);
+			return root.Stardog;
+		});
+	}
+	else {
+		// Browser global
+		root['Stardog'] = factory(root);
+	}
+}).call(this, function(root) {
+	// Create top-level namespace
+	var Stardog = {};
 
 	// Current version of the library. Keep in sync with 'package.json'
-	Stardog.VERSION = '0.0.4';
+	Stardog.VERSION = '0.0.5';
 
-	// Require jsonld, if we're on the server, and it's not already present
-	var jsonld = root.jsonld;
-	if (!jsonld && (typeof require !== 'undefined')) jsonld = require('jsonld');
+	if (typeof exports !== 'undefined') {
+		// Require request, if we're on the server, and it's not already present
+		var request = root.request;
+		if (!request && (typeof require !== 'undefined')) request = require('request');
 
-	// Require request, if we're on the server, and it's not already present
-	var request = root.request;
-	if (!request && (typeof require !== 'undefined')) request = require('request');
+		// Require querystring, if we're on the server, and it's not already present
+		var qs = root.qs;
+		if (!qs && (typeof require !== 'undefined')) qs = require('querystring');
+	}
 
-	// Require querystring, if we're on the server, and it's not already present
-	var qs = root.qs;
-	if (!qs && (typeof require !== 'undefined')) qs = require('querystring');
+	var _ = root._;
+	if (!_ && (typeof require !== 'undefined')) _ = require('underscore');
 
 	// For AJAX's purposes, jQuery owns the `$` variable.
 	// jQuery is only required when using the library in the browser.
@@ -150,13 +158,28 @@
 	// Needs a callback to process results in a function receiving a 
 	// JSONLD object.
 	if (typeof exports !== 'undefined') {
+		
 		// Node.js implementation of the HTTP request using `request` npm module.
-
-		Connection.prototype._httpRequest = function(theMethod, 
-			resource, acceptH, params, callback, msgBody, isJsonBody, contentType, multipart) {
-
-			var req_url = this.endpoint + resource,
-				strParams = qs.stringify(params);
+		// __Parameters__:  
+		// `options`: an object with the following attributes: 
+		//				`httpMethod`: the name of the database;
+		//				`resource`: the resource;
+		//				`acceptHeader`: the accept header;
+		//				`params`: any other parameters to pass to the SPARQL endpoint;
+		//				`msgBody`: the message body;
+		//				`isJsonBody`: whether the body is a JSON object;
+		//				`contentType`: the content type;
+		//				`multipart`: the multipart;
+		// `callback`: the callback to execute once the request is done. 
+		Connection.prototype._httpRequest = function(options, callback) {
+			var theMethod = options.httpMethod,
+				req_url = this.endpoint + options.resource,
+				strParams = qs.stringify(options.params),
+				msgBody = options.msgBody,
+				acceptH = options.acceptHeader,
+				isJsonBody = options.isJsonBody,
+				contentType = options.contentType,
+				multipart = options.multipart;
 
 			if (strParams && strParams.length > 0)
 				req_url += "?" + strParams;
@@ -183,14 +206,14 @@
 							jsonData = arrLinkedJson;
 						}
 						else if (jsonData.hasOwnProperty('@id') ||
-                            jsonData.hasOwnProperty('@context')) {
+							jsonData.hasOwnProperty('@context')) {
                             
-                            jsonData = new LinkedJson(jsonData);
+							jsonData = new LinkedJson(jsonData);
 						}
 					}
 					catch (err) {
-                        // If parsing throws an error just leave it as is.
-                        jsonData = body;
+						// If parsing throws an error just leave it as is.
+						jsonData = body;
 					}
 
 					callback(jsonData, response);
@@ -198,6 +221,8 @@
 				else {
 					console.log('Error found!');
 					console.log(error);
+					// TODO: maybe wrap the error with stardog specific info
+					callback(body, response, error); 
 				}
 			};
 
@@ -210,7 +235,7 @@
 				}
 			};
 
-			if (msgBody && msgBody != null) {
+			if (msgBody) {
 				if (isJsonBody) {
 					reqJSON["json"] = msgBody;
 				}
@@ -264,14 +289,33 @@
 		Connection.prototype._base64Encode = typeof(btoa) == "function" ? function(x){return btoa(x)} : null;
 
 		// Low level HTTP request method to use in the Browser, using an AJAX implementation.
-		Connection.prototype._httpRequest = function(theMethod, resource, acceptH, params, callback) {
-			var req_url = this.endpoint + resource,
+		// __Parameters__:  
+		// `options`: an object with the following attributes:
+		// 				`httpMethod`: the name of the database;
+		//				`resource`: the resource;
+		//				`acceptHeader`: the accept header;
+		//				`params`: any other parameters to pass to the SPARQL endpoint;
+		//				`msgBody`: the message body;
+		//				`isJsonBody`: whether the body is a JSON object;
+		//				`contentType`: the content type;
+		//				`multipart`: the multipart;
+		// `callback`: the callback to execute once the request is done. 
+		Connection.prototype._httpRequest = function(options, callback) {
+			var theMethod = options.httpMethod,
+				acceptH = options.acceptHeader,
+				req_url = this.endpoint + options.resource,
+				params = options.params ? ("?" + $.param(options.params)) : '',
+				contentType = options.contentType,
+				body = options.msgBody ? options.msgBody : null,
+				isJsonBody = options.isJsonBody,
+				multipart = options.multipart,
 				headers = {},
 				username, password;
 
 			if (this.reasoning && this.reasoning != null) {
 				headers['SD-Connection-String'] = 'reasoning=' + this.reasoning;
 			}
+
 			headers['Accept'] = acceptH || "application/sparql-results+json";
 
 			if (this.credentials) {
@@ -286,32 +330,42 @@
 				headers["Authorization"] = "Basic ".concat(userPassBase64);
 			}
 
+			if (isJsonBody) {
+				headers['Content-Type'] = 'application/json';
+			} else if (contentType) {
+				headers['Content-Type'] = contentType;
+			}
+
 			$.ajax({
 				type: theMethod,
-				url: req_url,
-				dataType: 'json',
-				data: params,
-				headers: headers,
-
-				success: function(data) {
-					var return_obj;
-
-					// check if the returned object is a JSONLD object
-					if (data.hasOwnProperty('@id') || data.hasOwnProperty('@context')) {
-						return_obj = Connection._convertToLinkedJson(data);
-					}
-					else {
-						return_obj = data;
-					}
-
-					callback(return_obj);
-				},
-				error: function(jqXHR, textStatus, errorThrown) {
-					callback({
-						'status': jqXHR.status,
-						'statusText' : jqXHR.statusCode,
-						'error': jqXHR.responseText});
+				url: req_url + params,
+				processData: false,
+				dataType: acceptH.match(/json/gi) ? 'json' : 'text',
+				data:  isJsonBody ? JSON.stringify(body) : body,
+				headers: headers
+			}).done(function(data, status, jqXHR) {
+				var return_obj;
+				// check if the returned object is a JSONLD object
+				if (data && (data.hasOwnProperty('@id') || data.hasOwnProperty('@context'))) {
+					return_obj = Connection._convertToLinkedJson(data);
+				} else {
+					return_obj = data;
 				}
+				callback(return_obj, {
+					responseText: jqXHR.responseText,
+					statusCode: jqXHR.status,
+					statusText: jqXHR.statusText
+				});
+			}).fail(function(jqXHR, textStatus, errorThrown) {
+				callback(
+					jqXHR.responseText,
+					{
+						responseText: jqXHR.responseText,
+						statusCode: jqXHR.status,
+						statusText: jqXHR.statusText
+					},
+					errorThrown
+				);
 			});
 		};
 	}
@@ -319,12 +373,22 @@
     // `Connection.getProperty` retrieves the values for a specific property of a URI individual in a 
     // Stardog DB. This function is a direct access to provide easy out-of-the-box functionality
     // for retrieving common properties such as rdfs:label, etc
-	Connection.prototype.getProperty = function(database, uri, property, callback) {
-		var strQuery = 'select ?val where { '+ uri +' '+ property +' ?val }' ;
-		var val = uri;
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`uri`: the individual URI;
+	//				`property`: the specific property.
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint
+	// `callback`: the callback to execute once the request is done.  
+	Connection.prototype.getProperty = function(options, callback) {
+		var val = options.uri,
+			reqOptions = { 
+				database: options.database,
+				query:  'select ?val where { '+ options.uri +' '+ options.property +' ?val }',
+				params: options.params
+			};
 
-		this.query(database, strQuery, function (jsonRes) {
-
+		this.query(reqOptions, function (jsonRes) {
 			if (jsonRes.results && jsonRes.results.bindings.length > 0) {
 				val = jsonRes.results.bindings[0].val.value;
 			}
@@ -335,151 +399,318 @@
 
 	// Performs a GET to the root endpoint of the DB `database`
 	//
-	// __Parameters__:  
-	// `database`: the name of the database verify its size.
+	// __Parameters__:
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	// 				`params`: (optional) any other parameters to pass to the SPARQL endpoint
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.getDB = function (database, callback) {
-		this._httpRequest("GET", database, "*/*", "", callback);
+	Connection.prototype.getDB = function (options, callback) {
+		var reqOptions = {
+				resource : options.database,
+				acceptHeader: "*/*",
+				httpMethod: "GET",
+				params: options.params ? options.params : ""
+			 };
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Retrieve the DB size.
 	// Returns a single numeric value representing the number of triples in the database.
 	//
-	// __Parameters__:  
-	// `database`: the name of the database verify its size.
+	// __Parameters__:
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database to verify its size;
+	// 				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.getDBSize = function (database, callback) {
-		this._httpRequest("GET", database + "/size", "*/*", "", callback);
+	Connection.prototype.getDBSize = function (options, callback) {
+		var reqOptions = {
+				resource: options.database + "/size",
+				httpMethod: "GET",
+				acceptHeader: "*/*",
+				params: options.params ? options.params : ""
+			};
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Evaluate a SPARQL query specifying `database`, `query`, `baseURI`, `limit`, `offset` and the `mimetype`
 	// for the Accept header. This method is designed for `select` & `ask` queries, where the result type will 
 	// be a set of bindings.
-	Connection.prototype.query = function(database, query, baseURI, limit, offset, callback, acceptMIME) {
-		var acceptH = (acceptMIME) ? acceptMIME : 'application/sparql-results+json';
-		var options = {
-			"query" : query
-		};
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`query`: the query;
+	//				`baseURI`: the base URI;
+	//				`limit`: the limit;
+	//				`offset`: the offset;
+	//				`mimetype`: the mimetype;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.  
+	Connection.prototype.query = function(options, callback) {
+		var reqOptions = {
+				acceptHeader : options.mimetype ? options.mimetype : 'application/sparql-results+json',
+				resource: options.database + "/query",
+				httpMethod: "GET",
+				params : _.extend({ "query" : options.query }, options.params)
+			};
 
-		if (baseURI && baseURI != null)
-			options["baseURI"] = baseURI;
+		if (options.baseURI && options.baseURI != null) {
+			reqOptions["params"]["baseURI"] = options.baseURI;
+		}
 
-		if (limit && limit != null)
-			options["limit"] = limit;
+		if (options.limit && options.limit != null) {
+			reqOptions["params"]["limit"] = options.limit;
+		}
 
-		if (offset && offset != null)
-			options["offset"] = offset;
+		if (options.offset && options.offset != null) {
+			reqOptions["params"]["offset"] = options.offset;
+		}
 
-		this._httpRequest("GET", database + "/query", acceptH, options, callback);
+		this._httpRequest(reqOptions, callback);
 	};
 
 
 	// Evaluate a SPARQL query specifying `database`, `query`, `baseURI`, `limit`, `offset` and the `mimetype`
 	// for the Accept header. This method is designed for `describe` & `construct` queries, where the result type will 
 	// be a set of triples.
-	Connection.prototype.queryGraph = function (database, query, baseURI, limit, offset, callback, acceptMIME) {
-		var acceptH = (acceptMIME) ? acceptMIME : 'application/ld+json';
-		var options = {
-			"query" : query
-		};
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`query`: the query;
+	//				`baseURI`: the base URI;
+	//				`limit`: the limit;
+	//				`offset`: the offset;
+	//				`mimetype`: the mimetype;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.  
+	Connection.prototype.queryGraph = function (options, callback) {
+		var reqOptions = {
+				acceptHeader : options.mimetype ? options.mimetype : 'application/ld+json',
+				resource: options.database + "/query",
+				httpMethod: "GET",
+				params : _.extend({ "query" : options.query }, options.params)
+			};
 
-		if (baseURI && baseURI != null)
-			options["baseURI"] = baseURI;
+		if (options.baseURI && options.baseURI != null) {
+			reqOptions["params"]["baseURI"] = options.baseURI;
+		}
 
-		if (limit && limit != null)
-			options["limit"] = limit;
+		if (options.limit && options.limit != null) {
+			reqOptions["params"]["limit"] = options.limit;
+		}
 
-		if (offset && offset != null)
-			options["offset"] = offset;
+		if (options.offset && options.offset != null) {
+			reqOptions["params"]["offset"] = options.offset;
+		}
 
-		this._httpRequest("GET", database + "/query", acceptH, options, callback);
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Returns the query plan generated by Stardog given a SPARQL query.
-	Connection.prototype.queryExplain = function (database, query, baseURI, callback) {
-		var options = {
-			"query" : query
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`query`: the query;
+	//				`baseURI`: (optional) the base URI;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.  
+	Connection.prototype.queryExplain = function (options, callback) {
+		var reqOptions = {
+				resource: options.database + "/explain",
+				httpMethod: "GET",
+				acceptHeader: "text/plain",
+				params : _.extend({ "query" : options.query }, options.params)
+			};
+
+		if (options.baseURI) {
+			reqOptions["params"]["baseURI"] = options.baseURI;
 		}
 
-		if (baseURI)
-			options["baseURI"] = baseURI;
-
-		this._httpRequest("GET", database + "/explain", "text/plain", options, callback);
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Start a new transaction in the database.
-	Connection.prototype.begin = function (database, callback) {
-		this._httpRequest("POST", database + "/transaction/begin", "text/plain", "", callback);
+	//
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done. 
+	Connection.prototype.begin = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "POST",
+				resource: options.database + "/transaction/begin",
+				acceptHeader: "text/plain",
+				params: options.params
+			};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Commit the transaction `txId` in the database. This will remove the transaction and the `txId` will not 
 	// be valid anymore. All function calls using a transaction to mutate the contents of a database must call this 
 	// function in order to make the changes permanent.
-	Connection.prototype.commit = function (database, txId, callback) {
-		this._httpRequest("POST", database + "/transaction/commit/" + txId, "text/plain", "", callback);
+	//
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`txId`: the transaction id;
+	// 				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done. 
+	Connection.prototype.commit = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "POST",
+				resource:  options.database + "/transaction/commit/" + options.txId,
+				acceptHeader: "text/plain",
+				params: options.params
+			};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Perform a rollback given within a trasaction, providing the transaction id `txId`.
-	Connection.prototype.rollback = function (database, txId, callback) {
-		this._httpRequest("POST", database + "/transaction/rollback/"+ txId, "text/plain", "", callback);
+	//
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`txId`: the transaction id;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	Connection.prototype.rollback = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "POST",
+				resource:  options.database + "/transaction/rollback/" + options.txId,
+				acceptHeader: "text/plain",
+				params: options.params
+			};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Evaluate a SPARQL query using a transaction `txId`.
-	Connection.prototype.queryInTransaction = 
-		function (database, txId, query, baseURI, limit, offset, callback, acceptMIME) {
-		var acceptH = (acceptMIME) ? acceptMIME : 'application/sparql-results+json';
-		var options = {
-			"query" : query
-		};
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`query`: the query;
+	//				`txId`: the transaction id;
+	//				`baseURI`: the base URI;
+	//				`limit`: the limit;
+	//				`offset`: the offset;
+	//				`mimetype`: the mimetype;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.  
+	Connection.prototype.queryInTransaction = function(options, callback) {
+		// function (database, txId, query, baseURI, limit, offset, callback, acceptMIME) {
+		var reqOptions = {
+				acceptHeader : options.mimetype ? options.mimetype : 'application/sparql-results+json',
+				resource: options.database + "/" + options.txId +"/query",
+				httpMethod: "GET",
+				params : _.extend({ "query" : options.query }, options.params)
+			};
 
-		if (baseURI && baseURI != null)
-			options["baseURI"] = baseURI;
+		if (options.baseURI && options.baseURI != null) {
+			reqOptions["params"]["baseURI"] = options.baseURI;
+		}
 
-		if (limit && limit != null)
-			options["limit"] = limit;
+		if (options.limit && options.limit != null) {
+			reqOptions["params"]["limit"] = options.limit;
+		}
 
-		if (offset && offset != null)
-			options["offset"] = offset;
+		if (options.offset && options.offset != null) {
+			reqOptions["params"]["offset"] = options.offset;
+		}
 
-		this._httpRequest("GET", database + "/" + txId +"/query", acceptH, options,	callback);
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Add a set of statements included in the `body` request, using a transaction `txId`. Note that after calling this function 
 	// to add the statements, `Connection.commit` must be performed to make the changes persistent in the DB.
-	Connection.prototype.addInTransaction = function (database, txId, body, callback, contentType, graph_uri) {
-		var options;
-		if (graph_uri && graph_uri != null) {
-			options = {
-				"graph-uri" : graph_uri
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`txId`: the transaction id;
+	//				`body`: the request body;
+	//				`contentType`: the request content type;
+	//				`graphUri`: (optional) the graph URI;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	Connection.prototype.addInTransaction = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "POST",
+				resource: options.database + "/" + options.txId + "/add",
+				acceptHeader: "*/*",
+				params: options.params || { },
+				msgBody: options.body,
+				contentType: options.contentType,
+				isJsonBody: false,
+				multipart: null
 			};
+
+		if (options.graphUri && options.graphUri != null) {
+			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
-		this._httpRequest("POST", database + "/" + txId + "/add", "*/*", options, callback, body, false, contentType, null);
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Remove a set of statements included in the `body` request, using a transaction `txId`. Note that after calling this function 
 	// to add the statements, `Connection.commit` must be performed to make the changes persistent in the DB.
-	Connection.prototype.removeInTransaction = function (database, txId, body, callback, contentType, graph_uri) {
-		var options;
-		if (graph_uri) {
-			options = {
-				"graph-uri" : graph_uri
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`txId`: the transaction id;
+	//				`body`: the request body;
+	//				`contentType`: the request content type;
+	//				`graphUri`: the graph URI;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	Connection.prototype.removeInTransaction = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "POST",
+				resource: options.database + "/" + options.txId + "/remove",
+				acceptHeader: "text/plain",
+				params: options.params || { },
+				msgBody: options.body,
+				contentType: options.contentType,
+				isJsonBody: false,
+				multipart: null
 			};
+
+		if (options.graphUri && options.graphUri != null) {
+			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
-		this._httpRequest("POST", database + "/" + txId + "/remove", "text/plain", options, callback, body, false, contentType, null);
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Clears the content of the DB.
-	Connection.prototype.clearDB = function (database, txId, callback, graph_uri) {
-		var options;
-		if (graph_uri) {
-			options = {
-				"graph-uri" : graph_uri
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`txId`: the transaction id;
+	//				`graphUri`: the graph URI;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	Connection.prototype.clearDB = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "POST",
+				resource: options.database + "/" + options.txId + "/clear",
+				acceptHeader: "text/plain",
+				params: options.params || {}
 			};
+
+		if (options.graphUri && options.graphUri != null) {
+			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
-		this._httpRequest("POST", database + "/" + txId + "/clear", "text/plain", options, callback);
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// ## Reasoning API
@@ -487,86 +718,173 @@
 	
 	// API call to get explanation of the inferences in `axioms` using a transaction `txId` with the content type 
 	// `contentType` of the axioms.
-	Connection.prototype.reasoningExplain = function (database, axioms, callback, contentType, txId) {
-		var url = database + "/reasoning";
-		if (txId && txId != null) {
-			url = url + "/" + txId;
-		}
-		url + url + "/explain";
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`txId`: the transaction;
+	//				`axioms`: the axioms;
+	//				`contentType`: the content-type;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	Connection.prototype.reasoningExplain = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "POST",
+				resource: options.database + "/reasoning/" 
+							+ (options.txId && options.txId != null ? "/" + options.txId : ""),
+				acceptHeader: "application/x-turtle",
+				params: options.params || null,
+				msgBody: options.axioms,
+				isJsonBody: false,
+				contentType: options.contentType || "text/plain"
+			};
 
-		// set default content-type to "text/plain" (N-Triples)
-		if (!contentType || contentType === null) {
-			contentType = "text/plain";
-		}
-
-		this._httpRequest("POST", url, "application/x-turtle", null, callback, axioms, false, contentType);
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Checks the logical consistency of database. If using a named graph provide the `graph_uri` parameter.
 	// Returns a boolean response as `true` if the database is consistent. 
 	// See [stardog-reasoning consistency](http://stardog.com/docs/man/reasoning-consistency.html)
-	Connection.prototype.isConsistent = function (database, callback, graph_uri) {
-		var options;
-		if (graph_uri) {
-			options = {
-				"graph-uri" : graph_uri
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`graphUri`: the graph URI;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	Connection.prototype.isConsistent = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "GET",
+				resource: options.database + "/reasoning/consistency",
+				acceptHeader: "text/boolean",
+				params: options.params || {}
 			};
+
+		if (options.graphUri && options.graphUri != null) {
+			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
-		this._httpRequest("GET", database + "/reasoning/consistency", "text/boolean", options, callback);
-	}
+		this._httpRequest(reqOptions, callback);
+	};
 
 	// ### Integrity Constraint Validation
 	// Listing the Integrity Constraints. Returns the integrity constraints for the specified database serialized in any supported RDF format.
-	Connection.prototype.getICV = function (database, acceptH, callback) {
-		var acceptH = (acceptMIME) ? acceptMIME : 'text/plain';
-		this._httpRequest("GET", database + "/icv", acceptH, null, callback);
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`acceptMime`: the MIME type;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	Connection.prototype.getICV = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "GET",
+				resource: options.database + "/icv",
+				acceptHeader: options.acceptMime || 'text/plain',
+				params: options.params || null,
+				contentType: options.contentType || "text/plain"
+			};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Accepts a set of valid Integrity constraints serialized in any RDF format supported by Stardog and adds them to the database in an atomic action. 
 	// 200 return code indicates the constraints were added successfully, 500 indicates that the constraints were not valid or unable to be added.
-	Connection.prototype.setICV = function (database, icv_axioms, callback, contentType) {
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`icvAxioms`: the ICV axioms;
+	//				`contentType`: the content-type;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	Connection.prototype.setICV = function (options, callback) {
 		// set default content-type to "text/plain" (N-Triples)
-		if (!contentType || contentType === null) {
-			contentType = "text/plain";
-		}
+		var reqOptions = {
+				httpMethod: "POST",
+				resource: options.database + "/icv/add",
+				acceptHeader: "text/boolean",
+				params: options.params || null,
+				contentType: options.contentType || "text/plain",
+				msgBody: options.icvAxioms,
+				isJsonBody: false
+			};
 
-		this._httpRequest("POST", database + "/icv/add", "text/boolean", null, callback, icv_axioms, false, contentType);
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Accepts a set of valid Integrity constraints serialized in any RDF format supported by Stardog and removes them from the database in a single atomic action. 
 	// 200 indicates the constraints were successfully remove; 500 indicates an error.
-	Connection.prototype.removeICV = function (database, icv_axioms, callback, contentType) {
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`icvAxioms`: the ICV axioms;
+	//				`contentType`: the content-type;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	Connection.prototype.removeICV = function (options, callback) {
 		// set default content-type to "text/plain" (N-Triples)
-		if (!contentType || contentType === null) {
-			contentType = "text/plain";
-		}
+		var reqOptions = {
+				httpMethod: "POST",
+				resource: options.database + "/icv/remove",
+				acceptHeader: "text/boolean",
+				params: options.params || null,
+				contentType: options.contentType || "text/plain",
+				msgBody: options.icvAxioms,
+				isJsonBody: false
+			};
 
-		this._httpRequest("POST", database + "/icv/remove", "text/boolean", null, callback, icv_axioms, false, contentType);
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Drops ALL integrity constraints for a database. 200 indicates all constraints were successfully dropped; 500 indicates an error.
-	Connection.prototype.clearICV = function (database, callback) {
-		this._httpRequest("POST", database + "/icv/clear", "text/boolean", null, callback);
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	Connection.prototype.clearICV = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "POST",
+				resource: options.database + "/icv/clear",
+				acceptHeader: "text/boolean",
+				params: options.params || null
+			};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// Only works for one constraint, if more than 1 are provided returns 400 code status. The body of the POST is a single Integrity Constraint, 
 	// serialized in any supported RDF format, with Content-type set appropriately. Returns either a text/plain result containing a single SPARQL query; 
 	// or it returns 400 if more than one constraint was included in the input.
-	Connection.prototype.fromICVtoSPARQL = function (database, icv_axiom, callback, contentType, graph_uri) {
-		var options;
-		if (graph_uri) {
-			options = {
-				"graph-uri" : graph_uri
-			};
-		}
-
+	// 
+	// __Parameters__:  
+	// `options`: an object with at least the following attributes: 
+	//				`database`: the name of the database;
+	//				`icvAxiom`: the ICV axiom;
+	//				`contentType`: the content-type;
+	//				`graphUri`: the graph URI;
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	Connection.prototype.fromICVtoSPARQL = function (options, callback) {
 		// set default content-type to "text/plain" (N-Triples)
-		if (!contentType || contentType === null) {
-			contentType = "text/plain";
+		var reqOptions = {
+				httpMethod: "POST",
+				resource: options.database + "/icv/convert",
+				acceptHeader: "text/plain",
+				params: options.params || {},
+				msgBody: icvAxiom,
+				isJsonBody: false,
+				contentType: options.contentType || "text/plain"
+			};
+
+		if (options.graphUri && options.graphUri != null) {
+			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
-		this._httpRequest("POST", database + "/icv/convert", "text/plain", options, callback, icv_axiom, false, contentType);
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// -----------------------------------------
@@ -577,7 +895,7 @@
 			'http://www.w3.org/2002/07/owl#' : 'owl',
 			'http://www.w3.org/2000/01/rdf-schema#' : 'rdfs',
 			'http://www.w3.org/1999/02/22-rdf-syntax-ns#' : 'rdf',
-			'http://www.w3.org/2001/XMLSchema#' : 'xsd',
+			'http://www.w3.org/2001/xmlnschema#' : 'xsd',
 			'http://www.w3.org/2004/02/skos/core#' : 'skos',
 			'http://purl.org/dc/elements/1.1/' : 'dc',
 			'http://xmlns.com/foaf/0.1/' : 'foaf',
@@ -604,72 +922,117 @@
 	// #### List databases (GET)
 	// Get a List of the existing databases in the system.
 	//
-	// __Parameters__:  
+	// __Parameters__:
+	// `options`: an object with one the following attributes: 
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
 	// `callback`: the callback to execute once the request is done. 
-	Connection.prototype.listDBs = function (callback) {
-		this._httpRequest("GET", "admin/databases", "application/json", "", callback);
+	Connection.prototype.listDBs = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "GET",
+				resource: "admin/databases",
+				acceptHeader: "application/json",
+				params: (options && typeof options !== 'function') ? options.params : ""
+			};
+		this._httpRequest(
+			reqOptions,
+			typeof options === 'function' ? options /* no options passed, so this is the callback */ 
+					: callback /* options is an object, callback might be a function */);
 	};
 
 	// #### Copy database (PUT)
 	// Copy an existing database.
 	//
-	// __Parameters__:  
-	// `dbsource`: the name of the database to copy.  
-	// `dbtarget`: the name of the new copied database.  
+	// __Parameters__: 
+	// `options`: an object with one the following attributes: 
+	// 				`dbsource`: the name of the database to copy.  
+	// 				`dbtarget`: the name of the new copied database.
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.copyDB = function (dbsource, dbtarget, callback) {
-		this._httpRequest(
-			"PUT", "admin/databases/"+ dbsource + "/copy", "application/json", { "to" : dbtarget }, callback
-		);
+	Connection.prototype.copyDB = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "PUT",
+				resource: "admin/databases/" + options.dbsource + "/copy",
+				acceptHeader: "application/json",
+				params: _.extend({ "to" : options.dbtarget }, options.params)
+			};
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Drop an existing database.
 	// Drops an existing database `dbname` and all the information that it contains.
 	//
-	// __Parameters__:  
-	// `dbname`: the name of the database to drop.  
+	// __Parameters__: 
+	// `options`: an object with one the following attributes: 
+	// 				`database`: the name of the database to drop.
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint. 
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.dropDB = function (dbname, callback) {
-		this._httpRequest(
-			"DELETE", "admin/databases/"+ dbname, "application/json", "", callback
-		);
+	Connection.prototype.dropDB = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "DELETE",
+				resource: "admin/databases/" + options.database,
+				acceptHeader: "application/json",
+				params: options.params || ""
+			};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Migrate an existing database.
 	// Migrates the existing content of a legacy database to new format.
 	// 
-	// __Parameters__:  
-	// `dbname`: the name of the database to migrate.
+	// __Parameters__: 
+	// `options`: an object with one the following attributes: 
+	// 				`database`: the name of the database to migrate.
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint. 
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.migrateDB = function (dbname, callback) {
-		this._httpRequest(
-			"PUT", "admin/databases/"+ dbname +"/migrate", "application/json", "", callback
-		);
+	Connection.prototype.migrateDB = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "PUT",
+				resource: "admin/databases/" + options.database + "/migrate",
+				acceptHeader: "application/json",
+				params: options.params || ""
+			};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Optimize an existing database.
 	// Optimize an existing database.
 	//
-	// __Parameters__:  
-	// `dbname`: the name of the database to optimize.  
+	// __Parameters__:
+	// `options`: an object with one the following attributes: 
+	// 				`database`: the name of the database to optimize.
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint. 
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.optimizeDB = function (dbname, callback) {
-		this._httpRequest(
-			"PUT", "admin/databases/"+ dbname +"/optimize", "application/json", "", callback
-		);
+	Connection.prototype.optimizeDB = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "PUT",
+				resource: "admin/databases/" + options.database +"/optimize",
+				acceptHeader: "application/json",
+				params: options.params || ""
+			};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Set database on-line.
 	// Request message to set an existing database `dbname` on-line.
 	//
 	// __Parameters__:  
-	// `dbname`: the name of the database to set on-line.  
-	// `strategyOp`: the strategy options, [more info](http://stardog.com/docs/network/#extended-http).  
+	// `options`: an object with one the following attributes: 
+	// 				`database`: the name of the database to set on-line.  
+	// 				`strategyOp`: the strategy options, [more info](http://stardog.com/docs/network/#extended-http).
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.   
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.onlineDB = function (dbname, strategyOp, callback) {
-		this._httpRequest(
-			"PUT", "admin/databases/"+ dbname +"/online", "application/json", { "strategy" : strategyOp }, callback
-		);
+	Connection.prototype.onlineDB = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "PUT",
+				resource: "admin/databases/" + options.database +"/online",
+				acceptHeader: "application/json",
+				params: _.extend({ "strategy": options.strategyOp }, options.params)
+			};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Set database off-line.
@@ -681,15 +1044,27 @@
 	// This will allow open transaction to commit/rollback, open queries to complete, etc. 
 	// After the timeout has expired, all remaining open connections are closed and the database goes off-line.
 	//
-	// __Parameters__:  
-	// `dbname`: the name of the database to set off-line.  
-	// `strategyOp`: the strategy options, [more info](http://stardog.com/docs/network/#extended-http).  
-	// `timeoutMS`: timeout in milliseconds.  
+	// __Parameters__:
+	// `options`: an object with one the following attributes: 
+	// 				`database`: the name of the database to set off-line.  
+	//				`strategyOp`: the strategy options, [more info](http://stardog.com/docs/network/#extended-http).  
+	//				`timeout`: timeout in milliseconds.
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.offlineDB = function (dbname, strategyOp, timeoutMS, callback) {
-		this._httpRequest(
-			"PUT", "admin/databases/"+ dbname +"/offline", "application/json", { "strategy" : strategyOp }, callback
-		);
+	Connection.prototype.offlineDB = function (options, callback) {
+		var reqOptions = {
+				httpMethod: "PUT",
+				resource: "admin/databases/" + options.database +"/offline",
+				acceptHeader: "application/json",
+				params: _.extend({ "strategy": options.strategyOp }, options.params)
+			};
+
+		if (options.timeoutMS) {
+			reqOptions.msgBody = { timeout: options.timeout };
+			reqOptions.isJsonBody = true;
+		}
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Set option values to an existing database.
@@ -697,13 +1072,22 @@
 	// Database options can be found [here](http://stardog.com/docs/admin/#admin-db).
 	//
 	// __Parameters__:  
-	// `dbname`: the name of the database to set the options.  
-	// `optionsObj`: the options JSON object, indicating the options and values to set, [more info](http://stardog.com/docs/network/#extended-http).  
+	// `options`: an object with one the following attributes: 
+	// 				`database`: the name of the database to set the options.  
+	// 				`optionsObj`: the options JSON object, indicating the options and values to set, [more info](http://stardog.com/docs/network/#extended-http).
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
 	// `callback`: the callback to execute once the request is done.
-	Connection.prototype.setDBOptions = function(dbname, optionsObj, callback) {
-		this._httpRequest(
-			"POST", "admin/databases/"+ dbname +"/options", "application/json", "", callback, optionsObj, true
-		);
+	Connection.prototype.setDBOptions = function(options, callback) {
+		var reqOptions = {
+				httpMethod: "POST",
+				resource: "admin/databases/" + options.database +"/options",
+				acceptHeader: "application/json",
+				params: options.params,
+				msgBody: options.optionsObj,
+				isJsonBody: true
+			};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Get option values from an existing database.
@@ -712,13 +1096,22 @@
 	// values in the database when the call returns.
 	//
 	// __Parameters__:  
-	// `dbname`: the name of the db to retrieve the option values.  
-	// `optionsObj`: the options JSON object seed, indicating the options to retrieve, [more info](http://stardog.com/docs/network/#extended-http).  
+	// `options`: an object with one the following attributes: 
+	// 				`database`: the name of the db to retrieve the option values.  
+	// 				`optionsObj`: the options JSON object seed, indicating the options to retrieve, [more info](http://stardog.com/docs/network/#extended-http).  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.getDBOptions = function(dbname, optionsObj, callback) {
-		this._httpRequest(
-			"PUT", "admin/databases/"+ dbname +"/options", "application/json", "", callback, optionsObj, true
-		);
+	Connection.prototype.getDBOptions = function(options, callback) {
+		var reqOptions = {
+				httpMethod: "PUT",
+				resource: "admin/databases/" + options.database +"/options",
+				acceptHeader: "application/json",
+				params: options.params || "",
+				msgBody: options.optionsObj,
+				isJsonBody: true
+			};
+
+		this._httpRequest(reqOptions, callback);
 	};
 	
 	// ### User operations.
@@ -730,111 +1123,188 @@
 	// Adds a new user to the system; allows a configuration option for superuser as a JSON object. 
 	// Superuser configuration is set as default to false. The password __must__ be provided for the user.
 	// 
-	// __Parameters__:  
-	// `username`: the username of the user to create.  
-	// `password`: the initial password of the newly created user.  
-	// `superuser`: boolean flag indicating if the created user will have super-user privileges.  
+	// __Parameters__:
+	// `options`: an object with one the following attributes: 
+	// 				`username`: the username of the user to create.  
+	// 				`password`: the initial password of the newly created user.  
+	// 				`superuser`: boolean flag indicating if the created user will have super-user privileges.
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.createUser = function (username, password, superuser, callback) {
-		var options = {
-			"username" : username,
-			"password" : password.split('')
+	Connection.prototype.createUser = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "POST",
+			resource: "admin/users",
+			acceptHeader: "application/json",
+			msgBody: { "username" : options.username, "password" : options.password.split('') },
+			isJsonBody: true,
+			params: options.params || ""
+
+		};
+
+		if (options.superuser && options.superuser != null) {
+			reqOptions.msgBody.superuser = options.superuser;
 		}
 
-		if (superuser && superuser != null) {
-			options["superuser"] = superuser;
-		}
-
-		this._httpRequest(
-			"POST", "admin/users", "application/json", "", callback, options, true
-		);
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Change user's password
 	// Changes `user` password in the system. Receives input of new password as a JSON Object.
 	//
 	// __Parameters__:  
-	// `user`: the user to change the password.  
-	// `newPwd`: the new password of `user`.  
+	// `options`: an object with one the following attributes: 
+	// 				`user`: the user to change the password.  
+	// 				`newPwd`: the new password of `user`.
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.changePwd = function (user, newPwd, callback) {
-		this._httpRequest(
-			"PUT", "admin/users/"+ user +"/pwd", "application/json", "", callback, { "password" : newPwd }, true
-		);
+	Connection.prototype.changePwd = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "PUT",
+			resource: "admin/users/" + options.user + "/pwd",
+			acceptHeader: "application/json",
+			msgBody: { "password" : options.newPwd },
+			isJsonBody: true,
+			params: options.params || ""
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Check if user is enabled.
 	// Verifies if user is enabled in the system.
 	// 
 	// __Parameters__:  
-	// `user`: the user name to verify if enabled.  
+	// `options`: an object with one the following attributes: 
+	// 				`user`: the user name to verify if enabled.  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.isUserEnabled = function (user, callback) {
-		this._httpRequest("GET", "admin/users/"+ user +"/enabled", "application/json", "", callback);
+	Connection.prototype.isUserEnabled = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "GET",
+			resource: "admin/users/" + options.user + "/enabled",
+			acceptHeader: "application/json",
+			params: options.params || ""
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Check if user is superuser.
 	// Verifies if the user is a superuser.
 	//
 	// __Parameters__:  
-	// `user`: the user to verify if is superuser.  
+	// `options`: an object with one the following attributes: 
+	// 				`user`: the user to verify if is superuser.  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.isSuperUser = function (user, callback) {
-		this._httpRequest("GET", "admin/users/"+ user +"/superuser", "application/json", "", callback);
+	Connection.prototype.isSuperUser = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "GET",
+			resource: "admin/users/" + options.user + "/superuser",
+			acceptHeader: "application/json",
+			params: options.params || ""
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### List user roles.
 	// Retrieves the list of the roles assigned to user.
 	//
 	// __Parameters__:  
-	// `user`: the user used to list roles.  
+	// `options`: an object with one the following attributes: 
+	// 				`user`: the user used to list roles.  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.listUserRoles = function (user, callback) {
-		this._httpRequest("GET", "admin/users/"+ user +"/roles", "application/json", "", callback);
+	Connection.prototype.listUserRoles = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "GET",
+			resource: "admin/users/" + options.user + "/roles",
+			acceptHeader: "application/json",
+			params: options.params || ""
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### List users (GET)
 	// Retrieves a list of users available in the system.
 	//
-	// __Parameters__:  
+	// __Parameters__:
+	// `options`: (optional) an object with one the following attributes: 
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.  
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.listUsers = function (callback) {
-		this._httpRequest("GET", "admin/users", "application/json", "", callback);
+	Connection.prototype.listUsers = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "GET",
+			resource: "admin/users",
+			acceptHeader: "application/json",
+			params: options.params || ""
+		};
+
+		this._httpRequest(reqOptions, typeof options === 'function' ? options : callback);
 	};
 
 	// #### Delete user
 	// 
 	// __Parameters__:  
-	// `user`: the name of the user to delete from the system.  
+	// `options`: an object with one the following attributes: 
+	// 				`user`: the name of the user to delete from the system.  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.  
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.deleteUser = function (user, callback) {
-		this._httpRequest("DELETE", "admin/users/"+ user, "application/json", "", callback);
+	Connection.prototype.deleteUser = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "DELETE",
+			resource: "admin/users/" + options.user,
+			acceptHeader: "application/json",
+			params: options.params || ""
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Enable users.
 	// Enables/Disables an existing user in the system.
 	// 
-	// __Parameters__:  
-	// `user`: the name of the user to set enable.  
-	// `enableFlag`: boolean flag, if `true` user is enabled; `false` to disable it.  
+	// __Parameters__:
+	// `options`: an object with one the following attributes: 
+	// 				`user`: the name of the user to set enable.
+	// 				`enableFlag`: boolean flag, if `true` user is enabled; `false` to disable it.  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.  
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.userEnabled = function (user, enableFlag, callback) {
-		this._httpRequest(
-			"PUT", "admin/users/"+ user +"/enabled", "application/json", "", callback, { "enabled" : enableFlag }, true
-		);
+	Connection.prototype.userEnabled = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "PUT",
+			resource: "admin/users/" + options.user + "/enabled",
+			acceptHeader: "application/json",
+			params: options.params || "",
+			msgBody: { "enabled" : options.enableFlag},
+			isJsonBody: true
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Setting user roles.
 	// Sets roles for a given user.
 	//
 	// __Parameters__:  
-	// `user`: the name of the user to set the roles.  
-	// `rolesArray`: an array containing the roles to assign to the user, [more info](http://stardog.com/docs/network/#extended-http).  
+	// `options`: an object with one the following attributes: 
+	// 				`user`: the name of the user to set the roles.  
+	// 				`roles`: an array containing the roles to assign to the user, [more info](http://stardog.com/docs/network/#extended-http).  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.  
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.setUserRoles = function (user, rolesArray, callback) {
-		this._httpRequest(
-			"PUT", "admin/users/"+ user +"/roles", "application/json", "", callback, { "roles" : rolesArray }, true
-		);
+	Connection.prototype.setUserRoles = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "PUT",
+			resource: "admin/users/" + options.user + "/roles",
+			acceptHeader: "application/json",
+			params: options.params || "",
+			msgBody: { "roles" : options.roles },
+			isJsonBody: true
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// ### Role operations.
@@ -845,31 +1315,58 @@
 	// #### Create a new role
 	// 
 	// __Parameters__:  
-	// `rolename`: the name of the role to create.  
+	// `options`: an object with one the following attributes: 
+	// 				`rolename`: the name of the role to create.  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.  
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.createRole = function(rolename, callback) {
-		this._httpRequest(
-			"POST", "admin/roles", "application/json", "", callback, { "rolename" : rolename }, true
-		);
+	Connection.prototype.createRole = function(options, callback) {
+		var reqOptions = {
+			httpMethod: "POST",
+			resource: "admin/roles",
+			acceptHeader: "application/json",
+			params: options.params || "",
+			msgBody: { "rolename" : options.rolename },
+			isJsonBody: true
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### List roles (GET)
 	// Retrieves the list of roles registered in the system.
 	// 
-	// __Parameters__:  
+	// __Parameters__:
+	// `options`: an object with one the following attributes: 
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.  
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.listRoles = function (callback) {
-		this._httpRequest("GET", "admin/roles", "application/json", "", callback);
+	Connection.prototype.listRoles = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "GET",
+			resource: "admin/roles",
+			acceptHeader: "application/json",
+			params: options.params || ""
+		};
+
+		this._httpRequest(reqOptions, (typeof options === 'function') ? options : callback);
 	};
 
 	// #### List users with a specified role.
 	// Retrieves users that have the role assigned.
 	//
-	// __Parameters__:  
-	// `role`: the role to look for in the set of users defined in Stardog.  
+	// __Parameters__:
+	// `options`: an object with one the following attributes: 
+	// 				`role`: the role to look for in the set of users defined in Stardog.  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.  
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.listRoleUsers = function (role, callback) {
-		this._httpRequest("GET", "admin/roles/"+ role +"/users", "application/json", "", callback);
+	Connection.prototype.listRoleUsers = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "GET",
+			resource: "admin/roles/" + options.role + "/users",
+			acceptHeader: "application/json",
+			params: options.params || ""
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Delete role
@@ -877,11 +1374,20 @@
 	// flag which indicates if the delete call for the role must be forced, 
 	// [more info](http://stardog.com/docs/network/#extended-http)
 	//
-	// __Parameters__:  
-	// `role`: the role to delete.  
+	// __Parameters__:
+	// `options`: an object with one the following attributes: 
+	// 				`role`: the role to delete.  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint. 
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.deleteRole = function (role, callback) {
-		this._httpRequest("DELETE", "admin/roles/"+ role, "application/json", "", callback);
+	Connection.prototype.deleteRole = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "DELETE",
+			resource: "admin/roles/" + options.role,
+			acceptHeader: "application/json",
+			params: options.params || ""
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// ### Permissions operations.
@@ -894,88 +1400,145 @@
 	// Creates a new permission for a given role over a specified resource.
 	//
 	// __Parameters__:  
-	// `role`: the role to whom the permission will be assigned.  
-	// `permissionObj`: the permission descriptor object, [more info](http://stardog.com/docs/network/#extended-http).  
+	// `options`: an object with one the following attributes: 
+	// 				`role`: the role to whom the permission will be assigned.  
+	// 				`permissionObj`: the permission descriptor object, [more info](http://stardog.com/docs/network/#extended-http).  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint. 
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.assignPermissionToRole = function (role, permissionObj, callback) {
-		this._httpRequest(
-			"PUT", "admin/permissions/role/"+ role, "application/json", "", callback, permissionObj, true
-		);
+	Connection.prototype.assignPermissionToRole = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "PUT",
+			resource: "admin/permissions/role/" + options.role,
+			acceptHeader: "application/json",
+			params: options.params || "",
+			msgBody: options.permissionObj,
+			isJsonBody: true
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Assign permission to user.
 	// Creates a new permission for a given user over a specified resource.
 	//
-	// __Parameters__:  
-	// `user`: the user to whom the permission will be assigned.  
-	// `permissionObj`: the permission descriptor object, [more info](http://stardog.com/docs/network/#extended-http).  
+	// __Parameters__:
+	// `options`: an object with one the following attributes: 
+	// 				`user`: the user to whom the permission will be assigned.  
+	// 				`permissionObj`: the permission descriptor object, [more info](http://stardog.com/docs/network/#extended-http).  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint. 
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.assignPermissionToUser = function (user, permissionObj, callback) {
-		this._httpRequest(
-			"PUT", "admin/permissions/user/"+ user, "application/json", "", callback, permissionObj, true
-		);
+	Connection.prototype.assignPermissionToUser = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "PUT",
+			resource: "admin/permissions/user/" + options.user,
+			acceptHeader: "application/json",
+			params: options.params || "",
+			msgBody: options.permissionObj,
+			isJsonBody: true
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Delete permission from role.
 	// Deletes a permission for a given role over a specified resource.
 	//
-	// __Parameters__:  
-	// `role`: the role to whom the permission will be removed.  
-	// `permissionObj`: the permission descriptor object, [more info](http://stardog.com/docs/network/#extended-http).  
+	// __Parameters__:
+	// `options`: an object with one the following attributes: 
+	// 				`role`: the role to whom the permission will be removed.  
+	// 				`permissionObj`: the permission descriptor object, [more info](http://stardog.com/docs/network/#extended-http).  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint. 
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.deletePermissionFromRole = function (role, permissionObj, callback) {
-		this._httpRequest(
-			"POST", "admin/permissions/role/"+ role + "/delete", "application/json", "", callback, permissionObj, true
-		);
+	Connection.prototype.deletePermissionFromRole = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "POST",
+			resource: "admin/permissions/role/" + options.role + "/delete",
+			acceptHeader: "application/json",
+			params: options.params || "",
+			msgBody: options.permissionObj,
+			isJsonBody: true
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### Delete permission from user.
 	// Deletes a permission for a given user over a specified resource.
 	//
-	// __Parameters__:  
-	// `user`: the user to whom the permission will be removed.  
-	// `permissionObj`: the permission descriptor object, [more info](http://stardog.com/docs/network/#extended-http).  
+	// __Parameters__: 
+	// `options`: an object with one the following attributes: 
+	// 				`user`: the user to whom the permission will be removed.  
+	// 				`permissionObj`: the permission descriptor object, [more info](http://stardog.com/docs/network/#extended-http).  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint. 
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.deletePermissionFromUser = function (user, permissionObj, callback) {
-		this._httpRequest(
-			"POST", "admin/permissions/user/"+ user + "/delete", "application/json", "", callback, permissionObj, true
-		);
+	Connection.prototype.deletePermissionFromUser = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "POST",
+			resource: "admin/permissions/user/" + options.user + "/delete",
+			acceptHeader: "application/json",
+			params: options.params || "",
+			msgBody: options.permissionObj,
+			isJsonBody: true
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### List role permissions.
 	// Retrieves permissions assigned to the role.
 	//
 	// __Parameters__:  
-	// `role`: the role to check for its permissions.  
+	// `options`: an object with one the following attributes: 
+	// 				`role`: the role to check for its permissions.  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint. 
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.listRolePermissions = function (role, callback) {
-		this._httpRequest(
-			"GET", "admin/permissions/role/"+ role, "application/json", "", callback
-		);
+	Connection.prototype.listRolePermissions = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "GET",
+			resource: "admin/permissions/role/" + options.role,
+			acceptHeader: "application/json",
+			params: options.params || ""
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### List user permissions.
 	// Retrieves permissions assigned to the user.
 	//
 	// __Parameters__:  
-	// `user`: the user to check for its permissions.  
+	// `options`: an object with one the following attributes: 
+	// 				`user`: the user to check for its permissions.  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint. 
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.listUserPermissions = function (user, callback) {
-		this._httpRequest(
-			"GET", "admin/permissions/user/"+ user, "application/json", "", callback
-		);
+	Connection.prototype.listUserPermissions = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "GET",
+			resource: "admin/permissions/user/" + options.user,
+			acceptHeader: "application/json",
+			params: options.params || ""
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// #### List user effective permissions.
 	// Retrieves effective permissions assigned to the user.
 	//
 	// __Parameters__:  
-	// `user`: the user to check for its effective permissions.  
+	// `options`: an object with one the following attributes: 
+	// 				`user`: the user to check for its effective permissions.  
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint. 
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.listUserEffPermissions = function (user, callback) {
-		this._httpRequest(
-			"GET", "admin/permissions/effective/user/"+ user, "application/json", "", callback
-			);
+	Connection.prototype.listUserEffPermissions = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "GET",
+			resource: "admin/permissions/effective/user/" + options.user,
+			acceptHeader: "application/json",
+			params: options.params || ""
+		};
+
+		this._httpRequest(reqOptions, callback);
 	};
 
 	// ### Shutdown server.
@@ -983,11 +1546,19 @@
 	// request was received and that the server will be shut down shortly.
 	//
 	// __Parameters__:  
+	// `options`: an object with one the following attributes: 
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint. 
 	// `callback`: the callback to execute once the request is done.  
-	Connection.prototype.shutdownServer = function (callback) {
-		this._httpRequest(
-			"POST", "admin/shutdown", "application/json", "", callback
-			);
+	Connection.prototype.shutdownServer = function (options, callback) {
+		var reqOptions = {
+			httpMethod: "POST",
+			resource: "admin/shutdown",
+			acceptHeader: "application/json",
+			params: options.params || ""
+		};
+
+		this._httpRequest(reqOptions, (typeof options === 'function') ? options : callback);
 	};
 
-}).call(this);
+	return Stardog;
+});

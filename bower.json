@@ -28,15 +28,22 @@
     "url"  : "https://github.com/clarkparsia/stardog.js/issues" 
   },
   "dependencies": {
-    "request"      : "2.9.x",
-    "querystring" : ">=0.1.0",
+    "jquery": "1.10.1",
     "underscore": ">=1.4.4"
   },
   "devDependencies": {
-    "jasmine-node" : ">=1.0.26"
+    "jasmine": "latest"
   },
-  "engines": "*",
-  "scripts": { 
-    "test" : "sh load_test_data.sh && node_modules/jasmine-node/bin/jasmine-node test/spec" 
-  }
+  "licenses": [{
+    "type": "Apache License, Version 2.0"
+  }],
+  "ignore": [
+    "**/.*",
+    "data",
+    "load_test_data.sh",
+    "package.json",
+    "test",
+    "node_modules",
+    "components"
+  ]
 }

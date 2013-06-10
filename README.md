@@ -2,7 +2,7 @@ Stardog.js
 ==========
 
 Licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)  
-_Current Version **0.0.4**_ 
+_Current Version **0.0.5**_ 
 
 Stardog.js JavaScript Framework for Node.js to develop apps with the [Stardog RDF Database](http://stardog.com).  
 
@@ -31,21 +31,41 @@ That will fetch the latest version of stardog.js in the npm registry, [more deta
 
 To get started, just clone the project. You'll need a local copy of Stardog to be able to run the tests. For more information on starting the Stardog DB service and how it works, go to [Stardog's documentation](http://stardog.com/docs/), where you'll find everything you need to get up and running with Stardog.
 
-Go to [http://stardog.com](http://stardog.com), download and install the database and load the data provided in `data/` using the script in the repository. Having the Stardog service running load the data with the following command:
+Go to [http://stardog.com](http://stardog.com), download and install the database and load the data provided in `data/` using the script in the repository. Start Stardog with the `http` port on `5823` with the following command:
+
+	$ stardog-admin server start --http 5823
+
+Once you have Stardog running, execute the following command:
+
+    $ npm install
+    $ bower install
+
+This will install all the dependencies using npm (for node) and bower (for browser), once this is done, run the test cases.
+
+All tests should pass.
+
+### Running Tests
+
+Run all the test cases in `test/spec`. Having the Stardog server running, execute the following commands:
+
+1\. Load the test data using the provided script:
 
     $ ./load_test_data.sh
 
-Once you have the testing database in your Stardog copy, run the following command:
+2\. Start the proxy via:
 
-    $ npm install
+    $ node test/testCORS.js
 
-This will install all the dependencies using npm, once this is done, run the test cases:
+3.\ Run the test suite:
 
-    $ npm test
+#### In the Browser
 
-That will run all the test cases in `spec/`
+    open test/index.html
 
-All tests should pass.
+#### In node.js
+
+    $ npm test    
+
 
 ## Version details ##
 
@@ -54,27 +74,33 @@ Stardog.js depends of the Stardog HTTP API, and any change in this API will be s
 | Stardog Version | Stardog.js Version |
 | --------------- | ------------------ |
 | <= 1.1.5        | <= 0.0.3           |
-| 1.2             | 0.0.4              |
+| 1.2             | >= 0.0.4           |
 
 
 ## Quick Example ##
 
 ### Node.js
 
-	var stardog = require("stardog");
-	 
-	var conn = new stardog.Connection();
-	 
-	conn.setEndpoint("http://myserver:myport/");
-	conn.setCredentials("username", "password");
-	 
-	conn.query("db-name", "select distinct * where { ?s ?p ?o } limit 5", null, 5, 0, function (data) {
-		console.log(data.results.bindings);
-	})
-	
+    var stardog = require("stardog");
+     
+    var conn = new stardog.Connection();
+     
+    conn.setEndpoint("http://myserver:myport/");
+    conn.setCredentials("username", "password");
+     
+    conn.query({ 
+            database: "myDB", 
+            query: "select distinct ?s where { ?s ?p ?o }",  
+            limit: 10, 
+            offset: 0 
+        },
+        function (data) {
+            console.log(data.results.bindings);
+    });
+    
 ### Browser
 
-__NOTE__: the Endpoint is a proxy to the Stardog HTTP interface in order to avoid CORS issues.
+__NOTE__: the Endpoint is a proxy to the Stardog HTTP interface in order to avoid CORS issues (an example can be fount in `test/testCORS.js`.
 
     <script src="js/stardog.js" type="text/javascript"></script>
     …
@@ -88,4 +114,3 @@ __NOTE__: the Endpoint is a proxy to the Stardog HTTP interface in order to avoi
 ## NOTE ##
 
 This framework is in continuous development, please check the [issues](https://github.com/clarkparsia/stardog.js/issues) page. You're welcome to contribute.
-
