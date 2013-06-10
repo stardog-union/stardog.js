@@ -1,0 +1,19 @@
+{
+  "name": "stardog",
+  "version": "0.0.5",
+  "main": "js/stardog.js",
+  "ignore": [
+    "**/.*",
+    "data",
+    "test",
+    "node_modules",
+    "components"
+  ],
+  "dependencies": {
+    "jquery": "1.10.1",
+    "underscore": "latest"
+  },
+  "devDependencies": {
+    "jasmine": "latest"
+  }
+}

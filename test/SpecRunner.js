@@ -1,9 +1,9 @@
 require.config({
   paths: {
-    jquery: 'lib/jquery-1.10.1.min',
-    underscore: '../node_modules/underscore/underscore-min',
-    jasmine: 'lib/jasmine',
-    'jasmine-html': 'lib/jasmine-html',
+    jquery: '../components/jquery/jquery.min',
+    underscore: '../components/underscore/underscore-min',
+    jasmine: '../components/jasmine/lib/jasmine-core/jasmine',
+    'jasmine-html': '../components/jasmine/lib/jasmine-core/jasmine-html',
     spec: 'spec/',
     stardog : "../js/stardog",
     async: "lib/jasmine.async"
