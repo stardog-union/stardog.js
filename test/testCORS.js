@@ -79,7 +79,9 @@ var server = http.createServer(function(req, res){
 				addCORSHeaders(res);
 
 				res.writeHead(response.statusCode);
-	    		res.write(body);
+				if (body) {
+					res.write(body);
+				}
 	    		
 				res.end();
 			};
