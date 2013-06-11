@@ -4,7 +4,7 @@ Stardog.js
 Licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)  
 _Current Version **0.0.5**_ 
 
-Stardog.js JavaScript Framework for Node.js to develop apps with the [Stardog RDF Database](http://stardog.com).  
+Stardog.js JavaScript Framework for node.js to develop apps with the [Stardog RDF Database](http://stardog.com).  
 
 ![Stardog](http://stardog.com/_/img/sdog.png)   
 
@@ -16,16 +16,24 @@ This framework wraps all the functionality of a client for the Stardog DBMS, and
 
 All the implementation uses the HTTP protocol, since most of Stardog functionality is available using this protocol. For more information, go to the Stardog's [Network Programming](http://stardog.com/docs/network/) documentation.
 
-The framework is currently targeted to Node.js (the latest version) and it has not been fully tested in the browser, but future versions will be have browser compatibility.
-You'll also need [npm](https://npmjs.org) to run the test cases and install the dependencies.
+The framework is currently supported for node.js and the browser, including test cases for both environments.
+You'll also need [npm](https://npmjs.org) and [bower](http://bower.io) to run the test cases and install the dependencies in node.js & the browser respectively.
 
 ## Installation
 
 To install stardog.js locally from the npm registry simply execute:
 
+#### In node.js
+
     npm install stardog
     
 That will fetch the latest version of stardog.js in the npm registry, [more details](https://npmjs.org/package/stardog).
+    
+#### In the browser (client library using bower)
+
+    bower install stardog
+    
+That will fetch the latest version of stardog.js in the bower registry, [more details](http://sindresorhus.com/bower-components/).
 
 ## Development ##
 
@@ -33,14 +41,14 @@ To get started, just clone the project. You'll need a local copy of Stardog to b
 
 Go to [http://stardog.com](http://stardog.com), download and install the database and load the data provided in `data/` using the script in the repository. Start Stardog with the `http` port on `5823` with the following command:
 
-	$ stardog-admin server start --http 5823
+    $ stardog-admin server start --http 5823
 
 Once you have Stardog running, execute the following command:
 
     $ npm install
     $ bower install
 
-This will install all the dependencies using npm (for node) and bower (for browser), once this is done, run the test cases.
+This will install all the dependencies using npm (for node.js) and bower (for browser), once this is done, run the test cases.
 
 All tests should pass.
 
@@ -56,9 +64,9 @@ Run all the test cases in `test/spec`. Having the Stardog server running, execut
 
     $ node test/testCORS.js
 
-3.\ Run the test suite:
+3\. Run the test suite:
 
-#### In the Browser
+#### In the browser
 
     open test/index.html
 
@@ -79,7 +87,7 @@ Stardog.js depends of the Stardog HTTP API, and any change in this API will be s
 
 ## Quick Example ##
 
-### Node.js
+### node.js
 
     var stardog = require("stardog");
      
