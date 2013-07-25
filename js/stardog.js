@@ -303,7 +303,7 @@
 				req_url = this.endpoint + options.resource,
 				params = options.params ? ("?" + $.param(options.params)) : '',
 				contentType = options.contentType,
-				body = options.msgBody ? options.msgBody : null,
+				body = options.msgBody || null,
 				isJsonBody = options.isJsonBody,
 				multipart = options.multipart,
 				headers = {},
@@ -412,7 +412,7 @@
 				resource : options.database,
 				acceptHeader: "*/*",
 				httpMethod: "GET",
-				params: options.params ? options.params : ""
+				params: options.params || ""
 			 };
 
 		this._httpRequest(reqOptions, callback);
@@ -431,7 +431,7 @@
 				resource: options.database + "/size",
 				httpMethod: "GET",
 				acceptHeader: "*/*",
-				params: options.params ? options.params : ""
+				params: options.params || ""
 			};
 		this._httpRequest(reqOptions, callback);
 	};
@@ -452,7 +452,7 @@
 	// `callback`: the callback to execute once the request is done.  
 	Connection.prototype.query = function(options, callback) {
 		var reqOptions = {
-				acceptHeader : options.mimetype ? options.mimetype : 'application/sparql-results+json',
+				acceptHeader : options.mimetype || 'application/sparql-results+json',
 				resource: options.database + "/query",
 				httpMethod: "GET",
 				params : _.extend({ "query" : options.query }, options.params)
@@ -490,7 +490,7 @@
 	// `callback`: the callback to execute once the request is done.  
 	Connection.prototype.queryGraph = function (options, callback) {
 		var reqOptions = {
-				acceptHeader : options.mimetype ? options.mimetype : 'application/ld+json',
+				acceptHeader : options.mimetype || 'application/ld+json',
 				resource: options.database + "/query",
 				httpMethod: "GET",
 				params : _.extend({ "query" : options.query }, options.params)
@@ -609,7 +609,7 @@
 	Connection.prototype.queryInTransaction = function(options, callback) {
 		// function (database, txId, query, baseURI, limit, offset, callback, acceptMIME) {
 		var reqOptions = {
-				acceptHeader : options.mimetype ? options.mimetype : 'application/sparql-results+json',
+				acceptHeader : options.mimetype || 'application/sparql-results+json',
 				resource: options.database + "/" + options.txId +"/query",
 				httpMethod: "GET",
 				params : _.extend({ "query" : options.query }, options.params)
