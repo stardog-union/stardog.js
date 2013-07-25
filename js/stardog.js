@@ -114,14 +114,11 @@
 	};
 
     // Set the Stardog HTTP endpoint, usually running in port `5822`.
-	Connection.prototype.setEndpoint = function (endpoint) {
-		if (endpoint.charAt(endpoint.length-1) != '/') {
-			this.endpoint = endpoint + '/';
-		} else {
-			this.endpoint = endpoint;
-		}
+	Connection.prototype.setEndpoint = function (url) {
+		var lastChar = url[url.length - 1];
+		this.endpoint = (lastChar === '/') ? url : url + '/';
 	};
-
+	
     // Retrieve the configured Stardog HTTP endpoint.
 	Connection.prototype.getEndpoint = function () {
 		return this.endpoint;
