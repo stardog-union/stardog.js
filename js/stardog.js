@@ -310,8 +310,9 @@
 				isJsonBody = options.isJsonBody,
 				multipart = options.multipart,
 				headers = {},
-				username, password;
-
+				username, password,
+				ajaxSettings;
+			
 			if (this.reasoning && this.reasoning != null) {
 				headers['SD-Connection-String'] = 'reasoning=' + this.reasoning;
 			}
@@ -330,20 +331,25 @@
 				headers["Authorization"] = "Basic ".concat(userPassBase64);
 			}
 
+			ajaxSettings = {
+				type: theMethod,
+				url: req_url + params,
+				processData: false, // prevents jquery from tampering with the DataFrom object
+				dataType: acceptH.match(/json/gi) ? 'json' : 'text',
+				data:  isJsonBody ? JSON.stringify(body) : body,
+				headers: headers
+			};
+
 			if (isJsonBody) {
 				headers['Content-Type'] = 'application/json';
 			} else if (contentType) {
 				headers['Content-Type'] = contentType;
+			} else if (multipart) {
+				// prevents jquery from overwriting the proper content-type header
+				ajaxSettings.contentType = false;
 			}
 
-			$.ajax({
-				type: theMethod,
-				url: req_url + params,
-				processData: false,
-				dataType: acceptH.match(/json/gi) ? 'json' : 'text',
-				data:  isJsonBody ? JSON.stringify(body) : body,
-				headers: headers
-			}).done(function(data, status, jqXHR) {
+			$.ajax(ajaxSettings).done(function(data, status, jqXHR) {
 				var return_obj;
 				// check if the returned object is a JSONLD object
 				if (data && (data.hasOwnProperty('@id') || data.hasOwnProperty('@context'))) {
@@ -957,6 +963,44 @@
 			};
 		this._httpRequest(reqOptions, callback);
 	};
+
+
+	// #### Create a new database (POST)
+	// Set options in the database passed through a JSON object specification, i.e. JSON Request for option values. 
+	// Database options can be found [here](http://stardog.com/docs/admin/#admin-db).
+	//
+	// __Parameters__:  
+	// `options`: an object with one the following attributes: 
+	//				`database`: the name of the database to set the options.  
+	//				`options`: the options JSON object, indicating the options and values to set, [more info](http://stardog.com/docs/network/#extended-http).
+	//				`files`: the array of file names to bulk load into the new database
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	Connection.prototype.createDB = function(options, callback) {
+		var creationData, data, formData, reqOptions;
+		
+		creationData = {
+			dbname : options.database,
+			options : options.options,
+			files : options.files
+		}
+		data = JSON.stringify(creationData);
+		formData = new FormData();
+		formData.append("root", data);
+
+		reqOptions = {
+			httpMethod: "POST",
+			resource: "admin/databases",
+			acceptHeader: "*/*",
+			params: options.params || "",
+			multipart: true,
+			msgBody: formData
+		};
+		
+		this._httpRequest(reqOptions, callback);
+	};
+
+
 
 	// #### Drop an existing database.
 	// Drops an existing database `dbname` and all the information that it contains.
