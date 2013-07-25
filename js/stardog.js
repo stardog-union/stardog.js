@@ -733,8 +733,8 @@
 	Connection.prototype.reasoningExplain = function (options, callback) {
 		var reqOptions = {
 				httpMethod: "POST",
-				resource: options.database + "/reasoning/" 
-							+ (options.txId && options.txId != null ? "/" + options.txId : ""),
+				resource: options.database + "/reasoning/" + 
+					(options.txId && options.txId != null ? "/" + options.txId : ""),
 				acceptHeader: "application/x-turtle",
 				params: options.params || null,
 				msgBody: options.axioms,
