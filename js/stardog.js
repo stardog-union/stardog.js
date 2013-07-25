@@ -252,11 +252,11 @@
 				reqJSON["headers"]["Authorization"] = authHeaderVal;
 			}
 
-			if (multipart && multipart != null) {
+			if (multipart) {
 				reqJSON["multipart"] = multipart;
 			}
 
-			if (this.reasoning && this.reasoning != null) {
+			if (this.reasoning) {
 				reqJSON['headers']['SD-Connection-String'] = 'reasoning=' + this.reasoning;
 			}
 
@@ -313,7 +313,7 @@
 				username, password,
 				ajaxSettings;
 			
-			if (this.reasoning && this.reasoning != null) {
+			if (this.reasoning) {
 				headers['SD-Connection-String'] = 'reasoning=' + this.reasoning;
 			}
 
@@ -461,15 +461,15 @@
 				params : _.extend({ "query" : options.query }, options.params)
 			};
 
-		if (options.baseURI && options.baseURI != null) {
+		if (options.baseURI) {
 			reqOptions["params"]["baseURI"] = options.baseURI;
 		}
 
-		if (options.limit && options.limit != null) {
+		if (options.limit) {
 			reqOptions["params"]["limit"] = options.limit;
 		}
 
-		if (options.offset && options.offset != null) {
+		if (options.offset) {
 			reqOptions["params"]["offset"] = options.offset;
 		}
 
@@ -499,15 +499,15 @@
 				params : _.extend({ "query" : options.query }, options.params)
 			};
 
-		if (options.baseURI && options.baseURI != null) {
+		if (options.baseURI) {
 			reqOptions["params"]["baseURI"] = options.baseURI;
 		}
 
-		if (options.limit && options.limit != null) {
+		if (options.limit) {
 			reqOptions["params"]["limit"] = options.limit;
 		}
 
-		if (options.offset && options.offset != null) {
+		if (options.offset) {
 			reqOptions["params"]["offset"] = options.offset;
 		}
 
@@ -618,15 +618,15 @@
 				params : _.extend({ "query" : options.query }, options.params)
 			};
 
-		if (options.baseURI && options.baseURI != null) {
+		if (options.baseURI) {
 			reqOptions["params"]["baseURI"] = options.baseURI;
 		}
 
-		if (options.limit && options.limit != null) {
+		if (options.limit) {
 			reqOptions["params"]["limit"] = options.limit;
 		}
 
-		if (options.offset && options.offset != null) {
+		if (options.offset) {
 			reqOptions["params"]["offset"] = options.offset;
 		}
 
@@ -657,7 +657,7 @@
 				multipart: null
 			};
 
-		if (options.graphUri && options.graphUri != null) {
+		if (options.graphUri) {
 			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
@@ -688,7 +688,7 @@
 				multipart: null
 			};
 
-		if (options.graphUri && options.graphUri != null) {
+		if (options.graphUri) {
 			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
@@ -712,7 +712,7 @@
 				params: options.params || {}
 			};
 
-		if (options.graphUri && options.graphUri != null) {
+		if (options.graphUri) {
 			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
@@ -766,7 +766,7 @@
 				params: options.params || {}
 			};
 
-		if (options.graphUri && options.graphUri != null) {
+		if (options.graphUri) {
 			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
@@ -886,7 +886,7 @@
 				contentType: options.contentType || "text/plain"
 			};
 
-		if (options.graphUri && options.graphUri != null) {
+		if (options.graphUri) {
 			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
@@ -1185,7 +1185,7 @@
 
 		};
 
-		if (options.superuser && options.superuser != null) {
+		if (options.superuser) {
 			reqOptions.msgBody.superuser = options.superuser;
 		}
 
