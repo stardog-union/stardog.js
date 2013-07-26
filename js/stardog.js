@@ -114,14 +114,11 @@
 	};
 
     // Set the Stardog HTTP endpoint, usually running in port `5822`.
-	Connection.prototype.setEndpoint = function (endpoint) {
-		if (endpoint.charAt(endpoint.length-1) != '/') {
-			this.endpoint = endpoint + '/';
-		} else {
-			this.endpoint = endpoint;
-		}
+	Connection.prototype.setEndpoint = function (url) {
+		var lastChar = url[url.length - 1];
+		this.endpoint = (lastChar === '/') ? url : url + '/';
 	};
-
+	
     // Retrieve the configured Stardog HTTP endpoint.
 	Connection.prototype.getEndpoint = function () {
 		return this.endpoint;
@@ -252,11 +249,11 @@
 				reqJSON["headers"]["Authorization"] = authHeaderVal;
 			}
 
-			if (multipart && multipart != null) {
+			if (multipart) {
 				reqJSON["multipart"] = multipart;
 			}
 
-			if (this.reasoning && this.reasoning != null) {
+			if (this.reasoning) {
 				reqJSON['headers']['SD-Connection-String'] = 'reasoning=' + this.reasoning;
 			}
 
@@ -306,13 +303,14 @@
 				req_url = this.endpoint + options.resource,
 				params = options.params ? ("?" + $.param(options.params)) : '',
 				contentType = options.contentType,
-				body = options.msgBody ? options.msgBody : null,
+				body = options.msgBody || null,
 				isJsonBody = options.isJsonBody,
 				multipart = options.multipart,
 				headers = {},
-				username, password;
-
-			if (this.reasoning && this.reasoning != null) {
+				username, password,
+				ajaxSettings;
+			
+			if (this.reasoning) {
 				headers['SD-Connection-String'] = 'reasoning=' + this.reasoning;
 			}
 
@@ -330,20 +328,25 @@
 				headers["Authorization"] = "Basic ".concat(userPassBase64);
 			}
 
+			ajaxSettings = {
+				type: theMethod,
+				url: req_url + params,
+				processData: false, // prevents jquery from tampering with the DataFrom object
+				dataType: acceptH.match(/json/gi) ? 'json' : 'text',
+				data:  isJsonBody ? JSON.stringify(body) : body,
+				headers: headers
+			};
+
 			if (isJsonBody) {
 				headers['Content-Type'] = 'application/json';
 			} else if (contentType) {
 				headers['Content-Type'] = contentType;
+			} else if (multipart) {
+				// prevents jquery from overwriting the proper content-type header
+				ajaxSettings.contentType = false;
 			}
 
-			$.ajax({
-				type: theMethod,
-				url: req_url + params,
-				processData: false,
-				dataType: acceptH.match(/json/gi) ? 'json' : 'text',
-				data:  isJsonBody ? JSON.stringify(body) : body,
-				headers: headers
-			}).done(function(data, status, jqXHR) {
+			$.ajax(ajaxSettings).done(function(data, status, jqXHR) {
 				var return_obj;
 				// check if the returned object is a JSONLD object
 				if (data && (data.hasOwnProperty('@id') || data.hasOwnProperty('@context'))) {
@@ -409,7 +412,7 @@
 				resource : options.database,
 				acceptHeader: "*/*",
 				httpMethod: "GET",
-				params: options.params ? options.params : ""
+				params: options.params || ""
 			 };
 
 		this._httpRequest(reqOptions, callback);
@@ -428,7 +431,7 @@
 				resource: options.database + "/size",
 				httpMethod: "GET",
 				acceptHeader: "*/*",
-				params: options.params ? options.params : ""
+				params: options.params || ""
 			};
 		this._httpRequest(reqOptions, callback);
 	};
@@ -449,21 +452,21 @@
 	// `callback`: the callback to execute once the request is done.  
 	Connection.prototype.query = function(options, callback) {
 		var reqOptions = {
-				acceptHeader : options.mimetype ? options.mimetype : 'application/sparql-results+json',
+				acceptHeader : options.mimetype || 'application/sparql-results+json',
 				resource: options.database + "/query",
 				httpMethod: "GET",
 				params : _.extend({ "query" : options.query }, options.params)
 			};
 
-		if (options.baseURI && options.baseURI != null) {
+		if (options.baseURI) {
 			reqOptions["params"]["baseURI"] = options.baseURI;
 		}
 
-		if (options.limit && options.limit != null) {
+		if (options.limit) {
 			reqOptions["params"]["limit"] = options.limit;
 		}
 
-		if (options.offset && options.offset != null) {
+		if (options.offset) {
 			reqOptions["params"]["offset"] = options.offset;
 		}
 
@@ -487,21 +490,21 @@
 	// `callback`: the callback to execute once the request is done.  
 	Connection.prototype.queryGraph = function (options, callback) {
 		var reqOptions = {
-				acceptHeader : options.mimetype ? options.mimetype : 'application/ld+json',
+				acceptHeader : options.mimetype || 'application/ld+json',
 				resource: options.database + "/query",
 				httpMethod: "GET",
 				params : _.extend({ "query" : options.query }, options.params)
 			};
 
-		if (options.baseURI && options.baseURI != null) {
+		if (options.baseURI) {
 			reqOptions["params"]["baseURI"] = options.baseURI;
 		}
 
-		if (options.limit && options.limit != null) {
+		if (options.limit) {
 			reqOptions["params"]["limit"] = options.limit;
 		}
 
-		if (options.offset && options.offset != null) {
+		if (options.offset) {
 			reqOptions["params"]["offset"] = options.offset;
 		}
 
@@ -606,21 +609,21 @@
 	Connection.prototype.queryInTransaction = function(options, callback) {
 		// function (database, txId, query, baseURI, limit, offset, callback, acceptMIME) {
 		var reqOptions = {
-				acceptHeader : options.mimetype ? options.mimetype : 'application/sparql-results+json',
+				acceptHeader : options.mimetype || 'application/sparql-results+json',
 				resource: options.database + "/" + options.txId +"/query",
 				httpMethod: "GET",
 				params : _.extend({ "query" : options.query }, options.params)
 			};
 
-		if (options.baseURI && options.baseURI != null) {
+		if (options.baseURI) {
 			reqOptions["params"]["baseURI"] = options.baseURI;
 		}
 
-		if (options.limit && options.limit != null) {
+		if (options.limit) {
 			reqOptions["params"]["limit"] = options.limit;
 		}
 
-		if (options.offset && options.offset != null) {
+		if (options.offset) {
 			reqOptions["params"]["offset"] = options.offset;
 		}
 
@@ -651,7 +654,7 @@
 				multipart: null
 			};
 
-		if (options.graphUri && options.graphUri != null) {
+		if (options.graphUri) {
 			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
@@ -682,7 +685,7 @@
 				multipart: null
 			};
 
-		if (options.graphUri && options.graphUri != null) {
+		if (options.graphUri) {
 			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
@@ -706,7 +709,7 @@
 				params: options.params || {}
 			};
 
-		if (options.graphUri && options.graphUri != null) {
+		if (options.graphUri) {
 			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
@@ -730,8 +733,8 @@
 	Connection.prototype.reasoningExplain = function (options, callback) {
 		var reqOptions = {
 				httpMethod: "POST",
-				resource: options.database + "/reasoning/" 
-							+ (options.txId && options.txId != null ? "/" + options.txId : ""),
+				resource: options.database + "/reasoning/" + 
+					(options.txId && options.txId != null ? "/" + options.txId : ""),
 				acceptHeader: "application/x-turtle",
 				params: options.params || null,
 				msgBody: options.axioms,
@@ -760,7 +763,7 @@
 				params: options.params || {}
 			};
 
-		if (options.graphUri && options.graphUri != null) {
+		if (options.graphUri) {
 			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
@@ -880,7 +883,7 @@
 				contentType: options.contentType || "text/plain"
 			};
 
-		if (options.graphUri && options.graphUri != null) {
+		if (options.graphUri) {
 			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
@@ -957,6 +960,44 @@
 			};
 		this._httpRequest(reqOptions, callback);
 	};
+
+
+	// #### Create a new database (POST)
+	// Set options in the database passed through a JSON object specification, i.e. JSON Request for option values. 
+	// Database options can be found [here](http://stardog.com/docs/admin/#admin-db).
+	//
+	// __Parameters__:  
+	// `options`: an object with one the following attributes: 
+	//				`database`: the name of the database to set the options.  
+	//				`options`: the options JSON object, indicating the options and values to set, [more info](http://stardog.com/docs/network/#extended-http).
+	//				`files`: the array of file names to bulk load into the new database
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	Connection.prototype.createDB = function(options, callback) {
+		var creationData, data, formData, reqOptions;
+		
+		creationData = {
+			dbname : options.database,
+			options : options.options,
+			files : options.files
+		}
+		data = JSON.stringify(creationData);
+		formData = new FormData();
+		formData.append("root", data);
+
+		reqOptions = {
+			httpMethod: "POST",
+			resource: "admin/databases",
+			acceptHeader: "*/*",
+			params: options.params || "",
+			multipart: true,
+			msgBody: formData
+		};
+		
+		this._httpRequest(reqOptions, callback);
+	};
+
+
 
 	// #### Drop an existing database.
 	// Drops an existing database `dbname` and all the information that it contains.
@@ -1141,7 +1182,7 @@
 
 		};
 
-		if (options.superuser && options.superuser != null) {
+		if (options.superuser) {
 			reqOptions.msgBody.superuser = options.superuser;
 		}
 
