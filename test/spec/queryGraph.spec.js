@@ -69,7 +69,7 @@
 				});
 
 			});
-		});
+		}, 10000);
 
 		self.it("A graph query could be limited too", function(done) {
 			conn.onlineDB({ database: 'nodeDB', strategy: 'NO_WAIT' }, function (data2, response) {
@@ -108,7 +108,7 @@
 					done();
 				});
 			});
-		});
+		}, 10000);
 
 	});
 

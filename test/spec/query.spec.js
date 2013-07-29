@@ -51,7 +51,7 @@
 						done();
 				});
 			});
-		});
+		}, 10000);
 
 	});
 
@@ -92,7 +92,7 @@
 					expect(data.results.bindings.length).toBe(3);
 					done();
 			});
-		});
+		}, 10000);
 
 		self.it ("A query to Car must have result count to 3", function(done) {
 			conn.query(
@@ -112,7 +112,7 @@
 					expect(data.results.bindings.length).toBe(3);
 					done();
 			});
-		});
+		}, 10000);
 
 		self.it ("A query to SportsCar must have result count to 3", function(done) {
 			
@@ -133,7 +133,7 @@
 					expect(data.results.bindings.length).toBe(1);
 					done();
 			});
-		});
+		}, 10000);
 
 	});
 
@@ -174,7 +174,7 @@
 					expect(data.results.bindings.length).toBe(3);
 					done();
 			});
-		});
+		}, 10000);
 
 		self.it ("A query to Car must have result count to 3", function(done) {
 			
@@ -195,7 +195,7 @@
 					expect(data.results.bindings.length).toBe(3);
 					done();
 			});
-		});
+		}, 10000);
 
 		self.it ("A query to SportsCar must have result count to 1", function(done) {
 			
@@ -216,7 +216,7 @@
 					expect(data.results.bindings.length).toBe(1);
 					done();
 			});
-		});
+		}, 10000);
 
 	});
 
@@ -257,7 +257,7 @@
 					expect(data.results.bindings.length).toBe(3);
 					done();
 			});
-		});
+		}, 10000);
 
 		self.it ("A query to Car must have result count to 3", function(done) {
 			
@@ -278,7 +278,7 @@
 					expect(data.results.bindings.length).toBe(3);
 					done();
 			});
-		});
+		}, 10000);
 
 		self.it ("A query to SportsCar must have result count to 1", function(done) {
 			
@@ -299,7 +299,7 @@
 					expect(data.results.bindings.length).toBe(1);
 					done();
 			});
-		});
+		}, 10000);
 
 	});
 

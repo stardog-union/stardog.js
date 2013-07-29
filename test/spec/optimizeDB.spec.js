@@ -58,6 +58,8 @@
 							conn.dropDB({ database: 'nodeDB_optimize' }, function (data, response4) {
 								expect(response4.statusCode).toBe(200);
 
+								expect(conn).not.toBeNull();
+
 								conn.onlineDB({ database: 'nodeDB', strategy: 'NO_WAIT' }, function (data, response5) {
 									expect(response5.statusCode).toBe(200);
 									done();

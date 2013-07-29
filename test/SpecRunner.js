@@ -1,10 +1,10 @@
 require.config({
   paths: {
-    jquery: '../components/jquery/jquery.min',
-    underscore: '../components/underscore/underscore-min',
-    jasmine: '../components/jasmine/lib/jasmine-core/jasmine',
-    'jasmine-html': '../components/jasmine/lib/jasmine-core/jasmine-html',
-    spec: 'spec/',
+    jquery: '../bower_components/jquery/jquery.min',
+    underscore: '../bower_components/underscore/underscore-min',
+    jasmine: '../bower_components/jasmine/lib/jasmine-core/jasmine',
+    'jasmine-html': '../bower_components/jasmine/lib/jasmine-core/jasmine-html',
+    spec: 'spec',
     stardog : "../js/stardog",
     async: "lib/jasmine.async"
   },
@@ -40,6 +40,7 @@ require(['underscore', 'jquery', 'jasmine-html', 'stardog', 'async'], function(_
 
   var specs = [];
 
+  specs.push('spec/createDB.spec');
   specs.push('spec/copyDB.spec');
   specs.push('spec/migrateDB.spec');
   specs.push('spec/dropDB.spec');

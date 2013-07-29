@@ -52,10 +52,13 @@
 	// Current version of the library. Keep in sync with 'package.json'
 	Stardog.VERSION = '0.0.5';
 
-	if (typeof exports !== 'undefined') {
+	// Verify the environment of the library
+	var isNode = (typeof exports !== 'undefined' && typeof module !== 'undefined' && module.exports);
+
+	if (isNode) {
 		// Require request, if we're on the server, and it's not already present
-		var request = root.request;
-		if (!request && (typeof require !== 'undefined')) request = require('request');
+		var rest = root.rest;
+		if (!rest && (typeof require !== 'undefined')) rest = require('restler');
 
 		// Require querystring, if we're on the server, and it's not already present
 		var qs = root.qs;
@@ -154,7 +157,7 @@
 	// resource specified and the parameters.
 	// Needs a callback to process results in a function receiving a 
 	// JSONLD object.
-	if (typeof exports !== 'undefined') {
+	if (isNode) {
 		
 		// Node.js implementation of the HTTP request using `request` npm module.
 		// __Parameters__:  
@@ -171,41 +174,51 @@
 		Connection.prototype._httpRequest = function(options, callback) {
 			var theMethod = options.httpMethod,
 				req_url = this.endpoint + options.resource,
-				strParams = qs.stringify(options.params),
+				params = options.params || {};
 				msgBody = options.msgBody,
 				acceptH = options.acceptHeader,
 				isJsonBody = options.isJsonBody,
 				contentType = options.contentType,
-				multipart = options.multipart;
+				multipart = options.multipart,
+				files = options.files || [],
+				headers = {};
 
-			if (strParams && strParams.length > 0)
-				req_url += "?" + strParams;
+			if (this.reasoning) {
+				headers['SD-Connection-String'] = 'reasoning=' + this.reasoning;
+			}
 
-			var fnResponseHandler = function (error, response, body) {
-				if (!error) {
+			// Set the Accept header by default to "application/sparql-results+json"
+			headers['Accept'] = acceptH || "text/plain";
+
+			var fnResponseHandler = function (body, response) {
+				if (!(body instanceof Error)) {
 					var jsonData;
 					// Try to parse response to JSON, which is expected in most 
 					// cases
 					try {
-						jsonData = JSON.parse(body);
+						if (body) {
+							jsonData = JSON.parse(body);
 
-						if (jsonData instanceof Array) {
-							// console.log(jsonData);
-							var arrLinkedJson = []
-							for (var iElem=0; iElem < jsonData.length; iElem++) {
-								// Check if the JSON object is JSON-LD
-								if (jsonData[iElem].hasOwnProperty('@id') || 
-                                    jsonData[iElem].hasOwnProperty('@context')) {
-								
-                                    arrLinkedJson.push( new LinkedJson(jsonData[iElem]) );
+							if (jsonData instanceof Array) {
+								// console.log(jsonData);
+								var arrLinkedJson = []
+								for (var iElem=0; iElem < jsonData.length; iElem++) {
+									// Check if the JSON object is JSON-LD
+									if (jsonData[iElem].hasOwnProperty('@id') || 
+	                                    jsonData[iElem].hasOwnProperty('@context')) {
+									
+	                                    arrLinkedJson.push( new LinkedJson(jsonData[iElem]) );
+									}
 								}
+								jsonData = arrLinkedJson;
 							}
-							jsonData = arrLinkedJson;
-						}
-						else if (jsonData.hasOwnProperty('@id') ||
-							jsonData.hasOwnProperty('@context')) {
-                            
-							jsonData = new LinkedJson(jsonData);
+							else if (jsonData.hasOwnProperty('@id') ||
+								jsonData.hasOwnProperty('@context')) {
+	                            
+								jsonData = new LinkedJson(jsonData);
+							}
+						} else {
+							jsonData = {};
 						}
 					}
 					catch (err) {
@@ -217,47 +230,73 @@
 				}
 				else {
 					console.log('Error found!');
-					console.log(error);
+					console.log(JSON.stringify(body));
+
 					// TODO: maybe wrap the error with stardog specific info
-					callback(body, response, error); 
+					callback(body, response); 
 				}
 			};
+
+			if (!multipart && msgBody) {
+				if (isJsonBody) {
+					headers['Content-Type'] = "application/json";
+				}
+				else {
+					headers['Content-Type'] = contentType;
+				}
+			}
 
 			// build request object
 			var reqJSON = { 
-				url : req_url,
-				method : theMethod,
-				headers : {
-					"Accept" : acceptH
-				}
+				"method" : theMethod,
+				"query" : params,
+				"username" : this.credentials.username,
+				"password" : this.credentials.password,
+				"headers" : headers,
+				"data" : (isJsonBody) ? JSON.stringify(msgBody) : msgBody,
+				"multipart" : multipart || false
 			};
 
-			if (msgBody) {
-				if (isJsonBody) {
-					reqJSON["json"] = msgBody;
-				}
-				else {
-					reqJSON["body"] = msgBody;
-					reqJSON["headers"]["Content-Type"] = contentType;
-				}
-			}
-
-			if (this.credentials) {
-				var authHeaderVal = "Basic " + new Buffer(this.credentials.username + ":" + 
-					this.credentials.password).toString("base64");
-
-				reqJSON["headers"]["Authorization"] = authHeaderVal;
-			}
-
 			if (multipart) {
-				reqJSON["multipart"] = multipart;
+				// var fs = require("fs");
+
+				var attachments = {
+					"root" : msgBody
+				};
+
+				reqJSON["data"] = attachments;
+
+				// var formParams = req.form();
+				// console.log(util.inspect(formParams));
+				// console.log(JSON.stringify(msgBody));
+
+				// formParams.append("root", msgBody);
+
+				// var filepath = "";
+				// if (files && files !== null) {
+				// 	if (files instanceof Array) {
+				// 		for (var i=0; i < files.length; i++) {
+				// 			filepath = files[i].replace(/^.*[\\\/]/, '');
+				// 			formParams.append(filepath, fs.createReadStream(files[i], { flags: 'r',
+				// 				  encoding: 'utf8'
+				// 				})
+				// 			);
+				// 		}
+				// 	}
+				// 	else {
+				// 		filepath = files.replace(/^.*[\\\/]/, '');
+				// 		formParams.append(filepath, fs.createReadStream(files, { flags: 'r',
+				// 				  encoding: 'utf8'
+				// 				})
+				// 		);
+
+				// 		console.log("Attachment name: "+ filepath);
+				// 		console.log("File Path: "+ files);
+				// 	}
+				// }
 			}
 
-			if (this.reasoning) {
-				reqJSON['headers']['SD-Connection-String'] = 'reasoning=' + this.reasoning;
-			}
-
-			request(reqJSON, 
+			rest.request(req_url, reqJSON).on("complete",
 				fnResponseHandler	
 			);
 		};
@@ -982,16 +1021,24 @@
 			files : options.files
 		}
 		data = JSON.stringify(creationData);
-		formData = new FormData();
-		formData.append("root", data);
+
+		if (!isNode) {
+			formData = new window.FormData();
+			formData.append("root", data);
+		}
+		else {
+			formData = data;
+		}
 
 		reqOptions = {
 			httpMethod: "POST",
 			resource: "admin/databases",
 			acceptHeader: "*/*",
 			params: options.params || "",
+			isJsonBody: false,
 			multipart: true,
-			msgBody: formData
+			msgBody: formData,
+			files: options.files
 		};
 		
 		this._httpRequest(reqOptions, callback);
