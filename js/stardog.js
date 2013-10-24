@@ -192,7 +192,7 @@
 				headers = {};
 
 			if (this.reasoning) {
-				headers['SD-Connection-String'] = 'reasoning=' + this.reasoning;
+				params['sd-connection-string'] = "reasoning=" + this.reasoning;
 			}
 
 			// Set the Accept header by default to "application/sparql-results+json"
