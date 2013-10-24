@@ -6,7 +6,7 @@ _Current Version **0.0.5**_
 
 Stardog.js JavaScript Framework for node.js to develop apps with the [Stardog RDF Database](http://stardog.com).  
 
-![Stardog](http://stardog.com/_/img/sdog.png)   
+![Stardog](http://docs.stardog.com/img/sd.png)   
 
 For detailed documentation, see the [annotated source](http://clarkparsia.github.io/stardog.js/docs/stardog.html).
 
