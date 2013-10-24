@@ -1,4 +1,4 @@
-//     Stardog.js 0.0.5
+//     Stardog.js 0.1.0
 //
 // Copyright 2012 Clark & Parsia LLC
 
@@ -50,12 +50,15 @@
 	var Stardog = {};
 
 	// Current version of the library. Keep in sync with 'package.json'
-	Stardog.VERSION = '0.0.5';
+	Stardog.VERSION = '0.1.0';
 
-	if (typeof exports !== 'undefined') {
+	// Verify the environment of the library
+	var isNode = (typeof exports !== 'undefined' && typeof module !== 'undefined' && module.exports);
+
+	if (isNode) {
 		// Require request, if we're on the server, and it's not already present
-		var request = root.request;
-		if (!request && (typeof require !== 'undefined')) request = require('request');
+		var rest = root.rest;
+		if (!rest && (typeof require !== 'undefined')) rest = require('restler');
 
 		// Require querystring, if we're on the server, and it's not already present
 		var qs = root.qs;
@@ -110,18 +113,23 @@
     // referenced in [Stardog Network documentation](http://stardog.com/docs/network/).
 	var Connection = Stardog.Connection = function ()	{ 
 		// By default (for testing)
-		this.endpoint = 'http://localhost:5822/nodeDB/';
+		this.endpoint = 'http://localhost:5820/nodeDB/';
 	};
 
-    // Set the Stardog HTTP endpoint, usually running in port `5822`.
-	Connection.prototype.setEndpoint = function (endpoint) {
-		if (endpoint.charAt(endpoint.length-1) != '/') {
-			this.endpoint = endpoint + '/';
-		} else {
-			this.endpoint = endpoint;
+    // Set the Stardog HTTP endpoint, usually running in port `5820`.
+	Connection.prototype.setEndpoint = function (url) {
+		var i = url.length -1;
+		var lastChar = url[url.length - 1];
+
+		// find last index of not / char
+		for (; i >= 0; i -= 1) {
+			if (url[i] != '/')
+				break;
 		}
-	};
 
+		this.endpoint = url.substring(0, i+1) + '/';
+	};
+	
     // Retrieve the configured Stardog HTTP endpoint.
 	Connection.prototype.getEndpoint = function () {
 		return this.endpoint;
@@ -157,7 +165,7 @@
 	// resource specified and the parameters.
 	// Needs a callback to process results in a function receiving a 
 	// JSONLD object.
-	if (typeof exports !== 'undefined') {
+	if (isNode) {
 		
 		// Node.js implementation of the HTTP request using `request` npm module.
 		// __Parameters__:  
@@ -174,41 +182,51 @@
 		Connection.prototype._httpRequest = function(options, callback) {
 			var theMethod = options.httpMethod,
 				req_url = this.endpoint + options.resource,
-				strParams = qs.stringify(options.params),
+				params = options.params || {};
 				msgBody = options.msgBody,
 				acceptH = options.acceptHeader,
 				isJsonBody = options.isJsonBody,
 				contentType = options.contentType,
-				multipart = options.multipart;
+				multipart = options.multipart,
+				files = options.files || [],
+				headers = {};
 
-			if (strParams && strParams.length > 0)
-				req_url += "?" + strParams;
+			if (this.reasoning) {
+				params['sd-connection-string'] = "reasoning=" + this.reasoning;
+			}
 
-			var fnResponseHandler = function (error, response, body) {
-				if (!error) {
+			// Set the Accept header by default to "application/sparql-results+json"
+			headers['Accept'] = acceptH || "text/plain";
+
+			var fnResponseHandler = function (body, response) {
+				if (!(body instanceof Error)) {
 					var jsonData;
 					// Try to parse response to JSON, which is expected in most 
 					// cases
 					try {
-						jsonData = JSON.parse(body);
+						if (body) {
+							jsonData = JSON.parse(body);
 
-						if (jsonData instanceof Array) {
-							// console.log(jsonData);
-							var arrLinkedJson = []
-							for (var iElem=0; iElem < jsonData.length; iElem++) {
-								// Check if the JSON object is JSON-LD
-								if (jsonData[iElem].hasOwnProperty('@id') || 
-                                    jsonData[iElem].hasOwnProperty('@context')) {
-								
-                                    arrLinkedJson.push( new LinkedJson(jsonData[iElem]) );
+							if (jsonData instanceof Array) {
+								// console.log(jsonData);
+								var arrLinkedJson = []
+								for (var iElem=0; iElem < jsonData.length; iElem++) {
+									// Check if the JSON object is JSON-LD
+									if (jsonData[iElem].hasOwnProperty('@id') || 
+	                                    jsonData[iElem].hasOwnProperty('@context')) {
+									
+	                                    arrLinkedJson.push( new LinkedJson(jsonData[iElem]) );
+									}
 								}
+								jsonData = arrLinkedJson;
 							}
-							jsonData = arrLinkedJson;
-						}
-						else if (jsonData.hasOwnProperty('@id') ||
-							jsonData.hasOwnProperty('@context')) {
-                            
-							jsonData = new LinkedJson(jsonData);
+							else if (jsonData.hasOwnProperty('@id') ||
+								jsonData.hasOwnProperty('@context')) {
+	                            
+								jsonData = new LinkedJson(jsonData);
+							}
+						} else {
+							jsonData = {};
 						}
 					}
 					catch (err) {
@@ -220,47 +238,73 @@
 				}
 				else {
 					console.log('Error found!');
-					console.log(error);
+					console.log(JSON.stringify(body));
+
 					// TODO: maybe wrap the error with stardog specific info
-					callback(body, response, error); 
+					callback(body, response); 
 				}
 			};
+
+			if (!multipart && msgBody) {
+				if (isJsonBody) {
+					headers['Content-Type'] = "application/json";
+				}
+				else {
+					headers['Content-Type'] = contentType;
+				}
+			}
 
 			// build request object
 			var reqJSON = { 
-				url : req_url,
-				method : theMethod,
-				headers : {
-					"Accept" : acceptH
-				}
+				"method" : theMethod,
+				"query" : params,
+				"username" : this.credentials.username,
+				"password" : this.credentials.password,
+				"headers" : headers,
+				"data" : (isJsonBody) ? JSON.stringify(msgBody) : msgBody,
+				"multipart" : multipart || false
 			};
 
-			if (msgBody) {
-				if (isJsonBody) {
-					reqJSON["json"] = msgBody;
-				}
-				else {
-					reqJSON["body"] = msgBody;
-					reqJSON["headers"]["Content-Type"] = contentType;
-				}
+			if (multipart) {
+				// var fs = require("fs");
+
+				var attachments = {
+					"root" : msgBody
+				};
+
+				reqJSON["data"] = attachments;
+
+				// var formParams = req.form();
+				// console.log(util.inspect(formParams));
+				// console.log(JSON.stringify(msgBody));
+
+				// formParams.append("root", msgBody);
+
+				// var filepath = "";
+				// if (files && files !== null) {
+				// 	if (files instanceof Array) {
+				// 		for (var i=0; i < files.length; i++) {
+				// 			filepath = files[i].replace(/^.*[\\\/]/, '');
+				// 			formParams.append(filepath, fs.createReadStream(files[i], { flags: 'r',
+				// 				  encoding: 'utf8'
+				// 				})
+				// 			);
+				// 		}
+				// 	}
+				// 	else {
+				// 		filepath = files.replace(/^.*[\\\/]/, '');
+				// 		formParams.append(filepath, fs.createReadStream(files, { flags: 'r',
+				// 				  encoding: 'utf8'
+				// 				})
+				// 		);
+
+				// 		console.log("Attachment name: "+ filepath);
+				// 		console.log("File Path: "+ files);
+				// 	}
+				// }
 			}
 
-			if (this.credentials) {
-				var authHeaderVal = "Basic " + new Buffer(this.credentials.username + ":" + 
-					this.credentials.password).toString("base64");
-
-				reqJSON["headers"]["Authorization"] = authHeaderVal;
-			}
-
-			if (multipart && multipart != null) {
-				reqJSON["multipart"] = multipart;
-			}
-
-			if (this.reasoning && this.reasoning != null) {
-				reqJSON['headers']['SD-Connection-String'] = 'reasoning=' + this.reasoning;
-			}
-
-			request(reqJSON, 
+			rest.request(req_url, reqJSON).on("complete",
 				fnResponseHandler	
 			);
 		};
@@ -306,13 +350,14 @@
 				req_url = this.endpoint + options.resource,
 				params = options.params ? ("?" + $.param(options.params)) : '',
 				contentType = options.contentType,
-				body = options.msgBody ? options.msgBody : null,
+				body = options.msgBody || null,
 				isJsonBody = options.isJsonBody,
 				multipart = options.multipart,
 				headers = {},
-				username, password;
-
-			if (this.reasoning && this.reasoning != null) {
+				username, password,
+				ajaxSettings;
+			
+			if (this.reasoning) {
 				headers['SD-Connection-String'] = 'reasoning=' + this.reasoning;
 			}
 
@@ -330,20 +375,25 @@
 				headers["Authorization"] = "Basic ".concat(userPassBase64);
 			}
 
+			ajaxSettings = {
+				type: theMethod,
+				url: req_url + params,
+				processData: false, // prevents jquery from tampering with the DataFrom object
+				dataType: acceptH.match(/json/gi) ? 'json' : 'text',
+				data:  isJsonBody ? JSON.stringify(body) : body,
+				headers: headers
+			};
+
 			if (isJsonBody) {
 				headers['Content-Type'] = 'application/json';
 			} else if (contentType) {
 				headers['Content-Type'] = contentType;
+			} else if (multipart) {
+				// prevents jquery from overwriting the proper content-type header
+				ajaxSettings.contentType = false;
 			}
 
-			$.ajax({
-				type: theMethod,
-				url: req_url + params,
-				processData: false,
-				dataType: acceptH.match(/json/gi) ? 'json' : 'text',
-				data:  isJsonBody ? JSON.stringify(body) : body,
-				headers: headers
-			}).done(function(data, status, jqXHR) {
+			$.ajax(ajaxSettings).done(function(data, status, jqXHR) {
 				var return_obj;
 				// check if the returned object is a JSONLD object
 				if (data && (data.hasOwnProperty('@id') || data.hasOwnProperty('@context'))) {
@@ -409,7 +459,7 @@
 				resource : options.database,
 				acceptHeader: "*/*",
 				httpMethod: "GET",
-				params: options.params ? options.params : ""
+				params: options.params || ""
 			 };
 
 		this._httpRequest(reqOptions, callback);
@@ -428,7 +478,7 @@
 				resource: options.database + "/size",
 				httpMethod: "GET",
 				acceptHeader: "*/*",
-				params: options.params ? options.params : ""
+				params: options.params || ""
 			};
 		this._httpRequest(reqOptions, callback);
 	};
@@ -449,21 +499,21 @@
 	// `callback`: the callback to execute once the request is done.  
 	Connection.prototype.query = function(options, callback) {
 		var reqOptions = {
-				acceptHeader : options.mimetype ? options.mimetype : 'application/sparql-results+json',
+				acceptHeader : options.mimetype || 'application/sparql-results+json',
 				resource: options.database + "/query",
 				httpMethod: "GET",
 				params : _.extend({ "query" : options.query }, options.params)
 			};
 
-		if (options.baseURI && options.baseURI != null) {
+		if (options.baseURI) {
 			reqOptions["params"]["baseURI"] = options.baseURI;
 		}
 
-		if (options.limit && options.limit != null) {
+		if (options.limit) {
 			reqOptions["params"]["limit"] = options.limit;
 		}
 
-		if (options.offset && options.offset != null) {
+		if (options.offset) {
 			reqOptions["params"]["offset"] = options.offset;
 		}
 
@@ -487,21 +537,21 @@
 	// `callback`: the callback to execute once the request is done.  
 	Connection.prototype.queryGraph = function (options, callback) {
 		var reqOptions = {
-				acceptHeader : options.mimetype ? options.mimetype : 'application/ld+json',
+				acceptHeader : options.mimetype || 'application/ld+json',
 				resource: options.database + "/query",
 				httpMethod: "GET",
 				params : _.extend({ "query" : options.query }, options.params)
 			};
 
-		if (options.baseURI && options.baseURI != null) {
+		if (options.baseURI) {
 			reqOptions["params"]["baseURI"] = options.baseURI;
 		}
 
-		if (options.limit && options.limit != null) {
+		if (options.limit) {
 			reqOptions["params"]["limit"] = options.limit;
 		}
 
-		if (options.offset && options.offset != null) {
+		if (options.offset) {
 			reqOptions["params"]["offset"] = options.offset;
 		}
 
@@ -606,21 +656,21 @@
 	Connection.prototype.queryInTransaction = function(options, callback) {
 		// function (database, txId, query, baseURI, limit, offset, callback, acceptMIME) {
 		var reqOptions = {
-				acceptHeader : options.mimetype ? options.mimetype : 'application/sparql-results+json',
+				acceptHeader : options.mimetype || 'application/sparql-results+json',
 				resource: options.database + "/" + options.txId +"/query",
 				httpMethod: "GET",
 				params : _.extend({ "query" : options.query }, options.params)
 			};
 
-		if (options.baseURI && options.baseURI != null) {
+		if (options.baseURI) {
 			reqOptions["params"]["baseURI"] = options.baseURI;
 		}
 
-		if (options.limit && options.limit != null) {
+		if (options.limit) {
 			reqOptions["params"]["limit"] = options.limit;
 		}
 
-		if (options.offset && options.offset != null) {
+		if (options.offset) {
 			reqOptions["params"]["offset"] = options.offset;
 		}
 
@@ -651,7 +701,7 @@
 				multipart: null
 			};
 
-		if (options.graphUri && options.graphUri != null) {
+		if (options.graphUri) {
 			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
@@ -682,7 +732,7 @@
 				multipart: null
 			};
 
-		if (options.graphUri && options.graphUri != null) {
+		if (options.graphUri) {
 			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
@@ -706,7 +756,7 @@
 				params: options.params || {}
 			};
 
-		if (options.graphUri && options.graphUri != null) {
+		if (options.graphUri) {
 			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
@@ -730,8 +780,8 @@
 	Connection.prototype.reasoningExplain = function (options, callback) {
 		var reqOptions = {
 				httpMethod: "POST",
-				resource: options.database + "/reasoning/" 
-							+ (options.txId && options.txId != null ? "/" + options.txId : ""),
+				resource: options.database + "/reasoning/" + 
+					(options.txId && options.txId != null ? "/" + options.txId : ""),
 				acceptHeader: "application/x-turtle",
 				params: options.params || null,
 				msgBody: options.axioms,
@@ -760,7 +810,7 @@
 				params: options.params || {}
 			};
 
-		if (options.graphUri && options.graphUri != null) {
+		if (options.graphUri) {
 			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
@@ -880,7 +930,7 @@
 				contentType: options.contentType || "text/plain"
 			};
 
-		if (options.graphUri && options.graphUri != null) {
+		if (options.graphUri) {
 			reqOptions.params["graph-uri"] =  options.graphUri;
 		}
 
@@ -957,6 +1007,52 @@
 			};
 		this._httpRequest(reqOptions, callback);
 	};
+
+
+	// #### Create a new database (POST)
+	// Set options in the database passed through a JSON object specification, i.e. JSON Request for option values. 
+	// Database options can be found [here](http://stardog.com/docs/admin/#admin-db).
+	//
+	// __Parameters__:  
+	// `options`: an object with one the following attributes: 
+	//				`database`: the name of the database to set the options.  
+	//				`options`: the options JSON object, indicating the options and values to set, [more info](http://stardog.com/docs/network/#extended-http).
+	//				`files`: the array of file names to bulk load into the new database
+	//				`params`: (optional) any other parameters to pass to the SPARQL endpoint.
+	// `callback`: the callback to execute once the request is done.
+	Connection.prototype.createDB = function(options, callback) {
+		var creationData, data, formData, reqOptions;
+		
+		creationData = {
+			dbname : options.database,
+			options : options.options,
+			files : options.files
+		}
+		data = JSON.stringify(creationData);
+
+		if (!isNode) {
+			formData = new window.FormData();
+			formData.append("root", data);
+		}
+		else {
+			formData = data;
+		}
+
+		reqOptions = {
+			httpMethod: "POST",
+			resource: "admin/databases",
+			acceptHeader: "*/*",
+			params: options.params || "",
+			isJsonBody: false,
+			multipart: true,
+			msgBody: formData,
+			files: options.files
+		};
+		
+		this._httpRequest(reqOptions, callback);
+	};
+
+
 
 	// #### Drop an existing database.
 	// Drops an existing database `dbname` and all the information that it contains.
@@ -1141,7 +1237,7 @@
 
 		};
 
-		if (options.superuser && options.superuser != null) {
+		if (options.superuser) {
 			reqOptions.msgBody.superuser = options.superuser;
 		}
 

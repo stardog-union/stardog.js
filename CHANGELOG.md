@@ -1,5 +1,12 @@
 # Stardog.js - Change Log
 
+## v0.1.0
+
+* __ADDED:__ Support for creating new empty DB via createDB function
+* __MODIFIED:__ Changes supporting new default Stardog server port (test cases & default)
+* __MODIFIED:__ Changes to the way reasoning is activated in the request via a URL querystring parameter instead of custom header
+* __FIXED:__ Bug when setting endpoint URL with multiple trailing slash characters ('/')
+
 ## v0.0.5
 ---
 

@@ -1,6 +1,6 @@
 {
   "name": "stardog",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "Stardog JavaScript Framework for node.js and the browser - Develop apps using the Stardog RDF Database & JS.",
   "homepage": "http://clarkparsia.github.com/stardog.js",
   "keywords": ["stardog", "rdf", "sparql", "library", "semantic web", "linked data"],
@@ -28,11 +28,12 @@
     "url"  : "https://github.com/clarkparsia/stardog.js/issues" 
   },
   "dependencies": {
-    "request"      : "2.9.x",
+    "restler"      : "latest",
     "querystring" : ">=0.1.0",
     "underscore": ">=1.4.4"
   },
   "devDependencies": {
+    "request" : "latest",
     "jasmine-node" : ">=1.0.26"
   },
   "engines": "*",

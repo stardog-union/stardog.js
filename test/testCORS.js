@@ -31,7 +31,7 @@ Run it:
 */
 
 var http = require('http'),
-	port = 5822,
+	port = 5820,
 	request = require('request'),
 	_ = require('underscore');
 
