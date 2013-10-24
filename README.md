@@ -2,7 +2,7 @@ Stardog.js
 ==========
 
 Licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)  
-_Current Version **0.0.5**_ 
+_Current Version **0.1.0**_ 
 
 Stardog.js JavaScript Framework for node.js to develop apps with the [Stardog RDF Database](http://stardog.com).  
 
@@ -82,7 +82,8 @@ Stardog.js depends of the Stardog HTTP API, and any change in this API will be s
 | Stardog Version | Stardog.js Version |
 | --------------- | ------------------ |
 | <= 1.1.5        | <= 0.0.3           |
-| 1.2             | >= 0.0.4           |
+| 1.2 - 2.0.0     | 0.0.4, 0.0.5       |
+| 2.0.0           | >= 0.1.0           |
 
 
 ## Quick Example ##
