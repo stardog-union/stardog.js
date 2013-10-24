@@ -27,7 +27,7 @@
 
     self.it ("should execute command successfully using endpoint with trailing /", function (done) {
       conn = new Stardog.Connection();
-      conn.setEndpoint("http://localhost:5822/");
+      conn.setEndpoint("http://localhost:5820/");
       conn.setCredentials("admin", "admin");
 
       conn.listUsers(function (data, response) {
@@ -45,7 +45,7 @@
 
     self.it("should execute command successfully using endpoint without trailing /", function (done) {
       conn = new Stardog.Connection();
-      conn.setEndpoint("http://localhost:5822");
+      conn.setEndpoint("http://localhost:5820");
       conn.setCredentials("admin", "admin");
 
       conn.listUsers(function (data, response) {
@@ -62,7 +62,7 @@
 
     self.it("should execute command successfully using endpoint with two trailing /", function (done) {
       conn = new Stardog.Connection();
-      conn.setEndpoint("http://localhost:5822//");
+      conn.setEndpoint("http://localhost:5820//");
       conn.setCredentials("admin", "admin");
 
       conn.listUsers(function (data, response) {

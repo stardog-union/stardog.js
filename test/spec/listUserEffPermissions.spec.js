@@ -23,7 +23,7 @@
 
 		beforeEach(function() {
 			conn = new Stardog.Connection();
-			conn.setEndpoint("http://localhost:5822/");
+			conn.setEndpoint("http://localhost:5820/");
 			conn.setCredentials("admin", "admin");
 		});
 

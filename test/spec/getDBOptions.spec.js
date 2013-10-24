@@ -27,7 +27,7 @@
 
 		beforeEach(function() {
 			conn = new Stardog.Connection();
-			conn.setEndpoint("http://localhost:5822/");
+			conn.setEndpoint("http://localhost:5820/");
 			conn.setCredentials("admin", "admin");
 		});
 
@@ -36,11 +36,21 @@
 		});
 
 		self.it ("should get NOT_FOUND status code trying to get the options of a non-existent DB.", function (done) {
-				
-			conn.getDBOptions({ database: 'nodeDB_test', optionsObj: { } }, function (data, response) {
+			var optionsObj = {
+				"search.enabled" : "",
+				"icv.enabled" : ""
+			};
 
-				expect(response.statusCode).toBe(404);
-				done();
+			conn.onlineDB({ database: 'nodeDB_test' }, function (dataOnline, responseOnline) {
+				// put online if it's not
+
+				expect(responseOnline.statusCode).toBe(404);
+				
+				conn.getDBOptions({ "database": "nodeDB_test", "optionsObj": optionsObj }, function (data, response) {
+
+					expect(response.statusCode).toBe(500);
+					done();
+				});
 			});
 		});
 
@@ -53,7 +63,7 @@
 			conn.onlineDB({ database: 'nodeDB' }, function (data3, response3) {
 				// put online if it's not
 				
-				conn.getDBOptions({ database: 'nodeDB', optionsObj: optionsObj }, function (data, respose2) {
+				conn.getDBOptions({ "database": "nodeDB", "optionsObj": optionsObj }, function (data, respose2) {
 					expect(respose2.statusCode).toBe(200);
 
 					// check options retrieved
