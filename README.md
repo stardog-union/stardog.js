@@ -39,9 +39,9 @@ That will fetch the latest version of stardog.js in the bower registry, [more de
 
 To get started, just clone the project. You'll need a local copy of Stardog to be able to run the tests. For more information on starting the Stardog DB service and how it works, go to [Stardog's documentation](http://stardog.com/docs/), where you'll find everything you need to get up and running with Stardog.
 
-Go to [http://stardog.com](http://stardog.com), download and install the database and load the data provided in `data/` using the script in the repository. Start Stardog with the `http` port on `5823` with the following command:
+Go to [http://stardog.com](http://stardog.com), download and install the database and load the data provided in `data/` using the script in the repository. Start Stardog with the port on `5823` using the following command:
 
-    $ stardog-admin server start --http 5823
+    $ stardog-admin server start --port 5823
 
 Once you have Stardog running, execute the following command:
 
