@@ -39,40 +39,50 @@ That will fetch the latest version of stardog.js in the bower registry, [more de
 
 To get started, just clone the project. You'll need a local copy of Stardog to be able to run the tests. For more information on starting the Stardog DB service and how it works, go to [Stardog's documentation](http://stardog.com/docs/), where you'll find everything you need to get up and running with Stardog.
 
-Go to [http://stardog.com](http://stardog.com), download and install the database and load the data provided in `data/` using the script in the repository. Start Stardog with the port on `5823` using the following command:
+Go to [http://stardog.com](http://stardog.com), download and install the database and load the data provided in `data/` using the script in the repository. 
 
-    $ stardog-admin server start --port 5823
+1. Start the Stardog server
 
-Once you have Stardog running, execute the following command:
+    * Stardog > `2.1.1`
 
-    $ npm install
-    $ bower install
+            $ stardog-admin server start
+            
+    * Stardog <= `2.1.1`
+    
+            $ stardog-admin server start --port 5823                
+
+2. Install `stardog.js` dependencies:
+
+        $ npm install
+        $ bower install
 
 This will install all the dependencies using npm (for node.js) and bower (for browser), once this is done, run the test cases.
 
-All tests should pass.
-
 ### Running Tests
 
-Run all the test cases in `test/spec`. Having the Stardog server running, execute the following commands:
+Run all the test cases in `test/spec`, all test cases must pass. Having the Stardog server running, execute the following commands:
 
-1\. Load the test data using the provided script:
+* In the browser
 
-    $ ./load_test_data.sh
+    1. Load the test data using the provided script:
 
-2\. Start the proxy via:
+            $ ./load_test_data.sh
+            
+    2. Run the test cases
+        
+        * Stardog > `2.1.1`
 
-    $ node test/testCORS.js
+                $ open test/index.html
+                        
+        * Stardog <= `2.1.1`
+    
+                $ node test/testCORS.js
+                $ open test/index.html       
 
-3\. Run the test suite:
+* In node.js
 
-#### In the browser
-
-    open test/index.html
-
-#### In node.js
-
-    $ npm test    
+        $ npm test   
+    
 
 
 ## Version details ##
