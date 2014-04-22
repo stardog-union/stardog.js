@@ -15,6 +15,8 @@
 // limitations under the License.
 
 (function(factory) {
+
+	"use strict";
 	// ## Initial Setup
 	// -------------
 	//
@@ -22,51 +24,50 @@
 	// on the server).
 	var root = this;
 
-	// Save the previous value of the 'Stardog' variable, so that it can be 
-	// restored later on, if 'noConflict' is used.
-	var previousStardog = root.Stardog;
-
 	// Export the Underscore object for **Node.js**, with
 	// backward compatibility for the old `require()` API. If we're in
 	// the browser, add `_` as a global object via a string identifier,
 	// for Closure Compiler "advanced" mode.
-	if (typeof exports !== 'undefined' && typeof module !== 'undefined' && module.exports) {
+	if (typeof exports !== "undefined" && typeof module !== "undefined" && module.exports) {
 		exports = module.exports = factory(root);
 	}
-	else if (typeof define === 'function' && define.amd) {
+	else if (typeof define === "function" && define.amd) {
 		// load Stardog via AMD
-		define(['stardog'], function() {
+		define(["stardog"], function() {
 			// Export to global for backward compatibility
-			root['Stardog'] = factory(root);
+			root.Stardog = factory(root);
 			return root.Stardog;
 		});
 	}
 	else {
 		// Browser global
-		root['Stardog'] = factory(root);
+		root.Stardog = factory(root);
 	}
 }).call(this, function(root) {
+
+	"use strict";
+
 	// Create top-level namespace
 	var Stardog = {};
 
 	// Current version of the library. Keep in sync with 'package.json'
-	Stardog.VERSION = '0.1.0';
+	Stardog.VERSION = "0.1.0";
 
 	// Verify the environment of the library
-	var isNode = (typeof exports !== 'undefined' && typeof module !== 'undefined' && module.exports);
+	var isNode = (typeof exports !== "undefined" && typeof module !== "undefined" && module.exports);
 
 	if (isNode) {
 		// Require request, if we're on the server, and it's not already present
 		var rest = root.rest;
-		if (!rest && (typeof require !== 'undefined')) rest = require('restler');
+		if (!rest && (typeof require !== "undefined")) rest = require("restler");
 
 		// Require querystring, if we're on the server, and it's not already present
 		var qs = root.qs;
-		if (!qs && (typeof require !== 'undefined')) qs = require('querystring');
+		if (!qs && (typeof require !== "undefined")) qs = require("querystring");
 	}
 
 	var _ = root._;
-	if (!_ && (typeof require !== 'undefined')) _ = require('underscore');
+	if (!_ && (typeof require !== "undefined")) _ = require("underscore");
 
 	// For AJAX's purposes, jQuery owns the `$` variable.
 	// jQuery is only required when using the library in the browser.
@@ -82,27 +83,27 @@
 		// Attributes contains the original JSON object with the map of 
 		// all the attributes.
 		this.attributes = jsonldValues;
-	}
+	};
 
 	// Gets a property from the LinkedJson object.
 	LinkedJson.prototype.get = function (key) {
 		return this.attributes[key];
-	}
+	};
 
 	// Sets a property in the LinkedJson object.
 	LinkedJson.prototype.set = function (key, value) {
 		this.attributes[key] = value;
-	}
+	};
 
 	// Get the raw JSON object of the LinkedJson object.
 	LinkedJson.prototype.rawJSON = function () {
 		return this.attributes;
-	}
+	};
 
 	// Returns a String representation of the LinkedJson object.
 	LinkedJson.prototype.toString = function () {
 		return JSON.stringify(this.attributes);
-	}
+	};
 
 	// ---------------------------------
 
@@ -113,21 +114,20 @@
     // referenced in [Stardog Network documentation](http://stardog.com/docs/network/).
 	var Connection = Stardog.Connection = function ()	{ 
 		// By default (for testing)
-		this.endpoint = 'http://localhost:5820/nodeDB/';
+		this.endpoint = "http://localhost:5820/nodeDB/";
 	};
 
     // Set the Stardog HTTP endpoint, usually running in port `5820`.
 	Connection.prototype.setEndpoint = function (url) {
 		var i = url.length -1;
-		var lastChar = url[url.length - 1];
 
 		// find last index of not / char
 		for (; i >= 0; i -= 1) {
-			if (url[i] != '/')
+			if (url[i] != "/")
 				break;
 		}
 
-		this.endpoint = url.substring(0, i+1) + '/';
+		this.endpoint = url.substring(0, i+1) + "/";
 	};
 	
     // Retrieve the configured Stardog HTTP endpoint.
@@ -137,7 +137,7 @@
 
     // Set the Stardog Credentials - `username` and `password`.
 	Connection.prototype.setCredentials = function(username, password) {
-		this.credentials = new Object();
+		this.credentials = {};
 		this.credentials.username = username;
 		this.credentials.password = password;
 	};
@@ -152,7 +152,7 @@
     // function calls involving reasoning. Allowed values are documented in 
     // [Stardog Reasoning docs](http://stardog.com/docs/owl2/)
 	Connection.prototype.setReasoning = function(reasoning) {
-		return this.reasoning = reasoning;
+		this.reasoning = reasoning;
 	};
 
     // Retrieves the configured reasoning level for the Stardog Connection.
@@ -182,21 +182,20 @@
 		Connection.prototype._httpRequest = function(options, callback) {
 			var theMethod = options.httpMethod,
 				req_url = this.endpoint + options.resource,
-				params = options.params || {};
+				params = options.params || {},
 				msgBody = options.msgBody,
 				acceptH = options.acceptHeader,
 				isJsonBody = options.isJsonBody,
 				contentType = options.contentType,
 				multipart = options.multipart,
-				files = options.files || [],
 				headers = {};
 
 			if (this.reasoning) {
-				params['sd-connection-string'] = "reasoning=" + this.reasoning;
+				params["sd-connection-string"] = "reasoning=" + this.reasoning;
 			}
 
 			// Set the Accept header by default to "application/sparql-results+json"
-			headers['Accept'] = acceptH || "text/plain";
+			headers.Accept = acceptH || "text/plain";
 
 			var fnResponseHandler = function (body, response) {
 				if (!(body instanceof Error)) {
@@ -209,19 +208,19 @@
 
 							if (jsonData instanceof Array) {
 								// console.log(jsonData);
-								var arrLinkedJson = []
+								var arrLinkedJson = [];
 								for (var iElem=0; iElem < jsonData.length; iElem++) {
 									// Check if the JSON object is JSON-LD
-									if (jsonData[iElem].hasOwnProperty('@id') || 
-	                                    jsonData[iElem].hasOwnProperty('@context')) {
+									if (jsonData[iElem].hasOwnProperty("@id") || 
+	                                    jsonData[iElem].hasOwnProperty("@context")) {
 									
 	                                    arrLinkedJson.push( new LinkedJson(jsonData[iElem]) );
 									}
 								}
 								jsonData = arrLinkedJson;
 							}
-							else if (jsonData.hasOwnProperty('@id') ||
-								jsonData.hasOwnProperty('@context')) {
+							else if (jsonData.hasOwnProperty("@id") ||
+								jsonData.hasOwnProperty("@context")) {
 	                            
 								jsonData = new LinkedJson(jsonData);
 							}
@@ -237,7 +236,7 @@
 					callback(jsonData, response);
 				}
 				else {
-					console.log('Error found!');
+					console.log("Error found!");
 					console.log(JSON.stringify(body));
 
 					// TODO: maybe wrap the error with stardog specific info
@@ -247,10 +246,10 @@
 
 			if (!multipart && msgBody) {
 				if (isJsonBody) {
-					headers['Content-Type'] = "application/json";
+					headers["Content-Type"] = "application/json";
 				}
 				else {
-					headers['Content-Type'] = contentType;
+					headers["Content-Type"] = contentType;
 				}
 			}
 
@@ -272,7 +271,7 @@
 					"root" : msgBody
 				};
 
-				reqJSON["data"] = attachments;
+				reqJSON.data = attachments;
 
 				// var formParams = req.form();
 				// console.log(util.inspect(formParams));
@@ -330,7 +329,7 @@
 		// One can fall back to a JS implementation, e.g. http://www.webtoolkit.info/javascript-base64.html
 		// jQuery does not natively provide support for IE's XDomainRequest object, although jQuery plugins exist that
 		// provide this extension and are reported to work.
-		Connection.prototype._base64Encode = typeof(btoa) == "function" ? function(x){return btoa(x)} : null;
+		Connection.prototype._base64Encode = typeof(btoa) == "function" ? function(x){return btoa(x);} : null;
 
 		// Low level HTTP request method to use in the Browser, using an AJAX implementation.
 		// __Parameters__:  
@@ -348,46 +347,47 @@
 			var theMethod = options.httpMethod,
 				acceptH = options.acceptHeader,
 				req_url = this.endpoint + options.resource,
-				params = options.params ? ("?" + $.param(options.params)) : '',
+				params = options.params ? ("?" + $.param(options.params)) : "",
 				contentType = options.contentType,
 				body = options.msgBody || null,
 				isJsonBody = options.isJsonBody,
 				multipart = options.multipart,
 				headers = {},
 				username, password,
-				ajaxSettings;
+				ajaxSettings,
+				userPassBase64;
 			
 			if (this.reasoning) {
-				headers['SD-Connection-String'] = 'reasoning=' + this.reasoning;
+				headers["SD-Connection-String"] = "reasoning=" + this.reasoning;
 			}
 
-			headers['Accept'] = acceptH || "application/sparql-results+json";
+			headers.Accept = acceptH || "application/sparql-results+json";
 
 			if (this.credentials) {
 				username = this.credentials.username;
 				password = this.credentials.password;
 				if (this._base64Encode) {
-					var userPassBase64 = this._base64Encode(username.concat(":",password));
+					userPassBase64 = this._base64Encode(username.concat(":",password));
+					headers.Authorization = "Basic ".concat(userPassBase64);
 				} else {
 					throw new Error("Your browser does not support btoa() natively.\n" +
-						" Please provide a javascript implementation for Connection.prototype._base64Encode")
+						" Please provide a javascript implementation for Connection.prototype._base64Encode");
 				}
-				headers["Authorization"] = "Basic ".concat(userPassBase64);
 			}
 
 			ajaxSettings = {
 				type: theMethod,
 				url: req_url + params,
 				processData: false, // prevents jquery from tampering with the DataFrom object
-				dataType: acceptH.match(/json/gi) ? 'json' : 'text',
+				dataType: acceptH.match(/json/gi) ? "json" : "text",
 				data:  isJsonBody ? JSON.stringify(body) : body,
 				headers: headers
 			};
 
 			if (isJsonBody) {
-				headers['Content-Type'] = 'application/json';
+				headers["Content-Type"] = "application/json";
 			} else if (contentType) {
-				headers['Content-Type'] = contentType;
+				headers["Content-Type"] = contentType;
 			} else if (multipart) {
 				// prevents jquery from overwriting the proper content-type header
 				ajaxSettings.contentType = false;
@@ -396,7 +396,7 @@
 			$.ajax(ajaxSettings).done(function(data, status, jqXHR) {
 				var return_obj;
 				// check if the returned object is a JSONLD object
-				if (data && (data.hasOwnProperty('@id') || data.hasOwnProperty('@context'))) {
+				if (data && (data.hasOwnProperty("@id") || data.hasOwnProperty("@context"))) {
 					return_obj = Connection._convertToLinkedJson(data);
 				} else {
 					return_obj = data;
@@ -434,7 +434,7 @@
 		var val = options.uri,
 			reqOptions = { 
 				database: options.database,
-				query:  'select ?val where { '+ options.uri +' '+ options.property +' ?val }',
+				query:  "select ?val where { "+ options.uri +" "+ options.property +" ?val }",
 				params: options.params
 			};
 
@@ -499,22 +499,22 @@
 	// `callback`: the callback to execute once the request is done.  
 	Connection.prototype.query = function(options, callback) {
 		var reqOptions = {
-				acceptHeader : options.mimetype || 'application/sparql-results+json',
+				acceptHeader : options.mimetype || "application/sparql-results+json",
 				resource: options.database + "/query",
 				httpMethod: "GET",
 				params : _.extend({ "query" : options.query }, options.params)
 			};
 
 		if (options.baseURI) {
-			reqOptions["params"]["baseURI"] = options.baseURI;
+			reqOptions.params.baseURI = options.baseURI;
 		}
 
 		if (options.limit) {
-			reqOptions["params"]["limit"] = options.limit;
+			reqOptions.params.limit = options.limit;
 		}
 
 		if (options.offset) {
-			reqOptions["params"]["offset"] = options.offset;
+			reqOptions.params.offset = options.offset;
 		}
 
 		this._httpRequest(reqOptions, callback);
@@ -537,22 +537,22 @@
 	// `callback`: the callback to execute once the request is done.  
 	Connection.prototype.queryGraph = function (options, callback) {
 		var reqOptions = {
-				acceptHeader : options.mimetype || 'application/ld+json',
+				acceptHeader : options.mimetype || "application/ld+json",
 				resource: options.database + "/query",
 				httpMethod: "GET",
 				params : _.extend({ "query" : options.query }, options.params)
 			};
 
 		if (options.baseURI) {
-			reqOptions["params"]["baseURI"] = options.baseURI;
+			reqOptions.params.baseURI = options.baseURI;
 		}
 
 		if (options.limit) {
-			reqOptions["params"]["limit"] = options.limit;
+			reqOptions.params.limit = options.limit;
 		}
 
 		if (options.offset) {
-			reqOptions["params"]["offset"] = options.offset;
+			reqOptions.params.offset = options.offset;
 		}
 
 		this._httpRequest(reqOptions, callback);
@@ -576,7 +576,7 @@
 			};
 
 		if (options.baseURI) {
-			reqOptions["params"]["baseURI"] = options.baseURI;
+			reqOptions.params.baseURI = options.baseURI;
 		}
 
 		this._httpRequest(reqOptions, callback);
@@ -656,22 +656,22 @@
 	Connection.prototype.queryInTransaction = function(options, callback) {
 		// function (database, txId, query, baseURI, limit, offset, callback, acceptMIME) {
 		var reqOptions = {
-				acceptHeader : options.mimetype || 'application/sparql-results+json',
+				acceptHeader : options.mimetype || "application/sparql-results+json",
 				resource: options.database + "/" + options.txId +"/query",
 				httpMethod: "GET",
 				params : _.extend({ "query" : options.query }, options.params)
 			};
 
 		if (options.baseURI) {
-			reqOptions["params"]["baseURI"] = options.baseURI;
+			reqOptions.params.baseURI = options.baseURI;
 		}
 
 		if (options.limit) {
-			reqOptions["params"]["limit"] = options.limit;
+			reqOptions.params.limit = options.limit;
 		}
 
 		if (options.offset) {
-			reqOptions["params"]["offset"] = options.offset;
+			reqOptions.params.offset = options.offset;
 		}
 
 		this._httpRequest(reqOptions, callback);
@@ -781,7 +781,7 @@
 		var reqOptions = {
 				httpMethod: "POST",
 				resource: options.database + "/reasoning/" + 
-					(options.txId && options.txId != null ? "/" + options.txId : ""),
+					(options.txId && options.txId !== null ? "/" + options.txId : ""),
 				acceptHeader: "application/x-turtle",
 				params: options.params || null,
 				msgBody: options.axioms,
@@ -830,7 +830,7 @@
 		var reqOptions = {
 				httpMethod: "GET",
 				resource: options.database + "/icv",
-				acceptHeader: options.acceptMime || 'text/plain',
+				acceptHeader: options.acceptMime || "text/plain",
 				params: options.params || null,
 				contentType: options.contentType || "text/plain"
 			};
@@ -925,7 +925,7 @@
 				resource: options.database + "/icv/convert",
 				acceptHeader: "text/plain",
 				params: options.params || {},
-				msgBody: icvAxiom,
+				msgBody: options.icvAxiom,
 				isJsonBody: false,
 				contentType: options.contentType || "text/plain"
 			};
@@ -942,17 +942,17 @@
 	// Returns a mapping of common prefix-namespace values. In the future this function will be replaced by a function call to the DB service.
 	Connection.prototype.getPrefixes = function () {
 		var prefixMap = {
-			'http://www.w3.org/2002/07/owl#' : 'owl',
-			'http://www.w3.org/2000/01/rdf-schema#' : 'rdfs',
-			'http://www.w3.org/1999/02/22-rdf-syntax-ns#' : 'rdf',
-			'http://www.w3.org/2001/xmlnschema#' : 'xsd',
-			'http://www.w3.org/2004/02/skos/core#' : 'skos',
-			'http://purl.org/dc/elements/1.1/' : 'dc',
-			'http://xmlns.com/foaf/0.1/' : 'foaf',
-			'http://www.w3.org/ns/sparql-service-description#' : 'sd',
-			'http://rdfs.org/ns/void#' : 'void',
-			'http://www.w3.org/ns/org#' : 'org',
-			'http://clarkparsia.com/annex#' : 'annex'
+			"http://www.w3.org/2002/07/owl#" : "owl",
+			"http://www.w3.org/2000/01/rdf-schema#" : "rdfs",
+			"http://www.w3.org/1999/02/22-rdf-syntax-ns#" : "rdf",
+			"http://www.w3.org/2001/xmlnschema#" : "xsd",
+			"http://www.w3.org/2004/02/skos/core#" : "skos",
+			"http://purl.org/dc/elements/1.1/" : "dc",
+			"http://xmlns.com/foaf/0.1/" : "foaf",
+			"http://www.w3.org/ns/sparql-service-description#" : "sd",
+			"http://rdfs.org/ns/void#" : "void",
+			"http://www.w3.org/ns/org#" : "org",
+			"http://clarkparsia.com/annex#" : "annex"
 		};
 
 		return prefixMap;
@@ -981,11 +981,11 @@
 				httpMethod: "GET",
 				resource: "admin/databases",
 				acceptHeader: "application/json",
-				params: (options && typeof options !== 'function') ? options.params : ""
+				params: (options && typeof options !== "function") ? options.params : ""
 			};
 		this._httpRequest(
 			reqOptions,
-			typeof options === 'function' ? options /* no options passed, so this is the callback */ 
+			typeof options === "function" ? options /* no options passed, so this is the callback */ 
 					: callback /* options is an object, callback might be a function */);
 	};
 
@@ -1027,7 +1027,8 @@
 			dbname : options.database,
 			options : options.options,
 			files : options.files
-		}
+		};
+
 		data = JSON.stringify(creationData);
 
 		if (!isNode) {
@@ -1231,7 +1232,7 @@
 			httpMethod: "POST",
 			resource: "admin/users",
 			acceptHeader: "application/json",
-			msgBody: { "username" : options.username, "password" : options.password.split('') },
+			msgBody: { "username" : options.username, "password" : options.password.split("") },
 			isJsonBody: true,
 			params: options.params || ""
 
@@ -1338,7 +1339,7 @@
 			params: options.params || ""
 		};
 
-		this._httpRequest(reqOptions, typeof options === 'function' ? options : callback);
+		this._httpRequest(reqOptions, typeof options === "function" ? options : callback);
 	};
 
 	// #### Delete user
@@ -1443,7 +1444,7 @@
 			params: options.params || ""
 		};
 
-		this._httpRequest(reqOptions, (typeof options === 'function') ? options : callback);
+		this._httpRequest(reqOptions, (typeof options === "function") ? options : callback);
 	};
 
 	// #### List users with a specified role.
@@ -1653,7 +1654,7 @@
 			params: options.params || ""
 		};
 
-		this._httpRequest(reqOptions, (typeof options === 'function') ? options : callback);
+		this._httpRequest(reqOptions, (typeof options === "function") ? options : callback);
 	};
 
 	return Stardog;
