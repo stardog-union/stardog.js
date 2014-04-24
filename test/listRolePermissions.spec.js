@@ -1,72 +1,75 @@
 (function (root, factory) {
-    if (typeof exports === 'object') {
+    "use strict";
+
+    if (typeof exports === "object") {
         // NodeJS. Does not work with strict CommonJS, but
         // only CommonJS-like enviroments that support module.exports,
         // like Node.
-        module.exports = factory(require('../js/stardog.js'), require('expect.js'));
-    } else if (typeof define === 'function' && define.amd) {
+        module.exports = factory(require("../js/stardog.js"), require("expect.js"));
+    } else if (typeof define === "function" && define.amd) {
         // AMD. Register as an anonymous module.
-        define(['stardog', 'expect'], factory);
+        define(["stardog", "expect"], factory);
     } else {
         // Browser globals (root is window)
         root.returnExports = factory(root.Stardog, root.expect);
     }
 }(this, function (Stardog, expect) {
+    "use strict";
 
-	describe ("List Role permissions Test Suite", function() {
-		var conn;
+    describe ("List Role permissions Test Suite", function() {
+        var conn;
 
-		beforeEach(function() {
-			conn = new Stardog.Connection();
-			conn.setEndpoint("http://localhost:5820/");
-			conn.setCredentials("admin", "admin");
-		});
+        beforeEach(function() {
+            conn = new Stardog.Connection();
+            conn.setEndpoint("http://localhost:5820/");
+            conn.setCredentials("admin", "admin");
+        });
 
-		afterEach(function() {
-			conn = null;
-		});
+        afterEach(function() {
+            conn = null;
+        });
 
-		it ("should fail trying to get the list of permissions of a non-existent role.", function (done) {
+        it ("should fail trying to get the list of permissions of a non-existent role.", function (done) {
 
-			conn.listRolePermissions({ role: 'myrole' }, function (data, response) {
-				expect(response.statusCode).to.be(404);
-				done();
-			});
-		});
+            conn.listRolePermissions({ role: "myrole" }, function (data, response) {
+                expect(response.statusCode).to.be(404);
+                done();
+            });
+        });
 
-		it ("should list permissions assigned to a new role.", function (done) {
-			var aNewRole = 'newtestrole';
-			var aNewPermission = {
-				'action' : 'write',
-				'resource_type' : 'db',
-				'resource' : 'nodeDB'
-			};
+        it ("should list permissions assigned to a new role.", function (done) {
+            var aNewRole = "newtestrole";
+            var aNewPermission = {
+                "action" : "write",
+                "resource_type" : "db",
+                "resource" : "nodeDB"
+            };
 
-			conn.createRole({ rolename: aNewRole }, function (data1, response1) {
-				expect(response1.statusCode).to.be(201);
+            conn.createRole({ rolename: aNewRole }, function (data1, response1) {
+                expect(response1.statusCode).to.be(201);
 
-				conn.assignPermissionToRole({ role: aNewRole, permissionObj: aNewPermission }, function (data2, response2) {
+                conn.assignPermissionToRole({ role: aNewRole, permissionObj: aNewPermission }, function (data2, response2) {
 
-					expect(response2.statusCode).to.be(201);
+                    expect(response2.statusCode).to.be(201);
 
-					// list permissions to new role should include recently added.
-					conn.listRolePermissions({ role: aNewRole }, function (data3, response3) {
-						expect(response3.statusCode).to.be(200);
+                    // list permissions to new role should include recently added.
+                    conn.listRolePermissions({ role: aNewRole }, function (data3, response3) {
+                        expect(response3.statusCode).to.be(200);
 
-						expect(data3.permissions).not.to.be(undefined);
-						expect(data3.permissions).not.to.be(null);
-						expect(data3.permissions).to.contain('stardog:write:db:nodeDB');
+                        expect(data3.permissions).not.to.be(undefined);
+                        expect(data3.permissions).not.to.be(null);
+                        expect(data3.permissions).to.contain("stardog:write:db:nodeDB");
 
-						// delete role
-						conn.deleteRole({ role: aNewRole }, function (data, response) {
-							expect(response3.statusCode).to.be(200);
+                        // delete role
+                        conn.deleteRole({ role: aNewRole }, function () {
+                            expect(response3.statusCode).to.be(200);
 
-							done();
-						});
+                            done();
+                        });
 
-					});
-				});
-			});
-		});
-	});
+                    });
+                });
+            });
+        });
+    });
 }));
