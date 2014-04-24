@@ -16,6 +16,8 @@
 	describe ("Assign Permissions to Users Test Suite", function() {
 		var conn;
 
+		this.timeout(0);
+
 		beforeEach(function() {
 			conn = new Stardog.Connection();
 			conn.setEndpoint("http://localhost:5820/");

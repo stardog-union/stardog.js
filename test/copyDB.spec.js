@@ -20,6 +20,8 @@
 	describe ("Copy DBs Test Suite", function() {
 		var conn;
 
+		this.timeout(0);
+
 		beforeEach(function() {
 			conn = new Stardog.Connection();
 			conn.setEndpoint("http://localhost:5820/");
@@ -48,7 +50,6 @@
 		});
 
 		it("should copy an offline DB", function(done) {
-			this.timeout(0);
 
 			conn.dropDB({ database: 'nodeDBCopy' }, function (data, response2) {
 				// drop if exists

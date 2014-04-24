@@ -67,7 +67,7 @@
 	}
 
 	var _ = root._;
-	if (!_ && (typeof require !== "undefined")) _ = require("underscore");
+	if (!_ && (typeof require !== "undefined")) _ = require("lodash");
 
 	// For AJAX's purposes, jQuery owns the `$` variable.
 	// jQuery is only required when using the library in the browser.

@@ -6,7 +6,7 @@
 </head>
 <body>
   <div id="mocha"></div>
-  <script src="../bower_components/jquery/jquery.js" type="text/javascript"></script>
+  <script src="../bower_components/jquery/dist/jquery.js" type="text/javascript"></script>
   <script src="../bower_components/expect/index.js" type="text/javascript"></script>
   <script src="../bower_components/mocha/mocha.js" type="text/javascript"></script>
   <script src="../bower_components/lodash/dist/lodash.js" type="text/javascript"></script>
@@ -16,13 +16,44 @@
   <script type="text/javascript">mocha.setup('bdd')</script>
 
   <!-- Test Cases -->
+  <script src="setEndpoint.spec.js" type="text/javascript"></script>
+
+  <script src="listDBs.spec.js" type="text/javascript"></script>
+  <script src="getDBSize.spec.js" type="text/javascript"></script>
+  <script src="createDB.spec.js" type="text/javascript"></script>
+  <script src="copyDB.spec.js" type="text/javascript"></script>
+  <script src="dropDB.spec.js" type="text/javascript"></script>
+  <script src="getDB.spec.js" type="text/javascript"></script>
+  <script src="getDBOptions.spec.js" type="text/javascript"></script>
+  <script src="setDBOptions.spec.js" type="text/javascript"></script>
+  <script src="getProperty.spec.js" type="text/javascript"></script>
+  <script src="migrateDB.spec.js" type="text/javascript"></script>
+  <script src="optimizeDB.spec.js" type="text/javascript"></script>
+
+  <script src="query.spec.js" type="text/javascript"></script>
+  <script src="queryGraph.spec.js" type="text/javascript"></script>
+  
+  <script src="transactions.spec.js" type="text/javascript"></script>
+  <script src="explain.spec.js" type="text/javascript"></script>
+
+  <script src="isSuperUser.spec.js" type="text/javascript"></script>
+  <script src="isUserEnabled.spec.js" type="text/javascript"></script>
+  <script src="listRolePermissions.spec.js" type="text/javascript"></script>
+  <script src="listRoles.spec.js" type="text/javascript"></script>
+  <script src="listRoleUsers.spec.js" type="text/javascript"></script>
+  <script src="listUserEffPermissions.spec.js" type="text/javascript"></script>
+  <script src="listUserPermissions.spec.js" type="text/javascript"></script>
+  <script src="listUserRoles.spec.js" type="text/javascript"></script>
+  <script src="listUsers.spec.js" type="text/javascript"></script>
   <script src="assignPermissionToRole.spec.js" type="text/javascript"></script>
   <script src="assignPermissionToUser.spec.js" type="text/javascript"></script>
   <script src="changePwd.spec.js" type="text/javascript"></script>
-  <script src="copyDB.spec.js" type="text/javascript"></script>
-  <script src="createDB.spec.js" type="text/javascript"></script>
+  <script src="userEnabled.spec.js" type="text/javascript"></script>
+  <script src="setUserRoles.spec.js" type="text/javascript"></script>
   <script src="deletePermissionFromRole.spec.js" type="text/javascript"></script>
-  <script src="listDBs.spec.js" type="text/javascript"></script>
+  <script src="deletePermissionFromUser.spec.js" type="text/javascript"></script>
+  <script src="deleteRole.spec.js" type="text/javascript"></script>
+  <script src="deleteUser.spec.js" type="text/javascript"></script>
 
   <script>
     mocha.globals(['jQuery']);

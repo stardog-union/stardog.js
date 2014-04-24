@@ -13,7 +13,7 @@
     }
 }(this, function (Stardog, expect) {
 
-	describe ("Delete Permissions to Roles Test Suite", function() {
+	describe ("Delete Permissions to Users Test Suite", function() {
 		var conn;
 
 		this.timeout(0);
@@ -28,7 +28,7 @@
 			conn = null;
 		});
 
-		it ("should fail trying to delete a permssion from a non-existent role.", function (done) {
+		it ("should fail trying to delete a permssion to a non-existent user.", function (done) {
 
 			var aNewPermission = {
 				'action' : 'write',
@@ -36,48 +36,46 @@
 				'resource' : 'nodeDB'
 			};
 
-			conn.deletePermissionFromRole({ role: 'myrole', permissionObj: aNewPermission }, function (data, response) {
+			conn.deletePermissionFromUser({ user: 'myuser', permissionObj: aNewPermission }, function (data, response) {
 
 				expect(response.statusCode).to.be(404);
 				done();
 			});
 		});
 
-		it ("should pass deleting Permissions from a new role.", function (done) {
+		it ("should pass deleting a Permissions to a new user.", function (done) {
 
-			var aNewRole = 'newtestrole';
+			var aNewUser = aNewUserPwd = 'newpermuser';
 			var aNewPermission = {
 				'action' : 'write',
 				'resource_type' : 'db',
 				'resource' : 'nodeDB'
 			};
 
-			conn.deletePermissionFromRole({ role: aNewRole, permissionObj: aNewPermission }, function (data6, response6) {
-				// delete if exists
-				conn.deleteRole({ role: aNewRole }, function (data5, response5) {
-					// delete if exists
+			conn.deletePermissionFromUser({ user: aNewUser, permissionObj: aNewPermission }, function (data3, response3) {
+				// delete permission if exists
+				// delete role if exists
+				conn.deleteUser({ user: aNewUser }, function (data4, response4) {
 
-					conn.createRole({ rolename: aNewRole }, function (data1, response1) {
+					// actual test
+					conn.createUser({ username: aNewUser, password: aNewUserPwd, superuser: true }, function (data1, response1) {
 						expect(response1.statusCode).to.be(201);
 
-						// Add permissions to role
-						conn.assignPermissionToRole({ role: aNewRole, permissionObj: aNewPermission }, function (data2, response2) {
+						conn.assignPermissionToUser({ user: aNewUser, permissionObj: aNewPermission }, function (data2, response2) {
 							expect(response2.statusCode).to.be(201);
 
-							conn.deletePermissionFromRole({ role: aNewRole, permissionObj: aNewPermission }, function (data3, response3) {
+							conn.deletePermissionFromUser({ user: aNewUser, permissionObj: aNewPermission }, function (data3, response3) {
 								expect(response3.statusCode).to.be(200);
 
 								// delete role
-								conn.deleteRole({ role: aNewRole }, function (data4, response4) {
+								conn.deleteUser({ user: aNewUser }, function (data4, response4) {
 									expect(response4.statusCode).to.be(200);
 									done();
 								});
 							});
-
 						});
 					});
 				});
-
 			});
 		});
 	});

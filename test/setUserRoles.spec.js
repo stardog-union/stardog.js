@@ -12,9 +12,8 @@
         root.returnExports = factory(root.Stardog, root.expect);
     }
 }(this, function (Stardog, expect) {
-	var self = this;
 
-	describe ("Assign Permissions to Roles Test Suite", function() {
+	describe ("Set User Roles Test Suite", function() {
 		var conn;
 
 		this.timeout(0);
@@ -29,47 +28,37 @@
 			conn = null;
 		});
 
-		it("should fail trying to assign a permssion to a non-existent role.", function (done) {
+		it("should return NOT_FOUND trying to set roles to a non-existent user.", function (done) {
 
-			var aNewPermission = {
-				'action' : 'write',
-				'resource_type' : 'db',
-				'resource' : 'nodeDB'
-			};
+			conn.setUserRoles({ user: "roletestuser", roles: ["reader"] }, function (data, response) {
 
-			conn.assignPermissionToRole({ role: 'myrole', permissionObj: aNewPermission }, function (data, response) {
 				expect(response.statusCode).to.be(404);
 				done();
 			});
 		});
 
-		it("should pass assinging a Permissions to a new role.", function (done) {
+		it("should assign roles to a newly created user.", function (done) {
 
-			var aNewRole = 'newtestrole';
-			var aNewPermission = {
-				'action' : 'write',
-				'resource_type' : 'db',
-				'resource' : 'nodeDB'
-			};
+			// clean and delete the user
+			conn.deleteUser({ user: "roletestuser" }, function (data, response3) {
 
-			conn.deleteRole({ role: aNewRole}, function(data, response) {
-				// delete role if exists
-
-				conn.createRole({ rolename: aNewRole }, function (data, response1) {
+				conn.createUser({ username: "roletestuser", password: "roletestuser", superuser: true }, function (data1, response1) {
 					expect(response1.statusCode).to.be(201);
 
-					conn.assignPermissionToRole({ role: aNewRole, permissionObj: aNewPermission }, function (data, response2) {
+					conn.setUserRoles({ user: "roletestuser", roles: ["reader"] }, function (data2, response2) {
 
-						expect(response2.statusCode).to.be(201);
+						expect(response2.statusCode).to.be(200);
 
-						// delete role
-						conn.deleteRole({ role: aNewRole }, function (data, response3) {
+						// clean and delete the user
+						conn.deleteUser({ user: "roletestuser" }, function (data, response3) {
 							expect(response3.statusCode).to.be(200);
+
 							done();
 						});
 					});
 				});
 			});
 		});
+		
 	});
 }));

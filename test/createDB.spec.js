@@ -16,6 +16,8 @@
 	describe ("Create a new DB Test Suite", function() {
 		var conn;
 
+		this.timeout(0);
+
 		beforeEach(function() {
 			conn = new Stardog.Connection();
 			conn.setEndpoint("http://localhost:5820/");
@@ -43,7 +45,6 @@
 		});
 
 		it ("should create a new empty DB, returning 201", function (done) {
-			this.timeout(0);
 
 			var options = {
 				"database" : "nodeDB2",

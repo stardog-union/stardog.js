@@ -3,22 +3,24 @@
 // -----------------------------------
 
 (function (root, factory) {
-		if (typeof exports === 'object') {
-				// NodeJS. Does not work with strict CommonJS, but
-				// only CommonJS-like enviroments that support module.exports,
-				// like Node.
-				module.exports = factory(require('../js/stardog.js'), require('expect.js'));
-		} else if (typeof define === 'function' && define.amd) {
-				// AMD. Register as an anonymous module.
-				define(['stardog', 'expect'], factory);
-		} else {
-				// Browser globals (root is window)
-				root.returnExports = factory(root.Stardog, root.expect);
-		}
+	if (typeof exports === 'object') {
+		// NodeJS. Does not work with strict CommonJS, but
+		// only CommonJS-like enviroments that support module.exports,
+		// like Node.
+		module.exports = factory(require('../js/stardog.js'), require('expect.js'));
+	} else if (typeof define === 'function' && define.amd) {
+		// AMD. Register as an anonymous module.
+		define(['stardog', 'expect'], factory);
+	} else {
+		// Browser globals (root is window)
+		root.returnExports = factory(root.Stardog, root.expect);
+	}
 }(this, function (Stardog, expect) {
 
 	describe ("Listing DBs Test Suite", function() {
 		var conn;
+
+		this.timeout(0);
 
 		beforeEach(function() {
 			conn = new Stardog.Connection();
