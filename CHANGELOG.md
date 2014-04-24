@@ -1,5 +1,10 @@
 # Stardog.js - Change Log
 
+## v0.1.1
+
+* __MODIFIED:__ Changed testing framework from Jasmine to Mocha
+* __FIXED:__ JS Style check with JS Hint 
+
 ## v0.1.0
 
 * __ADDED:__ Support for creating new empty DB via createDB function
