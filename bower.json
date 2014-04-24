@@ -1,38 +1,39 @@
 {
   "name": "stardog",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Stardog JavaScript Framework for node.js and the browser - Develop apps using the Stardog RDF Database & JS.",
   "homepage": "http://clarkparsia.github.com/stardog.js",
   "keywords": ["stardog", "rdf", "sparql", "library", "semantic web", "linked data"],
   "main": "js/stardog.js",
   "author": { 
-    "name"  : "Clark & Parsia LLC",
-    "email" : "inquiries@clarkparsia.com",
-    "url"   : "http://clarkparsia.com"
+    "name": "Clark & Parsia LLC",
+    "email": "inquiries@clarkparsia.com",
+    "url": "http://clarkparsia.com"
   },
   "contributors": [
     {
-      "name"  : "Edgar Rodriguez",
-      "email" : "edgar@clarkparsia.com"
+      "name": "Edgar Rodriguez",
+      "email": "edgar@clarkparsia.com"
     },
     {
-      "name"  : "Fernando Hernandez",
-      "email" : "fernando@clarkparsia.com"
+      "name": "Fernando Hernandez",
+      "email": "fernando@clarkparsia.com"
     }
   ],
   "repository": { 
-    "type" : "git",
-    "url"  : "https://github.com/clarkparsia/stardog.js"
+    "type": "git",
+    "url": "https://github.com/clarkparsia/stardog.js"
   },
   "bugs": { 
-    "url"  : "https://github.com/clarkparsia/stardog.js/issues" 
+    "url": "https://github.com/clarkparsia/stardog.js/issues" 
   },
   "dependencies": {
-    "jquery": "1.10.1",
-    "underscore": ">=1.4.4"
+    "jquery": "~1.11.0",
+    "lodash": "~2.4.1"
   },
   "devDependencies": {
-    "jasmine": "latest"
+    "mocha": "~1.18.2",
+    "expect": "~0.3.1"
   },
   "licenses": [{
     "type": "Apache License, Version 2.0"

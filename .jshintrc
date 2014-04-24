@@ -1,0 +1,26 @@
+{
+  "strict": true,
+  "undef": true,
+  "unused": true,
+  "browser": true,
+  "devel": true,
+  "jquery": true,
+  "scripturl": true,
+
+  "quotmark": "double",
+  "globals": { 
+    "module": true,
+    "exports": true,
+    "process": true,
+    "__dirname": true,
+    "beforeEach": true,
+    "afterEach": true,
+    "define": true,
+    "describe": true,
+    "it": true,
+    "expect": true,
+    "requirejs": true,
+    "require": true,
+    "jasmine": true
+  }
+}
