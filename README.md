@@ -2,7 +2,7 @@ Stardog.js
 ==========
 
 Licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)  
-_Current Version **0.1.0**_ 
+_Current Version **0.1.1**_ 
 
 Stardog.js JavaScript Framework for node.js to develop apps with the [Stardog RDF Database](http://stardog.com).  
 
@@ -133,3 +133,8 @@ __NOTE__: the Endpoint is a proxy to the Stardog HTTP interface in order to avoi
 ## NOTE ##
 
 This framework is in continuous development, please check the [issues](https://github.com/clarkparsia/stardog.js/issues) page. You're welcome to contribute.
+
+&nbsp;
+&nbsp;
+
+![C&P](http://docs.stardog.com/img/cp.png =200x)
