@@ -958,6 +958,78 @@
         return prefixMap;
     };
 
+    // ## Query Management API
+    // ---------------------------------------
+    // [Stardog Query Management](http://docs.stardog.com/admin/#manage-queries)
+    // Stardog includes the capability to manage running queries according to configurable 
+    // policies set at run-time; this capability includes support for:
+    //
+    // * __listing__ running queries
+    // * __deleting__ running queries
+    // * __reading__ the status of a running query
+    // * __killing__ running queries that exceed a time threshold automatically
+
+    // ### List running queries
+    // Get a list of the currently running queries.
+    //
+    // __Parameters__:
+    // `options`: an object with one the following attributes: 
+    //              `params`: (optional) currently not used.
+    // `callback`: the callback to execute once the request is done. 
+    Connection.prototype.queryList = function (options, callback) {
+        var reqOptions = {
+            httpMethod: "GET",
+            resource: "admin/queries",
+            acceptHeader: "application/json",
+            params: options.params || ""
+        };
+
+        this._httpRequest(reqOptions, (typeof options === "function") ? options : callback);
+    };
+
+    // ### Get query information
+    // Get the information related to the query running such as: a query ID, the database on which the 
+    // query is running, the user that executed the query, the elapsed time among other metadata.
+    // 
+    // __Parameters__:
+    // `options`: an object with the following attributes: 
+    //              `queryId`: the ID of the query;
+    //              `params`: (optional) currently not used.
+    // `callback`: the callback to execute once the request is done. 
+    Connection.prototype.queryGet = function (options, callback) {
+        var reqOptions = {
+            httpMethod: "GET",
+            resource: "admin/queries/" + options.queryId,
+            acceptHeader: "application/json",
+            params: options.params || ""
+        };
+
+        this._httpRequest(reqOptions, (typeof options === "function") ? options : callback);
+    };
+
+    // ### Kill a running query
+    // Kill a currently running query using a query ID.
+    // 
+    // __Parameters__:
+    // `options`: an object with the following attributes: 
+    //              `queryId`: the ID of the query;
+    //              `params`: (optional) currently not used.
+    // `callback`: the callback to execute once the request is done. 
+    Connection.prototype.queryKill = function (options, callback) {
+        var reqOptions = {
+            httpMethod: "DELETE",
+            resource: "admin/queries/" + options.queryId,
+            acceptHeader: "application/json",
+            params: options.params || ""
+        };
+
+        this._httpRequest(reqOptions, (typeof options === "function") ? options : callback);
+    };
+
+
+    // ---------------------------------------
+
+
     // ## Stardog Administrative API
     // ---------------------------------------
     // [Extended HTTP Protocol](http://stardog.com/docs/network/#extended-http)
@@ -970,7 +1042,7 @@
     // on the HTTP multi-part libraries, but support for this is coming soon.
 
     // #### List databases (GET)
-    // Get a List of the existing databases in the system.
+    // Get a list of the existing databases in the system.
     //
     // __Parameters__:
     // `options`: an object with one the following attributes: 
@@ -1052,8 +1124,6 @@
         
         this._httpRequest(reqOptions, callback);
     };
-
-
 
     // #### Drop an existing database.
     // Drops an existing database `dbname` and all the information that it contains.
