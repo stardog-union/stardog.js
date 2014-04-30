@@ -39,6 +39,6 @@
   },
   "engines": "*",
   "scripts": { 
-    "test": "sh load_test_data.sh && node_modules/mocha/bin/mocha --reporter spec"
+    "test": "sh load_test_data.sh && node_modules/mocha/bin/mocha --reporter spec test/*.spec.js"
   }
 }
