@@ -1,54 +1,37 @@
-var exec = require('child_process').exec,
-    child;
-var os = require('os');
-var shell;
-var cmd;
-var bash_script = 'load_test_data.bat';
-var shell_spript = 'sh load_test_data.sh';
-var win_run_test = 'node node_modules/jasmine-node/bin/jasmine-node test/spec';
-var unix_test = 'node_modules/jasmine-node/bin/jasmine-node test/spec';
+"use strict";
 
+var spawn = require("child_process").spawn,
+    loadData, runTests,
+    shell,
+    cmd,
+    bash_script = "load_test_data.bat",
+    shell_script = "./load_test_data.sh",
+    win_run_test = "node node_modules/mocha/bin/mocha",
+    unix_run_test = "node_modules/mocha/bin/mocha";
 
+if (process.platform === "win32" && process.env.SHELL === undefined) {
+    shell = process.env.COMSPEC || "cmd.exe";
 
-if (os.platform() === 'win32' && process.env.SHELL === undefined) { 
-  shell = process.env.COMSPEC || 'cmd.exe';
+    cmd = "\"" + shell + "\"" + bash_script;
+    loadData = spawn(cmd, [], { stdio: "inherit" });
 
-  cmd = '"' + shell + '"' + bash_script;
-    child = exec(bash_script,
-		  function (error, stdout, stderr) {
-		    console.log('stdout: ' + stdout);
-		    console.log('stderr: ' + stderr);
-		    if (error !== null) {
-		      console.log('exec error: ' + error);
-		    }
-	});
-
-	child = exec(win_run_test,
-		  function (error, stdout, stderr) {
-		    console.log('stdout: ' + stdout);
-		    console.log('stderr: ' + stderr);
-		    if (error !== null) {
-		      console.log('exec error: ' + error);
-		    }
-	});
+    loadData.on("exit", function (code) {
+        if (code !== 0) {
+            process.stdout.write("There was an error loading the test data.\n");
+        } else {
+            runTests = spawn(win_run_test, ["--reporter", "spec", "test/*.spec.js"], { stdio: "inherit" });
+        }
+    });
 
 } else {
-	child = exec(shell_spript,
-		  function (error, stdout, stderr) {
-		    console.log('stdout: ' + stdout);
-		    console.log('stderr: ' + stderr);
-		    if (error !== null) {
-		      console.log('exec error: ' + error);
-		    }
-	});
+    loadData = spawn(shell_script, [], { stdio: "inherit" });
 
-    child = exec(unix_test,
-		  function (error, stdout, stderr) {
-		    console.log('stdout: ' + stdout);
-		    console.log('stderr: ' + stderr);
-		    if (error !== null) {
-		      console.log('exec error: ' + error);
-		    }
-	});
+    loadData.on("exit", function (code) {
+        if (code !== 0) {
+            process.stdout.write("There was an error loading the test data.\n");
+        } else {
+            runTests = spawn(unix_run_test, ["--reporter", "spec", "test/*.spec.js"], { stdio: "inherit" });
+        }
+    });
 
 }

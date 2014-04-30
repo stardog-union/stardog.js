@@ -39,6 +39,6 @@
   },
   "engines": "*",
   "scripts": { 
-    "test" : "node ./test.js"
+    "test" : "node test.js"
   }
 }
