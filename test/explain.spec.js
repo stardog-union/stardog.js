@@ -42,7 +42,9 @@
                 conn.queryExplain({ database: "nodeDB", query: "select ?s where { ?s ?p ?o } limit 10" }, function (data) {
                     expect(data).not.to.be(undefined);
                     expect(data).not.to.be(null);
-                    expect(data).to.be("Slice(offset=0, limit=10)\n  Projection(s)\n    Scan(subject='s', predicate='p', object='o')\n");
+                    expect(data).to.contain("Slice(offset=0, limit=10)");
+                    expect(data).to.contain("Projection(s)");
+                    expect(data).to.contain("Scan(subject='s', predicate='p', object='o')");
                     done();
                 });
             });
