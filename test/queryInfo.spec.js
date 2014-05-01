@@ -16,7 +16,7 @@
 }(this, function (Stardog, expect) {
     "use strict";
 
-    describe ("Get info of a running query", function() {
+    xdescribe ("Get info of a running query", function() {
         var conn;
 
         this.timeout(0);

@@ -16,7 +16,7 @@
 }(this, function (Stardog, expect) {
     "use strict";
 
-    describe ("Kill a running query", function() {
+    xdescribe ("Kill a running query", function() {
         var conn;
 
         this.timeout(0);
