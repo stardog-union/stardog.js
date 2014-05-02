@@ -115,6 +115,7 @@
     var Connection = Stardog.Connection = function ()   { 
         // By default (for testing)
         this.endpoint = "http://localhost:5820/nodeDB/";
+        this.reasoning = undefined;
     };
 
     // Set the Stardog HTTP endpoint, usually running in port `5820`.
@@ -160,6 +161,11 @@
         return this.reasoning;
     };
 
+    // Get the sd-connetion-string as expected by Stardog
+    Connection.prototype._getSdConnectionString = function(reasoningProfile) {
+        return "reasoning=" + reasoningProfile;
+    };
+
     // Check if we're in node or in the browser.
     // Execute a query to the endpoint provided with the 
     // resource specified and the parameters.
@@ -190,8 +196,8 @@
                 multipart = options.multipart,
                 headers = {};
 
-            if (this.reasoning) {
-                params["sd-connection-string"] = "reasoning=" + this.reasoning;
+            if (this.reasoning && !_.has(params, "sd-connection-string")) {
+                params["sd-connection-string"] = this._getSdConnectionString(this.reasoning);
             }
 
             // Set the Accept header by default to "application/sparql-results+json"
@@ -347,7 +353,7 @@
             var theMethod = options.httpMethod,
                 acceptH = options.acceptHeader,
                 req_url = this.endpoint + options.resource,
-                params = options.params ? ("?" + $.param(options.params)) : "",
+                params = options.params || {},
                 contentType = options.contentType,
                 body = options.msgBody || null,
                 isJsonBody = options.isJsonBody,
@@ -357,8 +363,8 @@
                 ajaxSettings,
                 userPassBase64;
             
-            if (this.reasoning) {
-                headers["SD-Connection-String"] = "reasoning=" + this.reasoning;
+            if (this.reasoning && !_.has(params, "sd-connection-string")) {
+                params["sd-connection-string"] = this._getSdConnectionString(this.reasoning);
             }
 
             headers.Accept = acceptH || "application/sparql-results+json";
@@ -375,9 +381,15 @@
                 }
             }
 
+            // if there are params, append them to the req_url
+            req_url = (!_.isEmpty(params)) ? req_url +"?"+ $.param(params) :
+                req_url;
+
+            console.log(req_url);
+
             ajaxSettings = {
                 type: theMethod,
-                url: req_url + params,
+                url: req_url,
                 processData: false, // prevents jquery from tampering with the DataFrom object
                 dataType: acceptH.match(/json/gi) ? "json" : "text",
                 data:  isJsonBody ? JSON.stringify(body) : body,
@@ -499,11 +511,15 @@
     // `callback`: the callback to execute once the request is done.  
     Connection.prototype.query = function(options, callback) {
         var reqOptions = {
-                acceptHeader : options.mimetype || "application/sparql-results+json",
-                resource: options.database + "/query",
-                httpMethod: "GET",
-                params : _.extend({ "query" : options.query }, options.params)
-            };
+            acceptHeader : options.mimetype || "application/sparql-results+json",
+            resource: options.database + "/query",
+            httpMethod: "GET",
+            params : _.extend({ "query" : options.query }, options.params)
+        };
+
+        if (options.reasoning) {
+            reqOptions.params["sd-connection-string"] = this._getSdConnectionString(options.reasoning);
+        }
 
         if (options.baseURI) {
             reqOptions.params.baseURI = options.baseURI;
@@ -537,11 +553,15 @@
     // `callback`: the callback to execute once the request is done.  
     Connection.prototype.queryGraph = function (options, callback) {
         var reqOptions = {
-                acceptHeader : options.mimetype || "application/ld+json",
-                resource: options.database + "/query",
-                httpMethod: "GET",
-                params : _.extend({ "query" : options.query }, options.params)
-            };
+            acceptHeader : options.mimetype || "application/ld+json",
+            resource: options.database + "/query",
+            httpMethod: "GET",
+            params : _.extend({ "query" : options.query }, options.params)
+        };
+
+        if (options.reasoning) {
+            reqOptions.params["sd-connection-string"] = this._getSdConnectionString(options.reasoning);
+        }
 
         if (options.baseURI) {
             reqOptions.params.baseURI = options.baseURI;

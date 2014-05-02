@@ -289,4 +289,83 @@
         });
 
     });
+
+    describe ("Query a DB with reasoning per query, receiving a bind of results.", function() {
+        var conn;
+
+        this.timeout(0);
+
+        beforeEach(function() {
+            conn = new Stardog.Connection();
+            conn.setEndpoint("http://localhost:5820/");
+            conn.setCredentials("admin", "admin");
+        });
+
+        afterEach(function() {
+            conn = null;
+        });
+
+        it ("A query to Vehicles must have result count to 3", function(done) {
+            
+            conn.query({
+                database: "nodeDBReasoning", 
+                query: "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :Vehicle }", 
+                limit: 20,
+                offset: 0,
+                reasoning: "EL"
+            }, 
+            function (data) {
+                // console.log(data);
+
+                expect(data).not.to.be(null);
+                expect(data.results).not.to.be(undefined);
+                expect(data.results.bindings).not.to.be(undefined);
+                expect(data.results.bindings.length).to.be.above(0);
+                expect(data.results.bindings.length).to.be(3);
+                done();
+            });
+        });
+
+        it ("A query to Car must have result count to 3", function(done) {
+            
+            conn.query({
+                database: "nodeDBReasoning", 
+                query: "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :Car }",
+                limit: 20,
+                offset: 0,
+                reasoning: "QL"
+            }, 
+            function (data) {
+                //console.log(data);
+
+                expect(data).not.to.be(null);
+                expect(data.results).not.to.be(undefined);
+                expect(data.results.bindings).not.to.be(undefined);
+                expect(data.results.bindings.length).to.be.above(0);
+                expect(data.results.bindings.length).to.be(3);
+                done();
+            });
+        });
+
+        it ("A query to Vehicle must have result count to 1 w/o reasoning", function(done) {
+            
+            conn.query({
+                database: "nodeDBReasoning",
+                query: "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :Vehicle }",
+                limit: 20,
+                offset: 0,
+                reasoning: "NONE"
+            }, 
+            function (data) {
+                //console.log(data);
+
+                expect(data).not.to.be(null);
+                expect(data.results).not.to.be(undefined);
+                expect(data.results.bindings).not.to.be(undefined);
+                expect(data.results.bindings.length).to.be(0);
+                done();
+            });
+        });
+
+    });
 }));
