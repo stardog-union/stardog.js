@@ -513,24 +513,38 @@
         var reqOptions = {
             acceptHeader : options.mimetype || "application/sparql-results+json",
             resource: options.database + "/query",
-            httpMethod: "GET",
-            params : _.extend({ "query" : options.query }, options.params)
+            httpMethod: "POST",
+            params: {}
         };
 
         if (options.reasoning) {
             reqOptions.params["sd-connection-string"] = this._getSdConnectionString(options.reasoning);
         }
 
+        var queryParams = _.extend({ "query" : options.query }, options.params);
+
         if (options.baseURI) {
-            reqOptions.params.baseURI = options.baseURI;
+            queryParams.baseURI = options.baseURI;
         }
 
         if (options.limit) {
-            reqOptions.params.limit = options.limit;
+            queryParams.limit = options.limit;
         }
 
         if (options.offset) {
-            reqOptions.params.offset = options.offset;
+            queryParams.offset = options.offset;
+        }
+
+        if (!isNode) {
+            var formData = new window.FormData();
+            _.forIn(queryParams, function(value, key) {
+                formData.append(key, value);
+            });
+
+            reqOptions.msgBody = formData;
+        }
+        else {
+            reqOptions.msgBody = queryParams;
         }
 
         this._httpRequest(reqOptions, callback);
@@ -555,24 +569,38 @@
         var reqOptions = {
             acceptHeader : options.mimetype || "application/ld+json",
             resource: options.database + "/query",
-            httpMethod: "GET",
-            params : _.extend({ "query" : options.query }, options.params)
+            httpMethod: "POST",
+            params: {}
         };
 
         if (options.reasoning) {
             reqOptions.params["sd-connection-string"] = this._getSdConnectionString(options.reasoning);
         }
 
+        var queryParams = _.extend({ "query" : options.query }, options.params);
+
         if (options.baseURI) {
-            reqOptions.params.baseURI = options.baseURI;
+            queryParams.baseURI = options.baseURI;
         }
 
         if (options.limit) {
-            reqOptions.params.limit = options.limit;
+            queryParams.limit = options.limit;
         }
 
         if (options.offset) {
-            reqOptions.params.offset = options.offset;
+            queryParams.offset = options.offset;
+        }
+
+        if (!isNode) {
+            var formData = new window.FormData();
+            _.forIn(queryParams, function(value, key) {
+                formData.append(key, value);
+            });
+
+            reqOptions.msgBody = formData;
+        }
+        else {
+            reqOptions.msgBody = queryParams;
         }
 
         this._httpRequest(reqOptions, callback);
