@@ -456,9 +456,8 @@
         }
 
         if (!isNode) {
-            var postData = [];
-            _.map(_.pairs(queryParams), function (pairArr) {
-                postData.push(pairArr[0] +"="+ pairArr[1]);
+            var postData = _.map(_.pairs(queryParams), function (pairArr) {
+                return pairArr[0] +"="+ pairArr[1];
             });
 
             reqOptions.msgBody = postData.join("&");
@@ -512,9 +511,8 @@
         }
 
         if (!isNode) {
-            var postData = [];
-            _.map(_.pairs(queryParams), function (pairArr) {
-                postData.push(pairArr[0] +"="+ pairArr[1]);
+            var postData = _.map(_.pairs(queryParams), function (pairArr) {
+                return pairArr[0] +"="+ pairArr[1];
             });
 
             reqOptions.msgBody = postData.join("&");
