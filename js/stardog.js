@@ -456,12 +456,12 @@
         }
 
         if (!isNode) {
-            var formData = new window.FormData();
-            _.forIn(queryParams, function(value, key) {
-                formData.append(key, value);
+            var postData = [];
+            _.map(_.pairs(queryParams), function (pairArr) {
+                postData.push(pairArr[0] +"="+ pairArr[1]);
             });
 
-            reqOptions.msgBody = formData;
+            reqOptions.msgBody = postData.join("&");
         }
         else {
             reqOptions.msgBody = queryParams;
@@ -512,12 +512,12 @@
         }
 
         if (!isNode) {
-            var formData = new window.FormData();
-            _.forIn(queryParams, function(value, key) {
-                formData.append(key, value);
+            var postData = [];
+            _.map(_.pairs(queryParams), function (pairArr) {
+                postData.push(pairArr[0] +"="+ pairArr[1]);
             });
 
-            reqOptions.msgBody = formData;
+            reqOptions.msgBody = postData.join("&");
         }
         else {
             reqOptions.msgBody = queryParams;
