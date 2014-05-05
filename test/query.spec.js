@@ -44,7 +44,6 @@
                     limit: 20, 
                     offset: 0 
                 }, function (data) {
-                    //console.log(data);
 
                     expect(data).not.to.be(null);
                     expect(data.results).not.to.be(undefined);

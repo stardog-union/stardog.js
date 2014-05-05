@@ -72,38 +72,6 @@
     // For AJAX's purposes, jQuery owns the `$` variable.
     // jQuery is only required when using the library in the browser.
 
-    
-    // ## Define LinkedJson Object
-    // ---------------------------------------------
-
-    // LinkedJson is an abstraction of a JSON-LD Object. This is just a placeholder for a 
-    // better implementation of the JSON-LD spec. Currently it is used for query results when 
-    // the result format is a JSON-LD from Stardog.
-    var LinkedJson = Stardog.LinkedJson = function (jsonldValues) {
-        // Attributes contains the original JSON object with the map of 
-        // all the attributes.
-        this.attributes = jsonldValues;
-    };
-
-    // Gets a property from the LinkedJson object.
-    LinkedJson.prototype.get = function (key) {
-        return this.attributes[key];
-    };
-
-    // Sets a property in the LinkedJson object.
-    LinkedJson.prototype.set = function (key, value) {
-        this.attributes[key] = value;
-    };
-
-    // Get the raw JSON object of the LinkedJson object.
-    LinkedJson.prototype.rawJSON = function () {
-        return this.attributes;
-    };
-
-    // Returns a String representation of the LinkedJson object.
-    LinkedJson.prototype.toString = function () {
-        return JSON.stringify(this.attributes);
-    };
 
     // ---------------------------------
 
@@ -194,7 +162,8 @@
                 isJsonBody = options.isJsonBody,
                 contentType = options.contentType,
                 multipart = options.multipart,
-                headers = {};
+                headers = {},
+                reqJSON, attachments;
 
             if (this.reasoning && !_.has(params, "sd-connection-string")) {
                 params["sd-connection-string"] = this._getSdConnectionString(this.reasoning);
@@ -203,33 +172,15 @@
             // Set the Accept header by default to "application/sparql-results+json"
             headers.Accept = acceptH || "text/plain";
 
-            var fnResponseHandler = function (body, response) {
+            function fnResponseHandler(body, response) {
+                var jsonData;
+
                 if (!(body instanceof Error)) {
-                    var jsonData;
                     // Try to parse response to JSON, which is expected in most 
                     // cases
                     try {
                         if (body) {
                             jsonData = JSON.parse(body);
-
-                            if (jsonData instanceof Array) {
-                                // console.log(jsonData);
-                                var arrLinkedJson = [];
-                                for (var iElem=0; iElem < jsonData.length; iElem++) {
-                                    // Check if the JSON object is JSON-LD
-                                    if (jsonData[iElem].hasOwnProperty("@id") || 
-                                        jsonData[iElem].hasOwnProperty("@context")) {
-                                    
-                                        arrLinkedJson.push( new LinkedJson(jsonData[iElem]) );
-                                    }
-                                }
-                                jsonData = arrLinkedJson;
-                            }
-                            else if (jsonData.hasOwnProperty("@id") ||
-                                jsonData.hasOwnProperty("@context")) {
-                                
-                                jsonData = new LinkedJson(jsonData);
-                            }
                         } else {
                             jsonData = {};
                         }
@@ -248,7 +199,7 @@
                     // TODO: maybe wrap the error with stardog specific info
                     callback(body, response); 
                 }
-            };
+            }
 
             if (!multipart && msgBody) {
                 if (isJsonBody) {
@@ -260,7 +211,7 @@
             }
 
             // build request object
-            var reqJSON = { 
+            reqJSON = { 
                 "method" : theMethod,
                 "query" : params,
                 "username" : this.credentials.username,
@@ -273,40 +224,11 @@
             if (multipart) {
                 // var fs = require("fs");
 
-                var attachments = {
+                attachments = {
                     "root" : msgBody
                 };
 
                 reqJSON.data = attachments;
-
-                // var formParams = req.form();
-                // console.log(util.inspect(formParams));
-                // console.log(JSON.stringify(msgBody));
-
-                // formParams.append("root", msgBody);
-
-                // var filepath = "";
-                // if (files && files !== null) {
-                //  if (files instanceof Array) {
-                //      for (var i=0; i < files.length; i++) {
-                //          filepath = files[i].replace(/^.*[\\\/]/, '');
-                //          formParams.append(filepath, fs.createReadStream(files[i], { flags: 'r',
-                //                encoding: 'utf8'
-                //              })
-                //          );
-                //      }
-                //  }
-                //  else {
-                //      filepath = files.replace(/^.*[\\\/]/, '');
-                //      formParams.append(filepath, fs.createReadStream(files, { flags: 'r',
-                //                encoding: 'utf8'
-                //              })
-                //      );
-
-                //      console.log("Attachment name: "+ filepath);
-                //      console.log("File Path: "+ files);
-                //  }
-                // }
             }
 
             rest.request(req_url, reqJSON).on("complete",
@@ -384,8 +306,6 @@
             // if there are params, append them to the req_url
             req_url = (!_.isEmpty(params)) ? req_url +"?"+ $.param(params) :
                 req_url;
-
-            console.log(req_url);
 
             ajaxSettings = {
                 type: theMethod,
