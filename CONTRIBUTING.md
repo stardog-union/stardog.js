@@ -17,6 +17,7 @@ We try to follow the [Google JavaScript Style Guide](https://google-styleguide.g
 * Please manually confirm that your changes, and all tests, pass in `nodejs` and the `browser` platforms. 
 * Please maintain consistent whitespace - 4-space indentation, trailing newlines in all files, etc.
 * Any time you make a change to your PR, please rebase freshly on top of master. Nobody likes merge commits.
+* Add your information to the `contributors` section in the `package.json` file.
 
 Even if you don't have all of these items covered, please still feel free to submit a PR! Someone else may be inspired and volunteer to complete it for you.
 
