@@ -905,21 +905,30 @@
 
     // -----------------------------------------
 
-    // Returns a mapping of common prefix-namespace values. In the future this function will be replaced by a function call to the DB service.
-    Connection.prototype.getPrefixes = function () {
-        var prefixMap = {
-            "http://www.w3.org/2002/07/owl#" : "owl",
-            "http://www.w3.org/2000/01/rdf-schema#" : "rdfs",
-            "http://www.w3.org/1999/02/22-rdf-syntax-ns#" : "rdf",
-            "http://www.w3.org/2001/xmlnschema#" : "xsd",
-            "http://www.w3.org/2004/02/skos/core#" : "skos",
-            "http://purl.org/dc/elements/1.1/" : "dc",
-            "http://xmlns.com/foaf/0.1/" : "foaf",
-            "http://www.w3.org/ns/sparql-service-description#" : "sd",
-            "http://rdfs.org/ns/void#" : "void",
-            "http://www.w3.org/ns/org#" : "org",
-            "http://clarkparsia.com/annex#" : "annex"
-        };
+    // Returns a mapping of the namespaces being used in a database.
+    // See: Section __Namespace Prefix Bindings__ in 
+    // [Stardog Administration](http://docs.stardog.com/admin/#sd-Database-Admin)
+    Connection.prototype.getPrefixes = function (options, callback) {
+        var prefixMap;
+
+        if (!options || !options.database) {
+            throw new Error("Option `database` is required.");
+        }
+
+        this.getDBOptions({
+            database: options.database,
+            optionsObj: { "database.namespaces": "" }
+        }, function (data, response) {
+            var namespaces = data["database.namespaces"].split('\u0002') || {};
+            var nsMap = {};
+
+            _.each(namespaces, function (namespace) {
+                var nsTokens = namespace.split("=");
+                nsMap[nsTokens[0]] = nsTokens[1];
+            });
+
+            callback(nsMap, response);
+        });
 
         return prefixMap;
     };
