@@ -908,9 +908,7 @@
     // Returns a mapping of the namespaces being used in a database.
     // See: Section __Namespace Prefix Bindings__ in 
     // [Stardog Administration](http://docs.stardog.com/admin/#sd-Database-Admin)
-    Connection.prototype.getPrefixes = function (options, callback) {
-        var prefixMap;
-
+    Connection.prototype.getNamespaces = function(options, callback) {
         if (!options || !options.database) {
             throw new Error("Option `database` is required.");
         }
@@ -919,7 +917,7 @@
             database: options.database,
             optionsObj: { "database.namespaces": "" }
         }, function (data, response) {
-            var namespaces = data["database.namespaces"].split('\u0002') || {};
+            var namespaces = data["database.namespaces"].split("\u0002") || {};
             var nsMap = {};
 
             _.each(namespaces, function (namespace) {
@@ -929,8 +927,18 @@
 
             callback(nsMap, response);
         });
+    };
 
-        return prefixMap;
+    /**
+     * @deprecated Since version 0.1.2. Will be deleted in version 0.2.0. Use `getNamespaces` instead.
+     */
+    Connection.prototype.getPrefixes = function (options, callback) {
+        try {
+            this.getNamespaces(options, callback);
+        } catch (error) {
+            // Error propagation
+            throw new Error("Option `database` is required.");
+        }
     };
 
     // ## Query Management API

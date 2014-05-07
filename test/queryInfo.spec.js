@@ -19,7 +19,7 @@
     xdescribe ("Get info of a running query", function() {
         var conn;
 
-        this.timeout(0);
+        this.timeout(10000);
 
         beforeEach(function() {
             conn = new Stardog.Connection();

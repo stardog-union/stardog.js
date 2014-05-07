@@ -20,10 +20,10 @@
     // Gets DB Options
     // -----------------------------------
 
-    describe ("Get DB Options Test Suite", function() {
+    describe ("Get DB Namespaces Test Suite", function() {
         var conn;
 
-        this.timeout(0);
+        this.timeout(10000);
 
         beforeEach(function() {
             conn = new Stardog.Connection();
@@ -37,12 +37,12 @@
 
         it ("should throw an Error when the database option was not passed in the options object.", function () {
             var noop = function () {};
-            expect(conn.getPrefixes).to.throwError(/Option `database` is required/);
-            expect(conn.getPrefixes).withArgs({},noop).to.throwError(/Option `database` is required/);
+            expect(conn.getNamespaces).to.throwError(/Option `database` is required/);
+            expect(conn.getNamespaces).withArgs({},noop).to.throwError(/Option `database` is required/);
         });
 
         it ("should retrieve the namespace prefix bindings for the database", function (done) {
-            conn.getPrefixes({
+            conn.getNamespaces({
                 database: "nodeDB"
             }, function (data, response) {
                 expect(response.statusCode).to.be(200);
