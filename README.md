@@ -33,7 +33,7 @@ That will fetch the latest version of stardog.js in the npm registry, [more deta
 
     bower install stardog
     
-That will fetch the latest version of stardog.js in the bower registry, [more details](http://sindresorhus.com/bower-components/).
+That will fetch the latest version of stardog.js in the bower registry, [more details](http://bower.io/search/?q=stardog).
 
 ## Development ##
 
