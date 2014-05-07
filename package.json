@@ -1,6 +1,6 @@
 {
   "name": "stardog",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Stardog JavaScript Framework for node.js and the browser - Develop apps using the Stardog RDF Database & JS.",
   "homepage": "http://clarkparsia.github.com/stardog.js",
   "keywords": ["stardog", "rdf", "sparql", "library", "semantic web", "linked data"],
@@ -18,6 +18,28 @@
     {
       "name": "Fernando Hernandez",
       "email": "fernando@clarkparsia.com"
+    },
+    {
+      "name": "Maurice Rabb",
+      "email": "github@mauricerabb.com"
+    },
+    {
+      "name": "Laszlo"
+    },
+    {
+      "name": "Jonathan Abourbih",
+      "email": "jon.abourbih+github@gmail.com"
+    },
+    {
+      "name": "Andhika Nugraha",
+      "email": "andhika.nugraha@outlook.com"
+    },
+    {
+      "name": "BeArnis"
+    },
+    {
+      "name": "Ron Michael Zettlemoyer",
+      "email": "ron@zettlemoyer.com"
     }
   ],
   "repository": { 
@@ -34,11 +56,12 @@
   },
   "devDependencies": {
     "request": "~2.34.0",
+    "win-spawn": "~2.0.0",
     "mocha": "~1.18.2",
     "expect.js": "~0.3.1"
   },
   "engines": "*",
   "scripts": { 
-    "test": "sh load_test_data.sh && node_modules/mocha/bin/mocha --reporter spec"
+    "test" : "node test.js"
   }
 }

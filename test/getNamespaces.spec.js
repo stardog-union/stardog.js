@@ -17,10 +17,10 @@
     "use strict";
 
     // -----------------------------------
-    // Describes the getDB test methods
+    // Gets DB Options
     // -----------------------------------
 
-    describe ("Getting the DB info", function() {
+    describe ("Get DB Namespaces Test Suite", function() {
         var conn;
 
         this.timeout(10000);
@@ -35,19 +35,24 @@
             conn = null;
         });
 
-        it ("A response of the DB info should not be empty", function(done) {
-            conn.onlineDB({ database: "nodeDB" }, function () {
-                // put online if it"s not
+        it ("should throw an Error when the database option was not passed in the options object.", function () {
+            var noop = function () {};
+            expect(conn.getNamespaces).to.throwError(/Option `database` is required/);
+            expect(conn.getNamespaces).withArgs({},noop).to.throwError(/Option `database` is required/);
+        });
 
-                conn.getDB({ database: "nodeDB" }, function (data, response) {
-                    // console.log("data: ", data);
-                    expect(data).not.to.be(undefined);
-                    expect(data).not.to.be(null);
-                    expect(response).not.to.be(undefined);
-                    expect(response).not.to.be(null);
-                    expect(response.statusCode).to.be(200);
-                    done();
-                });
+        it ("should retrieve the namespace prefix bindings for the database", function (done) {
+            conn.getNamespaces({
+                database: "nodeDB"
+            }, function (data, response) {
+                expect(response.statusCode).to.be(200);
+
+                expect(data).not.to.be(undefined);
+                expect(data).not.to.be(null);
+                expect(data instanceof Object).to.be(true);
+                expect(Object.keys(data).length).to.be(5);
+
+                done();
             });
         });
 

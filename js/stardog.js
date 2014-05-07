@@ -1,4 +1,4 @@
-//     Stardog.js 0.1.1
+//     Stardog.js 0.1.2
 //
 // Copyright 2012 Clark & Parsia LLC
 
@@ -51,7 +51,7 @@
     var Stardog = {};
 
     // Current version of the library. Keep in sync with 'package.json'
-    Stardog.VERSION = "0.1.1";
+    Stardog.VERSION = "0.1.2";
 
     // Verify the environment of the library
     var isNode = (typeof exports !== "undefined" && typeof module !== "undefined" && module.exports);
@@ -72,38 +72,6 @@
     // For AJAX's purposes, jQuery owns the `$` variable.
     // jQuery is only required when using the library in the browser.
 
-    
-    // ## Define LinkedJson Object
-    // ---------------------------------------------
-
-    // LinkedJson is an abstraction of a JSON-LD Object. This is just a placeholder for a 
-    // better implementation of the JSON-LD spec. Currently it is used for query results when 
-    // the result format is a JSON-LD from Stardog.
-    var LinkedJson = Stardog.LinkedJson = function (jsonldValues) {
-        // Attributes contains the original JSON object with the map of 
-        // all the attributes.
-        this.attributes = jsonldValues;
-    };
-
-    // Gets a property from the LinkedJson object.
-    LinkedJson.prototype.get = function (key) {
-        return this.attributes[key];
-    };
-
-    // Sets a property in the LinkedJson object.
-    LinkedJson.prototype.set = function (key, value) {
-        this.attributes[key] = value;
-    };
-
-    // Get the raw JSON object of the LinkedJson object.
-    LinkedJson.prototype.rawJSON = function () {
-        return this.attributes;
-    };
-
-    // Returns a String representation of the LinkedJson object.
-    LinkedJson.prototype.toString = function () {
-        return JSON.stringify(this.attributes);
-    };
 
     // ---------------------------------
 
@@ -115,6 +83,7 @@
     var Connection = Stardog.Connection = function ()   { 
         // By default (for testing)
         this.endpoint = "http://localhost:5820/nodeDB/";
+        this.reasoning = undefined;
     };
 
     // Set the Stardog HTTP endpoint, usually running in port `5820`.
@@ -160,6 +129,11 @@
         return this.reasoning;
     };
 
+    // Get the sd-connetion-string as expected by Stardog
+    Connection.prototype._getSdConnectionString = function(reasoningProfile) {
+        return "reasoning=" + reasoningProfile;
+    };
+
     // Check if we're in node or in the browser.
     // Execute a query to the endpoint provided with the 
     // resource specified and the parameters.
@@ -188,42 +162,25 @@
                 isJsonBody = options.isJsonBody,
                 contentType = options.contentType,
                 multipart = options.multipart,
-                headers = {};
+                headers = {},
+                reqJSON, attachments;
 
-            if (this.reasoning) {
-                params["sd-connection-string"] = "reasoning=" + this.reasoning;
+            if (this.reasoning && !_.has(params, "sd-connection-string")) {
+                params["sd-connection-string"] = this._getSdConnectionString(this.reasoning);
             }
 
             // Set the Accept header by default to "application/sparql-results+json"
             headers.Accept = acceptH || "text/plain";
 
-            var fnResponseHandler = function (body, response) {
+            function fnResponseHandler(body, response) {
+                var jsonData;
+
                 if (!(body instanceof Error)) {
-                    var jsonData;
                     // Try to parse response to JSON, which is expected in most 
                     // cases
                     try {
                         if (body) {
                             jsonData = JSON.parse(body);
-
-                            if (jsonData instanceof Array) {
-                                // console.log(jsonData);
-                                var arrLinkedJson = [];
-                                for (var iElem=0; iElem < jsonData.length; iElem++) {
-                                    // Check if the JSON object is JSON-LD
-                                    if (jsonData[iElem].hasOwnProperty("@id") || 
-                                        jsonData[iElem].hasOwnProperty("@context")) {
-                                    
-                                        arrLinkedJson.push( new LinkedJson(jsonData[iElem]) );
-                                    }
-                                }
-                                jsonData = arrLinkedJson;
-                            }
-                            else if (jsonData.hasOwnProperty("@id") ||
-                                jsonData.hasOwnProperty("@context")) {
-                                
-                                jsonData = new LinkedJson(jsonData);
-                            }
                         } else {
                             jsonData = {};
                         }
@@ -242,7 +199,7 @@
                     // TODO: maybe wrap the error with stardog specific info
                     callback(body, response); 
                 }
-            };
+            }
 
             if (!multipart && msgBody) {
                 if (isJsonBody) {
@@ -254,7 +211,7 @@
             }
 
             // build request object
-            var reqJSON = { 
+            reqJSON = { 
                 "method" : theMethod,
                 "query" : params,
                 "username" : this.credentials.username,
@@ -267,40 +224,11 @@
             if (multipart) {
                 // var fs = require("fs");
 
-                var attachments = {
+                attachments = {
                     "root" : msgBody
                 };
 
                 reqJSON.data = attachments;
-
-                // var formParams = req.form();
-                // console.log(util.inspect(formParams));
-                // console.log(JSON.stringify(msgBody));
-
-                // formParams.append("root", msgBody);
-
-                // var filepath = "";
-                // if (files && files !== null) {
-                //  if (files instanceof Array) {
-                //      for (var i=0; i < files.length; i++) {
-                //          filepath = files[i].replace(/^.*[\\\/]/, '');
-                //          formParams.append(filepath, fs.createReadStream(files[i], { flags: 'r',
-                //                encoding: 'utf8'
-                //              })
-                //          );
-                //      }
-                //  }
-                //  else {
-                //      filepath = files.replace(/^.*[\\\/]/, '');
-                //      formParams.append(filepath, fs.createReadStream(files, { flags: 'r',
-                //                encoding: 'utf8'
-                //              })
-                //      );
-
-                //      console.log("Attachment name: "+ filepath);
-                //      console.log("File Path: "+ files);
-                //  }
-                // }
             }
 
             rest.request(req_url, reqJSON).on("complete",
@@ -347,7 +275,7 @@
             var theMethod = options.httpMethod,
                 acceptH = options.acceptHeader,
                 req_url = this.endpoint + options.resource,
-                params = options.params ? ("?" + $.param(options.params)) : "",
+                params = options.params || {},
                 contentType = options.contentType,
                 body = options.msgBody || null,
                 isJsonBody = options.isJsonBody,
@@ -357,8 +285,8 @@
                 ajaxSettings,
                 userPassBase64;
             
-            if (this.reasoning) {
-                headers["SD-Connection-String"] = "reasoning=" + this.reasoning;
+            if (this.reasoning && !_.has(params, "sd-connection-string")) {
+                params["sd-connection-string"] = this._getSdConnectionString(this.reasoning);
             }
 
             headers.Accept = acceptH || "application/sparql-results+json";
@@ -375,9 +303,13 @@
                 }
             }
 
+            // if there are params, append them to the req_url
+            req_url = (!_.isEmpty(params)) ? req_url +"?"+ $.param(params) :
+                req_url;
+
             ajaxSettings = {
                 type: theMethod,
-                url: req_url + params,
+                url: req_url,
                 processData: false, // prevents jquery from tampering with the DataFrom object
                 dataType: acceptH.match(/json/gi) ? "json" : "text",
                 data:  isJsonBody ? JSON.stringify(body) : body,
@@ -499,22 +431,39 @@
     // `callback`: the callback to execute once the request is done.  
     Connection.prototype.query = function(options, callback) {
         var reqOptions = {
-                acceptHeader : options.mimetype || "application/sparql-results+json",
-                resource: options.database + "/query",
-                httpMethod: "GET",
-                params : _.extend({ "query" : options.query }, options.params)
-            };
+            acceptHeader : options.mimetype || "application/sparql-results+json",
+            resource: options.database + "/query",
+            httpMethod: "POST",
+            params: {}
+        };
+
+        if (options.reasoning) {
+            reqOptions.params["sd-connection-string"] = this._getSdConnectionString(options.reasoning);
+        }
+
+        var queryParams = _.extend({ "query" : options.query }, options.params);
 
         if (options.baseURI) {
-            reqOptions.params.baseURI = options.baseURI;
+            queryParams.baseURI = options.baseURI;
         }
 
         if (options.limit) {
-            reqOptions.params.limit = options.limit;
+            queryParams.limit = options.limit;
         }
 
         if (options.offset) {
-            reqOptions.params.offset = options.offset;
+            queryParams.offset = options.offset;
+        }
+
+        if (!isNode) {
+            var postData = _.map(_.pairs(queryParams), function (pairArr) {
+                return pairArr[0] +"="+ pairArr[1];
+            });
+
+            reqOptions.msgBody = postData.join("&");
+        }
+        else {
+            reqOptions.msgBody = queryParams;
         }
 
         this._httpRequest(reqOptions, callback);
@@ -537,22 +486,39 @@
     // `callback`: the callback to execute once the request is done.  
     Connection.prototype.queryGraph = function (options, callback) {
         var reqOptions = {
-                acceptHeader : options.mimetype || "application/ld+json",
-                resource: options.database + "/query",
-                httpMethod: "GET",
-                params : _.extend({ "query" : options.query }, options.params)
-            };
+            acceptHeader : options.mimetype || "application/ld+json",
+            resource: options.database + "/query",
+            httpMethod: "POST",
+            params: {}
+        };
+
+        if (options.reasoning) {
+            reqOptions.params["sd-connection-string"] = this._getSdConnectionString(options.reasoning);
+        }
+
+        var queryParams = _.extend({ "query" : options.query }, options.params);
 
         if (options.baseURI) {
-            reqOptions.params.baseURI = options.baseURI;
+            queryParams.baseURI = options.baseURI;
         }
 
         if (options.limit) {
-            reqOptions.params.limit = options.limit;
+            queryParams.limit = options.limit;
         }
 
         if (options.offset) {
-            reqOptions.params.offset = options.offset;
+            queryParams.offset = options.offset;
+        }
+
+        if (!isNode) {
+            var postData = _.map(_.pairs(queryParams), function (pairArr) {
+                return pairArr[0] +"="+ pairArr[1];
+            });
+
+            reqOptions.msgBody = postData.join("&");
+        }
+        else {
+            reqOptions.msgBody = queryParams;
         }
 
         this._httpRequest(reqOptions, callback);
@@ -939,24 +905,113 @@
 
     // -----------------------------------------
 
-    // Returns a mapping of common prefix-namespace values. In the future this function will be replaced by a function call to the DB service.
-    Connection.prototype.getPrefixes = function () {
-        var prefixMap = {
-            "http://www.w3.org/2002/07/owl#" : "owl",
-            "http://www.w3.org/2000/01/rdf-schema#" : "rdfs",
-            "http://www.w3.org/1999/02/22-rdf-syntax-ns#" : "rdf",
-            "http://www.w3.org/2001/xmlnschema#" : "xsd",
-            "http://www.w3.org/2004/02/skos/core#" : "skos",
-            "http://purl.org/dc/elements/1.1/" : "dc",
-            "http://xmlns.com/foaf/0.1/" : "foaf",
-            "http://www.w3.org/ns/sparql-service-description#" : "sd",
-            "http://rdfs.org/ns/void#" : "void",
-            "http://www.w3.org/ns/org#" : "org",
-            "http://clarkparsia.com/annex#" : "annex"
+    // Returns a mapping of the namespaces being used in a database.
+    // See: Section __Namespace Prefix Bindings__ in 
+    // [Stardog Administration](http://docs.stardog.com/admin/#sd-Database-Admin)
+    Connection.prototype.getNamespaces = function(options, callback) {
+        if (!options || !options.database) {
+            throw new Error("Option `database` is required.");
+        }
+
+        this.getDBOptions({
+            database: options.database,
+            optionsObj: { "database.namespaces": "" }
+        }, function (data, response) {
+            var namespaces = data["database.namespaces"].split("\u0002") || {};
+            var nsMap = {};
+
+            _.each(namespaces, function (namespace) {
+                var nsTokens = namespace.split("=");
+                nsMap[nsTokens[0]] = nsTokens[1];
+            });
+
+            callback(nsMap, response);
+        });
+    };
+
+    /**
+     * @deprecated Since version 0.1.2. Will be deleted in version 0.2.0. Use `getNamespaces` instead.
+     */
+    Connection.prototype.getPrefixes = function (options, callback) {
+        try {
+            this.getNamespaces(options, callback);
+        } catch (error) {
+            // Error propagation
+            throw new Error("Option `database` is required.");
+        }
+    };
+
+    // ## Query Management API
+    // ---------------------------------------
+    // [Stardog Query Management](http://docs.stardog.com/admin/#manage-queries)
+    // Stardog includes the capability to manage running queries according to configurable 
+    // policies set at run-time; this capability includes support for:
+    //
+    // * __listing__ running queries
+    // * __deleting__ running queries
+    // * __reading__ the status of a running query
+    // * __killing__ running queries that exceed a time threshold automatically
+
+    // ### List running queries
+    // Get a list of the currently running queries.
+    //
+    // __Parameters__:
+    // `options`: an object with one the following attributes: 
+    //              `params`: (optional) currently not used.
+    // `callback`: the callback to execute once the request is done. 
+    Connection.prototype.queryList = function (options, callback) {
+        var reqOptions = {
+            httpMethod: "GET",
+            resource: "admin/queries",
+            acceptHeader: "application/json",
+            params: options.params || ""
         };
 
-        return prefixMap;
+        this._httpRequest(reqOptions, (typeof options === "function") ? options : callback);
     };
+
+    // ### Get query information
+    // Get the information related to the query running such as: a query ID, the database on which the 
+    // query is running, the user that executed the query, the elapsed time among other metadata.
+    // 
+    // __Parameters__:
+    // `options`: an object with the following attributes: 
+    //              `queryId`: the ID of the query;
+    //              `params`: (optional) currently not used.
+    // `callback`: the callback to execute once the request is done. 
+    Connection.prototype.queryGet = function (options, callback) {
+        var reqOptions = {
+            httpMethod: "GET",
+            resource: "admin/queries/" + options.queryId,
+            acceptHeader: "application/json",
+            params: options.params || ""
+        };
+
+        this._httpRequest(reqOptions, (typeof options === "function") ? options : callback);
+    };
+
+    // ### Kill a running query
+    // Kill a currently running query using a query ID.
+    // 
+    // __Parameters__:
+    // `options`: an object with the following attributes: 
+    //              `queryId`: the ID of the query;
+    //              `params`: (optional) currently not used.
+    // `callback`: the callback to execute once the request is done. 
+    Connection.prototype.queryKill = function (options, callback) {
+        var reqOptions = {
+            httpMethod: "DELETE",
+            resource: "admin/queries/" + options.queryId,
+            acceptHeader: "application/json",
+            params: options.params || ""
+        };
+
+        this._httpRequest(reqOptions, (typeof options === "function") ? options : callback);
+    };
+
+
+    // ---------------------------------------
+
 
     // ## Stardog Administrative API
     // ---------------------------------------
@@ -970,7 +1025,7 @@
     // on the HTTP multi-part libraries, but support for this is coming soon.
 
     // #### List databases (GET)
-    // Get a List of the existing databases in the system.
+    // Get a list of the existing databases in the system.
     //
     // __Parameters__:
     // `options`: an object with one the following attributes: 
@@ -1052,8 +1107,6 @@
         
         this._httpRequest(reqOptions, callback);
     };
-
-
 
     // #### Drop an existing database.
     // Drops an existing database `dbname` and all the information that it contains.

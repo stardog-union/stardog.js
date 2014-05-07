@@ -23,7 +23,7 @@
     describe ("Querying properties from individuals", function() {
         var conn;
         
-        this.timeout(0);
+        this.timeout(10000);
 
         beforeEach(function() {
             conn = new Stardog.Connection();

@@ -2,7 +2,7 @@ Stardog.js
 ==========
 
 Licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)  
-_Current Version **0.1.1**_ 
+_Current Version **0.1.2**_ 
 
 Stardog.js JavaScript Framework for node.js to develop apps with the [Stardog RDF Database](http://stardog.com).  
 
@@ -33,7 +33,7 @@ That will fetch the latest version of stardog.js in the npm registry, [more deta
 
     bower install stardog
     
-That will fetch the latest version of stardog.js in the bower registry, [more details](http://sindresorhus.com/bower-components/).
+That will fetch the latest version of stardog.js in the bower registry, [more details](http://bower.io/search/?q=stardog).
 
 ## Development ##
 
@@ -100,35 +100,39 @@ Stardog.js depends of the Stardog HTTP API, and any change in this API will be s
 
 ### node.js
 
-    var stardog = require("stardog");
-     
-    var conn = new stardog.Connection();
-     
-    conn.setEndpoint("http://myserver:myport/");
-    conn.setCredentials("username", "password");
-     
-    conn.query({ 
-            database: "myDB", 
-            query: "select distinct ?s where { ?s ?p ?o }",  
-            limit: 10, 
-            offset: 0 
-        },
-        function (data) {
-            console.log(data.results.bindings);
-    });
+```javascript
+var stardog = require("stardog");
+ 
+var conn = new stardog.Connection();
+ 
+conn.setEndpoint("http://myserver:myport/");
+conn.setCredentials("username", "password");
+ 
+conn.query({ 
+        database: "myDB", 
+        query: "select distinct ?s where { ?s ?p ?o }",  
+        limit: 10, 
+        offset: 0 
+    },
+    function (data) {
+        console.log(data.results.bindings);
+});
+```
     
 ### Browser
 
 __NOTE__: the Endpoint is a proxy to the Stardog HTTP interface in order to avoid CORS issues (an example can be fount in `test/testCORS.js`.
 
-    <script src="js/stardog.js" type="text/javascript"></script>
-    …
-    <script type="text/javascript">
-        var conn = new Stardog.Connection();
-        conn.setEndpoint("/stardog");
-        conn.setReasoning("QL");
-        conn.setCredentials("browser", "secret");
-    </script>
+```html
+<script src="js/stardog.js" type="text/javascript"></script>
+…
+<script type="text/javascript">
+    var conn = new Stardog.Connection();
+    conn.setEndpoint("/stardog");
+    conn.setReasoning("QL");
+    conn.setCredentials("browser", "secret");
+</script>
+```
 
 ## NOTE ##
 
@@ -137,4 +141,4 @@ This framework is in continuous development, please check the [issues](https://g
 &nbsp;
 &nbsp;
 
-![C&P](http://docs.stardog.com/img/cp.png =200x)
+<img src="http://docs.stardog.com/img/cp.png" style="width: 200px;" />

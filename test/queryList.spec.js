@@ -16,11 +16,7 @@
 }(this, function (Stardog, expect) {
     "use strict";
 
-    // -----------------------------------
-    // Describes the getDB test methods
-    // -----------------------------------
-
-    describe ("Getting the DB info", function() {
+    describe ("List running queries", function() {
         var conn;
 
         this.timeout(10000);
@@ -29,27 +25,25 @@
             conn = new Stardog.Connection();
             conn.setEndpoint("http://localhost:5820/");
             conn.setCredentials("admin", "admin");
+            conn.setReasoning("EL");
         });
 
         afterEach(function() {
             conn = null;
         });
+        
+        it ("should start a query and list it with the listQueries call.", function (done) {
+            conn.queryList(function (data, response) {
+                expect(response.statusCode).to.be(200);
 
-        it ("A response of the DB info should not be empty", function(done) {
-            conn.onlineDB({ database: "nodeDB" }, function () {
-                // put online if it"s not
-
-                conn.getDB({ database: "nodeDB" }, function (data, response) {
-                    // console.log("data: ", data);
-                    expect(data).not.to.be(undefined);
-                    expect(data).not.to.be(null);
-                    expect(response).not.to.be(undefined);
-                    expect(response).not.to.be(null);
-                    expect(response.statusCode).to.be(200);
-                    done();
-                });
+                expect(data).not.to.be(undefined);
+                expect(data).not.to.be(null);
+                expect(data.queries).not.to.be(undefined);
+                expect(data.queries).not.to.be(null);
+                expect(data.queries instanceof Array).to.be(true);
+                expect(data.queries.length).to.be(0);
+                done();
             });
         });
-
     });
 }));

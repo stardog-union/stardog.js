@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # load main test data
 stardog-admin db drop -n nodeDB
 stardog-admin db create -n nodeDB --searchable data/api_tests.nt

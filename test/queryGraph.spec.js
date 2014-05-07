@@ -22,7 +22,7 @@
     describe ("Query a DB receiving a Graph in JSON-LD", function() {
         var conn;
 
-        this.timeout(0);
+        this.timeout(10000);
 
         beforeEach(function() {
             conn = new Stardog.Connection();
@@ -37,31 +37,17 @@
         it("A graph query for ALL result should not be empty", function(done) {
             conn.onlineDB({ database: "nodeDB", strategy: "NO_WAIT" }, function () {
             
-                conn.queryGraph({ database: "nodeDB", query: "describe ?s" }, function (data) {
+                conn.queryGraph({ database: "nodeDB", query: "construct { ?s ?p ?o } where { ?s ?p ?o }" }, function (data) {
                     expect(data).not.to.be(undefined);
                     expect(data).not.to.be(null);
 
                     // Could be an array of JSON-LD objects
-                    if (data instanceof Array) {
-                        for (var i=0; i < data.length; i++) {
-                            expect(data[i]).not.to.be(undefined);
-                            if (data[i].attributes) {
-                                // node.js
-                                expect(data[i].get("@id")).not.to.be(undefined);
-                            } else {
-                                // browser
-                                expect(data[i]["@id"]).not.to.be(undefined);
-                            }
-                        }
-                    }
-                    else {
-                        if (data.attributes) {
-                            // node.js
-                            expect(data.get("@context")).not.to.be(undefined);
-                        } else {
-                            // browser
-                            expect(data["@context"]).not.to.be(undefined);
-                        }
+                    expect(data.length).to.be.above(0);
+                    expect(data.length).to.be(3);  // three articles defined in nodeDB
+
+                    for (var i=0; i < data.length; i++) {
+                        expect(data[i]).not.to.be(undefined);
+                        expect(data[i]["@id"]).not.to.be(undefined);
                     }
 
                     done();
@@ -73,36 +59,52 @@
         it("A graph query could be limited too", function(done) {
             conn.onlineDB({ database: "nodeDB", strategy: "NO_WAIT" }, function () {
 
-                conn.queryGraph({ database: "nodeDB", query: "describe ?s", limit: 1 }, function (data) {
+                conn.queryGraph({ database: "nodeDB", 
+                    query: "describe <http://localhost/publications/articles/Journal1/1940/Article1>",
+                    limit: 1 }, function (data) {  // retrieve just one triple
 
                     expect(data).not.to.be(undefined);
                     expect(data).not.to.be(null);
 
                     // Could be an array of JSON-LD objects
                     if (data instanceof Array) {
+                        expect(data).not.to.be(undefined);
+                        expect(data).not.to.be(null);
+
+                        // Could be an array of JSON-LD objects
+                        expect(data.length).to.be.above(0);
+                        expect(data.length).to.be(1);  // three articles defined in nodeDB
+
                         for (var i=0; i < data.length; i++) {
                             expect(data[i]).not.to.be();
-                            if (data[i].attributes) {
-                                // node.js
-                                expect(data[i].get("@id")).not.to.be(undefined);
-                            } else {
-                                // browser
-                                expect(data[i]["@id"]).not.to.be(undefined);
-                            }
+                            expect(data[i]["@id"]).not.to.be(undefined);
                         }
                     }
-                    else {
-                        // At leat must have the context and an id.
-                        if (data.attributes) {
-                            // node.js
-                            expect(data.get("@context")).not.to.be(undefined);
-                            expect(data.get("@id")).not.to.be(undefined);
-                        } else {
-                            // browser
-                            expect(data["@context"]).not.to.be(undefined);
-                            expect(data["@id"]).not.to.be(undefined);
-                        }
+                    else if (data instanceof Object) {
+                        expect(data["@id"]).not.to.be(undefined);
                     }
+
+                    done();
+                });
+            });
+        });
+
+        it("should be able to retrieve one triple in turtle format", function (done) {
+            conn.onlineDB({ database: "nodeDB", strategy: "NO_WAIT" }, function () {
+
+                conn.queryGraph({ database: "nodeDB", 
+                    query: "describe <http://localhost/publications/articles/Journal1/1940/Article1>",
+                    mimetype: "text/turtle",
+                    limit: 1 
+                }, function (data) {  // retrieve just one triple
+                    var tripleTokens;
+
+                    expect(data).not.to.be(undefined);
+                    expect(data).not.to.be(null);
+
+                    expect(data).to.contain("<http://localhost/publications/articles/Journal1/1940/Article1>");
+                    tripleTokens = data.split(" ");
+                    expect(tripleTokens.length).to.be(4);  // 4 including the trailing `.`
 
                     done();
                 });

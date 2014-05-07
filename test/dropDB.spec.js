@@ -23,7 +23,7 @@
     describe ("Drop DBs Test Suite", function() {
         var conn;
 
-        this.timeout(0);
+        this.timeout(10000);
 
         beforeEach(function() {
             conn = new Stardog.Connection();
@@ -46,7 +46,7 @@
         });
 
         it ("should drop a just created database", function (done) {
-            this.timeout(0);
+            this.timeout(10000);
 
             conn.offlineDB({ database: "nodeDB", strategy: "WAIT", timeout: 1 }, function (data2, response2) {
                 expect(response2.statusCode).to.be(200);

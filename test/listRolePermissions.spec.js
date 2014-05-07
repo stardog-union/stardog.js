@@ -19,6 +19,8 @@
     describe ("List Role permissions Test Suite", function() {
         var conn;
 
+        this.timeout(10000);
+
         beforeEach(function() {
             conn = new Stardog.Connection();
             conn.setEndpoint("http://localhost:5820/");
