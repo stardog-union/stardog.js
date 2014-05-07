@@ -1,11 +1,21 @@
 # Stardog.js - Change Log
 
+## v0.1.2
+---
+
+* __ADDED:__ Query Management API
+* __ADDED:__ `getNamespaces` call to retrieve the DB namespaces
+* __ADDED:__ `options.reasoning` parameter for `query` and `queryGraph` calls to let user specify reasoning profile by query
+* __ADDED:__ Support for running test cases in windows
+
 ## v0.1.1
+---
 
 * __MODIFIED:__ Changed testing framework from Jasmine to Mocha
 * __FIXED:__ JS Style check with JS Hint 
 
 ## v0.1.0
+---
 
 * __ADDED:__ Support for creating new empty DB via createDB function
 * __MODIFIED:__ Changes supporting new default Stardog server port (test cases & default)
