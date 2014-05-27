@@ -33,7 +33,7 @@
     }
     else if (typeof define === "function" && define.amd) {
         // load Stardog via AMD
-        define(["stardog"], function() {
+        define(function() {
             // Export to global for backward compatibility
             root.Stardog = factory(root);
             return root.Stardog;
