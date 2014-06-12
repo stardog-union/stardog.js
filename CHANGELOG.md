@@ -1,5 +1,9 @@
 # Stardog.js - Change Log
 
+## v0.1.3
+
+*__FIX:__ AMD importing in the browser, removing `stardog` module name declaration to avoid dependency problems
+
 ## v0.1.2
 ---
 
