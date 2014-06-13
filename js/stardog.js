@@ -1071,7 +1071,7 @@
     // __Parameters__:  
     // `options`: an object with one the following attributes: 
     //              `database`: the name of the database to set the options.  
-    //              `options`: the options JSON object, indicating the options and values to set, [more info](http://stardog.com/docs/network/#extended-http).
+    //              `options`: the options JSON object, indicating the options and values to set, [more info](http://docs.stardog.com/http/).
     //              `files`: the array of file names to bulk load into the new database
     //              `params`: (optional) any other parameters to pass to the SPARQL endpoint.
     // `callback`: the callback to execute once the request is done.
@@ -1171,7 +1171,7 @@
     // __Parameters__:  
     // `options`: an object with one the following attributes: 
     //              `database`: the name of the database to set on-line.  
-    //              `strategyOp`: the strategy options, [more info](http://stardog.com/docs/network/#extended-http).
+    //              `strategyOp`: the strategy options, [more info](http://docs.stardog.com/http/).
     //              `params`: (optional) any other parameters to pass to the SPARQL endpoint.   
     // `callback`: the callback to execute once the request is done.  
     Connection.prototype.onlineDB = function (options, callback) {
@@ -1197,7 +1197,7 @@
     // __Parameters__:
     // `options`: an object with one the following attributes: 
     //              `database`: the name of the database to set off-line.  
-    //              `strategyOp`: the strategy options, [more info](http://stardog.com/docs/network/#extended-http).  
+    //              `strategyOp`: the strategy options, [more info](http://docs.stardog.com/http/).  
     //              `timeout`: timeout in milliseconds.
     //              `params`: (optional) any other parameters to pass to the SPARQL endpoint.
     // `callback`: the callback to execute once the request is done.  
@@ -1224,7 +1224,7 @@
     // __Parameters__:  
     // `options`: an object with one the following attributes: 
     //              `database`: the name of the database to set the options.  
-    //              `optionsObj`: the options JSON object, indicating the options and values to set, [more info](http://stardog.com/docs/network/#extended-http).
+    //              `optionsObj`: the options JSON object, indicating the options and values to set, [more info](http://docs.stardog.com/http/).
     //              `params`: (optional) any other parameters to pass to the SPARQL endpoint.
     // `callback`: the callback to execute once the request is done.
     Connection.prototype.setDBOptions = function(options, callback) {
@@ -1248,7 +1248,7 @@
     // __Parameters__:  
     // `options`: an object with one the following attributes: 
     //              `database`: the name of the db to retrieve the option values.  
-    //              `optionsObj`: the options JSON object seed, indicating the options to retrieve, [more info](http://stardog.com/docs/network/#extended-http).  
+    //              `optionsObj`: the options JSON object seed, indicating the options to retrieve, [more info](http://docs.stardog.com/http/).  
     //              `params`: (optional) any other parameters to pass to the SPARQL endpoint.
     // `callback`: the callback to execute once the request is done.  
     Connection.prototype.getDBOptions = function(options, callback) {
@@ -1441,7 +1441,7 @@
     // __Parameters__:  
     // `options`: an object with one the following attributes: 
     //              `user`: the name of the user to set the roles.  
-    //              `roles`: an array containing the roles to assign to the user, [more info](http://stardog.com/docs/network/#extended-http).  
+    //              `roles`: an array containing the roles to assign to the user, [more info](http://docs.stardog.com/http/).  
     //              `params`: (optional) any other parameters to pass to the SPARQL endpoint.  
     // `callback`: the callback to execute once the request is done.  
     Connection.prototype.setUserRoles = function (options, callback) {
@@ -1522,7 +1522,7 @@
     // #### Delete role
     // Deletes an existing role from the system; the force parameter is a boolean 
     // flag which indicates if the delete call for the role must be forced, 
-    // [more info](http://stardog.com/docs/network/#extended-http)
+    // [more info](http://docs.stardog.com/http/)
     //
     // __Parameters__:
     // `options`: an object with one the following attributes: 
@@ -1552,7 +1552,7 @@
     // __Parameters__:  
     // `options`: an object with one the following attributes: 
     //              `role`: the role to whom the permission will be assigned.  
-    //              `permissionObj`: the permission descriptor object, [more info](http://stardog.com/docs/network/#extended-http).  
+    //              `permissionObj`: the permission descriptor object, [more info](http://docs.stardog.com/http/).  
     //              `params`: (optional) any other parameters to pass to the SPARQL endpoint. 
     // `callback`: the callback to execute once the request is done.  
     Connection.prototype.assignPermissionToRole = function (options, callback) {
@@ -1574,7 +1574,7 @@
     // __Parameters__:
     // `options`: an object with one the following attributes: 
     //              `user`: the user to whom the permission will be assigned.  
-    //              `permissionObj`: the permission descriptor object, [more info](http://stardog.com/docs/network/#extended-http).  
+    //              `permissionObj`: the permission descriptor object, [more info](http://docs.stardog.com/http/).  
     //              `params`: (optional) any other parameters to pass to the SPARQL endpoint. 
     // `callback`: the callback to execute once the request is done.  
     Connection.prototype.assignPermissionToUser = function (options, callback) {
@@ -1596,7 +1596,7 @@
     // __Parameters__:
     // `options`: an object with one the following attributes: 
     //              `role`: the role to whom the permission will be removed.  
-    //              `permissionObj`: the permission descriptor object, [more info](http://stardog.com/docs/network/#extended-http).  
+    //              `permissionObj`: the permission descriptor object, [more info](http://docs.stardog.com/http/).  
     //              `params`: (optional) any other parameters to pass to the SPARQL endpoint. 
     // `callback`: the callback to execute once the request is done.  
     Connection.prototype.deletePermissionFromRole = function (options, callback) {
@@ -1618,7 +1618,7 @@
     // __Parameters__: 
     // `options`: an object with one the following attributes: 
     //              `user`: the user to whom the permission will be removed.  
-    //              `permissionObj`: the permission descriptor object, [more info](http://stardog.com/docs/network/#extended-http).  
+    //              `permissionObj`: the permission descriptor object, [more info](http://docs.stardog.com/http/).  
     //              `params`: (optional) any other parameters to pass to the SPARQL endpoint. 
     // `callback`: the callback to execute once the request is done.  
     Connection.prototype.deletePermissionFromUser = function (options, callback) {
