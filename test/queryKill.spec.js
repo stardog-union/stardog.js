@@ -16,7 +16,7 @@
 }(this, function (Stardog, expect) {
     "use strict";
 
-    xdescribe ("Kill a running query", function() {
+    describe ("Kill a running query", function() {
         var conn;
 
         this.timeout(10000);
@@ -33,10 +33,12 @@
         });
         
         it ("should return 404 trying to kill a query with a non-existent queryId", function (done) {
+            var queryId = "1";
+
             conn.queryKill({
-                queryId: '1'
+                "queryId": queryId
             }, function (data, response) {
-                expect(data).to.contain('does not exist');
+                expect(data).to.contain("Query not found: "+ queryId);
                 expect(response.statusCode).to.be(404);
                 done();
             });

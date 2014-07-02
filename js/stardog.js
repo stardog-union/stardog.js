@@ -165,10 +165,6 @@
                 headers = {},
                 reqJSON, attachments;
 
-            if (this.reasoning && !_.has(params, "sd-connection-string")) {
-                params["sd-connection-string"] = this._getSdConnectionString(this.reasoning);
-            }
-
             // Set the Accept header by default to "application/sparql-results+json"
             headers.Accept = acceptH || "text/plain";
 
@@ -284,10 +280,6 @@
                 username, password,
                 ajaxSettings,
                 userPassBase64;
-            
-            if (this.reasoning && !_.has(params, "sd-connection-string")) {
-                params["sd-connection-string"] = this._getSdConnectionString(this.reasoning);
-            }
 
             headers.Accept = acceptH || "application/sparql-results+json";
 
@@ -435,11 +427,7 @@
             resource: options.database + "/query",
             httpMethod: "POST",
             params: {}
-        };
-
-        if (options.reasoning) {
-            reqOptions.params["sd-connection-string"] = this._getSdConnectionString(options.reasoning);
-        }
+        },  reasoning = options.reasoning || this.reasoning;
 
         var queryParams = _.extend({ "query" : options.query }, options.params);
 
@@ -453,6 +441,10 @@
 
         if (options.offset) {
             queryParams.offset = options.offset;
+        }
+
+        if (reasoning) {
+            reqOptions.params.reasoning = reasoning;
         }
 
         if (!isNode) {
@@ -490,11 +482,7 @@
             resource: options.database + "/query",
             httpMethod: "POST",
             params: {}
-        };
-
-        if (options.reasoning) {
-            reqOptions.params["sd-connection-string"] = this._getSdConnectionString(options.reasoning);
-        }
+        }, reasoning = options.reasoning || this.reasoning;
 
         var queryParams = _.extend({ "query" : options.query }, options.params);
 
@@ -508,6 +496,10 @@
 
         if (options.offset) {
             queryParams.offset = options.offset;
+        }
+
+        if (reasoning) {
+            reqOptions.params.reasoning = reasoning;
         }
 
         if (!isNode) {
