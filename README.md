@@ -2,7 +2,7 @@ Stardog.js
 ==========
 
 Licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)  
-_Current Version **0.1.3**_ 
+_Current Version **0.1.4**_ 
 
 Stardog.js JavaScript Framework for node.js to develop apps with the [Stardog RDF Database](http://stardog.com).  
 
@@ -14,7 +14,7 @@ For detailed documentation, see the [annotated source](http://clarkparsia.github
 
 This framework wraps all the functionality of a client for the Stardog DBMS, and provides access to a full set of functions such as executing SPARQL Queries, administration tasks on Stardog, and the use of the Reasoning API.
 
-All the implementation uses the HTTP protocol, since most of Stardog functionality is available using this protocol. For more information, go to the Stardog's [Network Programming](http://stardog.com/docs/network/) documentation.
+All the implementation uses the HTTP protocol, since most of Stardog functionality is available using this protocol. For more information, go to the Stardog's [HTTP Programming](http://docs.stardog.com/http/) documentation.
 
 The framework is currently supported for node.js and the browser, including test cases for both environments.
 You'll also need [npm](https://npmjs.org) and [bower](http://bower.io) to run the test cases and install the dependencies in node.js & the browser respectively.
@@ -37,7 +37,7 @@ That will fetch the latest version of stardog.js in the bower registry, [more de
 
 ## Development ##
 
-To get started, just clone the project. You'll need a local copy of Stardog to be able to run the tests. For more information on starting the Stardog DB service and how it works, go to [Stardog's documentation](http://stardog.com/docs/), where you'll find everything you need to get up and running with Stardog.
+To get started, just clone the project. You'll need a local copy of Stardog to be able to run the tests. For more information on starting the Stardog DB service and how it works, go to [Stardog's documentation](http://docs.stardog.com), where you'll find everything you need to get up and running with Stardog.
 
 Go to [http://stardog.com](http://stardog.com), download and install the database and load the data provided in `data/` using the script in the repository. 
 

@@ -1,5 +1,10 @@
 # Stardog.js - Change Log
 
+## v0.1.4
+
+*__ADDED:__ Query Management API tests
+*__MODIFIED:__ Reasoning level in queries now is sent via a query URL parameter (...?reasoning=<level>)
+
 ## v0.1.3
 
 *__FIX:__ AMD importing in the browser, removing `stardog` module name declaration to avoid dependency problems
