@@ -1,4 +1,4 @@
-//     Stardog.js 0.1.4
+//     Stardog.js 0.1.5
 //
 // Copyright 2012 Clark & Parsia LLC
 
@@ -51,7 +51,7 @@
     var Stardog = {};
 
     // Current version of the library. Keep in sync with 'package.json'
-    Stardog.VERSION = "0.1.4";
+    Stardog.VERSION = "0.1.5";
 
     // Verify the environment of the library
     var isNode = (typeof exports !== "undefined" && typeof module !== "undefined" && module.exports);
@@ -79,7 +79,7 @@
     //
     // Defines the HTTP connection to Stardog as well as all the API calls 
     // available to this protocol. The API calls defined in this element are
-    // referenced in [Stardog Network documentation](http://stardog.com/docs/network/).
+    // referenced in [Stardog HTTP Programming documentation](http://docs.stardog.com/http/).
     var Connection = Stardog.Connection = function ()   { 
         // By default (for testing)
         this.endpoint = "http://localhost:5820/nodeDB/";
@@ -119,7 +119,7 @@
         
     // Sets the reasoning level of the connection when performing SPARQL queries &
     // function calls involving reasoning. Allowed values are documented in 
-    // [Stardog Reasoning docs](http://stardog.com/docs/owl2/)
+    // [Stardog Reasoning docs](http://docs.stardog.com/owl2/)
     Connection.prototype.setReasoning = function(reasoning) {
         this.reasoning = reasoning;
     };
@@ -752,7 +752,7 @@
 
     // Checks the logical consistency of database. If using a named graph provide the `graph_uri` parameter.
     // Returns a boolean response as `true` if the database is consistent. 
-    // See [stardog-reasoning consistency](http://stardog.com/docs/man/reasoning-consistency.html)
+    // See [stardog reasoning consistency](http://docs.stardog.com/man/reasoning-consistency.html)
     // 
     // __Parameters__:  
     // `options`: an object with at least the following attributes: 
@@ -909,7 +909,7 @@
             database: options.database,
             optionsObj: { "database.namespaces": "" }
         }, function (data, response) {
-            var namespaces = data["database.namespaces"].split("\u0002") || {};
+            var namespaces = data["database.namespaces"] || [];
             var nsMap = {};
 
             _.each(namespaces, function (namespace) {
@@ -1007,7 +1007,7 @@
 
     // ## Stardog Administrative API
     // ---------------------------------------
-    // [Extended HTTP Protocol](http://stardog.com/docs/network/#extended-http)
+    // [Admin Resources](http://docs.stardog.com/http/#sd-Admin-Resources)
 
     // ### Database operations.
 
@@ -1058,7 +1058,7 @@
 
     // #### Create a new database (POST)
     // Set options in the database passed through a JSON object specification, i.e. JSON Request for option values. 
-    // Database options can be found [here](http://stardog.com/docs/admin/#admin-db).
+    // Database options can be found [here](http://docs.stardog.com/admin/#sd-Database-Admin).
     //
     // __Parameters__:  
     // `options`: an object with one the following attributes: 
@@ -1211,7 +1211,7 @@
 
     // #### Set option values to an existing database.
     // Set options in the database passed through a JSON object specification, i.e. JSON Request for option values. 
-    // Database options can be found [here](http://stardog.com/docs/admin/#admin-db).
+    // Database options can be found [here](http://docs.stardog.com/admin/#sd-Database-Admin).
     //
     // __Parameters__:  
     // `options`: an object with one the following attributes: 

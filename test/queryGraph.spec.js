@@ -37,7 +37,7 @@
         it("A graph query for ALL result should not be empty", function(done) {
             conn.onlineDB({ database: "nodeDB", strategy: "NO_WAIT" }, function () {
             
-                conn.queryGraph({ database: "nodeDB", query: "construct { ?s ?p ?o } where { ?s ?p ?o }" }, function (data) {
+                conn.queryGraph({ database: "nodeDB", query: "construct where { ?s ?p ?o }" }, function (data) {
                     expect(data).not.to.be(undefined);
                     expect(data).not.to.be(null);
 
