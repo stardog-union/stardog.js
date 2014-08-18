@@ -1,5 +1,9 @@
 # Stardog.js - Change Log
 
+## v0.1.5
+
+*__MODIFIED:__ `getNamespaces` from stardog now returns a proper JSON Array
+
 ## v0.1.4
 
 *__ADDED:__ Query Management API tests
