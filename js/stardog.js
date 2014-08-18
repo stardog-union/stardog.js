@@ -909,7 +909,7 @@
             database: options.database,
             optionsObj: { "database.namespaces": "" }
         }, function (data, response) {
-            var namespaces = data["database.namespaces"].split("\u0002") || {};
+            var namespaces = data["database.namespaces"] || [];
             var nsMap = {};
 
             _.each(namespaces, function (namespace) {
