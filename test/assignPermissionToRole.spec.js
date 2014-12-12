@@ -19,7 +19,7 @@
     describe ("Assign Permissions to Roles Test Suite", function() {
         var conn;
 
-        this.timeout(10000);
+        this.timeout(50000);
 
         beforeEach(function() {
             conn = new Stardog.Connection();

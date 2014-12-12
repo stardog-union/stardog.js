@@ -24,7 +24,7 @@
         var conn;
         var txId;
 
-        this.timeout(10000);
+        this.timeout(50000);
 
         beforeEach(function() {
             conn = new Stardog.Connection();
