@@ -1,4 +1,4 @@
-//     Stardog.js 0.1.5
+//     Stardog.js 0.1.6
 //
 // Copyright 2012 Clark & Parsia LLC
 
@@ -51,7 +51,7 @@
     var Stardog = {};
 
     // Current version of the library. Keep in sync with 'package.json'
-    Stardog.VERSION = "0.1.5";
+    Stardog.VERSION = "0.1.6";
 
     // Verify the environment of the library
     var isNode = (typeof exports !== "undefined" && typeof module !== "undefined" && module.exports);
@@ -651,7 +651,7 @@
         var reqOptions = {
                 httpMethod: "POST",
                 resource: options.database + "/" + options.txId + "/add",
-                acceptHeader: "*/*",
+                acceptHeader: "text/plain",
                 params: options.params || { },
                 msgBody: options.body,
                 contentType: options.contentType,

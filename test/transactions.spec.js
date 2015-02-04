@@ -24,7 +24,7 @@
         var conn;
         var txId;
 
-        this.timeout(10000);
+        this.timeout(50000);
 
         beforeEach(function() {
             conn = new Stardog.Connection();
@@ -97,6 +97,85 @@
                             conn.rollback({ database: "nodeDB", "txId": txId }, function (body3, response3) {
                                 expect(response3.statusCode).to.be(200);
                                 done();
+                            });
+                        }
+                    );
+                });
+            });
+        });
+
+        it("Should be able to get a transaction, add a triple with a defined prefix, commit that and query.", function(done) {
+
+            var aTriple = "@prefix foo: <http://localhost/publications/articles/Journal1/1940/> .\n"+
+                "@prefix dc: <http://purl.org/dc/elements/1.1/> .\n"+
+                "foo:Article2 "+
+                "dc:subject "+
+                "\"A very interesting subject\"^^<http://www.w3.org/2001/XMLSchema#string> .";
+
+            conn.onlineDB( { database: "nodeDB", strategy: "NO_WAIT" }, function () {
+
+                conn.begin({ database: "nodeDB" }, function (body, response) {
+                    expect(response.statusCode).to.be(200);
+                    expect(body).not.to.be(undefined);
+                    expect(body).not.to.be(null);
+
+                    txId = body;
+                    conn.addInTransaction(
+                        { database: "nodeDB", "txId": txId, "body": aTriple, contentType: "text/turtle" },
+                        function (body2, response2) {
+                            expect(response2.statusCode).to.be(200);
+
+                            conn.commit({ database: "nodeDB", "txId": txId }, function (body3, response3) {
+                                expect(response3.statusCode).to.be(200);
+                                // query for the triple added.
+                                conn.query(
+                                    { 
+                                        database: "nodeDB",
+                                        "query":"prefix foo: <http://localhost/publications/articles/Journal1/1940/>\n"+ 
+                                                "prefix dc: <http://purl.org/dc/elements/1.1/>\n"+ 
+                                                "ask where { "+
+                                                    "foo:Article2 "+
+                                                    "dc:subject "+
+                                                    "\"A very interesting subject\"^^<http://www.w3.org/2001/XMLSchema#string> .}",
+                                        mimetype: "text/boolean"
+                                    },
+                                    function (dataQ, responseQ) {
+                                        //console.log(data);
+                                        expect(responseQ.statusCode).to.be(200);
+                                        expect(dataQ).not.to.be(null);
+                                        var askResult;
+                                        if (typeof dataQ === "string") {
+                                            askResult = (dataQ.toLowerCase() === "true");
+                                        } else {
+                                            askResult = dataQ;
+                                        }
+                                        expect(askResult).to.be(true);
+
+                                        // restore database state
+                                        conn.begin({ database: "nodeDB" }, function (bodyB, responseB) {
+                                            expect(responseB.statusCode).to.be(200);
+                                            expect(bodyB).not.to.be(undefined);
+                                            expect(bodyB).not.to.be(null);
+                                            
+                                            var txId2 = bodyB;
+
+                                            conn.removeInTransaction(
+                                                { database: "nodeDB", "txId": txId2, "body": aTriple, contentType: "text/turtle" },
+                                                function (bodyR, responseR) {
+                                                    expect(responseR.statusCode).to.be(200);
+
+                                                    conn.commit(
+                                                        { database: "nodeDB", "txId": txId2 },
+                                                        function (bodyCD, responseCD) {
+                                                        expect(responseCD.statusCode).to.be(200);
+
+                                                        done();
+                                                    });
+                                                }
+                                            );
+                                        });
+                                    }
+                                );
                             });
                         }
                     );

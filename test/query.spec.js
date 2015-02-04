@@ -23,7 +23,7 @@
     describe ("Query a DB receiving a bind of results.", function() {
         var conn;
 
-        this.timeout(10000);
+        this.timeout(50000);
 
         beforeEach(function() {
             conn = new Stardog.Connection();
@@ -121,7 +121,7 @@
     describe ("Query a DB with QL reasoning receiving a bind of results.", function() {
         var conn;
 
-        this.timeout(10000);
+        this.timeout(50000);
 
         beforeEach(function() {
             conn = new Stardog.Connection();
@@ -197,7 +197,7 @@
     describe ("Query a DB with RL reasoning receiving a bind of results.", function() {
         var conn;
 
-        this.timeout(10000);
+        this.timeout(50000);
 
         beforeEach(function() {
             conn = new Stardog.Connection();
@@ -275,7 +275,7 @@
     describe ("Query a DB with EL reasoning receiving a bind of results.", function() {
         var conn;
 
-        this.timeout(10000);
+        this.timeout(50000);
 
         beforeEach(function() {
             conn = new Stardog.Connection();
@@ -353,7 +353,7 @@
     describe ("Query a DB with reasoning per query, receiving a bind of results.", function() {
         var conn;
 
-        this.timeout(10000);
+        this.timeout(50000);
 
         beforeEach(function() {
             conn = new Stardog.Connection();
