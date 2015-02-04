@@ -1,5 +1,9 @@
 # Stardog.js - Change Log
 
+## v0.1.6
+
+*__FIXED:__ Added specific mimetype for accept header on `addInTransaction` call
+
 ## v0.1.5
 
 *__MODIFIED:__ `getNamespaces` from stardog now returns a proper JSON Array
