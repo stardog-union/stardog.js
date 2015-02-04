@@ -651,7 +651,7 @@
         var reqOptions = {
                 httpMethod: "POST",
                 resource: options.database + "/" + options.txId + "/add",
-                acceptHeader: "*/*",
+                acceptHeader: "text/plain",
                 params: options.params || { },
                 msgBody: options.body,
                 contentType: options.contentType,
