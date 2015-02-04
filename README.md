@@ -137,8 +137,3 @@ __NOTE__: the Endpoint is a proxy to the Stardog HTTP interface in order to avoi
 ## NOTE ##
 
 This framework is in continuous development, please check the [issues](https://github.com/clarkparsia/stardog.js/issues) page. You're welcome to contribute.
-
-&nbsp;
-&nbsp;
-
-<img src="http://docs.stardog.com/img/cp.png" style="width: 200px;" />
