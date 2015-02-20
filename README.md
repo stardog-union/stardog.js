@@ -143,4 +143,4 @@ This framework is in continuous development, please check the [issues](https://g
 &nbsp;
 &nbsp;
 
-<img src="http://docs.stardog.com/img/cp.png" style="width: 200px;" />
+<img src="http://clarkparsia.github.io/stardog.js/images/cp.png" style="width: 200px;" />
