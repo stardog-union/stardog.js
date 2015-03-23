@@ -131,7 +131,7 @@ __NOTE__: the Endpoint is a proxy to the Stardog HTTP interface in order to avoi
 <script type="text/javascript">
     var conn = new Stardog.Connection();
     conn.setEndpoint("/stardog");
-    conn.setReasoning("QL");
+    conn.setReasoning(true);
     conn.setCredentials("browser", "secret");
 </script>
 ```

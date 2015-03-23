@@ -25,13 +25,13 @@
             conn = new Stardog.Connection();
             conn.setEndpoint("http://localhost:5820/");
             conn.setCredentials("admin", "admin");
-            conn.setReasoning("EL");
+            conn.setReasoning(true);
         });
 
         afterEach(function() {
             conn = null;
         });
-        
+
         it ("should start a query and list it with the listQueries call.", function (done) {
             conn.queryList(function (data, response) {
                 expect(response.statusCode).to.be(200);
