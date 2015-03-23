@@ -25,13 +25,13 @@
             conn = new Stardog.Connection();
             conn.setEndpoint("http://localhost:5820/");
             conn.setCredentials("admin", "admin");
-            conn.setReasoning("EL");
+            conn.setReasoning(true);
         });
 
         afterEach(function() {
             conn = null;
         });
-        
+
         it ("should return 404 trying to kill a query with a non-existent queryId", function (done) {
             var queryId = "1";
 
