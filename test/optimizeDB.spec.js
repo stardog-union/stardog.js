@@ -1,5 +1,3 @@
-var util = require('util');
-
 (function (root, factory) {
     "use strict";
 
