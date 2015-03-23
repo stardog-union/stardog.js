@@ -397,7 +397,7 @@
         var reqOptions = {
                 resource: options.database + "/size",
                 httpMethod: "GET",
-                acceptHeader: "*/*",
+                acceptHeader: "text/plain",
                 params: options.params || ""
             };
         this._httpRequest(reqOptions, callback);

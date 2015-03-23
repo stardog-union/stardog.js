@@ -43,8 +43,8 @@
                     expect(data).not.to.be(undefined);
                     expect(data).not.to.be(null);
                     expect(data).to.contain("Slice(offset=0, limit=10)");
-                    expect(data).to.contain("Projection(s)");
-                    expect(data).to.contain("Scan(s, _, _)");
+                    expect(data).to.contain("Projection(?s)");
+                    expect(data).to.contain("Scan[SC](?s, _, _)");
                     done();
                 });
             });
