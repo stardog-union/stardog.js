@@ -143,4 +143,4 @@ This framework is in continuous development, please check the [issues](https://g
 &nbsp;
 &nbsp;
 
-<a href="http://complexible.com"><img src="http://complexible.github.io/stardog.js/images/complexible.png" width="120px"/></a>
+<a href="http://complexible.com"><img src="http://complexible.com/img/l-b.png" width="120px"/></a>
