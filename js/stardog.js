@@ -1,4 +1,4 @@
-//     Stardog.js 0.1.6
+//     Stardog.js 0.2.0
 //
 // Copyright 2015 Complexible Inc 
 
@@ -51,7 +51,7 @@
     var Stardog = {};
 
     // Current version of the library. Keep in sync with 'package.json'
-    Stardog.VERSION = "0.1.6";
+    Stardog.VERSION = "0.2.0";
 
     // Verify the environment of the library
     var isNode = (typeof exports !== "undefined" && typeof module !== "undefined" && module.exports);
