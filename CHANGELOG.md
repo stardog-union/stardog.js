@@ -1,5 +1,10 @@
 # Stardog.js - Change Log
 
+## v0.2.0
+
+*__MODIFIED:__ Changes for stardog 3.0
+*__MODIFIED:__ Reasoning is now enabled/disabled with a boolean value, reasoning levels are no longer used
+
 ## v0.1.6
 
 *__FIXED:__ Added specific mimetype for accept header on `addInTransaction` call

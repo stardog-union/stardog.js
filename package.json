@@ -1,23 +1,23 @@
 {
   "name": "stardog",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "Stardog JavaScript Framework for node.js and the browser - Develop apps using the Stardog RDF Database & JS.",
-  "homepage": "http://clarkparsia.github.com/stardog.js",
+  "homepage": "http://complexible.github.com/stardog.js",
   "keywords": ["stardog", "rdf", "sparql", "library", "semantic web", "linked data"],
   "main": "js/stardog.js",
   "author": { 
-    "name": "Clark & Parsia LLC",
-    "email": "inquiries@clarkparsia.com",
-    "url": "http://clarkparsia.com"
+    "name": "Complexible Inc",
+    "email": "inquiries@complexible.com",
+    "url": "http://complexible.com"
   },
   "contributors": [
     {
       "name": "Edgar Rodriguez",
-      "email": "edgar@clarkparsia.com"
+      "email": "edgar@complexible.com"
     },
     {
       "name": "Fernando Hernandez",
-      "email": "fernando@clarkparsia.com"
+      "email": "fernando@complexible.com"
     },
     {
       "name": "Maurice Rabb",
@@ -44,10 +44,10 @@
   ],
   "repository": { 
     "type": "git",
-    "url": "https://github.com/clarkparsia/stardog.js"
+    "url": "https://github.com/complexible/stardog.js"
   },
   "bugs": { 
-    "url": "https://github.com/clarkparsia/stardog.js/issues" 
+    "url": "https://github.com/complexible/stardog.js/issues" 
   },
   "dependencies": {
     "restler": "~3.2.2",
