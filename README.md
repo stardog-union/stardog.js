@@ -1,14 +1,16 @@
 Stardog.js
 ==========
 
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/complexible/stardog.js?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)  
 _Current Version **0.1.6**_ 
 
 Stardog.js JavaScript Framework for node.js to develop apps with the [Stardog RDF Database](http://stardog.com).  
 
-![Stardog](http://stardog.com/img/stardog.png)   
+<a href="http://stardog.com"><img src="http://stardog.com/img/stardog.png" width="250px"/></a>   
 
-For detailed documentation, see the [annotated source](http://clarkparsia.github.io/stardog.js/docs/stardog.html).
+For detailed documentation, see the [annotated source](http://complexible.github.io/stardog.js/docs/stardog.html).
 
 ## What is it? ##
 
@@ -136,4 +138,9 @@ __NOTE__: the Endpoint is a proxy to the Stardog HTTP interface in order to avoi
 
 ## NOTE ##
 
-This framework is in continuous development, please check the [issues](https://github.com/clarkparsia/stardog.js/issues) page. You're welcome to contribute.
+This framework is in continuous development, please check the [issues](https://github.com/complexible/stardog.js/issues) page. You're welcome to contribute.
+
+&nbsp;
+&nbsp;
+
+<a href="http://complexible.com"><img src="http://complexible.github.io/stardog.js/images/complexible.png" width="120px"/></a>
