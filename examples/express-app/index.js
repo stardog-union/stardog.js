@@ -30,10 +30,6 @@ app.get("/article/:id", function (req, res) {
 
   console.log("Requested id: "+ req.params.id);
 
-  if (!req.params.id) {
-    res.send("No id was provided to query");
-  }
-
   connection().query({
     database: "nodeDB",
     query: instanceQuery,
