@@ -1,6 +1,6 @@
 //     Stardog.js 0.2.0
 //
-// Copyright 2015 Clark & Parsia, LLC 
+// Copyright 2015 Clark & Parsia, LLC
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -713,6 +713,28 @@
         if (options.graphUri) {
             reqOptions.params["graph-uri"] =  options.graphUri;
         }
+
+        this._httpRequest(reqOptions, callback);
+    };
+
+    // Exports the content of the DB.
+    //
+    // __Parameters__:
+    // `options`: an object with at least the following attributes:
+    //              `database`: the name of the database;
+    //              `mimetype`: the MIME type of the RDF format for the export, default: application/ld+json
+    //              `graphUri`: the graph URI to export (if any);
+    // `callback`: the callback to execute once the request is done.
+    Connection.prototype.exportDB = function (options, callback) {
+        var reqOptions = {
+            httpMethod: "GET",
+            resource: options.database + "/export",
+            acceptHeader: options.mimetype || "application/ld+json",
+            params: options.params || {}
+        };
+
+        // by default it exports the whole database in JSON-LD
+        reqOptions.params["graph-uri"] = options.graphUri || "tag:stardog:api:context:all";
 
         this._httpRequest(reqOptions, callback);
     };
