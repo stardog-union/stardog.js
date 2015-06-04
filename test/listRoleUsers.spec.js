@@ -32,17 +32,22 @@
         });
 
         it ("should return a list of users assigned to the 'reader' role in the system.", function (done) {
+          conn.createRole({ rolename: "nodeDBRole" }, function () {
+            conn.setUserRoles({user: "anonymous", roles: ["nodeDBRole"] }, function () {
+              conn.listRoleUsers({ role: "nodeDBRole" }, function (data, response) {
+                  expect(response.statusCode).to.be(200);
 
-            conn.listRoleUsers({ role: "reader" }, function (data, response) {
-                expect(response.statusCode).to.be(200);
+                  expect(data.users).not.to.be(undefined);
+                  expect(data.users).not.to.be(null);
+                  expect(data.users.length).to.be.above(0);
+                  expect(data.users).to.contain("anonymous");
 
-                expect(data.users).not.to.be(undefined);
-                expect(data.users).not.to.be(null);
-                expect(data.users.length).to.be.above(0);
-                expect(data.users).to.contain("anonymous");
-
-                done();
+                  conn.deleteRole({role: "nodeDBRole"}, function () {
+                    done();
+                  });
+              });
             });
+          });
         });
     });
 }));

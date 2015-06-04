@@ -36,7 +36,7 @@
             var aNewPermission = {
                 "action" : "write",
                 "resource_type" : "db",
-                "resource" : "nodeDB"
+                "resource" : ["nodeDB"]
             };
 
             conn.assignPermissionToRole({ role: "myrole", permissionObj: aNewPermission }, function (data, response) {
@@ -51,7 +51,7 @@
             var aNewPermission = {
                 "action" : "write",
                 "resource_type" : "db",
-                "resource" : "nodeDB"
+                "resource" : ["nodeDB"]
             };
 
             conn.deleteRole({ role: aNewRole}, function() {

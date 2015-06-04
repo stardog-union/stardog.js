@@ -5,15 +5,15 @@
         // NodeJS. Does not work with strict CommonJS, but
         // only CommonJS-like enviroments that support module.exports,
         // like Node.
-        module.exports = factory(require("../js/stardog.js"), require("expect.js"));
+        module.exports = factory(require("../js/stardog.js"), require("expect.js"), require("lodash"));
     } else if (typeof define === "function" && define.amd) {
         // AMD. Register as an anonymous module.
-        define(["stardog", "expect"], factory);
+        define(["stardog", "expect", "lodash"], factory);
     } else {
         // Browser globals (root is window)
-        root.returnExports = factory(root.Stardog, root.expect);
+        root.returnExports = factory(root.Stardog, root.expect, root._);
     }
-}(this, function (Stardog, expect) {
+}(this, function (Stardog, expect, _) {
     "use strict";
 
     describe ("List User effective permissions Test Suite", function() {
@@ -45,12 +45,12 @@
                 aNewPermission = {
                     "action" : "write",
                     "resource_type" : "db",
-                    "resource" : "nodeDB"
+                    "resource" : ["nodeDB"]
                 };
 
             // delete user
             conn.deleteUser({ user: aNewUser }, function () {
-                
+
                 conn.createUser({ username: aNewUser, password: aNewUserPwd, superuser: true }, function (data1, response1) {
                     expect(response1.statusCode).to.be(201);
 
@@ -62,7 +62,16 @@
 
                             expect(data3.permissions).not.to.be(undefined);
                             expect(data3.permissions).not.to.be(null);
-                            expect(data3.permissions).to.contain("stardog:*:*:*");
+                            expect(data3.permissions.length).to.be.above(0);
+
+                            var aPermWildcard = _.find(data3.permissions, function(aPermission) {
+                              return aPermission.action.toLowerCase() === "all" &&
+                                     aPermission.resource_type === "*" &&
+                                     _.contains(aPermission.resource, "*");
+                            });
+
+                            expect(aPermWildcard.resource).not.to.be(undefined);
+                            expect(aPermWildcard.resource).not.to.be(null);
 
                             // delete user
                             conn.deleteUser({ user: aNewUser }, function () {

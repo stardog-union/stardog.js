@@ -44,7 +44,7 @@
             var aNewPermission = {
                 "action" : "write",
                 "resource_type" : "db",
-                "resource" : "nodeDB"
+                "resource" : ["nodeDB"]
             };
 
             conn.createRole({ rolename: aNewRole }, function (data1, response1) {
@@ -60,7 +60,8 @@
 
                         expect(data3.permissions).not.to.be(undefined);
                         expect(data3.permissions).not.to.be(null);
-                        expect(data3.permissions).to.contain("stardog:write:db:nodeDB");
+                        expect(data3.permissions.length).to.be.above(0);
+                        expect(data3.permissions[0].resource).to.contain("nodeDB");
 
                         // delete role
                         conn.deleteRole({ role: aNewRole }, function () {
