@@ -1,6 +1,6 @@
-//     Stardog.js 0.2.0
+//     Stardog.js 0.3.0
 //
-// Copyright 2015 Clark & Parsia, LLC 
+// Copyright 2015 Clark & Parsia, LLC
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@
     var Stardog = {};
 
     // Current version of the library. Keep in sync with 'package.json'
-    Stardog.VERSION = "0.2.0";
+    Stardog.VERSION = "0.3.0";
 
     // Verify the environment of the library
     var isNode = (typeof exports !== "undefined" && typeof module !== "undefined" && module.exports);
@@ -717,6 +717,28 @@
         this._httpRequest(reqOptions, callback);
     };
 
+    // Exports the content of the DB.
+    //
+    // __Parameters__:
+    // `options`: an object with at least the following attributes:
+    //              `database`: the name of the database;
+    //              `mimetype`: the MIME type of the RDF format for the export, default: application/ld+json
+    //              `graphUri`: the graph URI to export (if any);
+    // `callback`: the callback to execute once the request is done.
+    Connection.prototype.exportDB = function (options, callback) {
+        var reqOptions = {
+            httpMethod: "GET",
+            resource: options.database + "/export",
+            acceptHeader: options.mimetype || "application/ld+json",
+            params: options.params || {}
+        };
+
+        // by default it exports the whole database in JSON-LD
+        reqOptions.params["graph-uri"] = options.graphUri || "tag:stardog:api:context:all";
+
+        this._httpRequest(reqOptions, callback);
+    };
+
     // ## Reasoning API
     // -------------------------
 
@@ -915,18 +937,6 @@
 
             callback(nsMap, response);
         });
-    };
-
-    /**
-     * @deprecated Since version 0.1.2. Will be deleted in version 0.2.0. Use `getNamespaces` instead.
-     */
-    Connection.prototype.getPrefixes = function (options, callback) {
-        try {
-            this.getNamespaces(options, callback);
-        } catch (error) {
-            // Error propagation
-            throw new Error("Option `database` is required.");
-        }
     };
 
     // ## Query Management API

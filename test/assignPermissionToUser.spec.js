@@ -36,7 +36,7 @@
             var aNewPermission = {
                 "action" : "write",
                 "resource_type" : "db",
-                "resource" : "nodeDB"
+                "resource" : ["nodeDB"]
             };
 
             conn.assignPermissionToUser({ user: "myuser", permissionObj: aNewPermission }, function (data, response) {
@@ -52,7 +52,7 @@
                 aNewPermission = {
                     "action" : "write",
                     "resource_type" : "db",
-                    "resource" : "nodeDB"
+                    "resource" : ["nodeDB"]
                 };
 
             conn.deleteUser({ user: aNewUser }, function () {

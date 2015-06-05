@@ -4,7 +4,7 @@ Stardog.js
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/complexible/stardog.js?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)  
-_Current Version **0.2.0**_
+_Current Version **0.3.0**_
 
 Stardog.js JavaScript Framework for node.js to develop apps with the [Stardog RDF Database](http://stardog.com).  
 

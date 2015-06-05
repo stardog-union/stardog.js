@@ -1,0 +1,15 @@
+{
+  "name": "express-app",
+  "version": "0.0.1",
+  "description": "Example using Express with Stardog.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "stardog": "latest",
+    "express": "latest"
+  },
+  "author": "Edgar Rodriguez-Diaz",
+  "license": "Apache v2.0"
+}

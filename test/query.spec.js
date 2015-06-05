@@ -138,7 +138,7 @@
 
             conn.query({
                 database: "nodeDBReasoning",
-                query: "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :Vehicle }",
+                query: "select distinct ?s where { ?s a <http://example.org/vehicles/Vehicle> }",
                 limit: 20,
                 offset: 0
             },
@@ -157,7 +157,7 @@
         it ("A query to Car must have result count to 3", function(done) {
             conn.query({
                 database: "nodeDBReasoning",
-                query: "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :Car }",
+                query: "select distinct ?s where { ?s a <http://example.org/vehicles/Car> }",
                 limit: 20,
                 offset: 0
             },
@@ -177,7 +177,7 @@
 
             conn.query({
                 database: "nodeDBReasoning",
-                query: "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :SportsCar }",
+                query: "select distinct ?s where { ?s a <http://example.org/vehicles/SportsCar> }",
                 limit: 20,
                 offset: 0
             },
@@ -197,7 +197,7 @@
 
             conn.query({
                 database: "nodeDBReasoning",
-                query: "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :Vehicle }",
+                query: "select distinct ?s where { ?s a <http://example.org/vehicles/Vehicle> }",
                 limit: 20,
                 offset: 0
             },
@@ -217,7 +217,7 @@
 
             conn.query({
                 database: "nodeDBReasoning",
-                query: "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :Car }",
+                query: "select distinct ?s where { ?s a <http://example.org/vehicles/Car> }",
                 limit: 20,
                 offset: 0
             },
@@ -237,7 +237,7 @@
 
             conn.query({
                 database: "nodeDBReasoning",
-                query: "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :SportsCar }",
+                query: "select distinct ?s where { ?s a <http://example.org/vehicles/SportsCar> }",
                 limit: 20,
                 offset: 0
             },
@@ -257,7 +257,7 @@
 
             conn.query({
                 database: "nodeDBReasoning",
-                query: "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :Vehicle }",
+                query: "select distinct ?s where { ?s a <http://example.org/vehicles/Vehicle> }",
                 limit: 20,
                 offset: 0
             },
@@ -277,7 +277,7 @@
 
             conn.query({
                 database: "nodeDBReasoning",
-                query: "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :Car }",
+                query: "select distinct ?s where { ?s a <http://example.org/vehicles/Car> }",
                 limit: 20,
                 offset: 0
             },
@@ -297,7 +297,7 @@
 
             conn.query({
                 database: "nodeDBReasoning",
-                query: "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :SportsCar }",
+                query: "select distinct ?s where { ?s a <http://example.org/vehicles/SportsCar> }",
                 limit: 20,
                 offset: 0
             },
@@ -334,7 +334,7 @@
 
             conn.query({
                 database: "nodeDBReasoning",
-                query: "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :Vehicle }",
+                query: "select distinct ?s where { ?s a <http://example.org/vehicles/Vehicle> }",
                 limit: 20,
                 offset: 0,
                 reasoning: true
@@ -355,7 +355,7 @@
 
             conn.query({
                 database: "nodeDBReasoning",
-                query: "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :Car }",
+                query: "select distinct ?s where { ?s a <http://example.org/vehicles/Car> }",
                 limit: 20,
                 offset: 0,
                 reasoning: true
@@ -376,13 +376,13 @@
 
             conn.query({
                 database: "nodeDBReasoning",
-                query: "prefix : <http://example.org/vehicles/> select distinct ?s where { ?s a :Vehicle }",
+                query: "select distinct ?s where { ?s a <http://example.org/vehicles/Vehicle> }",
                 limit: 20,
                 offset: 0,
                 reasoning: false
             },
             function (data) {
-                //console.log(data);
+                // console.log(data);
 
                 expect(data).not.to.be(null);
                 expect(data.results).not.to.be(undefined);

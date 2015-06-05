@@ -37,15 +37,21 @@
         });
 
         it ("should return a non-empty list with the roles of the user", function (done) {
-            conn.listUserRoles({ user: "anonymous" }, function (data, response) {
-                expect(response.statusCode).to.be(200);
+            conn.createRole({ rolename: "nodeDBRole" }, function () {
+              conn.setUserRoles({user: "anonymous", roles: ["nodeDBRole"] }, function () {
+                conn.listUserRoles({ user: "anonymous" }, function (data, response) {
+                    expect(response.statusCode).to.be(200);
 
-                expect(data.roles).not.to.be(undefined);
-                expect(data.roles).not.to.be(null);
-                expect(data.roles.length).to.be.above(0);
-                expect(data.roles).to.contain("reader");
+                    expect(data.roles).not.to.be(undefined);
+                    expect(data.roles).not.to.be(null);
+                    expect(data.roles.length).to.be.above(0);
+                    expect(data.roles).to.contain("nodeDBRole");
 
-                done();
+                    conn.deleteRole({role: "nodeDBRole"}, function () {
+                      done();
+                    });
+                });
+              });
             });
         });
 

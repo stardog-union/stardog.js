@@ -1,11 +1,11 @@
 {
   "name": "stardog",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Stardog JavaScript Framework for node.js and the browser - Develop apps using the Stardog RDF Database & JS.",
   "homepage": "http://complexible.github.com/stardog.js",
   "keywords": ["stardog", "rdf", "sparql", "library", "semantic web", "linked data"],
   "main": "js/stardog.js",
-  "author": { 
+  "author": {
     "name": "Complexible Inc",
     "email": "inquiries@complexible.com",
     "url": "http://complexible.com"
@@ -42,12 +42,12 @@
       "email": "ron@zettlemoyer.com"
     }
   ],
-  "repository": { 
+  "repository": {
     "type": "git",
     "url": "https://github.com/complexible/stardog.js"
   },
-  "bugs": { 
-    "url": "https://github.com/complexible/stardog.js/issues" 
+  "bugs": {
+    "url": "https://github.com/complexible/stardog.js/issues"
   },
   "dependencies": {
     "jquery": "~1.11.0",
