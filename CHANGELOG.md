@@ -1,5 +1,10 @@
 # Stardog.js - Change Log
 
+## v0.3.0
+
+*__ADDED:__ `exportDB` call for exporting the contents of a Database.
+*__MODIFIED:__ small changes due to recent security updates for stardog 3.1
+
 ## v0.2.0
 
 *__MODIFIED:__ Changes for stardog 3.0
