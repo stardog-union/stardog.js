@@ -1,4 +1,4 @@
-//     Stardog.js 0.2.0
+//     Stardog.js 0.3.0
 //
 // Copyright 2015 Clark & Parsia, LLC
 
@@ -51,7 +51,7 @@
     var Stardog = {};
 
     // Current version of the library. Keep in sync with 'package.json'
-    Stardog.VERSION = "0.2.0";
+    Stardog.VERSION = "0.3.0";
 
     // Verify the environment of the library
     var isNode = (typeof exports !== "undefined" && typeof module !== "undefined" && module.exports);
@@ -937,18 +937,6 @@
 
             callback(nsMap, response);
         });
-    };
-
-    /**
-     * @deprecated Since version 0.1.2. Will be deleted in version 0.2.0. Use `getNamespaces` instead.
-     */
-    Connection.prototype.getPrefixes = function (options, callback) {
-        try {
-            this.getNamespaces(options, callback);
-        } catch (error) {
-            // Error propagation
-            throw new Error("Option `database` is required.");
-        }
     };
 
     // ## Query Management API
