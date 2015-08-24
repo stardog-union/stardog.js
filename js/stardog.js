@@ -157,6 +157,7 @@
                 acceptH = options.acceptHeader,
                 isJsonBody = options.isJsonBody,
                 contentType = options.contentType,
+                contentEncoding = options.contentEncoding,
                 multipart = options.multipart,
                 headers = {},
                 reqJSON, attachments;
@@ -200,6 +201,11 @@
                 else {
                     headers["Content-Type"] = contentType;
                 }
+            }
+
+            // Set Content-Encoding if present
+            if (contentEncoding) {
+              headers["Content-Encoding"] = contentEncoding;
             }
 
             // build request object
@@ -269,6 +275,7 @@
                 req_url = this.endpoint + options.resource,
                 params = options.params || {},
                 contentType = options.contentType,
+                contentEncoding = options.contentEncoding,
                 body = options.msgBody || null,
                 isJsonBody = options.isJsonBody,
                 multipart = options.multipart,
@@ -311,6 +318,11 @@
             } else if (multipart) {
                 // prevents jquery from overwriting the proper content-type header
                 ajaxSettings.contentType = false;
+            }
+
+            // Set Content-Encoding if present
+            if (contentEncoding) {
+              headers["Content-Encoding"] = contentEncoding;
             }
 
             $.ajax(ajaxSettings).done(function(data, status, jqXHR) {
@@ -651,6 +663,7 @@
                 params: options.params || { },
                 msgBody: options.body,
                 contentType: options.contentType,
+                contentEncoding: options.contentEncoding || null,
                 isJsonBody: false,
                 multipart: null
             };
@@ -682,6 +695,7 @@
                 params: options.params || { },
                 msgBody: options.body,
                 contentType: options.contentType,
+                contentEncoding: options.contentEncoding || null,
                 isJsonBody: false,
                 multipart: null
             };
