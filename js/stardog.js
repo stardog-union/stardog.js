@@ -1139,25 +1139,6 @@
         this._httpRequest(reqOptions, callback);
     };
 
-    // #### Migrate an existing database.
-    // Migrates the existing content of a legacy database to new format.
-    //
-    // __Parameters__:
-    // `options`: an object with one the following attributes:
-    //              `database`: the name of the database to migrate.
-    //              `params`: (optional) any other parameters to pass to the SPARQL endpoint.
-    // `callback`: the callback to execute once the request is done.
-    Connection.prototype.migrateDB = function (options, callback) {
-        var reqOptions = {
-                httpMethod: "PUT",
-                resource: "admin/databases/" + options.database + "/migrate",
-                acceptHeader: "application/json",
-                params: options.params || ""
-            };
-
-        this._httpRequest(reqOptions, callback);
-    };
-
     // #### Optimize an existing database.
     // Optimize an existing database.
     //
