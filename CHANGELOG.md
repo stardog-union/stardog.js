@@ -1,5 +1,10 @@
 # Stardog.js - Change Log
 
+## v0.3.1
+
+*__REMOVED__: `migrateDB` is no longer part of the Stardog API
+*__ADDED:__: support for Stardog 4.0-RC1, tests were verified
+
 ## v0.3.0
 
 *__ADDED:__ `exportDB` call for exporting the contents of a Database.
