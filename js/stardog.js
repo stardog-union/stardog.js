@@ -1,4 +1,4 @@
-//     Stardog.js 0.3.0
+//     Stardog.js 0.3.1
 //
 // Copyright 2015 Clark & Parsia, LLC
 
@@ -51,7 +51,7 @@
     var Stardog = {};
 
     // Current version of the library. Keep in sync with 'package.json'
-    Stardog.VERSION = "0.3.0";
+    Stardog.VERSION = "0.3.1";
 
     // Verify the environment of the library
     var isNode = (typeof exports !== "undefined" && typeof module !== "undefined" && module.exports);
