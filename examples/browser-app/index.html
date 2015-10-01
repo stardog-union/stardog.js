@@ -1,0 +1,47 @@
+<html>
+    <head>
+        <title>Stardog.js in the Browser</title>
+        <script src="bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
+        <script src="bower_components/lodash/dist/lodash.min.js" type="text/javascript"></script>
+        <script src="bower_components/stardog/js/stardog.js" type="text/javascript"></script>
+
+        <style media="screen" type="text/css">
+        table, td, th { 
+            border: 1px solid 
+        }
+        th {
+            background: gray
+        }
+        </style>
+
+        <script type="text/javascript"> 
+        $(document).ready(function () {
+            // query stardog in localhost:5820 to get a list of DBs
+
+            var conn = new Stardog.Connection();
+            conn.setEndpoint("http://localhost:5820");
+            conn.setCredentials("admin", "admin");
+
+            conn.listDBs(function(data) {
+                _.each(data.databases, function (dbName) {
+                    $("table").find("tbody").append("<tr><td>"+ dbName +"</td></tr>");
+                });
+            });    
+        });
+        </script>
+    </head>
+
+    <body>
+        <h2>List of Databases in Stardog</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </body>
+</html>

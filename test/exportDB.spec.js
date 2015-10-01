@@ -16,7 +16,7 @@
 }(this, function (Stardog, expect) {
     "use strict";
 
-    describe ("Create a new DB Test Suite", function() {
+    describe ("Export a DB Test Suite", function() {
         var conn;
 
         this.timeout(50000);
@@ -31,7 +31,7 @@
             conn = null;
         });
 
-        it ("should export the whole DB (all graphs) if no graph-uri was passed", function (done) {
+        it ("should return a response with content-disposition header and the attachment export file", function (done) {
             var options = {
                 "database" : "ng"
             };
@@ -39,18 +39,15 @@
             conn.exportDB(options, function (data, response) {
                 expect(response.statusCode).to.be(200);
 
-                expect(data).not.to.be(null);
-                expect(data).not.to.be(undefined);
-
-                // 3 graphs, which include the triples in the default graph,
-                // which make reference to the named-graph URI
-                expect(data.length).to.be(3);
+                expect(response.headers['content-disposition']).not.to.be(null);
+                expect(response.headers['content-disposition']).not.to.be(undefined);
+                expect(response.headers['content-disposition']).to.be("attachment; filename=export.jsonld");
 
                 done();
             });
         });
 
-        it ("should export the default graph", function (done) {
+        it ("should return a response with content-disposition header and the attachment export file when using graph-uri param", function (done) {
             var options = {
                 "database" : "ng",
                 "graphUri": "tag:stardog:api:context:default"
@@ -59,34 +56,9 @@
             conn.exportDB(options, function (data, response) {
                 expect(response.statusCode).to.be(200);
 
-                expect(data).not.to.be(null);
-                expect(data).not.to.be(undefined);
-
-                // the individuals in the default graph
-                expect(data.length).to.be(2);
-
-                done();
-            });
-        });
-
-        it ("should export a named graph", function (done) {
-            var options = {
-                "database": "ng",
-                "graphUri": "http://example.org/namedgraphs#bob"
-            };
-
-            conn.exportDB(options, function (data, response) {
-                expect(response.statusCode).to.be(200);
-
-                expect(data).not.to.be(null);
-                expect(data).not.to.be(undefined);
-
-                // should have the @graph tag with a JSON object as value, including the NG URI
-                expect(data.length).to.be(1);
-                expect(data[0]).to.have.property("@graph");
-
-                expect(data[0]).to.have.property("@id");
-                expect(data[0]["@id"]).to.be("http://example.org/namedgraphs#bob");
+                expect(response.headers['content-disposition']).not.to.be(null);
+                expect(response.headers['content-disposition']).not.to.be(undefined);
+                expect(response.headers['content-disposition']).to.be("attachment; filename=export.jsonld");
 
                 done();
             });

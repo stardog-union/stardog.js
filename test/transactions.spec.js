@@ -38,7 +38,7 @@
 
         it("Should be able to get a transaction and make a query", function(done) {
             conn.onlineDB( { database: "nodeDB", strategy: "NO_WAIT" }, function () {
-            
+
                 conn.begin({ database: "nodeDB" }, function (body, response) {
                     // console.log("body: ", body);
                     expect(response.statusCode).to.be(200);
@@ -46,17 +46,20 @@
                     expect(body).not.to.be(null);
 
                     txId = body;
-                    // console.log(txId);
+                    // console.log("Transaction ID: "+ txId);
 
                     // execute a query with the transaction ID
-                    conn.queryInTransaction({ 
-                            database: "nodeDB", 
-                            "txId": txId, 
-                            query: "select distinct ?s where { ?s ?p ?o }", 
-                            limit: 10, 
+                    conn.queryInTransaction({
+                            database: "nodeDB",
+                            "txId": txId,
+                            query: "select distinct ?s where { ?s ?p ?o }",
+                            limit: 10,
                             offset: 0
                         },
-                        function (data) {
+                        function (data, resp) {
+                            // console.log(data);
+                            // console.log(require('util').inspect(resp, { depth: null }));
+
                             expect(data).not.to.be(undefined);
                             expect(data.results).not.to.be(undefined);
                             expect(data.results.bindings).not.to.be(undefined);
@@ -84,14 +87,19 @@
 
                     txId = body;
 
+                    // console.log("Transaction ID: "+ txId);
+
                     conn.addInTransaction(
-                        { 
+                        {
                             database: "nodeDB",
                             "txId": txId,
                             "body": aTriple,
-                            contentType: "text/plain"
+                            contentType: "text/turtle"
                         },
                         function (body2, response2) {
+                            // console.log(body2);
+                            // console.log(require('util').inspect(response2, { depth: null }));
+
                             expect(response2.statusCode).to.be(200);
 
                             conn.rollback({ database: "nodeDB", "txId": txId }, function (body3, response3) {
@@ -129,10 +137,10 @@
                                 expect(response3.statusCode).to.be(200);
                                 // query for the triple added.
                                 conn.query(
-                                    { 
+                                    {
                                         database: "nodeDB",
-                                        "query":"prefix foo: <http://localhost/publications/articles/Journal1/1940/>\n"+ 
-                                                "prefix dc: <http://purl.org/dc/elements/1.1/>\n"+ 
+                                        "query":"prefix foo: <http://localhost/publications/articles/Journal1/1940/>\n"+
+                                                "prefix dc: <http://purl.org/dc/elements/1.1/>\n"+
                                                 "ask where { "+
                                                     "foo:Article2 "+
                                                     "dc:subject "+
@@ -156,7 +164,7 @@
                                             expect(responseB.statusCode).to.be(200);
                                             expect(bodyB).not.to.be(undefined);
                                             expect(bodyB).not.to.be(null);
-                                            
+
                                             var txId2 = bodyB;
 
                                             conn.removeInTransaction(
@@ -198,7 +206,7 @@
 
                     txId = body;
                     conn.addInTransaction(
-                        { database: "nodeDB", "txId": txId, "body": aTriple, contentType: "text/plain" },
+                        { database: "nodeDB", "txId": txId, "body": aTriple, contentType: "text/turtle" },
                         function (body2, response2) {
                             expect(response2.statusCode).to.be(200);
 
@@ -206,7 +214,7 @@
                                 expect(response3.statusCode).to.be(200);
                                 // query for the triple added.
                                 conn.query(
-                                    { 
+                                    {
                                         database: "nodeDB",
                                         "query": "ask where { "+
                                                     "<http://localhost/publications/articles/Journal1/1940/Article2> "+
@@ -231,11 +239,11 @@
                                             expect(responseB.statusCode).to.be(200);
                                             expect(bodyB).not.to.be(undefined);
                                             expect(bodyB).not.to.be(null);
-                                            
+
                                             var txId2 = bodyB;
 
                                             conn.removeInTransaction(
-                                                { database: "nodeDB", "txId": txId2, "body": aTriple, contentType: "text/plain" },
+                                                { database: "nodeDB", "txId": txId2, "body": aTriple, contentType: "text/turtle" },
                                                 function (bodyR, responseR) {
                                                     expect(responseR.statusCode).to.be(200);
 
@@ -271,7 +279,7 @@
                     "<http://localhost/publications/articles/Journal1/1940/Article1> <http://swrc.ontoware.org/ontology#pages> \"110\"^^<http://www.w3.org/2001/XMLSchema#integer> .\n"+
                     "<http://localhost/publications/articles/Journal1/1940/Article1> <http://purl.org/dc/elements/1.1/title> \"richer dwelling scrapped\"^^<http://www.w3.org/2001/XMLSchema#string> .\n"+
                     "<http://localhost/publications/articles/Journal1/1940/Article1> <http://xmlns.com/foaf/0.1/homepage> \"http://www.succories.tld/scrapped/prat.html\"^^<http://www.w3.org/2001/XMLSchema#string> .\n"+
-                    "\n" +                  
+                    "\n" +
                     "<http://localhost/publications/articles/Journal1/1940/Article2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://localhost/vocabulary/bench/Article> .\n"+
                     "<http://localhost/publications/articles/Journal1/1940/Article2> <http://purl.org/dc/elements/1.1/creator> <http://localhost/persons/John_Erdoes> .\n"+
                     "<http://localhost/publications/articles/Journal1/1940/Article2> <http://swrc.ontoware.org/ontology#journal> <http://localhost/publications/journals/Journal1/1940> .\n"+
@@ -308,7 +316,7 @@
 
                                 var sizeNum = parseInt(dataS);
                                 expect(sizeNum).to.be(0);
-                                
+
                                 // restore the db content
                                 conn.begin({ database: "nodeDB" }, function (bodyB2, responseB2) {
                                     expect(responseB2.statusCode).to.be(200);
@@ -318,7 +326,7 @@
                                     txId = bodyB2;
 
                                     conn.addInTransaction(
-                                        { database: "nodeDB", "txId": txId, body: dbContent, contentType: "text/plain" },
+                                        { database: "nodeDB", "txId": txId, body: dbContent, contentType: "text/turtle" },
                                         function (dataA, responseA) {
                                             expect(responseA.statusCode).to.be(200);
 

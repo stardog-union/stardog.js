@@ -1,0 +1,7 @@
+{
+    "name": "Stardog.js in the Browser",
+    "version": "0.0.1",
+    "dependencies": {
+        "stardog": "latest"
+    }
+}

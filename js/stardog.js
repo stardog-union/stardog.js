@@ -1,4 +1,4 @@
-//     Stardog.js 0.3.0
+//     Stardog.js 0.3.1
 //
 // Copyright 2015 Clark & Parsia, LLC
 
@@ -51,7 +51,7 @@
     var Stardog = {};
 
     // Current version of the library. Keep in sync with 'package.json'
-    Stardog.VERSION = "0.3.0";
+    Stardog.VERSION = "0.3.1";
 
     // Verify the environment of the library
     var isNode = (typeof exports !== "undefined" && typeof module !== "undefined" && module.exports);
@@ -157,6 +157,7 @@
                 acceptH = options.acceptHeader,
                 isJsonBody = options.isJsonBody,
                 contentType = options.contentType,
+                contentEncoding = options.contentEncoding,
                 multipart = options.multipart,
                 headers = {},
                 reqJSON, attachments;
@@ -200,6 +201,11 @@
                 else {
                     headers["Content-Type"] = contentType;
                 }
+            }
+
+            // Set Content-Encoding if present
+            if (contentEncoding) {
+              headers["Content-Encoding"] = contentEncoding;
             }
 
             // build request object
@@ -269,6 +275,7 @@
                 req_url = this.endpoint + options.resource,
                 params = options.params || {},
                 contentType = options.contentType,
+                contentEncoding = options.contentEncoding,
                 body = options.msgBody || null,
                 isJsonBody = options.isJsonBody,
                 multipart = options.multipart,
@@ -311,6 +318,11 @@
             } else if (multipart) {
                 // prevents jquery from overwriting the proper content-type header
                 ajaxSettings.contentType = false;
+            }
+
+            // Set Content-Encoding if present
+            if (contentEncoding) {
+              headers["Content-Encoding"] = contentEncoding;
             }
 
             $.ajax(ajaxSettings).done(function(data, status, jqXHR) {
@@ -651,6 +663,7 @@
                 params: options.params || { },
                 msgBody: options.body,
                 contentType: options.contentType,
+                contentEncoding: options.contentEncoding || null,
                 isJsonBody: false,
                 multipart: null
             };
@@ -682,6 +695,7 @@
                 params: options.params || { },
                 msgBody: options.body,
                 contentType: options.contentType,
+                contentEncoding: options.contentEncoding || null,
                 isJsonBody: false,
                 multipart: null
             };
@@ -1118,25 +1132,6 @@
         var reqOptions = {
                 httpMethod: "DELETE",
                 resource: "admin/databases/" + options.database,
-                acceptHeader: "application/json",
-                params: options.params || ""
-            };
-
-        this._httpRequest(reqOptions, callback);
-    };
-
-    // #### Migrate an existing database.
-    // Migrates the existing content of a legacy database to new format.
-    //
-    // __Parameters__:
-    // `options`: an object with one the following attributes:
-    //              `database`: the name of the database to migrate.
-    //              `params`: (optional) any other parameters to pass to the SPARQL endpoint.
-    // `callback`: the callback to execute once the request is done.
-    Connection.prototype.migrateDB = function (options, callback) {
-        var reqOptions = {
-                httpMethod: "PUT",
-                resource: "admin/databases/" + options.database + "/migrate",
                 acceptHeader: "application/json",
                 params: options.params || ""
             };

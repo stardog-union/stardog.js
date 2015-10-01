@@ -50,7 +50,7 @@
                 expect(data).not.to.be(undefined);
                 expect(data).not.to.be(null);
                 expect(data instanceof Object).to.be(true);
-                expect(Object.keys(data).length).to.be(5);
+                expect(Object.keys(data).length).to.be(6);
 
                 done();
             });
