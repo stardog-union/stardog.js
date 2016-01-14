@@ -10,6 +10,10 @@
 <http://localhost/publications/articles/Journal1/1940/Article1> <http://purl.org/dc/elements/1.1/title> "richer dwelling scrapped"^^<http://www.w3.org/2001/XMLSchema#string> .
 <http://localhost/publications/articles/Journal1/1940/Article1> <http://xmlns.com/foaf/0.1/homepage> "http://www.succories.tld/scrapped/prat.html"^^<http://www.w3.org/2001/XMLSchema#string> .
 
+<http://localhost/persons/Paul_Erdoes> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+<http://localhost/persons/Paul_Erdoes> <http://xmlns.com/foaf/0.1/firstName> "Paul"^^<http://www.w3.org/2001/XMLSchema#string> .
+<http://localhost/persons/Paul_Erdoes> <http://xmlns.com/foaf/0.1/lastName> "Erdoes"^^<http://www.w3.org/2001/XMLSchema#string> .
+
 <http://localhost/publications/articles/Journal1/1940/Article2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://localhost/vocabulary/bench/Article> .
 <http://localhost/publications/articles/Journal1/1940/Article2> <http://purl.org/dc/elements/1.1/creator> <http://localhost/persons/John_Erdoes> .
 <http://localhost/publications/articles/Journal1/1940/Article2> <http://swrc.ontoware.org/ontology#journal> <http://localhost/publications/journals/Journal1/1940> .
@@ -22,6 +26,10 @@
 <http://localhost/publications/articles/Journal1/1940/Article2> <http://purl.org/dc/elements/1.1/title> "richer dwelling scrapped"^^<http://www.w3.org/2001/XMLSchema#string> .
 <http://localhost/publications/articles/Journal1/1940/Article2> <http://xmlns.com/foaf/0.1/homepage> "http://www.succories.tld/scrapped/prat2.html"^^<http://www.w3.org/2001/XMLSchema#string> .
 
+<http://localhost/persons/John_Erdoes> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+<http://localhost/persons/John_Erdoes> <http://xmlns.com/foaf/0.1/firstName> "John"^^<http://www.w3.org/2001/XMLSchema#string> .
+<http://localhost/persons/John_Erdoes> <http://xmlns.com/foaf/0.1/lastName> "Erdoes"^^<http://www.w3.org/2001/XMLSchema#string> .
+
 <http://localhost/publications/articles/Journal1/1940/Article3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://localhost/vocabulary/bench/Article> .
 <http://localhost/publications/articles/Journal1/1940/Article3> <http://purl.org/dc/elements/1.1/creator> <http://localhost/persons/John_Perez> .
 <http://localhost/publications/articles/Journal1/1940/Article3> <http://swrc.ontoware.org/ontology#journal> <http://localhost/publications/journals/Journal1/1940> .
@@ -33,3 +41,7 @@
 <http://localhost/publications/articles/Journal1/1940/Article3> <http://swrc.ontoware.org/ontology#pages> "840"^^<http://www.w3.org/2001/XMLSchema#integer> .
 <http://localhost/publications/articles/Journal1/1940/Article3> <http://purl.org/dc/elements/1.1/title> "richer dwelling scrapped 2"^^<http://www.w3.org/2001/XMLSchema#string> .
 <http://localhost/publications/articles/Journal1/1940/Article3> <http://xmlns.com/foaf/0.1/homepage> "http://www.succories.tld/scrapped/prat2.html"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://localhost/persons/John_Perez> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+<http://localhost/persons/John_Perez> <http://xmlns.com/foaf/0.1/firstName> "John"^^<http://www.w3.org/2001/XMLSchema#string> .
+<http://localhost/persons/John_Perez> <http://xmlns.com/foaf/0.1/lastName> "Perez"^^<http://www.w3.org/2001/XMLSchema#string> .

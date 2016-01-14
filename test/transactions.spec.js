@@ -64,7 +64,7 @@
                             expect(data.results).not.to.be(undefined);
                             expect(data.results.bindings).not.to.be(undefined);
                             expect(data.results.bindings.length).to.be.above(0);
-                            expect(data.results.bindings.length).to.be(3);
+                            expect(data.results.bindings.length).to.be(6);
 
                             done();
                     });

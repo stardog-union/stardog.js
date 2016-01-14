@@ -49,7 +49,40 @@
                     expect(data.results).not.to.be(undefined);
                     expect(data.results.bindings).not.to.be(undefined);
                     expect(data.results.bindings.length).to.be.above(0);
-                    expect(data.results.bindings.length).to.be(3);
+                    expect(data.results.bindings.length).to.be(6);
+                    done();
+                });
+            });
+        });
+
+        it ("A query result should work with property paths", function(done) {
+            conn.onlineDB({ database: "nodeDB", strategy: "NO_WAIT" }, function () {
+
+                conn.query({
+                    database: "nodeDB",
+                    query: "prefix prov: <http://www.w3.org/ns/prov#>\n" +
+"select distinct ?s ?sLabel ?sType ?sTypeLabel ?p ?pLabel ?o ?oLabel ?oType ?oTypeLabel where {\n"+
+"  VALUES ?basicProvProperties { prov:wasGeneratedBy prov:wasDerivedFrom prov:wasAttributedTo prov:startedAtTime prov:used prov:wasInformedBy prov:endedAtTime prov:wasAssociatedWith prov:actedOnBehalfOf prov:alternateOf prov:specializationOf prov:generatedAtTime prov:hadPrimarySource prov:value prov:wasQuotedFrom prov:wasRevisionOf prov:invalidatedAtTime prov:wasInvalidatedBy prov:hadMember prov:wasStartedBy prov:wasEndedBy prov:invalidated prov:influenced prov:atLocation prov:generated prov:wasInfluencedBy prov:qualifiedInfluence prov:qualifiedGeneration prov:qualifiedDerivation prov:qualifiedPrimarySource prov:qualifiedQuotation prov:qualifiedRevision prov:qualifiedAttribution prov:qualifiedInvalidation prov:qualifiedStart prov:qualifiedUsage prov:qualifiedCommunication prov:qualifiedAssociation prov:qualifiedEnd prov:qualifiedDelegation prov:influencer prov:entity prov:hadUsage prov:hadGeneration prov:activity prov:agent prov:hadPlan prov:hadActivity prov:atTime prov:hadRole }\n"+
+"         <http://www.example.org#chart2> (prov:wasGeneratedBy | prov:wasDerivedFrom | prov:wasAttributedTo | prov:startedAtTime | prov:used | prov:wasInformedBy | prov:endedAtTime | prov:wasAssociatedWith | prov:actedOnBehalfOf | prov:alternateOf | prov:specializationOf | prov:generatedAtTime | prov:hadPrimarySource | prov:value | prov:wasQuotedFrom | prov:wasRevisionOf | prov:invalidatedAtTime | prov:wasInvalidatedBy | prov:hadMember | prov:wasStartedBy | prov:wasEndedBy | prov:invalidated | prov:influenced | prov:atLocation | prov:generated | prov:wasInfluencedBy | prov:qualifiedInfluence | prov:qualifiedGeneration | prov:qualifiedDerivation | prov:qualifiedPrimarySource | prov:qualifiedQuotation | prov:qualifiedRevision | prov:qualifiedAttribution | prov:qualifiedInvalidation | prov:qualifiedStart | prov:qualifiedUsage | prov:qualifiedCommunication | prov:qualifiedAssociation | prov:qualifiedEnd | prov:qualifiedDelegation | prov:influencer | prov:entity | prov:hadUsage | prov:hadGeneration | prov:activity | prov:agent | prov:hadPlan | prov:hadActivity | prov:atTime | prov:hadRole)+ ?o .\n"+
+"  ?s ?basicProvProperties ?o .\n"+
+"  ?s ?p ?o .\n"+
+"  OPTIONAL{ ?s rdfs:label ?sLabel }\n"+
+"  OPTIONAL { ?p rdfs:label ?pLabel } \n"+
+"  OPTIONAL{ ?o rdfs:label ?oLabel }\n"+
+"  OPTIONAL { ?s rdf:type ?sType .\n"+
+"            OPTIONAL { ?sType rdfs:label ?sTypeLabel . }\n"+
+"           }\n"+
+"  OPTIONAL { ?o rdf:type ?oType .\n"+
+"            OPTIONAL { ?oType rdfs:label ?oTypeLabel . }\n"+
+"           }"+
+"}",
+                    limit: 20,
+                    offset: 0
+                }, function (data) {
+
+                    expect(data).not.to.be(null);
+                    expect(data.results).not.to.be(undefined);
+                    expect(data.results.bindings).not.to.be(undefined);
                     done();
                 });
             });

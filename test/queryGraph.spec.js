@@ -36,14 +36,14 @@
 
         it("A graph query for ALL result should not be empty", function(done) {
             conn.onlineDB({ database: "nodeDB", strategy: "NO_WAIT" }, function () {
-            
+
                 conn.queryGraph({ database: "nodeDB", query: "construct where { ?s ?p ?o }" }, function (data) {
                     expect(data).not.to.be(undefined);
                     expect(data).not.to.be(null);
 
                     // Could be an array of JSON-LD objects
                     expect(data.length).to.be.above(0);
-                    expect(data.length).to.be(3);  // three articles defined in nodeDB
+                    expect(data.length).to.be(6);  // three articles defined in nodeDB
 
                     for (var i=0; i < data.length; i++) {
                         expect(data[i]).not.to.be(undefined);
@@ -59,7 +59,7 @@
         it("A graph query could be limited too", function(done) {
             conn.onlineDB({ database: "nodeDB", strategy: "NO_WAIT" }, function () {
 
-                conn.queryGraph({ database: "nodeDB", 
+                conn.queryGraph({ database: "nodeDB",
                     query: "describe <http://localhost/publications/articles/Journal1/1940/Article1>",
                     limit: 1 }, function (data) {  // retrieve just one triple
 
@@ -92,10 +92,10 @@
         it("should be able to retrieve one triple in turtle format", function (done) {
             conn.onlineDB({ database: "nodeDB", strategy: "NO_WAIT" }, function () {
 
-                conn.queryGraph({ database: "nodeDB", 
+                conn.queryGraph({ database: "nodeDB",
                     query: "describe <http://localhost/publications/articles/Journal1/1940/Article1>",
                     mimetype: "text/turtle",
-                    limit: 1 
+                    limit: 1
                 }, function (data) {  // retrieve just one triple
                     var tripleTokens;
 
