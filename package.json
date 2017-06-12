@@ -2,7 +2,10 @@
   "name": "stardog",
   "version": "0.3.1",
   "description": "Stardog JavaScript Framework for node.js and the browser - Develop apps using the Stardog RDF Database & JS.",
+<<<<<<< HEAD
   "homepage": "http://complexible.github.com/stardog.js",
+=======
+>>>>>>> 💄 - Migrate to jest
   "keywords": [
     "stardog",
     "rdf",
@@ -13,9 +16,8 @@
   ],
   "main": "js/stardog.js",
   "author": {
-    "name": "Complexible Inc",
-    "email": "inquiries@complexible.com",
-    "url": "http://complexible.com"
+    "name": "Stardog Union",
+    "url": "http://stardog.com"
   },
   "licenses": [
     {
@@ -53,33 +55,37 @@
     {
       "name": "Ron Michael Zettlemoyer",
       "email": "ron@zettlemoyer.com"
+    },
+    {
+      "name": "Adam Bretz",
+      "email": "arbretz@gmail.com"
     }
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/complexible/stardog.js"
+    "url": "https://github.com/stardog-union/stardog.js"
   },
   "bugs": {
-    "url": "https://github.com/complexible/stardog.js/issues"
+    "url": "https://github.com/stardog-union/stardog.js/issues"
   },
   "dependencies": {
-    "restler": "~3.2.2",
+    "lodash": "~2.4.1",
+    "prettier": "^1.4.4",
     "querystring": "~0.2.0",
-    "lodash": "~2.4.1"
+    "restler": "~3.2.2"
   },
   "devDependencies": {
-    "expect.js": "~0.3.1",
     "husky": "^0.13.4",
+    "jest": "^20.0.4",
     "lint-staged": "^4.0.0",
-    "lodash": "~2.4.1",
-    "mocha": "~1.18.2",
     "prettier": "^1.4.4",
-    "request": "~2.34.0",
-    "win-spawn": "~2.0.0"
+    "randomstring": "^1.1.5"
   },
-  "engines": "*",
+  "engines": {
+    "node": ">=6.0.0"
+  },
   "scripts": {
-    "test": "node test.js",
+    "test": "jest test/*.spec.js --verbose -i",
     "precommit": "lint-staged"
   },
   "lint-staged": {

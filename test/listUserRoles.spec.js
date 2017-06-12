@@ -1,59 +1,41 @@
-(function (root, factory) {
-    "use strict";
+const Stardog = require('../lib');
+const {
+  seedDatabase,
+  dropDatabase,
+  generateDatabaseName,
+  generateRandomString,
+} = require('./setup-database');
 
-    if (typeof exports === "object") {
-        // NodeJS. Does not work with strict CommonJS, but
-        // only CommonJS-like enviroments that support module.exports,
-        // like Node.
-        module.exports = factory(require("../js/stardog.js"), require("expect.js"));
-    } else if (typeof define === "function" && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(["stardog", "expect"], factory);
-    } else {
-        // Browser globals (root is window)
-        root.returnExports = factory(root.Stardog, root.expect);
-    }
-}(this, function (Stardog, expect) {
-    "use strict";
+describe('listUserRoles()', () => {
+  var conn;
 
-    describe ("List user roles Test Suite", function() {
-        var conn;
+  beforeEach(() => {
+    conn = new Stardog.Connection();
+    conn.setEndpoint('http://localhost:5820/');
+    conn.setCredentials('admin', 'admin');
+  });
 
-        beforeEach(function() {
-            conn = new Stardog.Connection();
-            conn.setEndpoint("http://localhost:5820/");
-            conn.setCredentials("admin", "admin");
-        });
+  afterEach(() => {
+    conn = null;
+  });
 
-        afterEach(function() {
-            conn = null;
-        });
-
-        it ("should return NOT_FOUND if trying to list roles from non-existent user", function (done) {
-            conn.listUserRoles({ user: "someuser" }, function (data, response) {
-                expect(response.statusCode).to.be(404);
-                done();
-            });
-        });
-
-        it ("should return a non-empty list with the roles of the user", function (done) {
-            conn.createRole({ rolename: "nodeDBRole" }, function () {
-              conn.setUserRoles({user: "anonymous", roles: ["nodeDBRole"] }, function () {
-                conn.listUserRoles({ user: "anonymous" }, function (data, response) {
-                    expect(response.statusCode).to.be(200);
-
-                    expect(data.roles).not.to.be(undefined);
-                    expect(data.roles).not.to.be(null);
-                    expect(data.roles.length).to.be.above(0);
-                    expect(data.roles).to.contain("nodeDBRole");
-
-                    conn.deleteRole({role: "nodeDBRole"}, function () {
-                      done();
-                    });
-                });
-              });
-            });
-        });
-
+  it('should return NOT_FOUND if trying to list roles from non-existent user', done => {
+    conn.listUserRoles({ user: 'someuser' }, (data, response) => {
+      expect(response.statusCode).toEqual(404);
+      done();
     });
-}));
+  });
+
+  it('should return a non-empty list with the roles of the user', done => {
+    const role = generateRandomString();
+    conn.createRole({ rolename: role }, () => {
+      conn.setUserRoles({ user: 'anonymous', roles: [role] }, () => {
+        conn.listUserRoles({ user: 'anonymous' }, (data, response) => {
+          expect(response.statusCode).toEqual(200);
+          expect(data.roles).toContain(role);
+          done();
+        });
+      });
+    });
+  });
+});

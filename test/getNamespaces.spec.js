@@ -1,60 +1,47 @@
-(function (root, factory) {
-    "use strict";
+const Stardog = require('../lib');
+const {
+  seedDatabase,
+  dropDatabase,
+  generateDatabaseName,
+  generateRandomString,
+} = require('./setup-database');
+describe('getNamespaces()', () => {
+  const database = generateDatabaseName();
+  var conn;
 
-    if (typeof exports === "object") {
-        // NodeJS. Does not work with strict CommonJS, but
-        // only CommonJS-like enviroments that support module.exports,
-        // like Node.
-        module.exports = factory(require("../js/stardog.js"), require("expect.js"));
-    } else if (typeof define === "function" && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(["stardog", "expect"], factory);
-    } else {
-        // Browser globals (root is window)
-        root.returnExports = factory(root.Stardog, root.expect);
-    }
-}(this, function (Stardog, expect) {
-    "use strict";
+  beforeAll(seedDatabase(database));
+  afterAll(dropDatabase(database));
 
-    // -----------------------------------
-    // Gets DB Options
-    // -----------------------------------
+  beforeEach(() => {
+    conn = new Stardog.Connection();
+    conn.setEndpoint('http://localhost:5820/');
+    conn.setCredentials('admin', 'admin');
+  });
 
-    describe ("Get DB Namespaces Test Suite", function() {
-        var conn;
+  it('should throw an Error when the database option was not passed in the options object.', () => {
+    expect(() => {
+      conn.getNamespaces();
+    }).toThrow(/Option `database` is required/);
+  });
 
-        this.timeout(50000);
-
-        beforeEach(function() {
-            conn = new Stardog.Connection();
-            conn.setEndpoint("http://localhost:5820/");
-            conn.setCredentials("admin", "admin");
+  it('should retrieve the namespace prefix bindings for the database', done => {
+    conn.getNamespaces(
+      {
+        database,
+      },
+      (data, response) => {
+        expect(response.statusCode).toEqual(200);
+        expect(data).toEqual({
+          '': 'http://myvehicledata.com/',
+          owl: 'http://www.w3.org/2002/07/owl#',
+          rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+          rdfs: 'http://www.w3.org/2000/01/rdf-schema#',
+          stardog: 'tag:stardog:api:',
+          xsd: 'http://www.w3.org/2001/XMLSchema#',
+          ex: 'http://example.org/vehicles/',
         });
-
-        afterEach(function() {
-            conn = null;
-        });
-
-        it ("should throw an Error when the database option was not passed in the options object.", function () {
-            var noop = function () {};
-            expect(conn.getNamespaces).to.throwError(/Option `database` is required/);
-            expect(conn.getNamespaces).withArgs({},noop).to.throwError(/Option `database` is required/);
-        });
-
-        it ("should retrieve the namespace prefix bindings for the database", function (done) {
-            conn.getNamespaces({
-                database: "nodeDB"
-            }, function (data, response) {
-                expect(response.statusCode).to.be(200);
-
-                expect(data).not.to.be(undefined);
-                expect(data).not.to.be(null);
-                expect(data instanceof Object).to.be(true);
-                expect(Object.keys(data).length).to.be(6);
-
-                done();
-            });
-        });
-
-    });
-}));
+        done();
+      }
+    );
+  });
+});
