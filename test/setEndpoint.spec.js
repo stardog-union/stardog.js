@@ -1,7 +1,7 @@
 const Stardog = require('../lib');
 
 describe('Testing connection without trailing /', () => {
-  var conn;
+  let conn;
 
   afterEach(() => {
     conn = null;

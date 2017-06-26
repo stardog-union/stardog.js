@@ -9,7 +9,7 @@ const {
 describe('listDBs()', () => {
   const one = generateDatabaseName();
   const two = generateDatabaseName();
-  var conn;
+  let conn;
 
   beforeAll(seedDatabase(one));
   beforeAll(seedDatabase(two));

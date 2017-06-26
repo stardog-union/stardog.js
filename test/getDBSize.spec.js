@@ -8,7 +8,7 @@ const {
 
 describe('getDBSize()', () => {
   const database = generateDatabaseName();
-  var conn;
+  let conn;
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
@@ -21,7 +21,7 @@ describe('getDBSize()', () => {
 
   it('A response with the size of the DB should not be empty', done => {
     conn.getDBSize({ database }, response => {
-      var sizeNum = parseInt(response, 10);
+      const sizeNum = parseInt(response, 10);
       expect(sizeNum).toBe(48);
       done();
     });

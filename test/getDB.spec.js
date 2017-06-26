@@ -8,7 +8,7 @@ const {
 
 describe('getDB()', () => {
   const database = generateDatabaseName();
-  var conn;
+  let conn;
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));

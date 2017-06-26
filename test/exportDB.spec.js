@@ -8,7 +8,7 @@ const {
 
 describe('exportDB()', () => {
   const database = generateDatabaseName();
-  var conn;
+  let conn;
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
@@ -20,32 +20,28 @@ describe('exportDB()', () => {
   });
 
   it('should return a response with content-disposition header and the attachment export file', done => {
-    var options = {
+    const options = {
       database,
     };
 
     conn.exportDB(options, (data, response) => {
       expect(response.statusCode).toEqual(200);
-      expect(response.headers['content-disposition']).toEqual(
-        'attachment; filename=export.jsonld'
-      );
-
+      const res = JSON.parse(response.raw.toString());
+      expect(res).toHaveLength(12);
       done();
     });
   });
 
   it('should return a response with content-disposition header and the attachment export file when using graph-uri param', done => {
-    var options = {
+    const options = {
       database,
       graphUri: 'tag:stardog:api:context:default',
     };
 
     conn.exportDB(options, (data, response) => {
       expect(response.statusCode).toEqual(200);
-      expect(response.headers['content-disposition']).toEqual(
-        'attachment; filename=export.jsonld'
-      );
-
+      const res = JSON.parse(response.raw.toString());
+      expect(res).toHaveLength(12);
       done();
     });
   });

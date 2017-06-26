@@ -1,7 +1,7 @@
 const Stardog = require('../lib');
 
 describe('Kill a running query', () => {
-  var conn;
+  let conn;
 
   beforeEach(() => {
     conn = new Stardog.Connection();
@@ -10,19 +10,15 @@ describe('Kill a running query', () => {
     conn.setReasoning(true);
   });
 
-  afterEach(() => {
-    conn = null;
-  });
-
   it('should return 404 trying to kill a query with a non-existent queryId', done => {
-    var queryId = '1';
+    const queryId = '1';
 
     conn.queryKill(
       {
-        queryId: queryId,
+        queryId,
       },
       (data, response) => {
-        expect(data).toContain('Query not found: ' + queryId);
+        expect(data.message).toEqual(`Query not found: ${queryId}`);
         expect(response.statusCode).toEqual(404);
         done();
       }

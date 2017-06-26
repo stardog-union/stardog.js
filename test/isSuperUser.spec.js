@@ -7,7 +7,7 @@ const {
 } = require('./setup-database');
 
 describe('isSuperUser()', () => {
-  var conn;
+  let conn;
 
   beforeEach(() => {
     conn = new Stardog.Connection();
@@ -22,11 +22,24 @@ describe('isSuperUser()', () => {
     });
   });
 
-  it("should return the value with the user's superuser flag", done => {
+  it("should return the value with the user's superuser flag (true)", done => {
     conn.isSuperUser({ user: 'admin' }, (data, response) => {
-      expect(response.statusCode).toEqual(200);
       expect(data.superuser).toEqual(true);
       done();
+    });
+  });
+
+  it("should return the value with the user's superuser flag (false)", done => {
+    const username = generateRandomString();
+    const password = generateRandomString();
+
+    conn.createUser({ username, password, superuser: false }, (data, res) => {
+      expect(res.statusCode).toEqual(201);
+
+      conn.isSuperUser({ user: username }, (data, res) => {
+        expect(data.superuser).toEqual(false);
+        done();
+      });
     });
   });
 });

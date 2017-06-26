@@ -8,7 +8,7 @@ const {
 
 describe('Group_Concat()', () => {
   const database = generateDatabaseName();
-  var conn;
+  let conn;
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
@@ -20,7 +20,7 @@ describe('Group_Concat()', () => {
   });
 
   it('should execute a query with without errors, receiving 200 status code: Q1', done => {
-    var queryStr =
+    const queryStr =
       'select ?s (Group_Concat(?o ; separator=",") as ?o_s) where { ?s <#name> ?o } group by ?s';
 
     conn.query(

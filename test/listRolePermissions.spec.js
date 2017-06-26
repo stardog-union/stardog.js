@@ -7,7 +7,7 @@ const {
 } = require('./setup-database');
 describe('listRolePermissions()', () => {
   const database = generateDatabaseName();
-  var conn;
+  let conn;
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
@@ -26,8 +26,8 @@ describe('listRolePermissions()', () => {
   });
 
   it('should list permissions assigned to a new role.', done => {
-    var aNewRole = generateRandomString();
-    var aNewPermission = {
+    const aNewRole = generateRandomString();
+    const aNewPermission = {
       action: 'write',
       resource_type: 'db',
       resource: [database],

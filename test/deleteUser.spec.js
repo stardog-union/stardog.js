@@ -2,7 +2,7 @@ const Stardog = require('../lib');
 const { generateRandomString } = require('./setup-database');
 
 describe('deleteUser()', () => {
-  var conn;
+  let conn;
 
   beforeEach(() => {
     conn = new Stardog.Connection();
@@ -27,7 +27,7 @@ describe('deleteUser()', () => {
 
         // Once created then lets delete it.
         conn.deleteUser({ user: username }, (data, response) => {
-          expect(response.statusCode).toEqual(200);
+          expect(response.statusCode).toEqual(204);
           done();
         });
       }

@@ -7,7 +7,7 @@ const {
 } = require('./setup-database');
 describe('getNamespaces()', () => {
   const database = generateDatabaseName();
-  var conn;
+  let conn;
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
@@ -32,7 +32,7 @@ describe('getNamespaces()', () => {
       (data, response) => {
         expect(response.statusCode).toEqual(200);
         expect(data).toEqual({
-          '': 'http://myvehicledata.com/',
+          '': 'http://example.org/vehicles/',
           owl: 'http://www.w3.org/2002/07/owl#',
           rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
           rdfs: 'http://www.w3.org/2000/01/rdf-schema#',

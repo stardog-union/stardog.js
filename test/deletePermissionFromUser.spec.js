@@ -8,7 +8,7 @@ const {
 
 describe('deletePermissionFromUser()', () => {
   const database = generateDatabaseName();
-  var conn;
+  let conn;
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
@@ -20,7 +20,7 @@ describe('deletePermissionFromUser()', () => {
   });
 
   it('should fail trying to delete a permssion to a non-existent user.', done => {
-    var aNewPermission = {
+    const aNewPermission = {
       action: 'write',
       resource_type: 'db',
       resource: [database],
@@ -36,7 +36,7 @@ describe('deletePermissionFromUser()', () => {
   });
 
   it('should pass deleting a Permissions to a new user.', done => {
-    var aNewUser = generateRandomString(),
+    const aNewUser = generateRandomString(),
       aNewUserPwd = generateRandomString(),
       aNewPermission = {
         action: 'write',
@@ -58,7 +58,7 @@ describe('deletePermissionFromUser()', () => {
             conn.deletePermissionFromUser(
               { user: aNewUser, permissionObj: aNewPermission },
               (data3, response3) => {
-                expect(response3.statusCode).toEqual(200);
+                expect(response3.statusCode).toEqual(201);
                 done();
               }
             );

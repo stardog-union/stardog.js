@@ -7,7 +7,7 @@ const {
 
 describe('createDB()', () => {
   const database = generateDatabaseName();
-  var conn;
+  let conn;
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
@@ -19,7 +19,7 @@ describe('createDB()', () => {
   });
 
   it('should not be able to create a new db with the name of an existing DB', done => {
-    var options = {
+    const options = {
       database,
       options: { 'index.type': 'disk' },
       files: [],

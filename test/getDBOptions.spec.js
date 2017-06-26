@@ -8,7 +8,7 @@ const {
 
 describe('getDBOptions()', () => {
   const database = generateDatabaseName();
-  var conn;
+  let conn;
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
@@ -20,17 +20,17 @@ describe('getDBOptions()', () => {
   });
 
   it('should get NOT_FOUND status code trying to get the options of a non-existent DB.', done => {
-    var optionsObj = {
+    const optionsObj = {
       'search.enabled': '',
       'icv.enabled': '',
     };
 
-    conn.onlineDB({ database: 'nodeDB_test' }, (dataOnline, responseOnline) => {
-      expect(responseOnline.statusCode).toEqual(404);
+    conn.onlineDB({ database: 'nodeDB_test' }, (dataOnline, res) => {
+      expect(res.statusCode).toEqual(404);
       conn.getDBOptions(
         { database: 'nodeDB_test', optionsObj: optionsObj },
-        (data, response) => {
-          expect(response.statusCode).toEqual(500);
+        (data, res) => {
+          expect(res.statusCode).toEqual(404);
           done();
         }
       );
@@ -38,7 +38,7 @@ describe('getDBOptions()', () => {
   });
 
   it('should get the options of an DB', done => {
-    var optionsObj = {
+    const optionsObj = {
       'search.enabled': '',
       'icv.enabled': '',
     };

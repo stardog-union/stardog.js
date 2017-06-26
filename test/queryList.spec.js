@@ -1,7 +1,7 @@
 const Stardog = require('../lib');
 
 describe('queryList()', () => {
-  var conn;
+  let conn;
 
   beforeEach(() => {
     conn = new Stardog.Connection();
@@ -10,11 +10,7 @@ describe('queryList()', () => {
     conn.setReasoning(true);
   });
 
-  afterEach(() => {
-    conn = null;
-  });
-
-  it('should start a query and list it with the listQueries call.', done => {
+  it('should return the number of global running queries', done => {
     conn.queryList((data, response) => {
       expect(response.statusCode).toEqual(200);
       expect(data.queries).toHaveLength(0);

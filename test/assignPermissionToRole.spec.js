@@ -9,7 +9,7 @@ const {
 
 describe('assignPermissionToRole()', () => {
   const database = generateDatabaseName();
-  var conn;
+  let conn;
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
@@ -21,7 +21,7 @@ describe('assignPermissionToRole()', () => {
   });
 
   it('should fail trying to assign a permssion to a non-existent role.', done => {
-    var aNewPermission = {
+    const aNewPermission = {
       action: 'write',
       resource_type: 'db',
       resource: [database],
@@ -37,8 +37,8 @@ describe('assignPermissionToRole()', () => {
   });
 
   it('should pass assinging a Permissions to a new role.', done => {
-    var aNewRole = generateRandomString();
-    var aNewPermission = {
+    const aNewRole = generateRandomString();
+    const aNewPermission = {
       action: 'write',
       resource_type: 'db',
       resource: [database],

@@ -8,7 +8,7 @@ const {
 
 describe('listUserPermissions()', () => {
   const database = generateDatabaseName();
-  var conn;
+  let conn;
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
@@ -27,7 +27,7 @@ describe('listUserPermissions()', () => {
   });
 
   it('should list permissions assigned to a new user.', done => {
-    var aNewUser = generateRandomString(),
+    const aNewUser = generateRandomString(),
       aNewUserPwd = generateRandomString(),
       aNewPermission = {
         action: 'write',

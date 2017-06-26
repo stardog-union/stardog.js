@@ -1,7 +1,7 @@
 const Stardog = require('../lib');
 
 describe('List Users Test Suite', () => {
-  var conn;
+  let conn;
 
   beforeEach(() => {
     conn = new Stardog.Connection();

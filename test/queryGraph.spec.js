@@ -8,7 +8,7 @@ const {
 
 describe('queryGraph()', () => {
   const database = generateDatabaseName();
-  var conn;
+  let conn;
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
@@ -24,7 +24,7 @@ describe('queryGraph()', () => {
       { database, query: 'construct where { ?s ?p ?o }' },
       data => {
         expect(data).toHaveLength(12); // three articles defined in nodeDB
-        for (var i = 0; i < data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
           expect(data[i]['@id']).toEqual(expect.anything());
         }
 

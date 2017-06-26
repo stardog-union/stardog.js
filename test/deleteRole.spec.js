@@ -8,7 +8,7 @@ const {
 
 describe('deleteRole()', () => {
   const database = generateDatabaseName();
-  var conn;
+  let conn;
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
@@ -27,13 +27,13 @@ describe('deleteRole()', () => {
   });
 
   it("should delete a 'writer' role recently created.", done => {
-    conn.createRole({ rolename: 'writer' }, (data1, response1) => {
+    conn.createRole({ rolename: 'writer' }, (data, res) => {
       // It should be 201 (CREATED)
-      expect(response1.statusCode).toEqual(201);
+      expect(res.statusCode).toEqual(201);
 
       // Once created then lets delete it.
-      conn.deleteRole({ role: 'writer' }, (data2, response2) => {
-        expect(response2.statusCode).toEqual(200);
+      conn.deleteRole({ role: 'writer' }, (data, res) => {
+        expect(res.statusCode).toEqual(204);
         done();
       });
     });

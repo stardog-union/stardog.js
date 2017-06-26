@@ -8,7 +8,7 @@ const {
 
 describe('setDBOptions()', () => {
   const database = generateDatabaseName();
-  var conn;
+  let conn;
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
@@ -30,7 +30,7 @@ describe('setDBOptions()', () => {
   });
 
   it('should set the options of an DB', done => {
-    var optionsObj = {
+    const optionsObj = {
       'search.enabled': true,
       'icv.enabled': false,
     };

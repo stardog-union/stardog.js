@@ -8,7 +8,7 @@ const {
 
 describe('listRoleUsers()', () => {
   const database = generateDatabaseName();
-  var conn;
+  let conn;
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
@@ -19,7 +19,7 @@ describe('listRoleUsers()', () => {
     conn.setCredentials('admin', 'admin');
   });
 
-  it("should return a list of users assigned to the 'reader' role in the system.", done => {
+  it("should return a list of users assigned to the 'rolename' role in the system.", done => {
     const rolename = generateRandomString();
     conn.createRole({ rolename }, () => {
       conn.setUserRoles({ user: 'anonymous', roles: [rolename] }, () => {

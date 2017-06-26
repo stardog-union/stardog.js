@@ -7,7 +7,7 @@ const {
 } = require('./setup-database');
 
 describe('listUserRoles()', () => {
-  var conn;
+  let conn;
 
   beforeEach(() => {
     conn = new Stardog.Connection();

@@ -2,7 +2,7 @@ const Stardog = require('../lib');
 const { generateRandomString } = require('./setup-database');
 
 describe('Set User Roles Test Suite', () => {
-  var conn;
+  let conn;
 
   beforeEach(() => {
     conn = new Stardog.Connection();
@@ -27,7 +27,6 @@ describe('Set User Roles Test Suite', () => {
   it('should assign roles to a newly created user.', done => {
     const username = generateRandomString();
     const password = generateRandomString();
-    // clean and delete the user
     conn.createUser(
       {
         username,
@@ -37,9 +36,17 @@ describe('Set User Roles Test Suite', () => {
       () => {
         conn.setUserRoles(
           { user: username, roles: ['reader'] },
-          (data, response) => {
-            expect(response.statusCode).toEqual(200);
-            done();
+          (data, res) => {
+            expect(res.statusCode).toEqual(200);
+            conn.listUserRoles(
+              {
+                user: username,
+              },
+              (data, res) => {
+                expect(data.roles).toContain('reader');
+                done();
+              }
+            );
           }
         );
       }

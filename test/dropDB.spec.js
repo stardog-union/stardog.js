@@ -1,7 +1,7 @@
 const Stardog = require('../lib');
 
 describe('dropDB()', () => {
-  var conn;
+  let conn;
 
   beforeEach(() => {
     conn = new Stardog.Connection();
@@ -12,8 +12,7 @@ describe('dropDB()', () => {
   it('should not drop an non-existent DB', done => {
     conn.dropDB({ database: 'nodeDBDrop' }, (data, response) => {
       expect(response.statusCode).toEqual(404);
-
-      expect(data).toContain('does not exist');
+      expect(data.message).toEqual("Database 'nodeDBDrop' does not exist.");
       done();
     });
   });

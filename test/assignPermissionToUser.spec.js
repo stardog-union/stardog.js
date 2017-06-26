@@ -8,7 +8,7 @@ const {
 
 describe('assignPermissionToUser()', () => {
   const database = generateDatabaseName();
-  var conn;
+  let conn;
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
@@ -20,7 +20,7 @@ describe('assignPermissionToUser()', () => {
   });
 
   it('should fail trying to assign a permssion to a non-existent user.', done => {
-    var aNewPermission = {
+    const aNewPermission = {
       action: 'write',
       resource_type: 'db',
       resource: [database],
@@ -36,7 +36,7 @@ describe('assignPermissionToUser()', () => {
   });
 
   it('should pass assinging a Permissions to a new user.', done => {
-    var username = generateRandomString(),
+    const username = generateRandomString(),
       password = generateRandomString(),
       aNewPermission = {
         action: 'write',

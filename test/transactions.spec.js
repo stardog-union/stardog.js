@@ -8,7 +8,7 @@ const {
 
 describe('transactions', () => {
   const database = generateDatabaseName();
-  var conn;
+  let conn;
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
@@ -42,7 +42,7 @@ describe('transactions', () => {
   });
 
   it('Should be able to get a transaction, add a triple and rollback', done => {
-    var triple =
+    const triple =
       '<http://localhost/publications/articles/Journal1/1940/Article2> ' +
       '<http://purl.org/dc/elements/1.1/subject> ' +
       '"A very interesting subject"^^<http://www.w3.org/2001/XMLSchema#string> .';
@@ -73,7 +73,7 @@ describe('transactions', () => {
   });
 
   it('Should be able to get a transaction, add a triple with a defined prefix, commit that and query.', done => {
-    var triple =
+    const triple =
       '@prefix foo: <http://localhost/publications/articles/Journal1/1940/> .\n' +
       '@prefix dc: <http://purl.org/dc/elements/1.1/> .\n' +
       'foo:Article2 ' +
@@ -147,7 +147,7 @@ describe('transactions', () => {
   });
 
   it('Should be able to get a transaction, add a triple, commit that and query.', done => {
-    var aTriple =
+    const aTriple =
       '<http://localhost/publications/articles/Journal1/1940/Article2> ' +
       '<http://purl.org/dc/elements/1.1/subject> ' +
       '"A very interesting subject"^^<http://www.w3.org/2001/XMLSchema#string> .';
@@ -218,7 +218,7 @@ describe('transactions', () => {
   });
 
   it('Should be able to clean and insert all data in the DB using a transaction.', done => {
-    var dbContent =
+    const dbContent =
       '<http://localhost/publications/articles/Journal1/1940/Article1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://localhost/vocabulary/bench/Article> .\n' +
       '<http://localhost/publications/articles/Journal1/1940/Article1> <http://purl.org/dc/elements/1.1/creator> <http://localhost/persons/Paul_Erdoes> .\n' +
       '<http://localhost/publications/articles/Journal1/1940/Article1> <http://swrc.ontoware.org/ontology#journal> <http://localhost/publications/journals/Journal1/1940> .\n' +
@@ -260,7 +260,7 @@ describe('transactions', () => {
             expect(responseS.statusCode).toEqual(200);
             expect(dataS).toEqual(expect.anything());
 
-            var sizeNum = parseInt(dataS, 10);
+            const sizeNum = parseInt(dataS, 10);
             expect(sizeNum).toEqual(0);
 
             // restore the db content
@@ -287,7 +287,7 @@ describe('transactions', () => {
                     // check that the data is stored
                     conn.getDBSize({ database }, (dataS2, responseS2) => {
                       expect(responseS2.statusCode).toEqual(200);
-                      var sizeNum = parseInt(dataS2, 10);
+                      const sizeNum = parseInt(dataS2, 10);
                       expect(sizeNum).toBe(22);
                       done();
                     });

@@ -8,7 +8,7 @@ const {
 describe('copyDB()', () => {
   const sourceDatabase = generateDatabaseName();
   const destinationDatabase = generateDatabaseName();
-  var conn;
+  let conn;
 
   beforeAll(seedDatabase(sourceDatabase));
   afterAll(dropDatabase(sourceDatabase));
@@ -27,7 +27,8 @@ describe('copyDB()', () => {
         conn.copyDB(
           { dbsource: sourceDatabase, dbtarget: destinationDatabase },
           () => {
-            conn.listDBs(data => {
+            conn.listDBs((data, res) => {
+              expect(res.statusCode).toEqual(200); // Not sure why this is a 200, but it is
               expect(data.databases).not.toContain(destinationDatabase);
               expect(data.databases).toContain(sourceDatabase);
               done();
@@ -46,7 +47,8 @@ describe('copyDB()', () => {
         conn.copyDB(
           { dbsource: sourceDatabase, dbtarget: destinationDatabase },
           () => {
-            conn.listDBs(data => {
+            conn.listDBs((data, res) => {
+              expect(res.statusCode).toEqual(200);
               expect(data.databases).toEqual(
                 expect.arrayContaining([sourceDatabase, destinationDatabase])
               );
