@@ -1,67 +1,55 @@
-(function (root, factory) {
-    "use strict";
+const Stardog = require('../lib');
+const { generateRandomString } = require('./setup-database');
 
-    if (typeof exports === "object") {
-        // NodeJS. Does not work with strict CommonJS, but
-        // only CommonJS-like enviroments that support module.exports,
-        // like Node.
-        module.exports = factory(require("../js/stardog.js"), require("expect.js"));
-    } else if (typeof define === "function" && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(["stardog", "expect"], factory);
-    } else {
-        // Browser globals (root is window)
-        root.returnExports = factory(root.Stardog, root.expect);
-    }
-}(this, function (Stardog, expect) {
-    "use strict";
+describe('Set User Roles Test Suite', () => {
+  let conn;
 
-    describe ("Set User Roles Test Suite", function() {
-        var conn;
+  beforeEach(() => {
+    conn = new Stardog.Connection();
+    conn.setEndpoint('http://localhost:5820/');
+    conn.setCredentials('admin', 'admin');
+  });
 
-        this.timeout(50000);
+  afterEach(() => {
+    conn = null;
+  });
 
-        beforeEach(function() {
-            conn = new Stardog.Connection();
-            conn.setEndpoint("http://localhost:5820/");
-            conn.setCredentials("admin", "admin");
-        });
+  it('should return NOT_FOUND trying to set roles to a non-existent user.', done => {
+    conn.setUserRoles(
+      { user: generateRandomString(), roles: ['reader'] },
+      (data, response) => {
+        expect(response.statusCode).toEqual(404);
+        done();
+      }
+    );
+  });
 
-        afterEach(function() {
-            conn = null;
-        });
-
-        it("should return NOT_FOUND trying to set roles to a non-existent user.", function (done) {
-
-            conn.setUserRoles({ user: "roletestuser", roles: ["reader"] }, function (data, response) {
-
-                expect(response.statusCode).to.be(404);
+  it('should assign roles to a newly created user.', done => {
+    const username = generateRandomString();
+    const password = generateRandomString();
+    conn.createUser(
+      {
+        username,
+        password,
+        superuser: true,
+      },
+      () => {
+        conn.setUserRoles(
+          { user: username, roles: ['reader'] },
+          (data, res) => {
+            expect(res.statusCode).toEqual(200);
+            conn.listUserRoles(
+              {
+                user: username,
+              },
+              (data, res) => {
+                expect(data.roles).toContain('reader');
                 done();
-            });
-        });
-
-        it("should assign roles to a newly created user.", function (done) {
-
-            // clean and delete the user
-            conn.deleteUser({ user: "roletestuser" }, function () {
-
-                conn.createUser({ username: "roletestuser", password: "roletestuser", superuser: true }, function (data1, response1) {
-                    expect(response1.statusCode).to.be(201);
-
-                    conn.setUserRoles({ user: "roletestuser", roles: ["reader"] }, function (data2, response2) {
-
-                        expect(response2.statusCode).to.be(200);
-
-                        // clean and delete the user
-                        conn.deleteUser({ user: "roletestuser" }, function (data, response3) {
-                            expect(response3.statusCode).to.be(200);
-
-                            done();
-                        });
-                    });
-                });
-            });
-        });
-        
-    });
-}));
+              }
+            );
+          }
+        );
+      }
+    );
+  });
+});

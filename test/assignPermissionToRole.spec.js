@@ -1,77 +1,59 @@
-(function (root, factory) {
-    "use strict";
+const RandomString = require('randomstring');
+const Stardog = require('../lib');
+const {
+  seedDatabase,
+  dropDatabase,
+  generateDatabaseName,
+  generateRandomString,
+} = require('./setup-database');
 
-    if (typeof exports === "object") {
-        // NodeJS. Does not work with strict CommonJS, but
-        // only CommonJS-like enviroments that support module.exports,
-        // like Node.
-        module.exports = factory(require("../js/stardog.js"), require("expect.js"));
-    } else if (typeof define === "function" && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(["stardog", "expect"], factory);
-    } else {
-        // Browser globals (root is window)
-        root.returnExports = factory(root.Stardog, root.expect);
-    }
-}(this, function (Stardog, expect) {
-    "use strict";
+describe('assignPermissionToRole()', () => {
+  const database = generateDatabaseName();
+  let conn;
 
-    describe ("Assign Permissions to Roles Test Suite", function() {
-        var conn;
+  beforeAll(seedDatabase(database));
+  afterAll(dropDatabase(database));
 
-        this.timeout(50000);
+  beforeEach(() => {
+    conn = new Stardog.Connection();
+    conn.setEndpoint('http://localhost:5820/');
+    conn.setCredentials('admin', 'admin');
+  });
 
-        beforeEach(function() {
-            conn = new Stardog.Connection();
-            conn.setEndpoint("http://localhost:5820/");
-            conn.setCredentials("admin", "admin");
-        });
+  it('should fail trying to assign a permssion to a non-existent role.', done => {
+    const aNewPermission = {
+      action: 'write',
+      resource_type: 'db',
+      resource: [database],
+    };
 
-        afterEach(function() {
-            conn = null;
-        });
+    conn.assignPermissionToRole(
+      { role: 'myrole', permissionObj: aNewPermission },
+      (data, response) => {
+        expect(response.statusCode).toEqual(404);
+        done();
+      }
+    );
+  });
 
-        it("should fail trying to assign a permssion to a non-existent role.", function (done) {
+  it('should pass assinging a Permissions to a new role.', done => {
+    const aNewRole = generateRandomString();
+    const aNewPermission = {
+      action: 'write',
+      resource_type: 'db',
+      resource: [database],
+    };
 
-            var aNewPermission = {
-                "action" : "write",
-                "resource_type" : "db",
-                "resource" : ["nodeDB"]
-            };
+    conn.createRole({ rolename: aNewRole }, (data, response1) => {
+      expect(response1.statusCode).toEqual(201);
 
-            conn.assignPermissionToRole({ role: "myrole", permissionObj: aNewPermission }, function (data, response) {
-                expect(response.statusCode).to.be(404);
-                done();
-            });
-        });
-
-        it("should pass assinging a Permissions to a new role.", function (done) {
-
-            var aNewRole = "newtestrole";
-            var aNewPermission = {
-                "action" : "write",
-                "resource_type" : "db",
-                "resource" : ["nodeDB"]
-            };
-
-            conn.deleteRole({ role: aNewRole}, function() {
-                // delete role if exists
-
-                conn.createRole({ rolename: aNewRole }, function (data, response1) {
-                    expect(response1.statusCode).to.be(201);
-
-                    conn.assignPermissionToRole({ role: aNewRole, permissionObj: aNewPermission }, function (data, response2) {
-
-                        expect(response2.statusCode).to.be(201);
-
-                        // delete role
-                        conn.deleteRole({ role: aNewRole }, function (data, response3) {
-                            expect(response3.statusCode).to.be(200);
-                            done();
-                        });
-                    });
-                });
-            });
-        });
+      conn.assignPermissionToRole(
+        { role: aNewRole, permissionObj: aNewPermission },
+        (data, response2) => {
+          expect(response2.statusCode).toEqual(201);
+          done();
+        }
+      );
     });
-}));
+  });
+});

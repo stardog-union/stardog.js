@@ -1,60 +1,45 @@
-(function (root, factory) {
-    "use strict";
+const Stardog = require('../lib');
+const {
+  seedDatabase,
+  dropDatabase,
+  generateDatabaseName,
+  generateRandomString,
+} = require('./setup-database');
 
-    if (typeof exports === "object") {
-        // NodeJS. Does not work with strict CommonJS, but
-        // only CommonJS-like enviroments that support module.exports,
-        // like Node.
-        module.exports = factory(require("../js/stardog.js"), require("expect.js"));
-    } else if (typeof define === "function" && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(["stardog", "expect"], factory);
-    } else {
-        // Browser globals (root is window)
-        root.returnExports = factory(root.Stardog, root.expect);
-    }
-}(this, function (Stardog, expect) {
-    "use strict";
+describe('isSuperUser()', () => {
+  let conn;
 
-    // -----------------------------------
-    // Describes the super user test methods
-    // -----------------------------------
+  beforeEach(() => {
+    conn = new Stardog.Connection();
+    conn.setEndpoint('http://localhost:5820/');
+    conn.setCredentials('admin', 'admin');
+  });
 
-    describe ("Check if user is superuser Test Suite", function() {
-        var conn;
-
-        this.timeout(50000);
-
-        beforeEach(function() {
-            conn = new Stardog.Connection();
-            conn.setEndpoint("http://localhost:5820/");
-            conn.setCredentials("admin", "admin");
-        });
-
-        afterEach(function() {
-            conn = null;
-        });
-
-        it ("should get NOT_FOUND for a non-existent user", function (done) {
-
-            conn.isSuperUser({ user: "someuser" }, function (data, response) {
-                expect(response.statusCode).to.be(404);
-                done();
-            });
-        });
-
-        it ("should return the value with the user's superuser flag", function (done) {
-            conn.onlineDB({ database: "nodeDB" }, function () {
-                // put online if it"s not
-
-                conn.isSuperUser({ user: "admin" }, function (data, response) {
-                    expect(response.statusCode).to.be(200);
-                    expect(data.superuser).to.be(true);
-
-                    done();
-                });
-            });
-        });
-
+  it('should get NOT_FOUND for a non-existent user', done => {
+    conn.isSuperUser({ user: 'someuser' }, (data, response) => {
+      expect(response.statusCode).toEqual(404);
+      done();
     });
-}));
+  });
+
+  it("should return the value with the user's superuser flag (true)", done => {
+    conn.isSuperUser({ user: 'admin' }, (data, response) => {
+      expect(data.superuser).toEqual(true);
+      done();
+    });
+  });
+
+  it("should return the value with the user's superuser flag (false)", done => {
+    const username = generateRandomString();
+    const password = generateRandomString();
+
+    conn.createUser({ username, password, superuser: false }, (data, res) => {
+      expect(res.statusCode).toEqual(201);
+
+      conn.isSuperUser({ user: username }, (data, res) => {
+        expect(data.superuser).toEqual(false);
+        done();
+      });
+    });
+  });
+});
