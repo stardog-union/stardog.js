@@ -1,4 +1,6 @@
-const Stardog = require('../lib');
+//const Stardog = require('../lib');
+const Stardog = require('../lib/index2');
+
 const {
   seedDatabase,
   dropDatabase,
@@ -13,82 +15,66 @@ describe('query()', () => {
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = new Stardog.Connection();
-    conn.setEndpoint('http://localhost:5820/');
-    conn.setCredentials('admin', 'admin');
-    conn.setReasoning(true);
+    conn = new Stardog.Connection({
+      endpoint: 'http://localhost:5820/',
+      username: 'admin',
+      password: 'admin',
+      reasoning: true,
+      database,
+    });
   });
 
-  it('A query result should not be empty', done => {
-    conn.query(
-      {
-        database,
+  it('A query result should not be empty', () => {
+    return conn
+      .query({
         query: 'select distinct ?s where { ?s ?p ?o }',
-      },
-      data => {
-        expect(data.results.bindings).toHaveLength(10);
-        done();
-      }
-    );
+      })
+      .then(res => {
+        expect(res.result.results.bindings).toHaveLength(10);
+      });
   });
 
-  it('A query result should work with property paths', done => {
-    conn.query(
-      {
-        database,
+  it('A query result should work with property paths', () => {
+    return conn
+      .query({
         query: `select * {
           ?a a <http://localhost/vocabulary/bench/Article> ; 
                <http://purl.org/dc/elements/1.1/title> ?title ; 
                <http://purl.org/dc/elements/1.1/creator> ?c . 
           ?c (<http://xmlns.com/foaf/0.1/firstName> | <http://xmlns.com/foaf/0.1/lastName>)+ ?name
         }`,
-      },
-      data => {
-        expect(data.results.bindings).toHaveLength(6);
-        done();
-      }
-    );
+      })
+      .then(res => {
+        expect(res.result.results.bindings).toHaveLength(6);
+      });
   });
 
-  it('A query result should not have more bindings than its intended limit', done => {
-    conn.query(
-      {
-        database,
+  it('A query result should not have more bindings than its intended limit', () => {
+    return conn
+      .query({
         query: 'select * where { ?s ?p ?o }',
         limit: 10,
-        offset: 0,
-      },
-      data => {
-        expect(data.results.bindings).toHaveLength(10);
-        done();
-      }
-    );
+      })
+      .then(res => {
+        expect(res.result.results.bindings).toHaveLength(10);
+      });
   });
 
-  it('The baseURI option should be applied to the query', done => {
-    conn.query(
-      {
-        database,
+  it('The baseURI option should be applied to the query', () => {
+    return Promise.all([
+      conn.query({
         query:
           'select * {?s a <http://localhost/publications/articles/Journal1/1940/Article>}',
         limit: 10,
-      },
-      data => {
-        const noBase = data;
-        conn.query(
-          {
-            database,
-            query: 'select * {?s a <Article>}',
-            baseURI: 'http://localhost/publications/articles/Journal1/1940/',
-            limit: 10,
-          },
-          data => {
-            expect(noBase).toEqual(data);
-            done();
-          }
-        );
-      }
-    );
+      }),
+      conn.query({
+        query: 'select * {?s a <Article>}',
+        baseURI: 'http://localhost/publications/articles/Journal1/1940/',
+        limit: 10,
+      }),
+    ]).then(([noBase, base]) => {
+      expect(noBase).toEqual(base);
+    });
   });
 
   // Couldn't get this to work with Stardog 4.2.3... skipping for now
@@ -108,173 +94,93 @@ describe('query()', () => {
     );
   });
 
-  it('A query to Vehicles must have result count to 3', done => {
-    conn.query(
-      {
-        database,
+  it('A query to Articles must have result count to 3', () => {
+    return conn
+      .query({
         query:
-          'select distinct ?s where { ?s a <http://example.org/vehicles/Vehicle> }',
-      },
-      data => {
-        expect(data.results.bindings).toHaveLength(3);
-        done();
-      }
-    );
+          'select distinct * where { ?s a <http://localhost/vocabulary/bench/Article> }',
+      })
+      .then(res => {
+        expect(res.result.results.bindings).toHaveLength(3);
+      });
   });
 
-  it('A query to Car must have result count to 3', done => {
-    conn.query(
-      {
+  it('A query to Car must have result count to 3', () => {
+    return conn
+      .query({
+        query:
+          'select distinct * where { ?s a <http://example.org/vehicles/Car> }',
+      })
+      .then(res => {
+        expect(res.result.results.bindings).toHaveLength(3);
+      });
+  });
+
+  it('A query to SportsCar must have result count to 1', () => {
+    return conn
+      .query({
+        query:
+          'select distinct * where { ?s a <http://example.org/vehicles/SportsCar> }',
+      })
+      .then(res => {
+        expect(res.result.results.bindings).toHaveLength(1);
+      });
+  });
+
+  it('A query to Vehicles must have result count to 3', () => {
+    return conn
+      .query({
+        query:
+          'select distinct * where { ?s a <http://example.org/vehicles/Vehicle> }',
+      })
+      .then(res => {
+        expect(res.result.results.bindings).toHaveLength(3);
+      });
+  });
+
+  it('A query to SportsCar must have result count to 1', () => {
+    conn
+      .query({
+        query:
+          'select distinct * where { ?s a <http://example.org/vehicles/SportsCar> }',
+      })
+      .then(res => {
+        expect(res.result.results.bindings).toHaveLength(1);
+      });
+  });
+
+  it('A query to Vehicles must have result count to 3', () => {
+    return conn
+      .query({
+        query:
+          'select distinct ?s where { ?s a <http://example.org/vehicles/Vehicle> }',
+      })
+      .then(res => {
+        expect(res.result.results.bindings).toHaveLength(3);
+      });
+  });
+
+  it('A query to Car must have result count to 3', () => {
+    return conn
+      .query({
         database,
         query:
           'select distinct ?s where { ?s a <http://example.org/vehicles/Car> }',
-      },
-      data => {
-        expect(data.results.bindings).toHaveLength(3);
-        done();
-      }
-    );
+      })
+      .then(res => {
+        expect(res.result.results.bindings).toHaveLength(3);
+      });
   });
 
-  it('A query to SportsCar must have result count to 1', done => {
-    conn.query(
-      {
-        database,
-        query:
-          'select distinct ?s where { ?s a <http://example.org/vehicles/SportsCar> }',
-      },
-      data => {
-        expect(data.results.bindings).toHaveLength(1);
-        done();
-      }
-    );
-  });
-
-  it('A query to Vehicles must have result count to 3', done => {
-    conn.query(
-      {
-        database,
-        query:
-          'select distinct ?s where { ?s a <http://example.org/vehicles/Vehicle> }',
-      },
-      data => {
-        expect(data.results.bindings).toHaveLength(3);
-        done();
-      }
-    );
-  });
-
-  it('A query to Car must have result count to 3', done => {
-    conn.query(
-      {
-        database,
-        query:
-          'select distinct ?s where { ?s a <http://example.org/vehicles/Car> }',
-      },
-      data => {
-        expect(data.results.bindings).toHaveLength(3);
-        done();
-      }
-    );
-  });
-
-  it('A query to SportsCar must have result count to 1', done => {
-    conn.query(
-      {
-        database,
-        query:
-          'select distinct ?s where { ?s a <http://example.org/vehicles/SportsCar> }',
-      },
-      data => {
-        expect(data.results.bindings).toHaveLength(1);
-        done();
-      }
-    );
-  });
-
-  it('A query to Vehicles must have result count to 3', done => {
-    conn.query(
-      {
-        database,
-        query:
-          'select distinct ?s where { ?s a <http://example.org/vehicles/Vehicle> }',
-      },
-      data => {
-        expect(data.results.bindings).toHaveLength(3);
-        done();
-      }
-    );
-  });
-
-  it('A query to Car must have result count to 3', done => {
-    conn.query(
-      {
-        database,
-        query:
-          'select distinct ?s where { ?s a <http://example.org/vehicles/Car> }',
-      },
-      data => {
-        expect(data.results.bindings).toHaveLength(3);
-        done();
-      }
-    );
-  });
-
-  it('A query to SportsCar must have result count to 1', done => {
-    conn.query(
-      {
-        database,
-        query:
-          'select distinct ?s where { ?s a <http://example.org/vehicles/SportsCar> }',
-      },
-      data => {
-        expect(data.results.bindings).toHaveLength(1);
-        done();
-      }
-    );
-  });
-  it('A query to Vehicles must have result count to 3', done => {
-    conn.query(
-      {
-        database,
-        query:
-          'select distinct ?s where { ?s a <http://example.org/vehicles/Vehicle> }',
-        reasoning: true,
-      },
-      data => {
-        expect(data.results.bindings).toHaveLength(3);
-        done();
-      }
-    );
-  });
-
-  it('A query to Car must have result count to 3', done => {
-    conn.query(
-      {
-        database,
-        query:
-          'select distinct ?s where { ?s a <http://example.org/vehicles/Car> }',
-        reasoning: true,
-      },
-      data => {
-        expect(data.results.bindings).toHaveLength(3);
-        done();
-      }
-    );
-  });
-
-  it('A query to Vehicle must have result count to 3 w/o reasoning', done => {
-    conn.query(
-      {
-        database,
+  it('A query to Vehicle must have result count to 0 w/o reasoning', () => {
+    return conn
+      .query({
         query:
           'select distinct ?s where { ?s a <http://example.org/vehicles/Vehicle> }',
         reasoning: false,
-      },
-      data => {
-        expect(data.results.bindings).toHaveLength(3);
-        done();
-      }
-    );
+      })
+      .then(res => {
+        expect(res.result.results.bindings).toHaveLength(0);
+      });
   });
 });
