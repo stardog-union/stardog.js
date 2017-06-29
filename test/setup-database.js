@@ -17,11 +17,15 @@ exports.seedDatabase = database => done => {
       // Load everything into the DB
       files: [
         {
-          filename: Path.resolve(__dirname, 'fixtures', 'api_tests.nt'),
+          filename: Path.resolve(
+            '/var/opt/stardog/test/',
+            'fixtures',
+            'api_tests.nt'
+          ),
         },
         {
           filename: Path.resolve(
-            __dirname,
+            '/var/opt/stardog/test/',
             'fixtures',
             'reasoning',
             'abox.ttl'
@@ -29,7 +33,7 @@ exports.seedDatabase = database => done => {
         },
         {
           filename: Path.resolve(
-            __dirname,
+            '/var/opt/stardog/test/',
             'fixtures',
             'reasoning',
             'tbox.ttl'
@@ -38,7 +42,7 @@ exports.seedDatabase = database => done => {
       ],
     },
     (data, response) => {
-      expect(response.statusCode).toBe(201);
+      expect(response).toBe(201);
       done();
     }
   );
