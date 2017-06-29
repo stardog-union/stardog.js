@@ -1,4 +1,4 @@
-const Stardog = require('../lib');
+const Stardog = require('../lib/index2');
 const {
   seedDatabase,
   dropDatabase,
@@ -15,48 +15,34 @@ describe('copyDB()', () => {
   afterAll(dropDatabase(destinationDatabase));
 
   beforeEach(() => {
-    conn = new Stardog.Connection();
-    conn.setEndpoint('http://localhost:5820/');
-    conn.setCredentials('admin', 'admin');
+    conn = new Stardog.Connection({
+      username: 'admin',
+      password: 'admin',
+      endpoint: 'http://localhost:5820/',
+    });
   });
 
-  it('should not copy an online DB', done => {
-    conn.onlineDB(
-      { dbsource: sourceDatabase, strategy: 'WAIT', timeout: 3 },
-      () => {
-        conn.copyDB(
-          { dbsource: sourceDatabase, dbtarget: destinationDatabase },
-          () => {
-            conn.listDBs((data, res) => {
-              expect(res.statusCode).toEqual(200); // Not sure why this is a 200, but it is
-              expect(data.databases).not.toContain(destinationDatabase);
-              expect(data.databases).toContain(sourceDatabase);
-              done();
-            });
-          }
-        );
-      }
-    );
+  it('should not copy an online DB', () => {
+    return conn
+      .copyDB(sourceDatabase, destinationDatabase)
+      .then(conn.listDBs.bind(conn))
+      .then(res => {
+        expect(res.status).toEqual(200);
+        // Destination shouldn't be listed because it's not online yet and therefor didn't get copied.
+        expect(res.result.databases).not.toContain(destinationDatabase);
+        expect(res.result.databases).toContain(sourceDatabase);
+      });
   });
 
-  it('should copy an offline DB', done => {
-    conn.offlineDB(
-      { database: sourceDatabase, strategy: 'WAIT', timeout: 3 },
-      () => {
-        // Once the DB is offline, copy it.
-        conn.copyDB(
-          { dbsource: sourceDatabase, dbtarget: destinationDatabase },
-          () => {
-            conn.listDBs((data, res) => {
-              expect(res.statusCode).toEqual(200);
-              expect(data.databases).toEqual(
-                expect.arrayContaining([sourceDatabase, destinationDatabase])
-              );
-              done();
-            });
-          }
-        );
-      }
-    );
+  it('should copy an offline DB', () => {
+    return conn
+      .offlineDB(sourceDatabase)
+      .then(conn.copyDB.bind(conn, sourceDatabase, destinationDatabase))
+      .then(conn.listDBs.bind(conn))
+      .then(res => {
+        expect(res.status).toEqual(200);
+        expect(res.result.databases).toContain(destinationDatabase);
+        expect(res.result.databases).toContain(sourceDatabase);
+      });
   });
 });
