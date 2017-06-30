@@ -1,17 +1,18 @@
 const Path = require('path');
 const RandomString = require('randomstring');
-const Stardog = require('../lib/index2');
+const { Connection, db } = require('../lib/index2');
 const dbs = new Set(); // used to keep track of DBs across runs
 
 exports.seedDatabase = database => () => {
-  const conn = new Stardog.Connection({
+  const conn = new Connection({
     username: 'admin',
     password: 'admin',
     endpoint: 'http://localhost:5820',
   });
 
-  return conn
-    .createDB(
+  return db
+    .create(
+      conn,
       database,
       {
         index: {
@@ -52,12 +53,12 @@ exports.seedDatabase = database => () => {
 };
 
 exports.dropDatabase = database => () => {
-  const conn = new Stardog.Connection({
+  const conn = new Connection({
     username: 'admin',
     password: 'admin',
     endpoint: 'http://localhost:5820',
   });
-  return conn.dropDB(database).then(res => {
+  return db.drop(conn, database).then(res => {
     expect(response.status).toBe(200);
   });
 };
@@ -79,3 +80,10 @@ exports.generateRandomString = () => {
     charset: 'alphabetic',
   });
 };
+
+exports.ConnectionFactory = () =>
+  new Connection({
+    username: 'admin',
+    password: 'admin',
+    endpoint: 'http://localhost:5820',
+  });

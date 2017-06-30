@@ -1,4 +1,4 @@
-const Stardog = require('../lib/index2');
+const { Connection, query } = require('../lib/index2');
 const {
   seedDatabase,
   dropDatabase,
@@ -6,7 +6,7 @@ const {
   generateRandomString,
 } = require('./setup-database');
 
-describe('getProperty()', () => {
+describe('query.property()', () => {
   const database = generateDatabaseName();
   let conn;
 
@@ -14,7 +14,7 @@ describe('getProperty()', () => {
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = new Stardog.Connection({
+    conn = new Connection({
       username: 'admin',
       password: 'admin',
       endpoint: 'http://localhost:5820',
@@ -23,8 +23,8 @@ describe('getProperty()', () => {
   });
 
   it('Gets a specific property from the database', () => {
-    return conn
-      .getProperty({
+    return query
+      .property(conn, {
         uri: '<http://localhost/publications/articles/Journal1/1940/Article1>',
         property: '<http://localhost/vocabulary/bench/cdrom>',
       })

@@ -11,13 +11,11 @@ describe('Stardog.Connection', () => {
       username: 'admin',
       password: 'admin',
       endpoint: 'http://localhost:5820/DB/',
-      reasoning: false,
     });
     expect(c).toMatchObject({
       username: 'admin',
       password: 'admin',
       endpoint: 'http://localhost:5820/DB',
-      reasoning: false,
     });
   });
 
@@ -31,7 +29,6 @@ describe('Stardog.Connection', () => {
         username: 'admin',
         password: 'foo',
         endpoint: undefined,
-        reasoning: false,
       });
       c.config({
         username: 'adam',
@@ -42,8 +39,32 @@ describe('Stardog.Connection', () => {
         username: 'adam',
         password: 'admin',
         endpoint: 'http://localhost:3000/DB',
-        reasoning: false,
       });
+    });
+  });
+
+  describe('uri()', () => {
+    it('returns a formatted uri', () => {
+      const c = new Connection({
+        username: 'admin',
+        password: 'admin',
+        endpoint: 'http://localhost:5820/DB/',
+      });
+      expect(c.uri('admin', 'databases', 'foo', 'bar')).toBe(
+        'http://localhost:5820/DB/admin/databases/foo/bar'
+      );
+    });
+  });
+
+  describe('headers()', () => {
+    it('creates a Headers object with the Auth header set', () => {
+      const c = new Connection({
+        username: 'admin',
+        password: 'admin',
+        endpoint: 'http://localhost:5820/DB/',
+      });
+      const headers = c.headers();
+      expect(headers.get('Authorization')).toBe('Basic YWRtaW46YWRtaW4=');
     });
   });
 });

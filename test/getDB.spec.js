@@ -1,4 +1,4 @@
-const Stardog = require('../lib/index2');
+const { Connection, db } = require('../lib/index2');
 const {
   seedDatabase,
   dropDatabase,
@@ -14,7 +14,7 @@ describe('getDB()', () => {
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = new Stardog.Connection({
+    conn = new Connection({
       username: 'admin',
       password: 'admin',
       endpoint: 'http://localhost:5820',
@@ -22,7 +22,7 @@ describe('getDB()', () => {
   });
 
   it('A response of the DB info should not be empty', () => {
-    return conn.getDB(database).then(res => {
+    return db.get(conn, database).then(res => {
       expect(res.result).toMatch('@prefix : <http://example.org/vehicles/> .');
       expect(res.status).toEqual(200);
     });

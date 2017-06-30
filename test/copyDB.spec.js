@@ -1,11 +1,11 @@
-const Stardog = require('../lib/index2');
+const { Connection, db } = require('../lib/index2');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
 } = require('./setup-database');
 
-describe('copyDB()', () => {
+describe('db.copy()', () => {
   const sourceDatabase = generateDatabaseName();
   const destinationDatabase = generateDatabaseName();
   let conn;
@@ -15,7 +15,7 @@ describe('copyDB()', () => {
   afterAll(dropDatabase(destinationDatabase));
 
   beforeEach(() => {
-    conn = new Stardog.Connection({
+    conn = new Connection({
       username: 'admin',
       password: 'admin',
       endpoint: 'http://localhost:5820/',
@@ -23,9 +23,9 @@ describe('copyDB()', () => {
   });
 
   it('should not copy an online DB', () => {
-    return conn
-      .copyDB(sourceDatabase, destinationDatabase)
-      .then(conn.listDBs.bind(conn))
+    return db
+      .copy(conn, sourceDatabase, destinationDatabase)
+      .then(() => db.list(conn))
       .then(res => {
         expect(res.status).toEqual(200);
         // Destination shouldn't be listed because it's not online yet and therefor didn't get copied.
@@ -35,10 +35,10 @@ describe('copyDB()', () => {
   });
 
   it('should copy an offline DB', () => {
-    return conn
-      .offlineDB(sourceDatabase)
-      .then(conn.copyDB.bind(conn, sourceDatabase, destinationDatabase))
-      .then(conn.listDBs.bind(conn))
+    return db
+      .offline(conn, sourceDatabase)
+      .then(() => db.copy(conn, sourceDatabase, destinationDatabase))
+      .then(() => db.list(conn))
       .then(res => {
         expect(res.status).toEqual(200);
         expect(res.result.databases).toContain(destinationDatabase);

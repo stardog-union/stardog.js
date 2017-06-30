@@ -1,4 +1,4 @@
-const Stardog = require('../lib');
+const { Connection, db } = require('../lib/index2');
 const {
   seedDatabase,
   dropDatabase,
@@ -14,23 +14,22 @@ describe('optimizeDB()', () => {
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = new Stardog.Connection();
-    conn.setEndpoint('http://localhost:5820/');
-    conn.setCredentials('admin', 'admin');
-  });
-
-  it('should get NOT_FOUND status code trying to optimize a non-existent DB.', done => {
-    conn.optimizeDB({ database: 'nodeDB_optimize' }, (data, response) => {
-      expect(response.statusCode).toEqual(404);
-      done();
+    conn = new Connection({
+      endpoint: 'http://localhost:5820/',
+      username: 'admin',
+      password: 'admin',
     });
   });
 
-  it('should optimize an online DB', done => {
-    conn.optimizeDB({ database }, (data, response4) => {
-      expect(data.message).toEqual(`${database} was successfully optimized.`);
-      expect(response4.statusCode).toEqual(200);
-      done();
+  it('should get NOT_FOUND status code trying to optimize a non-existent DB.', () => {
+    return db.optimize(conn, 'nodeDB_optimize').then(res => {
+      expect(res.status).toEqual(404);
+    });
+  });
+
+  it('should optimize an online DB', () => {
+    return db.optimize(conn, database).then(res => {
+      expect(res.status).toEqual(200);
     });
   });
 });
