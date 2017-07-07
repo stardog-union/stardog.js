@@ -8,19 +8,15 @@
     "sparql",
     "library",
     "semantic web",
-    "linked data"
+    "linked data",
+    "query"
   ],
   "main": "js/stardog.js",
   "author": {
     "name": "Stardog Union",
     "url": "http://stardog.com"
   },
-  "licenses": [
-    {
-      "type": "Apache-2.0",
-      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-    }
-  ],
+  "license": "Apache-2.0",
   "contributors": [
     {
       "name": "Edgar Rodriguez",
