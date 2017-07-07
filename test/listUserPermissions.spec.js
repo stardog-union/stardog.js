@@ -25,7 +25,7 @@ describe('listUserPermissions()', () => {
   });
 
   it('should list permissions assigned to a new user.', () => {
-    const username = generateRandomString();
+    const name = generateRandomString();
     const password = generateRandomString();
     const permission = {
       action: 'write',
@@ -35,11 +35,11 @@ describe('listUserPermissions()', () => {
 
     return user
       .create(conn, {
-        username,
+        name,
         password,
       })
-      .then(() => user.assignPermission(conn, username, permission))
-      .then(() => user.permissions(conn, username))
+      .then(() => user.assignPermission(conn, name, permission))
+      .then(() => user.permissions(conn, name))
       .then(res => {
         expect(res.status).toBe(200);
         const resources = res.result.permissions.reduce(

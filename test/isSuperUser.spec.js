@@ -27,18 +27,18 @@ describe('isSuperUser()', () => {
   });
 
   it("should return the value with the user's superuser flag (false)", () => {
-    const username = generateRandomString();
+    const name = generateRandomString();
     const password = generateRandomString();
 
     return user
       .create(conn, {
-        username,
+        name,
         password,
         superuser: false,
       })
       .then(res => {
         expect(res.status).toBe(201);
-        return user.superUser(conn, username);
+        return user.superUser(conn, name);
       })
       .then(res => {
         expect(res.result.superuser).toBe(false);

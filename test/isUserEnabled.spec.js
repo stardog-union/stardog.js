@@ -27,19 +27,19 @@ describe('user.enabled()', () => {
   });
 
   it("should return the value with the user's superuser flag (false)", () => {
-    const username = generateRandomString();
+    const name = generateRandomString();
     const password = generateRandomString();
 
     return user
       .create(conn, {
-        username,
+        name,
         password,
       })
       .then(res => {
         expect(res.status).toEqual(201);
-        return user.enable(conn, username, false);
+        return user.enable(conn, name, false);
       })
-      .then(() => user.enabled(conn, username))
+      .then(() => user.enabled(conn, name))
       .then(res => {
         expect(res.result.enabled).toEqual(false);
       });
