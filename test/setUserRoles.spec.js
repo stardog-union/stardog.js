@@ -1,55 +1,34 @@
-const Stardog = require('../lib');
-const { generateRandomString } = require('./setup-database');
+const { user } = require('../lib');
+const { generateRandomString, ConnectionFactory } = require('./setup-database');
 
 describe('Set User Roles Test Suite', () => {
   let conn;
 
   beforeEach(() => {
-    conn = new Stardog.Connection();
-    conn.setEndpoint('http://localhost:5820/');
-    conn.setCredentials('admin', 'admin');
+    conn = ConnectionFactory();
   });
 
-  afterEach(() => {
-    conn = null;
+  it('should return NOT_FOUND trying to set roles to a non-existent user.', () => {
+    return user.setRoles(conn, generateRandomString(), ['reader']).then(res => {
+      expect(res.status).toBe(404);
+    });
   });
 
-  it('should return NOT_FOUND trying to set roles to a non-existent user.', done => {
-    conn.setUserRoles(
-      { user: generateRandomString(), roles: ['reader'] },
-      (data, response) => {
-        expect(response.statusCode).toEqual(404);
-        done();
-      }
-    );
-  });
-
-  it('should assign roles to a newly created user.', done => {
+  it('should assign roles to a newly created user.', () => {
     const username = generateRandomString();
     const password = generateRandomString();
-    conn.createUser(
-      {
+    return user
+      .create(conn, {
         username,
         password,
-        superuser: true,
-      },
-      () => {
-        conn.setUserRoles(
-          { user: username, roles: ['reader'] },
-          (data, res) => {
-            expect(res.statusCode).toEqual(200);
-            conn.listUserRoles(
-              {
-                user: username,
-              },
-              (data, res) => {
-                expect(data.roles).toContain('reader');
-                done();
-              }
-            );
-          }
-        );
-      }
-    );
+      })
+      .then(() => user.setRoles(conn, username, ['reader']))
+      .then(res => {
+        expect(res.status).toBe(200);
+        return user.listRoles(conn, username);
+      })
+      .then(res => {
+        expect(res.result.roles).toContain('reader');
+      });
   });
 });

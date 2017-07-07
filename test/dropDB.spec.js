@@ -1,19 +1,30 @@
-const Stardog = require('../lib');
+const { db } = require('../lib');
+const {
+  seedDatabase,
+  dropDatabase,
+  generateDatabaseName,
+  ConnectionFactory,
+} = require('./setup-database');
 
 describe('dropDB()', () => {
+  const database = generateDatabaseName();
   let conn;
 
+  beforeAll(seedDatabase(database));
   beforeEach(() => {
-    conn = new Stardog.Connection();
-    conn.setEndpoint('http://localhost:5820/');
-    conn.setCredentials('admin', 'admin');
+    conn = ConnectionFactory();
+    conn.config({ database });
   });
 
-  it('should not drop an non-existent DB', done => {
-    conn.dropDB({ database: 'nodeDBDrop' }, (data, response) => {
-      expect(response.statusCode).toEqual(404);
-      expect(data.message).toEqual("Database 'nodeDBDrop' does not exist.");
-      done();
+  it('should not drop an non-existent DB', () => {
+    return db.drop(conn, 'xxxx').then(res => {
+      expect(res.status).toBe(404);
+    });
+  });
+
+  it('should drop a DB', () => {
+    return db.drop(conn, conn.database).then(res => {
+      expect(res.status).toBe(200);
     });
   });
 });

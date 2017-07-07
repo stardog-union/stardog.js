@@ -1,9 +1,10 @@
-const Stardog = require('../lib');
+const { role, user } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   generateRandomString,
+  ConnectionFactory,
 } = require('./setup-database');
 
 describe('listRoleUsers()', () => {
@@ -14,21 +15,18 @@ describe('listRoleUsers()', () => {
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = new Stardog.Connection();
-    conn.setEndpoint('http://localhost:5820/');
-    conn.setCredentials('admin', 'admin');
+    conn = ConnectionFactory();
   });
 
-  it("should return a list of users assigned to the 'rolename' role in the system.", done => {
+  it("should return a list of users assigned to the 'rolename' role in the system.", () => {
     const rolename = generateRandomString();
-    conn.createRole({ rolename }, () => {
-      conn.setUserRoles({ user: 'anonymous', roles: [rolename] }, () => {
-        conn.listRoleUsers({ role: rolename }, (data, response) => {
-          expect(response.statusCode).toEqual(200);
-          expect(data.users).toContain('anonymous');
-          done();
-        });
+    return role
+      .create(conn, { name: rolename })
+      .then(() => user.setRoles(conn, 'anonymous', [rolename]))
+      .then(() => role.usersWithRole(conn, rolename))
+      .then(res => {
+        expect(res.status).toEqual(200);
+        expect(res.result.users).toContain('anonymous');
       });
-    });
   });
 });

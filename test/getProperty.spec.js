@@ -1,12 +1,13 @@
-const Stardog = require('../lib');
+const { query } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   generateRandomString,
+  ConnectionFactory,
 } = require('./setup-database');
 
-describe('getProperty()', () => {
+describe('query.property()', () => {
   const database = generateDatabaseName();
   let conn;
 
@@ -14,24 +15,20 @@ describe('getProperty()', () => {
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = new Stardog.Connection();
-    conn.setEndpoint('http://localhost:5820/');
-    conn.setCredentials('admin', 'admin');
+    conn = ConnectionFactory();
+    conn.config({ database });
   });
 
-  it('Gets a specific property from the database', done => {
-    conn.getProperty(
-      {
-        database,
+  it('Gets a specific property from the database', () => {
+    return query
+      .property(conn, {
         uri: '<http://localhost/publications/articles/Journal1/1940/Article1>',
         property: '<http://localhost/vocabulary/bench/cdrom>',
-      },
-      response => {
-        expect(response).toEqual(
+      })
+      .then(res => {
+        expect(res.result).toEqual(
           'http://www.hogfishes.tld/richer/succories.html'
         );
-        done();
-      }
-    );
+      });
   });
 });

@@ -1,56 +1,57 @@
 const Path = require('path');
 const RandomString = require('randomstring');
-const Stardog = require('../lib');
+const { Connection, db } = require('../lib');
 const dbs = new Set(); // used to keep track of DBs across runs
 
-exports.seedDatabase = database => done => {
-  const conn = new Stardog.Connection();
-  conn.setEndpoint('http://localhost:5820/');
-  conn.setCredentials('admin', 'admin');
-  conn.createDB(
-    {
+exports.seedDatabase = database => () => {
+  const conn = exports.ConnectionFactory();
+
+  return db
+    .create(
+      conn,
       database,
-      options: {
-        'index.type': 'disk',
-        'search.enabled': true,
+      {
+        index: {
+          type: 'disk',
+        },
+        search: {
+          enabled: true,
+        },
       },
-      // Load everything into the DB
-      files: [
-        {
-          filename: Path.resolve(__dirname, 'fixtures', 'api_tests.nt'),
-        },
-        {
-          filename: Path.resolve(
-            __dirname,
-            'fixtures',
-            'reasoning',
-            'abox.ttl'
-          ),
-        },
-        {
-          filename: Path.resolve(
-            __dirname,
-            'fixtures',
-            'reasoning',
-            'tbox.ttl'
-          ),
-        },
-      ],
-    },
-    (data, response) => {
-      expect(response.statusCode).toBe(201);
-      done();
-    }
-  );
+      {
+        // Load everything into the DB
+        files: [
+          {
+            filename: Path.resolve(__dirname, 'fixtures', 'api_tests.nt'),
+          },
+          {
+            filename: Path.resolve(
+              __dirname,
+              'fixtures',
+              'reasoning',
+              'abox.ttl'
+            ),
+          },
+          {
+            filename: Path.resolve(
+              __dirname,
+              'fixtures',
+              'reasoning',
+              'tbox.ttl'
+            ),
+          },
+        ],
+      }
+    )
+    .then(res => {
+      expect(res.status).toBe(201);
+    });
 };
 
-exports.dropDatabase = database => done => {
-  const conn = new Stardog.Connection();
-  conn.setEndpoint('http://localhost:5820/');
-  conn.setCredentials('admin', 'admin');
-  conn.dropDB({ database }, (data, response) => {
-    expect(response.statusCode).toBe(200);
-    done();
+exports.dropDatabase = database => () => {
+  const conn = exports.ConnectionFactory();
+  return db.drop(conn, database).then(res => {
+    expect(response.status).toBe(200);
   });
 };
 
@@ -71,3 +72,11 @@ exports.generateRandomString = () => {
     charset: 'alphabetic',
   });
 };
+
+exports.ConnectionFactory = () =>
+  new Connection({
+    username: 'admin',
+    password: 'admin',
+    endpoint: 'http://localhost:5820',
+    //endpoint: 'http://localhost:61941',
+  });

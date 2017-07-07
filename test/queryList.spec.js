@@ -1,20 +1,17 @@
-const Stardog = require('../lib');
+const { query } = require('../lib');
+const { ConnectionFactory } = require('./setup-database');
 
 describe('queryList()', () => {
   let conn;
 
   beforeEach(() => {
-    conn = new Stardog.Connection();
-    conn.setEndpoint('http://localhost:5820/');
-    conn.setCredentials('admin', 'admin');
-    conn.setReasoning(true);
+    conn = ConnectionFactory();
   });
 
-  it('should return the number of global running queries', done => {
-    conn.queryList((data, response) => {
-      expect(response.statusCode).toEqual(200);
-      expect(data.queries).toHaveLength(0);
-      done();
+  it.skip('should return the number of global running queries', () => {
+    return query.list(conn).then(res => {
+      expect(res.status).toEqual(200);
+      expect(res.result.queries).toHaveLength(0);
     });
   });
 });

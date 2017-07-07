@@ -1,9 +1,10 @@
-const Stardog = require('../lib');
+const { role } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   generateRandomString,
+  ConnectionFactory,
 } = require('./setup-database');
 
 describe('deleteRole()', () => {
@@ -14,28 +15,25 @@ describe('deleteRole()', () => {
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = new Stardog.Connection();
-    conn.setEndpoint('http://localhost:5820/');
-    conn.setCredentials('admin', 'admin');
+    conn = ConnectionFactory();
   });
 
-  it('should return NOT_FOUND trying to delete a non-existent role.', done => {
-    conn.deleteRole({ role: 'no-writer' }, (data, response) => {
-      expect(response.statusCode).toEqual(404);
-      done();
+  it('should return NOT_FOUND trying to delete a non-existent role.', () => {
+    return role.delete(conn, 'no-writer').then(res => {
+      expect(res.status).toEqual(404);
     });
   });
 
-  it("should delete a 'writer' role recently created.", done => {
-    conn.createRole({ rolename: 'writer' }, (data, res) => {
-      // It should be 201 (CREATED)
-      expect(res.statusCode).toEqual(201);
-
-      // Once created then lets delete it.
-      conn.deleteRole({ role: 'writer' }, (data, res) => {
-        expect(res.statusCode).toEqual(204);
-        done();
+  it("should delete a 'writer' role recently created.", () => {
+    const rolename = generateRandomString();
+    return role
+      .create(conn, { name: rolename })
+      .then(res => {
+        expect(res.status).toBe(201);
+        return role.delete(conn, rolename);
+      })
+      .then(res => {
+        expect(res.status).toEqual(204);
       });
-    });
   });
 });

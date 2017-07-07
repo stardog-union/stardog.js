@@ -1,9 +1,10 @@
-const Stardog = require('../lib');
+const { user } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   generateRandomString,
+  ConnectionFactory,
 } = require('./setup-database');
 
 describe('listUserPermissions()', () => {
@@ -14,45 +15,38 @@ describe('listUserPermissions()', () => {
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = new Stardog.Connection();
-    conn.setEndpoint('http://localhost:5820/');
-    conn.setCredentials('admin', 'admin');
+    conn = ConnectionFactory();
   });
 
-  it('should fail trying to get the list of permissions of a non-existent user.', done => {
-    conn.listUserPermissions({ user: 'myuser' }, (data, response) => {
-      expect(response.statusCode).toEqual(404);
-      done();
+  it('should fail trying to get the list of permissions of a non-existent user.', () => {
+    return user.permissions(conn, 'myuser').then(res => {
+      expect(res.status).toBe(404);
     });
   });
 
-  it('should list permissions assigned to a new user.', done => {
-    const aNewUser = generateRandomString(),
-      aNewUserPwd = generateRandomString(),
-      aNewPermission = {
-        action: 'write',
-        resource_type: 'db',
-        resource: [database],
-      };
+  it('should list permissions assigned to a new user.', () => {
+    const username = generateRandomString();
+    const password = generateRandomString();
+    const permission = {
+      action: 'write',
+      resourceType: 'db',
+      resources: [database],
+    };
 
-    conn.createUser(
-      { username: aNewUser, password: aNewUserPwd, superuser: true },
-      () => {
-        conn.assignPermissionToUser(
-          { user: aNewUser, permissionObj: aNewPermission },
-          () => {
-            conn.listUserPermissions({ user: aNewUser }, (data, response) => {
-              expect(response.statusCode).toBe(200);
-              const resources = data.permissions.reduce(
-                (memo, perm) => memo.concat(perm.resource),
-                []
-              );
-              expect(resources).toContain(database);
-              done();
-            });
-          }
+    return user
+      .create(conn, {
+        username,
+        password,
+      })
+      .then(() => user.assignPermission(conn, username, permission))
+      .then(() => user.permissions(conn, username))
+      .then(res => {
+        expect(res.status).toBe(200);
+        const resources = res.result.permissions.reduce(
+          (memo, perm) => memo.concat(perm.resource),
+          []
         );
-      }
-    );
+        expect(resources).toContain(database);
+      });
   });
 });

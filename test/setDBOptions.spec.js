@@ -1,12 +1,13 @@
-const Stardog = require('../lib');
+const { db } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   generateRandomString,
+  ConnectionFactory,
 } = require('./setup-database');
 
-describe('setDBOptions()', () => {
+describe('db.setOptions()', () => {
   const database = generateDatabaseName();
   let conn;
 
@@ -14,36 +15,43 @@ describe('setDBOptions()', () => {
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = new Stardog.Connection();
-    conn.setEndpoint('http://localhost:5820/');
-    conn.setCredentials('admin', 'admin');
+    conn = ConnectionFactory();
   });
 
-  it('should get NOT_FOUND status code trying to set the options of a non-existent DB.', done => {
-    conn.setDBOptions(
-      { database: 'nodeDB_test', optionsObj: {} },
-      (data, response) => {
-        expect(response.statusCode).toEqual(404);
-        done();
-      }
-    );
+  it('should get NOT_FOUND status code trying to set the options of a non-existent DB.', () => {
+    return db
+      .setOptions(conn, 'nodeDB_test', {
+        query: {
+          all: {
+            graphs: true,
+          },
+        },
+        transaction: {
+          logging: true,
+        },
+      })
+      .then(res => {
+        expect(res.status).toEqual(404);
+      });
   });
 
-  it('should set the options of an DB', done => {
-    const optionsObj = {
-      'search.enabled': true,
-      'icv.enabled': false,
-    };
-
-    conn.offlineDB({ database, strategy: 'WAIT', timeout: 700 }, () => {
-      conn.setDBOptions(
-        { database, optionsObj: optionsObj },
-        (data, response) => {
-          expect(response.statusCode).toEqual(200);
-
-          done();
-        }
-      );
-    });
+  it('should set the options of an DB', () => {
+    return db
+      .offline(conn, database)
+      .then(() => {
+        return db.setOptions(conn, database, {
+          query: {
+            all: {
+              graphs: true,
+            },
+          },
+          transaction: {
+            logging: true,
+          },
+        });
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+      });
   });
 });

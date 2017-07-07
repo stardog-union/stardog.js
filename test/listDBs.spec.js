@@ -1,9 +1,10 @@
-const Stardog = require('../lib');
+const { db } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   generateRandomString,
+  ConnectionFactory,
 } = require('./setup-database');
 
 describe('listDBs()', () => {
@@ -17,15 +18,12 @@ describe('listDBs()', () => {
   afterAll(dropDatabase(two));
 
   beforeEach(() => {
-    conn = new Stardog.Connection();
-    conn.setEndpoint('http://localhost:5820/');
-    conn.setCredentials('admin', 'admin');
+    conn = ConnectionFactory();
   });
 
-  it('should list available databases', done => {
-    conn.listDBs(data => {
-      expect(data.databases).toEqual(expect.arrayContaining([one, two]));
-      done();
+  it('should list available databases', () => {
+    db.list(conn).then(res => {
+      expect(res.result.databases).toEqual(expect.arrayContaining([one, two]));
     });
   });
 });

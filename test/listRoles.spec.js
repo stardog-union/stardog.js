@@ -1,23 +1,21 @@
-const Stardog = require('../lib');
+const { role } = require('../lib');
+const { ConnectionFactory, generateRandomString } = require('./setup-database');
 
 describe('listRoles()', () => {
   let conn;
 
   beforeEach(() => {
-    conn = new Stardog.Connection();
-    conn.setEndpoint('http://localhost:5820/');
-    conn.setCredentials('admin', 'admin');
+    conn = ConnectionFactory();
   });
 
-  afterEach(() => {
-    conn = null;
-  });
-
-  it('should return a list of current registered roles in the system.', done => {
-    conn.listRoles((data, response) => {
-      expect(response.statusCode).toEqual(200);
-      expect(data.roles).toContain('reader');
-      done();
-    });
+  it('should return a list of current registered roles in the system.', () => {
+    const rolename = generateRandomString();
+    return role
+      .create(conn, { name: rolename })
+      .then(() => role.list(conn))
+      .then(res => {
+        expect(res.status).toEqual(200);
+        expect(res.result.roles).toContain('reader', rolename);
+      });
   });
 });
