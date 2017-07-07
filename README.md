@@ -1,6 +1,6 @@
 # Stardog.js
 
-Universal Javascript fetch wrapper for communicating the with Stardog HTTP server.
+Universal Javascript fetch wrapper for communicating with the Stardog HTTP server.
 
 [![npm](https://img.shields.io/npm/v/stardog.svg?style=flat-square)](https://www.npmjs.com/package/stardog)
 
