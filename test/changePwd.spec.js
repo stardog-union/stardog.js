@@ -1,12 +1,23 @@
 const { user, db } = require('../lib');
-const { generateRandomString, ConnectionFactory } = require('./setup-database');
+const {
+  seedDatabase,
+  dropDatabase,
+  generateRandomString,
+  generateDatabaseName,
+  ConnectionFactory,
+} = require('./setup-database');
 
 describe('changePwd()', () => {
+  const database = generateDatabaseName();
   let conn;
 
   beforeEach(() => {
     conn = ConnectionFactory();
+    conn.config({ database });
   });
+
+  beforeAll(seedDatabase(database));
+  afterAll(dropDatabase(database));
 
   it('should fail trying to change a password (char[]) from an non-existent user', () => {
     return user.changePassword(conn, 'someuser', 'passworddd').then(res => {
