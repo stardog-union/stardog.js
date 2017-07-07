@@ -1,9 +1,10 @@
-const Stardog = require('../lib');
+const { db } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   generateRandomString,
+  ConnectionFactory,
 } = require('./setup-database');
 
 describe('getDBSize()', () => {
@@ -14,16 +15,13 @@ describe('getDBSize()', () => {
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = new Stardog.Connection();
-    conn.setEndpoint('http://localhost:5820/');
-    conn.setCredentials('admin', 'admin');
+    conn = ConnectionFactory();
   });
 
-  it('A response with the size of the DB should not be empty', done => {
-    conn.getDBSize({ database }, response => {
-      const sizeNum = parseInt(response, 10);
+  it('A response with the size of the DB should not be empty', () => {
+    db.size(conn, database).then(res => {
+      const sizeNum = parseInt(res.result, 10);
       expect(sizeNum).toBe(48);
-      done();
     });
   });
 });

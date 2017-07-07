@@ -1,8 +1,9 @@
-const { Connection, db } = require('../lib/index2');
+const { db } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
+  ConnectionFactory,
 } = require('./setup-database');
 
 describe('db.copy()', () => {
@@ -15,11 +16,7 @@ describe('db.copy()', () => {
   afterAll(dropDatabase(destinationDatabase));
 
   beforeEach(() => {
-    conn = new Connection({
-      username: 'admin',
-      password: 'admin',
-      endpoint: 'http://localhost:5820/',
-    });
+    conn = ConnectionFactory();
   });
 
   it('should not copy an online DB', () => {

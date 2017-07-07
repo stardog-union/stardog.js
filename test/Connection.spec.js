@@ -1,4 +1,4 @@
-const { Connection } = require('../lib/index2');
+const { Connection } = require('../lib');
 
 describe('Stardog.Connection', () => {
   it('creates a new connection object', () => {

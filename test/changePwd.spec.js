@@ -1,4 +1,4 @@
-const { Connection, user, db } = require('../lib/index2');
+const { user, db } = require('../lib');
 const { generateRandomString, ConnectionFactory } = require('./setup-database');
 
 describe('changePwd()', () => {

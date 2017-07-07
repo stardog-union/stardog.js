@@ -1,9 +1,10 @@
-const { Connection, db } = require('../lib/index2');
+const { db } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   generateRandomString,
+  ConnectionFactory,
 } = require('./setup-database');
 
 describe('db.getOptions()', () => {
@@ -14,11 +15,7 @@ describe('db.getOptions()', () => {
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = new Connection({
-      username: 'admin',
-      password: 'admin',
-      endpoint: 'http://localhost:5820/',
-    });
+    conn = ConnectionFactory();
   });
 
   it('should get NOT_FOUND status code trying to get the options of a non-existent DB.', () => {

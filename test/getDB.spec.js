@@ -1,9 +1,10 @@
-const { Connection, db } = require('../lib/index2');
+const { db } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   generateRandomString,
+  ConnectionFactory,
 } = require('./setup-database');
 
 describe('getDB()', () => {
@@ -14,11 +15,7 @@ describe('getDB()', () => {
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = new Connection({
-      username: 'admin',
-      password: 'admin',
-      endpoint: 'http://localhost:5820',
-    });
+    conn = ConnectionFactory();
   });
 
   it('A response of the DB info should not be empty', () => {

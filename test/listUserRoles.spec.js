@@ -1,41 +1,36 @@
-const Stardog = require('../lib');
+const { user, role } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   generateRandomString,
+  ConnectionFactory,
 } = require('./setup-database');
 
 describe('listUserRoles()', () => {
   let conn;
 
   beforeEach(() => {
-    conn = new Stardog.Connection();
-    conn.setEndpoint('http://localhost:5820/');
-    conn.setCredentials('admin', 'admin');
+    conn = ConnectionFactory();
   });
 
-  afterEach(() => {
-    conn = null;
-  });
-
-  it('should return NOT_FOUND if trying to list roles from non-existent user', done => {
-    conn.listUserRoles({ user: 'someuser' }, (data, response) => {
-      expect(response.statusCode).toEqual(404);
-      done();
+  it('should return NOT_FOUND if trying to list roles from non-existent user', () => {
+    return user.listRoles(conn, generateRandomString()).then(res => {
+      expect(res.status).toBe(404);
     });
   });
 
-  it('should return a non-empty list with the roles of the user', done => {
-    const role = generateRandomString();
-    conn.createRole({ rolename: role }, () => {
-      conn.setUserRoles({ user: 'anonymous', roles: [role] }, () => {
-        conn.listUserRoles({ user: 'anonymous' }, (data, response) => {
-          expect(response.statusCode).toEqual(200);
-          expect(data.roles).toContain(role);
-          done();
-        });
+  it('should return a non-empty list with the roles of the user', () => {
+    const r = generateRandomString();
+    return role
+      .create(conn, {
+        name: r,
+      })
+      .then(() => user.setRoles(conn, 'anonymous', [r]))
+      .then(() => user.listRoles(conn, 'anonymous'))
+      .then(res => {
+        expect(res.status).toBe(200);
+        expect(res.result.roles).toContain(r);
       });
-    });
   });
 });

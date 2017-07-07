@@ -1,9 +1,10 @@
-const Stardog = require('../lib');
+const { db } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   generateRandomString,
+  ConnectionFactory,
 } = require('./setup-database');
 describe('getNamespaces()', () => {
   const database = generateDatabaseName();
@@ -13,35 +14,22 @@ describe('getNamespaces()', () => {
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = new Stardog.Connection();
-    conn.setEndpoint('http://localhost:5820/');
-    conn.setCredentials('admin', 'admin');
+    conn = ConnectionFactory();
+    conn.config({ database });
   });
 
-  it('should throw an Error when the database option was not passed in the options object.', () => {
-    expect(() => {
-      conn.getNamespaces();
-    }).toThrow(/Option `database` is required/);
-  });
-
-  it('should retrieve the namespace prefix bindings for the database', done => {
-    conn.getNamespaces(
-      {
-        database,
-      },
-      (data, response) => {
-        expect(response.statusCode).toEqual(200);
-        expect(data).toEqual({
-          '': 'http://example.org/vehicles/',
-          owl: 'http://www.w3.org/2002/07/owl#',
-          rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
-          rdfs: 'http://www.w3.org/2000/01/rdf-schema#',
-          stardog: 'tag:stardog:api:',
-          xsd: 'http://www.w3.org/2001/XMLSchema#',
-          ex: 'http://example.org/vehicles/',
-        });
-        done();
-      }
-    );
+  it('should retrieve the namespace prefix bindings for the database', () => {
+    return db.namespaces(conn, conn.database).then(res => {
+      expect(res.status).toEqual(200);
+      expect(res.result).toEqual({
+        '': 'http://example.org/vehicles/',
+        owl: 'http://www.w3.org/2002/07/owl#',
+        rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+        rdfs: 'http://www.w3.org/2000/01/rdf-schema#',
+        stardog: 'tag:stardog:api:',
+        xsd: 'http://www.w3.org/2001/XMLSchema#',
+        ex: 'http://example.org/vehicles/',
+      });
+    });
   });
 });

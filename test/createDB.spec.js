@@ -1,34 +1,41 @@
-const Stardog = require('../lib');
+const { db } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
+  ConnectionFactory,
 } = require('./setup-database');
 
 describe('createDB()', () => {
   const database = generateDatabaseName();
   let conn;
 
-  beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = new Stardog.Connection();
-    conn.setEndpoint('http://localhost:5820/');
-    conn.setCredentials('admin', 'admin');
+    conn = ConnectionFactory();
+    conn.config({ database });
   });
 
-  it('should not be able to create a new db with the name of an existing DB', done => {
+  it('should not be able to create a new db with the name of an existing DB', () => {
     const options = {
       database,
       options: { 'index.type': 'disk' },
       files: [],
     };
 
-    conn.createDB(options, (data, response) => {
-      expect(response.statusCode).toEqual(409);
-
-      done();
-    });
+    return db
+      .create(conn, conn.database, {
+        index: {
+          type: 'disk',
+        },
+      })
+      .then(res => {
+        expect(res.status).toBe(201);
+        return db.create(conn, conn.database);
+      })
+      .then(res => {
+        expect(res.status).toBe(409);
+      });
   });
 });

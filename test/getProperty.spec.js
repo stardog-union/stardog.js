@@ -1,9 +1,10 @@
-const { Connection, query } = require('../lib/index2');
+const { query } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   generateRandomString,
+  ConnectionFactory,
 } = require('./setup-database');
 
 describe('query.property()', () => {
@@ -14,12 +15,8 @@ describe('query.property()', () => {
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = new Connection({
-      username: 'admin',
-      password: 'admin',
-      endpoint: 'http://localhost:5820',
-      database,
-    });
+    conn = ConnectionFactory();
+    conn.config({ database });
   });
 
   it('Gets a specific property from the database', () => {

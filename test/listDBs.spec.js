@@ -1,9 +1,10 @@
-const { Connection, db } = require('../lib/index2');
+const { db } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   generateRandomString,
+  ConnectionFactory,
 } = require('./setup-database');
 
 describe('listDBs()', () => {
@@ -17,11 +18,7 @@ describe('listDBs()', () => {
   afterAll(dropDatabase(two));
 
   beforeEach(() => {
-    conn = new Connection({
-      endpoint: 'http://localhost:5820/',
-      username: 'admin',
-      password: 'admin',
-    });
+    conn = ConnectionFactory();
   });
 
   it('should list available databases', () => {

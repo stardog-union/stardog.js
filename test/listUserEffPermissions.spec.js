@@ -1,9 +1,10 @@
-const Stardog = require('../lib');
+const { user } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   generateRandomString,
+  ConnectionFactory,
 } = require('./setup-database');
 
 describe('listUserEffPermissions()', () => {
@@ -14,49 +15,38 @@ describe('listUserEffPermissions()', () => {
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = new Stardog.Connection();
-    conn.setEndpoint('http://localhost:5820/');
-    conn.setCredentials('admin', 'admin');
+    conn = ConnectionFactory();
   });
 
-  it('should fail trying to get the list of effective permissions of a non-existent user.', done => {
-    conn.listUserEffPermissions({ user: 'myuser' }, (data, response) => {
-      expect(response.statusCode).toEqual(404);
-      done();
+  it('should fail trying to get the list of effective permissions of a non-existent user.', () => {
+    return user.effectivePermissions(conn, 'myuser').then(res => {
+      expect(res.status).toBe(404);
     });
   });
 
-  it('should list effective permissions assigned to a new user.', done => {
-    const aNewUser = generateRandomString(),
-      aNewUserPwd = generateRandomString(),
-      aNewPermission = {
-        action: 'write',
-        resource_type: 'db',
-        resource: [database],
-      };
+  it('should list effective permissions assigned to a new user.', () => {
+    const username = generateRandomString();
+    const password = generateRandomString();
+    const permission = {
+      action: 'write',
+      resourceType: 'db',
+      resources: [database],
+    };
 
-    conn.createUser(
-      { username: aNewUser, password: aNewUserPwd, superuser: true },
-      () => {
-        conn.assignPermissionToUser(
-          { user: aNewUser, permissionObj: aNewPermission },
-          () => {
-            // list permissions to new role should include recently added.
-            conn.listUserEffPermissions(
-              { user: aNewUser },
-              (data, response) => {
-                expect(data.permissions.length).toBeGreaterThan(0);
-                expect(data.permissions).toContainEqual({
-                  action: 'WRITE',
-                  resource: [database],
-                  resource_type: 'db',
-                });
-                done();
-              }
-            );
-          }
-        );
-      }
-    );
+    return user
+      .create(conn, {
+        username,
+        password,
+      })
+      .then(() => user.assignPermission(conn, username, permission))
+      .then(() => user.effectivePermissions(conn, username))
+      .then(res => {
+        expect(res.result.permissions.length).toBeGreaterThan(0);
+        expect(res.result.permissions).toContainEqual({
+          action: 'WRITE',
+          resource: [database],
+          resource_type: 'db',
+        });
+      });
   });
 });

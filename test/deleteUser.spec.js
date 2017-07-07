@@ -1,36 +1,32 @@
-const Stardog = require('../lib');
-const { generateRandomString } = require('./setup-database');
+const { user } = require('../lib');
+const { generateRandomString, ConnectionFactory } = require('./setup-database');
 
 describe('deleteUser()', () => {
   let conn;
 
   beforeEach(() => {
-    conn = new Stardog.Connection();
-    conn.setEndpoint('http://localhost:5820/');
-    conn.setCredentials('admin', 'admin');
+    conn = ConnectionFactory();
   });
 
-  it('should return NOT_FOUND trying to delete a non-existent user.', done => {
-    conn.deleteUser({ user: 'someuser' }, (data, response) => {
-      expect(response.statusCode).toEqual(404);
-      done();
+  it('should return NOT_FOUND trying to delete a non-existent user.', () => {
+    return user.delete(conn, generateRandomString()).then(res => {
+      expect(res.status).toBe(404);
     });
   });
 
-  it('should delete a supplied user recently created.', done => {
+  it('should delete a supplied user recently created.', () => {
     const username = generateRandomString();
-    conn.createUser(
-      { username, password: 'newuser', superuser: true },
-      (data, response) => {
-        // It should be 201 (CREATED)
-        expect(response.statusCode).toEqual(201);
-
-        // Once created then lets delete it.
-        conn.deleteUser({ user: username }, (data, response) => {
-          expect(response.statusCode).toEqual(204);
-          done();
-        });
-      }
-    );
+    return user
+      .create(conn, {
+        username,
+        password: generateRandomString(),
+      })
+      .then(res => {
+        expect(res.status).toBe(201);
+        return user.delete(conn, username);
+      })
+      .then(res => {
+        expect(res.status).toBe(204);
+      });
   });
 });

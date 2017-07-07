@@ -1,4 +1,4 @@
-const { user } = require('../lib/index2');
+const { user } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,

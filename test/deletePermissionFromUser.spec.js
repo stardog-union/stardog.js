@@ -1,9 +1,10 @@
-const Stardog = require('../lib');
+const { user } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   generateRandomString,
+  ConnectionFactory,
 } = require('./setup-database');
 
 describe('deletePermissionFromUser()', () => {
@@ -14,57 +15,45 @@ describe('deletePermissionFromUser()', () => {
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = new Stardog.Connection();
-    conn.setEndpoint('http://localhost:5820/');
-    conn.setCredentials('admin', 'admin');
+    conn = ConnectionFactory();
   });
 
-  it('should fail trying to delete a permssion to a non-existent user.', done => {
-    const aNewPermission = {
+  it('should fail trying to delete a permssion to a non-existent user.', () => {
+    const permission = {
       action: 'write',
-      resource_type: 'db',
-      resource: [database],
+      resourceType: 'db',
+      resources: [database],
     };
 
-    conn.deletePermissionFromUser(
-      { user: 'myuser', permissionObj: aNewPermission },
-      (data, response) => {
-        expect(response.statusCode).toEqual(404);
-        done();
-      }
-    );
+    return user.deletePermission(conn, 'myuser', permission).then(res => {
+      expect(res.status).toBe(404);
+    });
   });
 
-  it('should pass deleting a Permissions to a new user.', done => {
-    const aNewUser = generateRandomString(),
-      aNewUserPwd = generateRandomString(),
-      aNewPermission = {
-        action: 'write',
-        resource_type: 'db',
-        resource: [database],
-      };
+  it('should pass deleting a Permissions to a new user.', () => {
+    const username = generateRandomString();
+    const password = generateRandomString();
+    const permission = {
+      action: 'write',
+      resourceType: 'db',
+      resources: [database],
+    };
 
-    // actual test
-    conn.createUser(
-      { username: aNewUser, password: aNewUserPwd, superuser: true },
-      (data1, response1) => {
-        expect(response1.statusCode).toEqual(201);
-
-        conn.assignPermissionToUser(
-          { user: aNewUser, permissionObj: aNewPermission },
-          (data2, response2) => {
-            expect(response2.statusCode).toEqual(201);
-
-            conn.deletePermissionFromUser(
-              { user: aNewUser, permissionObj: aNewPermission },
-              (data3, response3) => {
-                expect(response3.statusCode).toEqual(201);
-                done();
-              }
-            );
-          }
-        );
-      }
-    );
+    return user
+      .create(conn, {
+        username,
+        password,
+      })
+      .then(res => {
+        expect(res.status).toBe(201);
+        return user.assignPermission(conn, username, permission);
+      })
+      .then(res => {
+        expect(res.status).toBe(201);
+        return user.deletePermission(conn, username, permission);
+      })
+      .then(res => {
+        expect(res.status).toBe(201);
+      });
   });
 });

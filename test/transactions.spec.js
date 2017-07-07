@@ -1,9 +1,11 @@
-const Stardog = require('../lib');
+const fs = require('fs');
+const { transaction, query, db } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   generateRandomString,
+  ConnectionFactory,
 } = require('./setup-database');
 
 describe('transactions', () => {
@@ -14,65 +16,77 @@ describe('transactions', () => {
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = new Stardog.Connection();
-    conn.setEndpoint('http://localhost:5820/');
-    conn.setCredentials('admin', 'admin');
+    conn = ConnectionFactory();
+    conn.config({ database });
   });
 
-  it('Should be able to get a transaction and make a query', done => {
-    conn.begin({ database }, (txId, response) => {
-      expect(response.statusCode).toEqual(200);
-      //Lifed from https://stackoverflow.com/a/13653180/1011616
-      expect(txId).toMatch(
-        /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
-      );
-
-      conn.queryInTransaction(
-        {
-          database,
-          txId,
-          query: "select ?s { VALUES ?s {'s'} }",
-        },
-        (data, resp) => {
-          expect(data.results.bindings).toHaveLength(1);
-          done();
-        }
-      );
-    });
+  expect.extend({
+    toBeGUID(received) {
+      const pass =
+        received.match(
+          /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+        ) != null;
+      if (pass) {
+        return {
+          pass,
+          message: () => `expected ${received} to not be a GUID`,
+        };
+      } else {
+        return {
+          pass,
+          message: () => `expected ${received} to be a GUID`,
+        };
+      }
+    },
   });
 
-  it('Should be able to get a transaction, add a triple and rollback', done => {
+  it('Should be able to get a transaction and make a query', () => {
+    return transaction
+      .begin(conn)
+      .then(res => {
+        expect(res.status).toEqual(200);
+        //Lifed from https://stackoverflow.com/a/13653180/1011616
+        expect(res.result).toBe(res.transactionId);
+        expect(res.result).toBeGUID();
+        return transaction.query(
+          conn,
+          res.result,
+          'select distinct ?s where { ?s ?p ?o }',
+          { limit: 10 }
+        );
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+        expect(res.result.results.bindings).toHaveLength(10);
+      });
+  });
+
+  it('Should be able to get a transaction, add a triple and rollback', () => {
     const triple =
       '<http://localhost/publications/articles/Journal1/1940/Article2> ' +
       '<http://purl.org/dc/elements/1.1/subject> ' +
       '"A very interesting subject"^^<http://www.w3.org/2001/XMLSchema#string> .';
 
-    conn.begin({ database }, (txId, response) => {
-      expect(response.statusCode).toEqual(200);
-      expect(txId).toMatch(
-        /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
-      );
-
-      conn.addInTransaction(
-        {
-          database,
-          txId,
-          body: triple,
+    return transaction
+      .begin(conn)
+      .then(res => {
+        const txId = res.transactionId;
+        expect(res.status).toBe(200);
+        expect(txId).toBeGUID();
+        return transaction.add(conn, txId, triple, {
           contentType: 'text/turtle',
-        },
-        (body, response2) => {
-          expect(response2.statusCode).toEqual(200);
-
-          conn.rollback({ database, txId }, (body, response3) => {
-            expect(response3.statusCode).toEqual(200);
-            done();
-          });
-        }
-      );
-    });
+        });
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+        return transaction.rollback(conn, res.transactionId);
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+      });
   });
 
-  it('Should be able to get a transaction, add a triple with a defined prefix, commit that and query.', done => {
+  it('Should be able to get a transaction, add a triple with a defined prefix, commit that and query.', () => {
     const triple =
       '@prefix foo: <http://localhost/publications/articles/Journal1/1940/> .\n' +
       '@prefix dc: <http://purl.org/dc/elements/1.1/> .\n' +
@@ -80,224 +94,145 @@ describe('transactions', () => {
       'dc:subject ' +
       '"A very interesting subject"^^<http://www.w3.org/2001/XMLSchema#string> .';
 
-    conn.begin({ database }, (txId, response) => {
-      expect(response.statusCode).toEqual(200);
-      expect(txId).toMatch(
-        /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
-      );
-
-      conn.addInTransaction(
-        {
-          database,
-          txId,
-          body: triple,
+    return transaction
+      .begin(conn)
+      .then(res => {
+        expect(res.status).toBe(200);
+        expect(res.result).toBeGUID();
+        return transaction.add(conn, res.transactionId, triple, {
           contentType: 'text/turtle',
-        },
-        (body2, response2) => {
-          expect(response2.statusCode).toEqual(200);
-
-          conn.commit({ database, txId }, (body3, response3) => {
-            expect(response3.statusCode).toEqual(200);
-            // query for the triple added.
-            conn.query(
-              {
-                database,
-                query:
-                  'prefix foo: <http://localhost/publications/articles/Journal1/1940/>\n' +
-                    'prefix dc: <http://purl.org/dc/elements/1.1/>\n' +
-                    'ask where { ' +
-                    'foo:Article2 ' +
-                    'dc:subject ' +
-                    '"A very interesting subject"^^<http://www.w3.org/2001/XMLSchema#string> .}',
-              },
-              (dataQ, responseQ) => {
-                expect(responseQ.statusCode).toEqual(200);
-                expect(dataQ.boolean).toEqual(true);
-
-                // restore database state
-                conn.begin({ database }, (txId, responseB) => {
-                  expect(responseB.statusCode).toEqual(200);
-                  expect(txId).toMatch(
-                    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
-                  );
-
-                  conn.removeInTransaction(
-                    {
-                      database,
-                      txId,
-                      body: triple,
-                      contentType: 'text/turtle',
-                    },
-                    (bodyR, responseR) => {
-                      expect(responseR.statusCode).toEqual(200);
-
-                      conn.commit({ database, txId }, (bodyCD, responseCD) => {
-                        expect(responseCD.statusCode).toEqual(200);
-                        done();
-                      });
-                    }
-                  );
-                });
-              }
-            );
-          });
-        }
-      );
-    });
+        });
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+        expect(res.transactionId).toBeGUID();
+        return transaction.commit(conn, res.transactionId);
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+        const _query = `
+          prefix foo: <http://localhost/publications/articles/Journal1/1940/>
+          prefix dc: <http://purl.org/dc/elements/1.1/>
+          ask where {
+          foo:Article2
+          dc:subject
+          "A very interesting subject"^^<http://www.w3.org/2001/XMLSchema#string> .}`;
+        return query.execute(conn, _query);
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+        expect(res.result).toBe(true);
+        return transaction.begin(conn);
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+        expect(res.transactionId).toBeGUID();
+        return transaction.remove(conn, res.transactionId, triple, {
+          contentType: 'text/turtle',
+        });
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+        return transaction.commit(conn, res.transactionId);
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+      });
   });
 
-  it('Should be able to get a transaction, add a triple, commit that and query.', done => {
-    const aTriple =
+  it('Should be able to get a transaction, add a triple, commit that and query.', () => {
+    const triple =
       '<http://localhost/publications/articles/Journal1/1940/Article2> ' +
       '<http://purl.org/dc/elements/1.1/subject> ' +
       '"A very interesting subject"^^<http://www.w3.org/2001/XMLSchema#string> .';
 
-    conn.begin({ database }, (txId, response) => {
-      expect(response.statusCode).toEqual(200);
-      expect(txId).toMatch(
-        /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
-      );
-
-      conn.addInTransaction(
-        {
-          database,
-          txId,
-          body: aTriple,
+    return transaction
+      .begin(conn)
+      .then(res => {
+        expect(res.status).toEqual(200);
+        expect(res.result).toBeGUID();
+        return transaction.add(conn, res.transactionId, triple, {
           contentType: 'text/turtle',
-        },
-        (body2, response2) => {
-          expect(response2.statusCode).toEqual(200);
-
-          conn.commit({ database, txId }, (body3, response3) => {
-            expect(response3.statusCode).toEqual(200);
-            // query for the triple added.
-            conn.query(
-              {
-                database,
-                query:
-                  'ask where { ' +
-                    '<http://localhost/publications/articles/Journal1/1940/Article2> ' +
-                    '<http://purl.org/dc/elements/1.1/subject> ' +
-                    '"A very interesting subject"^^<http://www.w3.org/2001/XMLSchema#string> .}',
-              },
-              (dataQ, responseQ) => {
-                expect(responseQ.statusCode).toEqual(200);
-                expect(dataQ.boolean).toEqual(true);
-
-                // restore database state
-                conn.begin({ database }, (txId, responseB) => {
-                  expect(responseB.statusCode).toEqual(200);
-                  expect(txId).toMatch(
-                    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
-                  );
-
-                  conn.removeInTransaction(
-                    {
-                      database,
-                      txId,
-                      body: aTriple,
-                      contentType: 'text/turtle',
-                    },
-                    (bodyR, responseR) => {
-                      expect(responseR.statusCode).toEqual(200);
-
-                      conn.commit({ database, txId }, (bodyCD, responseCD) => {
-                        expect(responseCD.statusCode).toEqual(200);
-
-                        done();
-                      });
-                    }
-                  );
-                });
-              }
-            );
-          });
-        }
-      );
-    });
+        });
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+        return transaction.commit(conn, res.transactionId);
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+        const q =
+          'ask where { ' +
+          '<http://localhost/publications/articles/Journal1/1940/Article2> ' +
+          '<http://purl.org/dc/elements/1.1/subject> ' +
+          '"A very interesting subject"^^<http://www.w3.org/2001/XMLSchema#string> .}';
+        return query.execute(conn, q);
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+        expect(res.result).toBe(true);
+        return transaction.begin(conn);
+      })
+      .then(({ transactionId }) =>
+        transaction.remove(conn, transactionId, triple, {
+          contentType: 'text/turtle',
+        })
+      )
+      .then(res => {
+        expect(res.status).toBe(200);
+        return transaction.commit(conn, res.transactionId);
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+      });
   });
 
-  it('Should be able to clean and insert all data in the DB using a transaction.', done => {
-    const dbContent =
-      '<http://localhost/publications/articles/Journal1/1940/Article1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://localhost/vocabulary/bench/Article> .\n' +
-      '<http://localhost/publications/articles/Journal1/1940/Article1> <http://purl.org/dc/elements/1.1/creator> <http://localhost/persons/Paul_Erdoes> .\n' +
-      '<http://localhost/publications/articles/Journal1/1940/Article1> <http://swrc.ontoware.org/ontology#journal> <http://localhost/publications/journals/Journal1/1940> .\n' +
-      '<http://localhost/publications/articles/Journal1/1940/Article1> <http://localhost/vocabulary/bench/abstract> "unmuzzling measles decentralizing hogfishes gantleted richer succories dwelling scrapped prat islanded burlily thanklessly swiveled polers oinked apnea maxillary dumpers bering evasiveness toto teashop reaccepts gunneries exorcises pirog desexes summable heliocentricity excretions recelebrating dually plateauing reoccupations embossers cerebrum gloves mohairs admiralties bewigged playgoers cheques batting waspishly stilbestrol villainousness miscalling firefanged skeins equalled sandwiching bewitchment cheaters riffled kerneling napoleons rifer splinting surmisers satisfying undamped sharpers forbearer anesthetization undermentioned outflanking funnyman commuted lachrymation floweret arcadian acridities unrealistic substituting surges preheats loggias reconciliating photocatalyst lenity tautological jambing sodality outcrop slipcases phenylketonuria grunts venturers valiantly unremorsefully extradites stollens ponderers conditione loathly cancels debiting parrots paraguayans resonates"^^<http://www.w3.org/2001/XMLSchema#string> .\n' +
-      '<http://localhost/publications/articles/Journal1/1940/Article1> <http://localhost/vocabulary/bench/cdrom> "http://www.hogfishes.tld/richer/succories.html"^^<http://www.w3.org/2001/XMLSchema#string> .\n' +
-      '<http://localhost/publications/articles/Journal1/1940/Article1> <http://www.w3.org/2000/01/rdf-schema#seeAlso> "http://www.gantleted.tld/succories/dwelling.html"^^<http://www.w3.org/2001/XMLSchema#string> .\n' +
-      '<http://localhost/publications/articles/Journal1/1940/Article1> <http://swrc.ontoware.org/ontology#month> "4"^^<http://www.w3.org/2001/XMLSchema#integer> .\n' +
-      '<http://localhost/publications/articles/Journal1/1940/Article1> <http://swrc.ontoware.org/ontology#note> "overbites terminals giros podgy vagus kinkiest xix recollected"^^<http://www.w3.org/2001/XMLSchema#string> .\n' +
-      '<http://localhost/publications/articles/Journal1/1940/Article1> <http://swrc.ontoware.org/ontology#pages> "110"^^<http://www.w3.org/2001/XMLSchema#integer> .\n' +
-      '<http://localhost/publications/articles/Journal1/1940/Article1> <http://purl.org/dc/elements/1.1/title> "richer dwelling scrapped"^^<http://www.w3.org/2001/XMLSchema#string> .\n' +
-      '<http://localhost/publications/articles/Journal1/1940/Article1> <http://xmlns.com/foaf/0.1/homepage> "http://www.succories.tld/scrapped/prat.html"^^<http://www.w3.org/2001/XMLSchema#string> .\n' +
-      '\n' +
-      '<http://localhost/publications/articles/Journal1/1940/Article2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://localhost/vocabulary/bench/Article> .\n' +
-      '<http://localhost/publications/articles/Journal1/1940/Article2> <http://purl.org/dc/elements/1.1/creator> <http://localhost/persons/John_Erdoes> .\n' +
-      '<http://localhost/publications/articles/Journal1/1940/Article2> <http://swrc.ontoware.org/ontology#journal> <http://localhost/publications/journals/Journal1/1940> .\n' +
-      '<http://localhost/publications/articles/Journal1/1940/Article2> <http://localhost/vocabulary/bench/abstract> "unmuzzling measles decentralizing hogfishes gantleted richer succories dwelling scrapped prat islanded burlily thanklessly swiveled polers oinked apnea maxillary dumpers bering evasiveness toto teashop reaccepts gunneries exorcises pirog desexes summable heliocentricity excretions recelebrating dually plateauing reoccupations embossers cerebrum gloves mohairs admiralties bewigged playgoers cheques batting waspishly stilbestrol villainousness miscalling firefanged skeins equalled sandwiching bewitchment cheaters riffled kerneling napoleons rifer splinting surmisers satisfying undamped sharpers forbearer anesthetization undermentioned outflanking funnyman commuted lachrymation floweret arcadian acridities unrealistic substituting surges preheats loggias reconciliating photocatalyst lenity tautological jambing sodality outcrop slipcases phenylketonuria grunts venturers valiantly unremorsefully extradites stollens ponderers conditione loathly cancels debiting parrots paraguayans resonates"^^<http://www.w3.org/2001/XMLSchema#string> .\n' +
-      '<http://localhost/publications/articles/Journal1/1940/Article2> <http://localhost/vocabulary/bench/cdrom> "http://www.hogfishes.tld/richer/succories.html"^^<http://www.w3.org/2001/XMLSchema#string> .\n' +
-      '<http://localhost/publications/articles/Journal1/1940/Article2> <http://www.w3.org/2000/01/rdf-schema#seeAlso> "http://www.gantleted.tld/succories/dwelling.html"^^<http://www.w3.org/2001/XMLSchema#string> .\n' +
-      '<http://localhost/publications/articles/Journal1/1940/Article2> <http://swrc.ontoware.org/ontology#month> "8"^^<http://www.w3.org/2001/XMLSchema#integer> .\n' +
-      '<http://localhost/publications/articles/Journal1/1940/Article2> <http://swrc.ontoware.org/ontology#note> "overbites terminals giros podgy vagus kinkiest xix recollected"^^<http://www.w3.org/2001/XMLSchema#string> .\n' +
-      '<http://localhost/publications/articles/Journal1/1940/Article2> <http://swrc.ontoware.org/ontology#pages> "240"^^<http://www.w3.org/2001/XMLSchema#integer> .\n' +
-      '<http://localhost/publications/articles/Journal1/1940/Article2> <http://purl.org/dc/elements/1.1/title> "richer dwelling scrapped"^^<http://www.w3.org/2001/XMLSchema#string> .\n' +
-      '<http://localhost/publications/articles/Journal1/1940/Article2> <http://xmlns.com/foaf/0.1/homepage> "http://www.succories.tld/scrapped/prat2.html"^^<http://www.w3.org/2001/XMLSchema#string> .\n';
-
-    conn.begin({ database }, (txId, responseB) => {
-      expect(responseB.statusCode).toEqual(200);
-      expect(txId).toMatch(
-        /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
-      );
-
-      conn.clearDB({ database, txId }, (dataC, responseC) => {
-        expect(responseC.statusCode).toEqual(200);
-
-        // once cleared let"s commit and then ask for the db size
-        conn.commit({ database, txId }, (dataCom, responseCom) => {
-          expect(responseCom.statusCode).toEqual(200);
-
-          conn.getDBSize({ database }, (dataS, responseS) => {
-            expect(responseS.statusCode).toEqual(200);
-            expect(dataS).toEqual(expect.anything());
-
-            const sizeNum = parseInt(dataS, 10);
-            expect(sizeNum).toEqual(0);
-
-            // restore the db content
-            conn.begin({ database }, (txId, responseB2) => {
-              expect(responseB2.statusCode).toEqual(200);
-              expect(txId).toMatch(
-                /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
-              );
-
-              conn.addInTransaction(
-                {
-                  database,
-                  txId,
-                  body: dbContent,
-                  contentType: 'text/turtle',
-                },
-                (dataA, responseA) => {
-                  expect(responseA.statusCode).toEqual(200);
-
-                  // commit
-                  conn.commit({ database, txId }, (dataCom2, responseCom2) => {
-                    expect(responseCom2.statusCode).toEqual(200);
-
-                    // check that the data is stored
-                    conn.getDBSize({ database }, (dataS2, responseS2) => {
-                      expect(responseS2.statusCode).toEqual(200);
-                      const sizeNum = parseInt(dataS2, 10);
-                      expect(sizeNum).toBe(22);
-                      done();
-                    });
-                  });
-                }
-              );
-            });
-          });
+  it('Should be able to clean and insert all data in the DB using a transaction.', () => {
+    const dbContent = fs.readFileSync(
+      process.cwd() + '/test/fixtures/api_tests.nt',
+      'utf-8'
+    );
+    return transaction
+      .begin(conn)
+      .then(res => {
+        expect(res.status).toBe(200);
+        expect(res.result).toBeGUID();
+        return db.clear(conn, conn.database, res.transactionId);
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+        expect(res.transactionId).toMatch(
+          /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+        );
+        return transaction.commit(conn, res.transactionId);
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+        return db.size(conn, conn.database);
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+        const sizeNum = parseInt(res.result, 10);
+        expect(sizeNum).toBe(0);
+        return transaction.begin(conn);
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+        expect(res.result).toBe(res.transactionId);
+        expect(res.result).toBeGUID();
+        return transaction.add(conn, res.result, dbContent, {
+          contentType: 'text/turtle',
         });
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+        return transaction.commit(conn, res.transactionId);
+      })
+      .then(() => db.size(conn, conn.database))
+      .then(res => {
+        expect(res.status).toBe(200);
+        const sizeNum = parseInt(res.result, 10);
+        expect(sizeNum).toBe(42);
       });
-    });
   });
 });

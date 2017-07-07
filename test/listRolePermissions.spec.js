@@ -1,9 +1,10 @@
-const Stardog = require('../lib');
+const { role } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   generateRandomString,
+  ConnectionFactory,
 } = require('./setup-database');
 describe('listRolePermissions()', () => {
   const database = generateDatabaseName();
@@ -13,45 +14,39 @@ describe('listRolePermissions()', () => {
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = new Stardog.Connection();
-    conn.setEndpoint('http://localhost:5820/');
-    conn.setCredentials('admin', 'admin');
+    conn = ConnectionFactory();
   });
 
-  it('should fail trying to get the list of permissions of a non-existent role.', done => {
-    conn.listRolePermissions({ role: 'myrole' }, (data, response) => {
-      expect(response.statusCode).toEqual(404);
-      done();
+  it('should fail trying to get the list of permissions of a non-existent role.', () => {
+    return role.permissions(conn, 'myrole').then(res => {
+      expect(res.status).toBe(404);
     });
   });
 
-  it('should list permissions assigned to a new role.', done => {
-    const aNewRole = generateRandomString();
-    const aNewPermission = {
+  it('should list permissions assigned to a new role.', () => {
+    const rolename = generateRandomString();
+    const permission = {
       action: 'write',
-      resource_type: 'db',
-      resource: [database],
+      resourceType: 'db',
+      resources: [database],
     };
 
-    conn.createRole({ rolename: aNewRole }, (data1, response1) => {
-      expect(response1.statusCode).toEqual(201);
+    return role
+      .create(conn, { name: rolename })
+      .then(res => {
+        expect(res.status).toBe(201);
+        return role.assignPermission(conn, rolename, permission);
+      })
+      .then(res => {
+        expect(res.status).toBe(201);
+        return role.permissions(conn, rolename);
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
 
-      conn.assignPermissionToRole(
-        { role: aNewRole, permissionObj: aNewPermission },
-        (data2, response2) => {
-          expect(response2.statusCode).toEqual(201);
-
-          // list permissions to new role should include recently added.
-          conn.listRolePermissions({ role: aNewRole }, (data3, response3) => {
-            expect(response3.statusCode).toEqual(200);
-
-            expect(data3.permissions).toEqual(expect.anything());
-            expect(data3.permissions.length).toBeGreaterThan(0);
-            expect(data3.permissions[0].resource).toContain(database);
-            done();
-          });
-        }
-      );
-    });
+        expect(res.result.permissions).toEqual(expect.anything());
+        expect(res.result.permissions.length).toBeGreaterThan(0);
+        expect(res.result.permissions[0].resource).toContain(database);
+      });
   });
 });

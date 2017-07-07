@@ -1,14 +1,10 @@
 const Path = require('path');
 const RandomString = require('randomstring');
-const { Connection, db } = require('../lib/index2');
+const { Connection, db } = require('../lib');
 const dbs = new Set(); // used to keep track of DBs across runs
 
 exports.seedDatabase = database => () => {
-  const conn = new Connection({
-    username: 'admin',
-    password: 'admin',
-    endpoint: 'http://localhost:5820',
-  });
+  const conn = exports.ConnectionFactory();
 
   return db
     .create(
@@ -53,11 +49,7 @@ exports.seedDatabase = database => () => {
 };
 
 exports.dropDatabase = database => () => {
-  const conn = new Connection({
-    username: 'admin',
-    password: 'admin',
-    endpoint: 'http://localhost:5820',
-  });
+  const conn = exports.ConnectionFactory();
   return db.drop(conn, database).then(res => {
     expect(response.status).toBe(200);
   });
@@ -86,4 +78,5 @@ exports.ConnectionFactory = () =>
     username: 'admin',
     password: 'admin',
     endpoint: 'http://localhost:5820',
+    //endpoint: 'http://localhost:61941',
   });

@@ -1,9 +1,10 @@
-const { Connection, db } = require('../lib/index2');
+const { db } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   generateRandomString,
+  ConnectionFactory,
 } = require('./setup-database');
 
 describe('optimizeDB()', () => {
@@ -14,11 +15,7 @@ describe('optimizeDB()', () => {
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = new Connection({
-      endpoint: 'http://localhost:5820/',
-      username: 'admin',
-      password: 'admin',
-    });
+    conn = ConnectionFactory();
   });
 
   it('should get NOT_FOUND status code trying to optimize a non-existent DB.', () => {

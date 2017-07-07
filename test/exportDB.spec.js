@@ -1,9 +1,10 @@
-const Stardog = require('../lib');
+const { db } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   generateRandomString,
+  ConnectionFactory,
 } = require('./setup-database');
 
 describe('exportDB()', () => {
@@ -14,35 +15,30 @@ describe('exportDB()', () => {
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = new Stardog.Connection();
-    conn.setEndpoint('http://localhost:5820/');
-    conn.setCredentials('admin', 'admin');
+    conn = ConnectionFactory();
+    conn.config({ database });
   });
 
-  it('should return a response with content-disposition header and the attachment export file', done => {
-    const options = {
-      database,
-    };
-
-    conn.exportDB(options, (data, response) => {
-      expect(response.statusCode).toEqual(200);
-      const res = JSON.parse(response.raw.toString());
-      expect(res).toHaveLength(12);
-      done();
+  it('should return a response with content-disposition header and the attachment export file', () => {
+    return db.export(conn, conn.database).then(res => {
+      expect(res.status).toBe(200);
+      expect(res.result).toHaveLength(12);
     });
   });
 
-  it('should return a response with content-disposition header and the attachment export file when using graph-uri param', done => {
+  it('should return a response with content-disposition header and the attachment export file when using graph-uri param', () => {
     const options = {
       database,
       graphUri: 'tag:stardog:api:context:default',
     };
 
-    conn.exportDB(options, (data, response) => {
-      expect(response.statusCode).toEqual(200);
-      const res = JSON.parse(response.raw.toString());
-      expect(res).toHaveLength(12);
-      done();
-    });
+    return db
+      .export(conn, conn.database, undefined, {
+        graphUri: 'tag:stardog:api:context:default',
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+        expect(res.result).toHaveLength(12);
+      });
   });
 });
