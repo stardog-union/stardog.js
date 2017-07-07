@@ -12,7 +12,7 @@ This framework wraps all the functionality of a client for the Stardog DBMS, and
 
 All the implementation uses the HTTP protocol, since most of Stardog functionality is available using this protocol. For more information, go to the Stardog's [HTTP Programming](http://www.stardog.com/docs/#_network_programming) documentation.
 
-This is a universal library and as such can be used in both the browser and node.
+This is a universal library and as such can be used in both the browser and Node.
 
 ## Installation
 
@@ -51,7 +51,7 @@ Fork, clone, dev, write or ammend tests and PR. All PRs go against "master". Thi
 
 ## Version details
 
-The current version of stardog.js has been tested against version 5.0.0 of Stardog. You are encouraged to use this library if you are using version 5 or greater of Stardog. However, there is very little code that is version specific in Stardog.js. It is essentially just a convenience wrapper around `fetch`. It is very likely that many of the exposed methods will work on older versions of Stardog, but it is has not been tested.
+The current version of stardog.js has been tested against version 5.0.0 of Stardog. You are encouraged to use this library if you are using version 5 or greater of Stardog. However, there is very little code that is version specific in stardog.js. It is essentially just a convenience wrapper around `fetch`. It is very likely that many of the exposed methods will work on older versions of Stardog, but it is has not been tested.
 
 If you are using a really old version of stardog (<= 3.0.0) you should stick with the legacy version of the library which is version 0.3.1.
 
