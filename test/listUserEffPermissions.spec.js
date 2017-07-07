@@ -25,7 +25,7 @@ describe('listUserEffPermissions()', () => {
   });
 
   it('should list effective permissions assigned to a new user.', () => {
-    const username = generateRandomString();
+    const name = generateRandomString();
     const password = generateRandomString();
     const permission = {
       action: 'write',
@@ -35,11 +35,11 @@ describe('listUserEffPermissions()', () => {
 
     return user
       .create(conn, {
-        username,
+        name,
         password,
       })
-      .then(() => user.assignPermission(conn, username, permission))
-      .then(() => user.effectivePermissions(conn, username))
+      .then(() => user.assignPermission(conn, name, permission))
+      .then(() => user.effectivePermissions(conn, name))
       .then(res => {
         expect(res.result.permissions.length).toBeGreaterThan(0);
         expect(res.result.permissions).toContainEqual({

@@ -15,15 +15,15 @@ describe('deleteUser()', () => {
   });
 
   it('should delete a supplied user recently created.', () => {
-    const username = generateRandomString();
+    const name = generateRandomString();
     return user
       .create(conn, {
-        username,
+        name,
         password: generateRandomString(),
       })
       .then(res => {
         expect(res.status).toBe(201);
-        return user.delete(conn, username);
+        return user.delete(conn, name);
       })
       .then(res => {
         expect(res.status).toBe(204);

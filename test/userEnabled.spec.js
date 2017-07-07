@@ -15,17 +15,17 @@ describe('userEnabled()', () => {
   });
 
   it('should enable a user recently created.', () => {
-    const username = generateRandomString();
+    const name = generateRandomString();
     const password = generateRandomString();
     return user
-      .create(conn, { username, password })
+      .create(conn, { name, password })
       .then(res => {
         expect(res.status).toBe(201);
-        return user.enable(conn, username, true);
+        return user.enable(conn, name, true);
       })
       .then(res => {
         expect(res.status).toBe(200);
-        return user.enabled(conn, username);
+        return user.enabled(conn, name);
       })
       .then(res => {
         expect(res.status).toBe(200);
