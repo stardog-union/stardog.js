@@ -5,6 +5,7 @@ const dbs = new Set(); // used to keep track of DBs across runs
 
 exports.seedDatabase = database => () => {
   const conn = exports.ConnectionFactory();
+  const basePath = process.env.CIRCLECI ? '/var/opt/stardog/test/' : __dirname;
 
   return db
     .create(
@@ -22,11 +23,11 @@ exports.seedDatabase = database => () => {
         // Load everything into the DB
         files: [
           {
-            filename: Path.resolve(__dirname, 'fixtures', 'api_tests.nt'),
+            filename: Path.resolve(basePath, 'fixtures', 'api_tests.nt'),
           },
           {
             filename: Path.resolve(
-              __dirname,
+              basePath,
               'fixtures',
               'reasoning',
               'abox.ttl'
@@ -34,7 +35,7 @@ exports.seedDatabase = database => () => {
           },
           {
             filename: Path.resolve(
-              __dirname,
+              basePath,
               'fixtures',
               'reasoning',
               'tbox.ttl'
