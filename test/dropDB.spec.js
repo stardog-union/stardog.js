@@ -23,7 +23,7 @@ describe('dropDB()', () => {
   });
 
   it('should drop a DB', () => {
-    return db.drop(conn, conn.database).then(res => {
+    return db.drop(conn, database).then(res => {
       expect(res.status).toBe(200);
     });
   });

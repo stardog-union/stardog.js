@@ -15,11 +15,10 @@ describe('getNamespaces()', () => {
 
   beforeEach(() => {
     conn = ConnectionFactory();
-    conn.config({ database });
   });
 
   it('should retrieve the namespace prefix bindings for the database', () => {
-    return db.namespaces(conn, conn.database).then(res => {
+    return db.namespaces(conn, database).then(res => {
       expect(res.status).toEqual(200);
       expect(res.result).toEqual({
         '': 'http://example.org/vehicles/',

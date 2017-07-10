@@ -25,14 +25,14 @@ describe('createDB()', () => {
     };
 
     return db
-      .create(conn, conn.database, {
+      .create(conn, database, {
         index: {
           type: 'disk',
         },
       })
       .then(res => {
         expect(res.status).toBe(201);
-        return db.create(conn, conn.database);
+        return db.create(conn, database);
       })
       .then(res => {
         expect(res.status).toBe(409);

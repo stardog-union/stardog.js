@@ -21,7 +21,7 @@ describe('query.property()', () => {
 
   it('Gets a specific property from the database', () => {
     return query
-      .property(conn, {
+      .property(conn, database, {
         uri: '<http://localhost/publications/articles/Journal1/1940/Article1>',
         property: '<http://localhost/vocabulary/bench/cdrom>',
       })

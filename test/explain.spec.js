@@ -16,12 +16,11 @@ describe('queryExplain()', () => {
 
   beforeEach(() => {
     conn = ConnectionFactory();
-    conn.config({ database });
   });
 
   it('A response with the query plan should not be empty', () => {
     return query
-      .explain(conn, 'select ?s where { ?s ?p ?o } limit 10')
+      .explain(conn, database, 'select ?s where { ?s ?p ?o } limit 10')
       .then(({ result }) => {
         expect(result).toContain('Slice(offset=0, limit=10)');
         expect(result).toContain('Projection(?s)');
