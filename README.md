@@ -12,7 +12,7 @@ This framework wraps all the functionality of a client for the Stardog DBMS, and
 
 All the implementation uses the HTTP protocol, since most of Stardog functionality is available using this protocol. For more information, go to the Stardog's [HTTP Programming](http://www.stardog.com/docs/#_network_programming) documentation.
 
-This is a universal library and as such can be used in both the browser and Node.
+This is a universal library and as such can be used in both the browser and Node.js.
 
 ## Installation
 
@@ -39,7 +39,7 @@ npm install
 
 ### Running Tests
 
-Run all the test cases in `test/spec`, all test cases must pass. With the Stardog server running, execute the following commands:
+In order to contribute changes, all test cases must pass. With the Stardog server running, execute the following command to run all test cases in `test/spec`:
 
 ```bash
 npm test
@@ -57,7 +57,7 @@ If you are using a really old version of stardog (<= 3.0.0) you should stick wit
 
 ### Discontinued Versions
 
-All versions prior to v1.0.0 have been discontinued and will not receive updates of any kind. If you are using a legacy version of stardog.js you can find the original documentation [here](http://stardog-union.github.io/stardog.js/docs/stardog.html). The most recent legacy version is 0.3.1.
+All versions of stardog.js prior to v1.0.0 have been discontinued and will not receive updates of any kind. If you are using a legacy version of stardog.js you can find the original documentation [here](http://stardog-union.github.io/stardog.js/docs/stardog.html). The most recent legacy version is 0.3.1.
 
 ## Quick Example
 ```js
