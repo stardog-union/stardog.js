@@ -74,6 +74,7 @@
     "husky": "^0.13.4",
     "jest": "^20.0.4",
     "lint-staged": "^4.0.0",
+    "mdchangelog": "^0.8.0",
     "prettier": "^1.4.4",
     "randomstring": "^1.1.5"
   },
@@ -82,7 +83,8 @@
   },
   "scripts": {
     "test": "jest test/*.spec.js --verbose -i",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "version": "mdchangelog --remote stardog-union/stardog.js --no-prologue --order-milestones semver --order-issues closed_at --overwrite --no-orphan-issues"
   },
   "lint-staged": {
     "*.js": [
