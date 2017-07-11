@@ -20,7 +20,7 @@ describe('exportDB()', () => {
   });
 
   it('should return a response with content-disposition header and the attachment export file', () => {
-    return db.export(conn, conn.database).then(res => {
+    return db.export(conn, database).then(res => {
       expect(res.status).toBe(200);
       expect(res.result).toHaveLength(12);
     });
@@ -33,7 +33,7 @@ describe('exportDB()', () => {
     };
 
     return db
-      .export(conn, conn.database, undefined, {
+      .export(conn, database, undefined, {
         graphUri: 'tag:stardog:api:context:default',
       })
       .then(res => {
