@@ -1,3 +1,5 @@
+/* eslint-env jest */
+
 const { user } = require('../lib');
 const {
   seedDatabase,

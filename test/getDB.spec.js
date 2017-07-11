@@ -1,9 +1,10 @@
+/* eslint-env jest */
+
 const { db } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
-  generateRandomString,
   ConnectionFactory,
 } = require('./setup-database');
 
@@ -18,10 +19,9 @@ describe('getDB()', () => {
     conn = ConnectionFactory();
   });
 
-  it('A response of the DB info should not be empty', () => {
-    return db.get(conn, database).then(res => {
+  it('A response of the DB info should not be empty', () =>
+    db.get(conn, database).then(res => {
       expect(res.result).toMatch('@prefix : <http://example.org/vehicles/> .');
       expect(res.status).toEqual(200);
-    });
-  });
+    }));
 });

@@ -1,6 +1,7 @@
+/* eslint-env jest */
+
 const { db } = require('../lib');
 const {
-  seedDatabase,
   dropDatabase,
   generateDatabaseName,
   ConnectionFactory,
@@ -17,14 +18,8 @@ describe('createDB()', () => {
     conn.config({ database });
   });
 
-  it('should not be able to create a new db with the name of an existing DB', () => {
-    const options = {
-      database,
-      options: { 'index.type': 'disk' },
-      files: [],
-    };
-
-    return db
+  it('should not be able to create a new db with the name of an existing DB', () =>
+    db
       .create(conn, database, {
         index: {
           type: 'disk',
@@ -36,6 +31,5 @@ describe('createDB()', () => {
       })
       .then(res => {
         expect(res.status).toBe(409);
-      });
-  });
+      }));
 });

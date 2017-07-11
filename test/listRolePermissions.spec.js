@@ -1,3 +1,5 @@
+/* eslint-env jest */
+
 const { role } = require('../lib');
 const {
   seedDatabase,
@@ -6,6 +8,7 @@ const {
   generateRandomString,
   ConnectionFactory,
 } = require('./setup-database');
+
 describe('listRolePermissions()', () => {
   const database = generateDatabaseName();
   let conn;
@@ -17,11 +20,10 @@ describe('listRolePermissions()', () => {
     conn = ConnectionFactory();
   });
 
-  it('should fail trying to get the list of permissions of a non-existent role.', () => {
-    return role.permissions(conn, 'myrole').then(res => {
+  it('should fail trying to get the list of permissions of a non-existent role.', () =>
+    role.permissions(conn, 'myrole').then(res => {
       expect(res.status).toBe(404);
-    });
-  });
+    }));
 
   it('should list permissions assigned to a new role.', () => {
     const rolename = generateRandomString();

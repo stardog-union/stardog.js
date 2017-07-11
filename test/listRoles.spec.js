@@ -1,3 +1,5 @@
+/* eslint-env jest */
+
 const { role } = require('../lib');
 const { ConnectionFactory, generateRandomString } = require('./setup-database');
 

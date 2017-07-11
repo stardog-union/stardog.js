@@ -1,10 +1,11 @@
+/* eslint-env jest */
+
 const fs = require('fs');
 const { transaction, query, db } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
-  generateRandomString,
   ConnectionFactory,
 } = require('./setup-database');
 
@@ -23,7 +24,7 @@ describe('transactions', () => {
     toBeGUID(received) {
       const pass =
         received.match(
-          //Lifed from https://stackoverflow.com/a/13653180/1011616
+          // Lifed from https://stackoverflow.com/a/13653180/1011616
           /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
         ) != null;
       if (pass) {
@@ -31,17 +32,16 @@ describe('transactions', () => {
           pass,
           message: () => `expected ${received} to not be a GUID`,
         };
-      } else {
-        return {
-          pass,
-          message: () => `expected ${received} to be a GUID`,
-        };
       }
+      return {
+        pass,
+        message: () => `expected ${received} to be a GUID`,
+      };
     },
   });
 
-  it('Should be able to get a transaction and make a query', () => {
-    return begin()
+  it('Should be able to get a transaction and make a query', () =>
+    begin()
       .then(res => {
         expect(res.status).toEqual(200);
         expect(res.result).toBe(res.transactionId);
@@ -57,8 +57,7 @@ describe('transactions', () => {
       .then(res => {
         expect(res.status).toBe(200);
         expect(res.result.results.bindings).toHaveLength(10);
-      });
-  });
+      }));
 
   it('Should be able to get a transaction, add a triple and rollback', () => {
     const triple =
@@ -107,14 +106,14 @@ describe('transactions', () => {
       })
       .then(res => {
         expect(res.status).toBe(200);
-        const _query = `
+        const q = `
           prefix foo: <http://localhost/publications/articles/Journal1/1940/>
           prefix dc: <http://purl.org/dc/elements/1.1/>
           ask where {
           foo:Article2
           dc:subject
           "A very interesting subject"^^<http://www.w3.org/2001/XMLSchema#string> .}`;
-        return query.execute(conn, database, _query);
+        return query.execute(conn, database, q);
       })
       .then(res => {
         expect(res.status).toBe(200);
@@ -185,7 +184,7 @@ describe('transactions', () => {
 
   it('Should be able to clean and insert all data in the DB using a transaction.', () => {
     const dbContent = fs.readFileSync(
-      process.cwd() + '/test/fixtures/api_tests.nt',
+      `${process.cwd()}/test/fixtures/api_tests.nt`,
       'utf-8'
     );
     return begin()

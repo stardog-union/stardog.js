@@ -1,11 +1,7 @@
+/* eslint-env jest */
+
 const { user, role } = require('../lib');
-const {
-  seedDatabase,
-  dropDatabase,
-  generateDatabaseName,
-  generateRandomString,
-  ConnectionFactory,
-} = require('./setup-database');
+const { generateRandomString, ConnectionFactory } = require('./setup-database');
 
 describe('listUserRoles()', () => {
   let conn;
@@ -14,11 +10,10 @@ describe('listUserRoles()', () => {
     conn = ConnectionFactory();
   });
 
-  it('should return NOT_FOUND if trying to list roles from non-existent user', () => {
-    return user.listRoles(conn, generateRandomString()).then(res => {
+  it('should return NOT_FOUND if trying to list roles from non-existent user', () =>
+    user.listRoles(conn, generateRandomString()).then(res => {
       expect(res.status).toBe(404);
-    });
-  });
+    }));
 
   it('should return a non-empty list with the roles of the user', () => {
     const r = generateRandomString();

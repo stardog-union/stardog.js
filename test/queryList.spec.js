@@ -1,3 +1,5 @@
+/* eslint-env jest */
+
 const { query } = require('../lib');
 const { ConnectionFactory } = require('./setup-database');
 
@@ -8,10 +10,10 @@ describe('queryList()', () => {
     conn = ConnectionFactory();
   });
 
-  it.skip('should return the number of global running queries', () => {
-    return query.list(conn).then(res => {
+  it.skip('should return the number of global running queries', () =>
+    query.list(conn).then(res => {
       expect(res.status).toEqual(200);
       expect(res.result.queries).toHaveLength(0);
-    });
-  });
+    })
+  );
 });

@@ -1,0 +1,24 @@
+{
+  "extends": [
+    "airbnb-base",
+    "prettier"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 6
+  },
+  "plugins": [
+    "prettier"
+  ],
+  "rules": {
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "params" // igore only these for the time being
+      }
+    ],
+    "prettier/prettier": ["error", {
+      "singleQuote": true,
+      "trailingComma": "es5"
+    }]
+  }
+}

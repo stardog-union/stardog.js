@@ -1,11 +1,7 @@
+/* eslint-env jest */
+
 const { user } = require('../lib');
-const {
-  seedDatabase,
-  dropDatabase,
-  generateDatabaseName,
-  generateRandomString,
-  ConnectionFactory,
-} = require('./setup-database');
+const { generateRandomString, ConnectionFactory } = require('./setup-database');
 
 describe('isSuperUser()', () => {
   let conn;
@@ -14,17 +10,15 @@ describe('isSuperUser()', () => {
     conn = ConnectionFactory();
   });
 
-  it('should get NOT_FOUND for a non-existent user', () => {
-    return user.superUser(conn, 'someuser').then(res => {
+  it('should get NOT_FOUND for a non-existent user', () =>
+    user.superUser(conn, 'someuser').then(res => {
       expect(res.status).toBe(404);
-    });
-  });
+    }));
 
-  it("should return the value with the user's superuser flag (true)", () => {
-    return user.superUser(conn, 'admin').then(res => {
+  it("should return the value with the user's superuser flag (true)", () =>
+    user.superUser(conn, 'admin').then(res => {
       expect(res.result.superuser).toBe(true);
-    });
-  });
+    }));
 
   it("should return the value with the user's superuser flag (false)", () => {
     const name = generateRandomString();

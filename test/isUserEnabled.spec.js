@@ -1,11 +1,7 @@
+/* eslint-env jest */
+
 const { user } = require('../lib');
-const {
-  seedDatabase,
-  dropDatabase,
-  generateDatabaseName,
-  generateRandomString,
-  ConnectionFactory,
-} = require('./setup-database');
+const { generateRandomString, ConnectionFactory } = require('./setup-database');
 
 describe('user.enabled()', () => {
   let conn;
@@ -14,17 +10,15 @@ describe('user.enabled()', () => {
     conn = ConnectionFactory();
   });
 
-  it('should get NOT_FOUND for a non-existent user', () => {
-    return user.enabled(conn, 'someuser').then(res => {
+  it('should get NOT_FOUND for a non-existent user', () =>
+    user.enabled(conn, 'someuser').then(res => {
       expect(res.status).toEqual(404);
-    });
-  });
+    }));
 
-  it("should return the value with the user's enabled flag", () => {
-    return user.enabled(conn, 'admin').then(res => {
+  it("should return the value with the user's enabled flag", () =>
+    user.enabled(conn, 'admin').then(res => {
       expect(res.result.enabled).toEqual(true);
-    });
-  });
+    }));
 
   it("should return the value with the user's superuser flag (false)", () => {
     const name = generateRandomString();

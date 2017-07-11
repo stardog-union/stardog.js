@@ -1,3 +1,5 @@
+/* eslint-env jest */
+
 const { db } = require('../lib');
 const {
   seedDatabase,
@@ -19,8 +21,8 @@ describe('db.copy()', () => {
     conn = ConnectionFactory();
   });
 
-  it('should not copy an online DB', () => {
-    return db
+  it('should not copy an online DB', () =>
+    db
       .copy(conn, sourceDatabase, destinationDatabase)
       .then(() => db.list(conn))
       .then(res => {
@@ -28,11 +30,10 @@ describe('db.copy()', () => {
         // Destination shouldn't be listed because it's not online yet and therefor didn't get copied.
         expect(res.result.databases).not.toContain(destinationDatabase);
         expect(res.result.databases).toContain(sourceDatabase);
-      });
-  });
+      }));
 
-  it('should copy an offline DB', () => {
-    return db
+  it('should copy an offline DB', () =>
+    db
       .offline(conn, sourceDatabase)
       .then(() => db.copy(conn, sourceDatabase, destinationDatabase))
       .then(() => db.list(conn))
@@ -40,6 +41,5 @@ describe('db.copy()', () => {
         expect(res.status).toEqual(200);
         expect(res.result.databases).toContain(destinationDatabase);
         expect(res.result.databases).toContain(sourceDatabase);
-      });
-  });
+      }));
 });

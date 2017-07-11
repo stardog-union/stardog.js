@@ -1,7 +1,8 @@
+/* eslint-env jest */
+
 const { db } = require('../lib');
 const {
   seedDatabase,
-  dropDatabase,
   generateDatabaseName,
   ConnectionFactory,
 } = require('./setup-database');
@@ -16,15 +17,13 @@ describe('dropDB()', () => {
     conn.config({ database });
   });
 
-  it('should not drop an non-existent DB', () => {
-    return db.drop(conn, 'xxxx').then(res => {
+  it('should not drop an non-existent DB', () =>
+    db.drop(conn, 'xxxx').then(res => {
       expect(res.status).toBe(404);
-    });
-  });
+    }));
 
-  it('should drop a DB', () => {
-    return db.drop(conn, database).then(res => {
+  it('should drop a DB', () =>
+    db.drop(conn, database).then(res => {
       expect(res.status).toBe(200);
-    });
-  });
+    }));
 });
