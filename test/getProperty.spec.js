@@ -1,9 +1,10 @@
+/* eslint-env jest */
+
 const { query } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
-  generateRandomString,
   ConnectionFactory,
 } = require('./setup-database');
 
@@ -19,8 +20,8 @@ describe('query.property()', () => {
     conn.config({ database });
   });
 
-  it('Gets a specific property from the database', () => {
-    return query
+  it('Gets a specific property from the database', () =>
+    query
       .property(conn, database, {
         uri: '<http://localhost/publications/articles/Journal1/1940/Article1>',
         property: '<http://localhost/vocabulary/bench/cdrom>',
@@ -29,6 +30,5 @@ describe('query.property()', () => {
         expect(res.result).toEqual(
           'http://www.hogfishes.tld/richer/succories.html'
         );
-      });
-  });
+      }));
 });

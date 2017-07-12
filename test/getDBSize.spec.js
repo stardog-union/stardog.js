@@ -1,9 +1,10 @@
+/* eslint-env jest */
+
 const { db } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
-  generateRandomString,
   ConnectionFactory,
 } = require('./setup-database');
 

@@ -1,3 +1,5 @@
+/* eslint-env jest */
+
 const { user } = require('../lib');
 const { generateRandomString, ConnectionFactory } = require('./setup-database');
 
@@ -8,11 +10,10 @@ describe('deleteUser()', () => {
     conn = ConnectionFactory();
   });
 
-  it('should return NOT_FOUND trying to delete a non-existent user.', () => {
-    return user.delete(conn, generateRandomString()).then(res => {
+  it('should return NOT_FOUND trying to delete a non-existent user.', () =>
+    user.delete(conn, generateRandomString()).then(res => {
       expect(res.status).toBe(404);
-    });
-  });
+    }));
 
   it('should delete a supplied user recently created.', () => {
     const name = generateRandomString();

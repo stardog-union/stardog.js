@@ -1,11 +1,13 @@
+/* eslint-env jest */
+
 const { db } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
-  generateRandomString,
   ConnectionFactory,
 } = require('./setup-database');
+
 describe('getNamespaces()', () => {
   const database = generateDatabaseName();
   let conn;
@@ -17,8 +19,8 @@ describe('getNamespaces()', () => {
     conn = ConnectionFactory();
   });
 
-  it('should retrieve the namespace prefix bindings for the database', () => {
-    return db.namespaces(conn, database).then(res => {
+  it('should retrieve the namespace prefix bindings for the database', () =>
+    db.namespaces(conn, database).then(res => {
       expect(res.status).toEqual(200);
       expect(res.result).toEqual({
         '': 'http://example.org/vehicles/',
@@ -29,6 +31,5 @@ describe('getNamespaces()', () => {
         xsd: 'http://www.w3.org/2001/XMLSchema#',
         ex: 'http://example.org/vehicles/',
       });
-    });
-  });
+    }));
 });

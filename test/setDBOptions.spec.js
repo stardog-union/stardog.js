@@ -1,9 +1,10 @@
+/* eslint-env jest */
+
 const { db } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
-  generateRandomString,
   ConnectionFactory,
 } = require('./setup-database');
 
@@ -18,8 +19,8 @@ describe('db.setOptions()', () => {
     conn = ConnectionFactory();
   });
 
-  it('should get NOT_FOUND status code trying to set the options of a non-existent DB.', () => {
-    return db
+  it('should get NOT_FOUND status code trying to set the options of a non-existent DB.', () =>
+    db
       .setOptions(conn, 'nodeDB_test', {
         query: {
           all: {
@@ -32,14 +33,13 @@ describe('db.setOptions()', () => {
       })
       .then(res => {
         expect(res.status).toEqual(404);
-      });
-  });
+      }));
 
-  it('should set the options of an DB', () => {
-    return db
+  it('should set the options of an DB', () =>
+    db
       .offline(conn, database)
-      .then(() => {
-        return db.setOptions(conn, database, {
+      .then(() =>
+        db.setOptions(conn, database, {
           query: {
             all: {
               graphs: true,
@@ -48,10 +48,9 @@ describe('db.setOptions()', () => {
           transaction: {
             logging: true,
           },
-        });
-      })
+        })
+      )
       .then(res => {
         expect(res.status).toBe(200);
-      });
-  });
+      }));
 });

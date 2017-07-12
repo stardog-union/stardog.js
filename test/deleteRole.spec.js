@@ -1,3 +1,5 @@
+/* eslint-env jest */
+
 const { role } = require('../lib');
 const {
   seedDatabase,
@@ -18,11 +20,10 @@ describe('deleteRole()', () => {
     conn = ConnectionFactory();
   });
 
-  it('should return NOT_FOUND trying to delete a non-existent role.', () => {
-    return role.delete(conn, 'no-writer').then(res => {
+  it('should return NOT_FOUND trying to delete a non-existent role.', () =>
+    role.delete(conn, 'no-writer').then(res => {
       expect(res.status).toEqual(404);
-    });
-  });
+    }));
 
   it("should delete a 'writer' role recently created.", () => {
     const rolename = generateRandomString();

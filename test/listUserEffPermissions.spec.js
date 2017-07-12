@@ -1,3 +1,5 @@
+/* eslint-env jest */
+
 const { user } = require('../lib');
 const {
   seedDatabase,
@@ -18,11 +20,10 @@ describe('listUserEffPermissions()', () => {
     conn = ConnectionFactory();
   });
 
-  it('should fail trying to get the list of effective permissions of a non-existent user.', () => {
-    return user.effectivePermissions(conn, 'myuser').then(res => {
+  it('should fail trying to get the list of effective permissions of a non-existent user.', () =>
+    user.effectivePermissions(conn, 'myuser').then(res => {
       expect(res.status).toBe(404);
-    });
-  });
+    }));
 
   it('should list effective permissions assigned to a new user.', () => {
     const name = generateRandomString();

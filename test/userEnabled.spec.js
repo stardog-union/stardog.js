@@ -1,3 +1,5 @@
+/* eslint-env jest */
+
 const { user } = require('../lib');
 const { generateRandomString, ConnectionFactory } = require('./setup-database');
 
@@ -8,11 +10,10 @@ describe('userEnabled()', () => {
     conn = ConnectionFactory();
   });
 
-  it('should return NOT_FOUND trying to enable a non-existent user.', () => {
-    return user.enabled(conn, 'someuser').then(res => {
+  it('should return NOT_FOUND trying to enable a non-existent user.', () =>
+    user.enabled(conn, 'someuser').then(res => {
       expect(res.status).toBe(404);
-    });
-  });
+    }));
 
   it('should enable a user recently created.', () => {
     const name = generateRandomString();

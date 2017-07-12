@@ -1,3 +1,5 @@
+/* eslint-env jest */
+
 const { user, db } = require('../lib');
 const {
   seedDatabase,
@@ -19,11 +21,10 @@ describe('changePwd()', () => {
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
 
-  it('should fail trying to change a password (char[]) from an non-existent user', () => {
-    return user.changePassword(conn, 'someuser', 'passworddd').then(res => {
+  it('should fail trying to change a password (char[]) from an non-existent user', () =>
+    user.changePassword(conn, 'someuser', 'passworddd').then(res => {
       expect(res.status).toEqual(404);
-    });
-  });
+    }));
 
   it('should change the password and allow calls with new credentials', () => {
     const name = generateRandomString();
