@@ -27,7 +27,7 @@ describe('stored', () => {
         })
         .then(res => {
           expect(res.status).toBe(204);
-          return stored.delete(conn, name);
+          return stored.remove(conn, name);
         });
     });
     it('fails if the body is not correct', () =>
@@ -78,7 +78,7 @@ describe('stored', () => {
         })
         .then(res => {
           expect(res.status).toBe(204);
-          return stored.delete(conn, name);
+          return stored.remove(conn, name);
         })
         .then(res => {
           expect(res.status).toBe(204);
