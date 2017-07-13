@@ -5,10 +5,10 @@ const RandomString = require('randomstring');
 const { Connection, db } = require('../lib');
 
 const dbs = new Set(); // used to keep track of DBs across runs
+const basePath = process.env.CIRCLECI ? '/var/opt/stardog/test/' : __dirname;
 
 exports.seedDatabase = database => () => {
   const conn = exports.ConnectionFactory();
-  const basePath = process.env.CIRCLECI ? '/var/opt/stardog/test/' : __dirname;
 
   return db
     .create(
@@ -19,6 +19,9 @@ exports.seedDatabase = database => () => {
           type: 'disk',
         },
         search: {
+          enabled: true,
+        },
+        icv: {
           enabled: true,
         },
       },
@@ -42,6 +45,17 @@ exports.seedDatabase = database => () => {
               'fixtures',
               'reasoning',
               'tbox.ttl'
+            ),
+          },
+          {
+            filename: Path.resolve(basePath, 'fixtures', 'issues', 'data.ttl'),
+          },
+          {
+            filename: Path.resolve(
+              basePath,
+              'fixtures',
+              'issues',
+              'schema.ttl'
             ),
           },
         ],
