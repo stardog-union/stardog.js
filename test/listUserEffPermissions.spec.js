@@ -42,8 +42,8 @@ describe('listUserEffPermissions()', () => {
       .then(() => user.assignPermission(conn, name, permission))
       .then(() => user.effectivePermissions(conn, name))
       .then(res => {
-        expect(res.result.permissions.length).toBeGreaterThan(0);
-        expect(res.result.permissions).toContainEqual({
+        expect(res.body.permissions.length).toBeGreaterThan(0);
+        expect(res.body.permissions).toContainEqual({
           action: 'WRITE',
           resource: [database],
           resource_type: 'db',

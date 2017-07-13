@@ -30,7 +30,7 @@ describe('userEnabled()', () => {
       })
       .then(res => {
         expect(res.status).toBe(200);
-        expect(res.result.enabled).toBe(true);
+        expect(res.body.enabled).toBe(true);
       });
   });
 });

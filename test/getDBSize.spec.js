@@ -19,10 +19,9 @@ describe('getDBSize()', () => {
     conn = ConnectionFactory();
   });
 
-  it('A response with the size of the DB should not be empty', () => {
+  it('A response with the size of the DB should not be empty', () =>
     db.size(conn, database).then(res => {
-      const sizeNum = parseInt(res.result, 10);
+      const sizeNum = parseInt(res.body, 10);
       expect(sizeNum).toBe(82);
-    });
-  });
+    }));
 });

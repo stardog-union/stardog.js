@@ -22,9 +22,9 @@ describe('queryExplain()', () => {
   it('A response with the query plan should not be empty', () =>
     query
       .explain(conn, database, 'select ?s where { ?s ?p ?o } limit 10')
-      .then(({ result }) => {
-        expect(result).toContain('Slice(offset=0, limit=10)');
-        expect(result).toContain('Projection(?s)');
-        expect(result).toContain('Scan');
+      .then(({ body }) => {
+        expect(body).toContain('Slice(offset=0, limit=10)');
+        expect(body).toContain('Projection(?s)');
+        expect(body).toContain('Scan');
       }));
 });

@@ -25,7 +25,7 @@ describe('listUserRoles()', () => {
       .then(() => user.listRoles(conn, 'anonymous'))
       .then(res => {
         expect(res.status).toBe(200);
-        expect(res.result.roles).toContain(r);
+        expect(res.body.roles).toContain(r);
       });
   });
 });

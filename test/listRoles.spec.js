@@ -17,7 +17,7 @@ describe('listRoles()', () => {
       .then(() => role.list(conn))
       .then(res => {
         expect(res.status).toEqual(200);
-        expect(res.result.roles).toContain('reader', rolename);
+        expect(res.body.roles).toContain('reader', rolename);
       });
   });
 });

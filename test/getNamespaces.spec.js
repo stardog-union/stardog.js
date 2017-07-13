@@ -22,7 +22,7 @@ describe('getNamespaces()', () => {
   it('should retrieve the namespace prefix bindings for the database', () =>
     db.namespaces(conn, database).then(res => {
       expect(res.status).toEqual(200);
-      expect(res.result).toEqual({
+      expect(res.body).toEqual({
         '': 'http://example.org/issues#',
         owl: 'http://www.w3.org/2002/07/owl#',
         foaf: 'http://xmlns.com/foaf/0.1/',

@@ -46,9 +46,9 @@ describe('listRolePermissions()', () => {
       .then(res => {
         expect(res.status).toBe(200);
 
-        expect(res.result.permissions).toEqual(expect.anything());
-        expect(res.result.permissions.length).toBeGreaterThan(0);
-        expect(res.result.permissions[0].resource).toContain(database);
+        expect(res.body.permissions).toEqual(expect.anything());
+        expect(res.body.permissions.length).toBeGreaterThan(0);
+        expect(res.body.permissions[0].resource).toContain(database);
       });
   });
 });

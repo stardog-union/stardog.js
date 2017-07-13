@@ -29,7 +29,7 @@ describe('icv', () => {
       .then(() => icv.get(conn, database))
       .then(res => {
         expect(res.status).toBe(200);
-        expect(res.result.includes('<http://example.org/issues#Issue>')).toBe(
+        expect(res.body.includes('<http://example.org/issues#Issue>')).toBe(
           true
         );
       })
@@ -38,7 +38,7 @@ describe('icv', () => {
       .then(() =>
         icv.get(conn, database).then(res => {
           expect(res.status).toBe(200);
-          expect(res.result.length).toBe(0);
+          expect(res.body.length).toBe(0);
         })
       ));
 });

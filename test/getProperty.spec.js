@@ -27,7 +27,7 @@ describe('query.property()', () => {
         property: '<http://localhost/vocabulary/bench/cdrom>',
       })
       .then(res => {
-        expect(res.result).toEqual(
+        expect(res.body).toEqual(
           'http://www.hogfishes.tld/richer/succories.html'
         );
       }));

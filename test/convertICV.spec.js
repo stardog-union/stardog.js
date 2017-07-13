@@ -26,6 +26,6 @@ describe('icv', () => {
     icv
       .convert(conn, database, icvAxioms, { contentType: 'text/turtle' })
       .then(res => {
-        expect(res.result.startsWith('SELECT')).toBe(true);
+        expect(res.body.startsWith('SELECT')).toBe(true);
       }));
 });

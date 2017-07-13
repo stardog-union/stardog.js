@@ -13,6 +13,6 @@ describe('List Users Test Suite', () => {
   it('should return a list of current registered users in the system.', () =>
     user.list(conn).then(res => {
       expect(res.status).toEqual(200);
-      expect(res.result.users).toContain('admin');
+      expect(res.body.users).toContain('admin');
     }));
 });

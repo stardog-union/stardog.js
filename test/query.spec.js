@@ -21,7 +21,7 @@ describe('query.execute()', () => {
     execute('select distinct ?s where { ?s ?p ?o }', {
       reasoning: true,
     }).then(res => {
-      expect(res.result.results.bindings).toHaveLength(23);
+      expect(res.body.results.bindings).toHaveLength(23);
     }));
 
   it('A query result should work with property paths', () =>
@@ -36,14 +36,14 @@ describe('query.execute()', () => {
         reasoning: true,
       }
     ).then(res => {
-      expect(res.result.results.bindings).toHaveLength(6);
+      expect(res.body.results.bindings).toHaveLength(6);
     }));
 
   it('A query result should not have more bindings than its intended limit', () =>
     execute('select * where { ?s ?p ?o }', {
       limit: 10,
     }).then(res => {
-      expect(res.result.results.bindings).toHaveLength(10);
+      expect(res.body.results.bindings).toHaveLength(10);
     }));
 
   it('The baseURI option should be applied to the query', () =>
@@ -83,7 +83,7 @@ describe('query.execute()', () => {
     execute(
       'select distinct * where { ?s a <http://localhost/vocabulary/bench/Article> }'
     ).then(res => {
-      expect(res.result.results.bindings).toHaveLength(3);
+      expect(res.body.results.bindings).toHaveLength(3);
     }));
 
   it('A query to Car must have result count to 3', () =>
@@ -93,14 +93,14 @@ describe('query.execute()', () => {
         reasoning: true,
       }
     ).then(res => {
-      expect(res.result.results.bindings).toHaveLength(3);
+      expect(res.body.results.bindings).toHaveLength(3);
     }));
 
   it('A query to SportsCar must have result count to 1', () =>
     execute(
       'select distinct * where { ?s a <http://example.org/vehicles/SportsCar> }'
     ).then(res => {
-      expect(res.result.results.bindings).toHaveLength(1);
+      expect(res.body.results.bindings).toHaveLength(1);
     }));
 
   it('A query to Vehicles must have result count to 3', () =>
@@ -110,14 +110,14 @@ describe('query.execute()', () => {
         reasoning: true,
       }
     ).then(res => {
-      expect(res.result.results.bindings).toHaveLength(3);
+      expect(res.body.results.bindings).toHaveLength(3);
     }));
 
   it('A query to SportsCar must have result count to 1', () =>
     execute(
       'select distinct * where { ?s a <http://example.org/vehicles/SportsCar> }'
     ).then(res => {
-      expect(res.result.results.bindings).toHaveLength(1);
+      expect(res.body.results.bindings).toHaveLength(1);
     }));
 
   it('A query to Vehicles must have result count to 3', () =>
@@ -127,7 +127,7 @@ describe('query.execute()', () => {
         reasoning: true,
       }
     ).then(res => {
-      expect(res.result.results.bindings).toHaveLength(3);
+      expect(res.body.results.bindings).toHaveLength(3);
     }));
 
   it('A query to Car must have result count to 3', () =>
@@ -137,7 +137,7 @@ describe('query.execute()', () => {
         reasoning: true,
       }
     ).then(res => {
-      expect(res.result.results.bindings).toHaveLength(3);
+      expect(res.body.results.bindings).toHaveLength(3);
     }));
 
   it('A query to Vehicle must have result count to 0 w/o reasoning', () =>
@@ -147,28 +147,28 @@ describe('query.execute()', () => {
         reasoning: false,
       }
     ).then(res => {
-      expect(res.result.results.bindings).toHaveLength(0);
+      expect(res.body.results.bindings).toHaveLength(0);
     }));
 
   it('returns a true boolean for an ASK query', () =>
     execute(
       'ask {<http://myvehicledata.com/FerrariEnzo> a <http://example.org/vehicles/SportsCar>}'
     ).then(res => {
-      expect(res.result).toBe(true);
+      expect(res.body).toBe(true);
     }));
 
   it('returns a false boolean for an ASK query', () =>
     execute(
       'ask {<http://myvehicledata.com/FerrariEnzo> a <http://example.org/vehicles/Sedan>}'
     ).then(res => {
-      expect(res.result).toBe(false);
+      expect(res.body).toBe(false);
     }));
 
   it('returns results for a construct query', () =>
-    execute('construct where { ?s ?p ?o }').then(({ result }) => {
-      expect(result).toHaveLength(26); // three articles defined in nodeDB
-      for (let i = 0; i < result.length; i += 1) {
-        expect(result[i]['@id'].startsWith('http://')).toBe(true);
+    execute('construct where { ?s ?p ?o }').then(({ body }) => {
+      expect(body).toHaveLength(26);
+      for (let i = 0; i < body.length; i += 1) {
+        expect(body[i]['@id'].startsWith('http://')).toBe(true);
       }
     }));
 
@@ -183,8 +183,8 @@ describe('query.execute()', () => {
             limit: 1,
           }
         )
-        .then(({ result }) => {
-          expect(result).toContain(
+        .then(({ body }) => {
+          expect(body).toContain(
             '<http://localhost/publications/articles/Journal1/1940/Article1>'
           );
         }));
@@ -201,7 +201,7 @@ describe('query.execute()', () => {
         `select ?s (Group_Concat(?o ; separator=",") as ?o_s) where { ?s <#name> ?o } group by ?s`
       ).then(res => {
         expect(res.status).toBe(200);
-        expect(res.result.results.bindings).toHaveLength(1);
+        expect(res.body.results.bindings).toHaveLength(1);
       }));
   });
 });
