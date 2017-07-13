@@ -62,13 +62,12 @@
     "url": "https://github.com/stardog-union/stardog.js/issues"
   },
   "dependencies": {
-    "fetch-ponyfill": "^4.0.0",
+    "fetch-ponyfill": "^4.1.0",
     "flat": "^2.0.1",
     "form-data": "^2.2.0",
     "isomorphic-base64": "^1.0.2",
     "lodash": "^4.17.4",
-    "querystring": "^0.2.0",
-    "restler": "~3.2.2"
+    "querystring": "^0.2.0"
   },
   "devDependencies": {
     "@types/jest": "^20.0.2",
