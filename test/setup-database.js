@@ -1,14 +1,15 @@
 /* eslint-env jest */
 
 const Path = require('path');
+const fs = require('fs');
 const RandomString = require('randomstring');
 const { Connection, db } = require('../lib');
 
 const dbs = new Set(); // used to keep track of DBs across runs
+const basePath = process.env.CIRCLECI ? '/var/opt/stardog/test/' : __dirname;
 
 exports.seedDatabase = database => () => {
   const conn = exports.ConnectionFactory();
-  const basePath = process.env.CIRCLECI ? '/var/opt/stardog/test/' : __dirname;
 
   return db
     .create(
@@ -52,6 +53,46 @@ exports.seedDatabase = database => () => {
     });
 };
 
+exports.seedICVDatabase = database => () => {
+  const conn = exports.ConnectionFactory();
+
+  return db
+    .create(
+      conn,
+      database,
+      {
+        index: {
+          type: 'disk',
+        },
+        search: {
+          enabled: true,
+        },
+        icv: {
+          enabled: true,
+        },
+      },
+      {
+        // Load everything into the DB
+        files: [
+          {
+            filename: Path.resolve(basePath, 'fixtures', 'issues', 'data.ttl'),
+          },
+          {
+            filename: Path.resolve(
+              basePath,
+              'fixtures',
+              'issues',
+              'schema.ttl'
+            ),
+          },
+        ],
+      }
+    )
+    .then(res => {
+      expect(res.status).toBe(201);
+    });
+};
+
 exports.dropDatabase = database => () => {
   const conn = exports.ConnectionFactory();
   return db.drop(conn, database).then(res => {
@@ -81,3 +122,9 @@ exports.ConnectionFactory = () =>
     endpoint: 'http://localhost:5820',
     // endpoint: 'http://localhost:61941',
   });
+
+exports.icvAxioms = (() =>
+  fs.readFileSync(
+    Path.resolve(`${__dirname}/fixtures/issues/constraints.ttl`),
+    'utf8'
+  ))();
