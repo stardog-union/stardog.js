@@ -11,7 +11,8 @@
     "linked data",
     "query"
   ],
-  "main": "js/stardog.js",
+  "main": "lib/index.js",
+  "browser": "dist/stardog.umd.js",
   "author": {
     "name": "Stardog Union",
     "url": "http://stardog.com"
@@ -71,6 +72,9 @@
   },
   "devDependencies": {
     "@types/jest": "^20.0.2",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
+    "babel-preset-es2015-rollup": "^3.0.0",
+    "chalk": "^2.0.1",
     "eslint": "^4.2.0",
     "eslint-config-airbnb-base": "^11.2.0",
     "eslint-config-prettier": "^2.3.0",
@@ -81,16 +85,25 @@
     "lint-staged": "^4.0.0",
     "mdchangelog": "^0.8.0",
     "prettier": "^1.4.4",
-    "randomstring": "^1.1.5"
+    "randomstring": "^1.1.5",
+    "rollup": "^0.43.0",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-commonjs": "^8.0.2",
+    "rollup-plugin-eslint": "^3.0.0",
+    "rollup-plugin-json": "^2.3.0",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-uglify": "^2.0.1"
   },
   "engines": {
     "node": ">=6.0.0"
   },
   "scripts": {
+    "build": "node scripts/build",
     "test": "eslint '{lib,test}/**/*.js' --fix && jest test/*.spec.js --verbose -i",
     "precommit": "lint-staged",
     "format": "prettier '{lib,test}/**/*.js' --single-quote --trailing-comma es5 --write",
-    "version": "mdchangelog --remote stardog-union/stardog.js --no-prologue --order-milestones semver --order-issues closed_at --overwrite --no-orphan-issues"
+    "version": "mdchangelog --remote stardog-union/stardog.js --no-prologue --order-milestones semver --order-issues closed_at --overwrite --no-orphan-issues",
+    "prepublishOnly": "npm run build"
   },
   "lint-staged": {
     "linters": {

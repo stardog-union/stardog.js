@@ -1,7 +1,3 @@
-data/
-components/
-node_modules/
-test/
-bower.json
-load_test_data.sh
-
+*
+!dist/**
+!lib/**
