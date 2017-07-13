@@ -13,7 +13,7 @@ describe('queryList()', () => {
   it.skip('should return the number of global running queries', () =>
     query.list(conn).then(res => {
       expect(res.status).toEqual(200);
-      expect(res.result.queries).toHaveLength(0);
+      expect(res.body.queries).toHaveLength(0);
     })
   );
 });

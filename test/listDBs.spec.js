@@ -24,7 +24,7 @@ describe('listDBs()', () => {
 
   it('should list available databases', () => {
     db.list(conn).then(res => {
-      expect(res.result.databases).toEqual(expect.arrayContaining([one, two]));
+      expect(res.body.databases).toEqual(expect.arrayContaining([one, two]));
     });
   });
 });

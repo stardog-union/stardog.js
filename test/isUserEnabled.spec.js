@@ -17,7 +17,7 @@ describe('user.enabled()', () => {
 
   it("should return the value with the user's enabled flag", () =>
     user.enabled(conn, 'admin').then(res => {
-      expect(res.result.enabled).toEqual(true);
+      expect(res.body.enabled).toEqual(true);
     }));
 
   it("should return the value with the user's superuser flag (false)", () => {
@@ -35,7 +35,7 @@ describe('user.enabled()', () => {
       })
       .then(() => user.enabled(conn, name))
       .then(res => {
-        expect(res.result.enabled).toEqual(false);
+        expect(res.body.enabled).toEqual(false);
       });
   });
 });

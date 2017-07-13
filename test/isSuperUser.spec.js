@@ -17,7 +17,7 @@ describe('isSuperUser()', () => {
 
   it("should return the value with the user's superuser flag (true)", () =>
     user.superUser(conn, 'admin').then(res => {
-      expect(res.result.superuser).toBe(true);
+      expect(res.body.superuser).toBe(true);
     }));
 
   it("should return the value with the user's superuser flag (false)", () => {
@@ -35,7 +35,7 @@ describe('isSuperUser()', () => {
         return user.superUser(conn, name);
       })
       .then(res => {
-        expect(res.result.superuser).toBe(false);
+        expect(res.body.superuser).toBe(false);
       });
   });
 });

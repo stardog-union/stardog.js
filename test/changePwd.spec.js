@@ -51,7 +51,7 @@ describe('changePwd()', () => {
       })
       .then(res => {
         expect(res.status).toEqual(200);
-        expect(res.result.databases.length).toBeGreaterThan(0);
+        expect(res.body.databases.length).toBeGreaterThan(0);
       });
   });
 });

@@ -28,8 +28,8 @@ describe('db.copy()', () => {
       .then(res => {
         expect(res.status).toEqual(200);
         // Destination shouldn't be listed because it's not online yet and therefor didn't get copied.
-        expect(res.result.databases).not.toContain(destinationDatabase);
-        expect(res.result.databases).toContain(sourceDatabase);
+        expect(res.body.databases).not.toContain(destinationDatabase);
+        expect(res.body.databases).toContain(sourceDatabase);
       }));
 
   it('should copy an offline DB', () =>
@@ -39,7 +39,7 @@ describe('db.copy()', () => {
       .then(() => db.list(conn))
       .then(res => {
         expect(res.status).toEqual(200);
-        expect(res.result.databases).toContain(destinationDatabase);
-        expect(res.result.databases).toContain(sourceDatabase);
+        expect(res.body.databases).toContain(destinationDatabase);
+        expect(res.body.databases).toContain(sourceDatabase);
       }));
 });

@@ -43,7 +43,7 @@ describe('listUserPermissions()', () => {
       .then(() => user.permissions(conn, name))
       .then(res => {
         expect(res.status).toBe(200);
-        const resources = res.result.permissions.reduce(
+        const resources = res.body.permissions.reduce(
           (memo, perm) => memo.concat(perm.resource),
           []
         );

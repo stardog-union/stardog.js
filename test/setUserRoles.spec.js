@@ -29,7 +29,7 @@ describe('Set User Roles Test Suite', () => {
         return user.listRoles(conn, name);
       })
       .then(res => {
-        expect(res.result.roles).toContain('reader');
+        expect(res.body.roles).toContain('reader');
       });
   });
 });

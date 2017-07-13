@@ -44,19 +44,19 @@ describe('transactions', () => {
     begin()
       .then(res => {
         expect(res.status).toEqual(200);
-        expect(res.result).toBe(res.transactionId);
-        expect(res.result).toBeGUID();
+        expect(res.body).toBe(res.transactionId);
+        expect(res.body).toBeGUID();
         return transaction.query(
           conn,
           database,
-          res.result,
+          res.body,
           'select distinct ?s where { ?s ?p ?o }',
           { limit: 10 }
         );
       })
       .then(res => {
         expect(res.status).toBe(200);
-        expect(res.result.results.bindings).toHaveLength(10);
+        expect(res.body.results.bindings).toHaveLength(10);
       }));
 
   it('Should be able to get a transaction, add a triple and rollback', () => {
@@ -94,7 +94,7 @@ describe('transactions', () => {
     return begin()
       .then(res => {
         expect(res.status).toBe(200);
-        expect(res.result).toBeGUID();
+        expect(res.body).toBeGUID();
         return add(res.transactionId, triple, {
           contentType: 'text/turtle',
         });
@@ -117,7 +117,7 @@ describe('transactions', () => {
       })
       .then(res => {
         expect(res.status).toBe(200);
-        expect(res.result).toBe(true);
+        expect(res.body).toBe(true);
         return begin();
       })
       .then(res => {
@@ -145,7 +145,7 @@ describe('transactions', () => {
     return begin()
       .then(res => {
         expect(res.status).toEqual(200);
-        expect(res.result).toBeGUID();
+        expect(res.body).toBeGUID();
         return add(res.transactionId, triple, {
           contentType: 'text/turtle',
         });
@@ -165,7 +165,7 @@ describe('transactions', () => {
       })
       .then(res => {
         expect(res.status).toBe(200);
-        expect(res.result).toBe(true);
+        expect(res.body).toBe(true);
         return begin();
       })
       .then(({ transactionId }) =>
@@ -190,7 +190,7 @@ describe('transactions', () => {
     return begin()
       .then(res => {
         expect(res.status).toBe(200);
-        expect(res.result).toBeGUID();
+        expect(res.body).toBeGUID();
         return db.clear(conn, database, res.transactionId);
       })
       .then(res => {
@@ -206,15 +206,15 @@ describe('transactions', () => {
       })
       .then(res => {
         expect(res.status).toBe(200);
-        const sizeNum = parseInt(res.result, 10);
+        const sizeNum = parseInt(res.body, 10);
         expect(sizeNum).toBe(0);
         return begin();
       })
       .then(res => {
         expect(res.status).toBe(200);
-        expect(res.result).toBe(res.transactionId);
-        expect(res.result).toBeGUID();
-        return add(res.result, dbContent, {
+        expect(res.body).toBe(res.transactionId);
+        expect(res.body).toBeGUID();
+        return add(res.body, dbContent, {
           contentType: 'text/turtle',
         });
       })
@@ -225,7 +225,7 @@ describe('transactions', () => {
       .then(() => db.size(conn, database))
       .then(res => {
         expect(res.status).toBe(200);
-        const sizeNum = parseInt(res.result, 10);
+        const sizeNum = parseInt(res.body, 10);
         expect(sizeNum).toBe(42);
       });
   });
