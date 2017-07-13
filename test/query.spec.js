@@ -21,7 +21,7 @@ describe('query.execute()', () => {
     execute('select distinct ?s where { ?s ?p ?o }', {
       reasoning: true,
     }).then(res => {
-      expect(res.result.results.bindings).toHaveLength(10);
+      expect(res.result.results.bindings).toHaveLength(23);
     }));
 
   it('A query result should work with property paths', () =>
@@ -166,7 +166,7 @@ describe('query.execute()', () => {
 
   it('returns results for a construct query', () =>
     execute('construct where { ?s ?p ?o }').then(({ result }) => {
-      expect(result).toHaveLength(12); // three articles defined in nodeDB
+      expect(result).toHaveLength(26); // three articles defined in nodeDB
       for (let i = 0; i < result.length; i += 1) {
         expect(result[i]['@id'].startsWith('http://')).toBe(true);
       }

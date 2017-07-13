@@ -1,7 +1,6 @@
 /* eslint-env jest */
 
 const Path = require('path');
-const fs = require('fs');
 const RandomString = require('randomstring');
 const { Connection, db } = require('../lib');
 
@@ -20,6 +19,9 @@ exports.seedDatabase = database => () => {
           type: 'disk',
         },
         search: {
+          enabled: true,
+        },
+        icv: {
           enabled: true,
         },
       },
@@ -45,35 +47,6 @@ exports.seedDatabase = database => () => {
               'tbox.ttl'
             ),
           },
-        ],
-      }
-    )
-    .then(res => {
-      expect(res.status).toBe(201);
-    });
-};
-
-exports.seedICVDatabase = database => () => {
-  const conn = exports.ConnectionFactory();
-
-  return db
-    .create(
-      conn,
-      database,
-      {
-        index: {
-          type: 'disk',
-        },
-        search: {
-          enabled: true,
-        },
-        icv: {
-          enabled: true,
-        },
-      },
-      {
-        // Load everything into the DB
-        files: [
           {
             filename: Path.resolve(basePath, 'fixtures', 'issues', 'data.ttl'),
           },
@@ -122,9 +95,3 @@ exports.ConnectionFactory = () =>
     endpoint: 'http://localhost:5820',
     // endpoint: 'http://localhost:61941',
   });
-
-exports.icvAxioms = (() =>
-  fs.readFileSync(
-    Path.resolve(`${__dirname}/fixtures/issues/constraints.ttl`),
-    'utf8'
-  ))();

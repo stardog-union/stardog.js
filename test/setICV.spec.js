@@ -1,26 +1,31 @@
 /* eslint-env jest */
 
+const fs = require('fs');
+const path = require('path');
 const { icv } = require('../lib');
 const {
-  seedICVDatabase,
+  seedDatabase,
   dropDatabase,
   generateDatabaseName,
   ConnectionFactory,
-  icvAxioms,
 } = require('./setup-database');
 
-describe('set integrity constraint', () => {
+const icvAxioms = fs.readFileSync(
+  path.resolve(`${__dirname}/fixtures/issues/constraints.ttl`),
+  'utf8'
+);
+
+describe('icv', () => {
   const database = generateDatabaseName();
   const conn = ConnectionFactory();
 
-  beforeAll(seedICVDatabase(database));
+  beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
 
-  it('should store integrity constraint axioms for a database', () => {
+  it('should store integrity constraint axioms for a database', () =>
     icv
       .set(conn, database, icvAxioms, { contentType: 'text/turtle' })
       .then(res => {
         expect(res.status).toBe(204);
-      });
-  });
+      }));
 });
