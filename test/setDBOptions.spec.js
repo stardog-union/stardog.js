@@ -8,6 +8,8 @@ const {
   ConnectionFactory,
 } = require('./setup-database');
 
+const { options } = db;
+
 describe('db.setOptions()', () => {
   const database = generateDatabaseName();
   let conn;
@@ -20,8 +22,8 @@ describe('db.setOptions()', () => {
   });
 
   it('should get NOT_FOUND status code trying to set the options of a non-existent DB.', () =>
-    db
-      .setOptions(conn, 'nodeDB_test', {
+    options
+      .set(conn, 'nodeDB_test', {
         query: {
           all: {
             graphs: true,
@@ -39,7 +41,7 @@ describe('db.setOptions()', () => {
     db
       .offline(conn, database)
       .then(() =>
-        db.setOptions(conn, database, {
+        options.set(conn, database, {
           query: {
             all: {
               graphs: true,

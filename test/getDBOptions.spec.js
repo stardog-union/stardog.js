@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-const { db } = require('../lib');
+const { db: { options } } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
@@ -20,12 +20,12 @@ describe('db.getOptions()', () => {
   });
 
   it('should get NOT_FOUND status code trying to get the options of a non-existent DB.', () =>
-    db.getOptions(conn, 'nodeDB_test').then(res => {
+    options.get(conn, 'nodeDB_test').then(res => {
       expect(res.status).toEqual(404);
     }));
 
   it('should get the options of an DB', () =>
-    db.getOptions(conn, database).then(res => {
+    options.get(conn, database).then(res => {
       expect(res.status).toEqual(200);
       expect(res.body).toMatchObject({
         search: {

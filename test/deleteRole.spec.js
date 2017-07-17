@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-const { role } = require('../lib');
+const { user: { role } } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,

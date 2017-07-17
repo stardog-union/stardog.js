@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { icv } = require('../lib');
+const { db: { icv } } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
