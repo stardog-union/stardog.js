@@ -1,7 +1,9 @@
 /* eslint-env jest */
 
-const { user, role } = require('../lib');
+const { user } = require('../lib');
 const { generateRandomString, ConnectionFactory } = require('./setup-database');
+
+const { role } = user;
 
 describe('listUserRoles()', () => {
   let conn;

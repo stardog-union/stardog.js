@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-const { role, user } = require('../lib');
+const { user } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
@@ -8,6 +8,8 @@ const {
   generateRandomString,
   ConnectionFactory,
 } = require('./setup-database');
+
+const role = user.role;
 
 describe('listRoleUsers()', () => {
   const database = generateDatabaseName();

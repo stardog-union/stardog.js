@@ -59,7 +59,7 @@ describe('query.execute()', () => {
         limit: 10,
       }),
     ]).then(([noBase, base]) => {
-      expect(noBase).toEqual(base);
+      expect(noBase.body).toEqual(base.body);
     }));
 
   // Couldn't get this to work with Stardog 4.2.3... skipping for now

@@ -1,13 +1,15 @@
 /* eslint-env jest */
 
 const fs = require('fs');
-const { transaction, query, db } = require('../lib');
+const { query, db } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   ConnectionFactory,
 } = require('./setup-database');
+
+const { transaction } = db;
 
 describe('transactions', () => {
   const database = generateDatabaseName();

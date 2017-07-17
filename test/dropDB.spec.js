@@ -14,7 +14,6 @@ describe('dropDB()', () => {
   beforeAll(seedDatabase(database));
   beforeEach(() => {
     conn = ConnectionFactory();
-    conn.config({ database });
   });
 
   it('should not drop an non-existent DB', () =>
