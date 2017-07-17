@@ -172,28 +172,17 @@ describe('query.execute()', () => {
       }
     }));
 
-  describe('turtle', () => {
-    it('returns results as turle for descibe queries', () =>
-      query
-        .turtle(
-          conn,
-          database,
-          'describe <http://localhost/publications/articles/Journal1/1940/Article1>',
-          {
-            limit: 1,
-          }
-        )
-        .then(({ body }) => {
-          expect(body).toContain(
-            '<http://localhost/publications/articles/Journal1/1940/Article1>'
-          );
-        }));
-    it('rejects with a type error for unacceptable query types', () => {
-      expect(() => {
-        query.turtle(conn, database, 'select distinct ?s where { ?s ?p ?o }');
-      }).toThrowError(TypeError);
-    });
-  });
+  it('returns results as turle for descibe queries', () =>
+    execute(
+      'describe <http://localhost/publications/articles/Journal1/1940/Article1>',
+      {
+        limit: 1,
+      }
+    ).then(({ body }) => {
+      expect(body[0]['@id']).toBe(
+        'http://localhost/publications/articles/Journal1/1940/Article1'
+      );
+    }));
 
   describe('group_concat', () => {
     it('should return values', () =>
