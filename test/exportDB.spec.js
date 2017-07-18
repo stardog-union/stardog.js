@@ -21,14 +21,14 @@ describe('exportDB()', () => {
   });
 
   it('should return a response with content-disposition header and the attachment export file', () =>
-    db.export(conn, database).then(res => {
+    db.exportData(conn, database).then(res => {
       expect(res.status).toBe(200);
       expect(res.body).toHaveLength(26);
     }));
 
   it('should return a response with content-disposition header and the attachment export file when using graph-uri param', () =>
     db
-      .export(conn, database, undefined, {
+      .exportData(conn, database, undefined, {
         graphUri: 'tag:stardog:api:context:default',
       })
       .then(res => {
