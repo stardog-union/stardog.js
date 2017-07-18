@@ -38,7 +38,7 @@ describe('icv', () => {
       .then(() =>
         icv.get(conn, database).then(res => {
           expect(res.status).toBe(200);
-          expect(res.body.length).toBe(0);
+          expect(res.body).toBe(null);
         })
       ));
 });

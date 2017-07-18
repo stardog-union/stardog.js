@@ -193,4 +193,61 @@ describe('query.execute()', () => {
         expect(res.body.results.bindings).toHaveLength(1);
       }));
   });
+
+  describe('update', () => {
+    it('should insert some data', () =>
+      execute(`insert data {:foo :bar :baz}`)
+        .then(res => {
+          expect(res.status).toBe(200);
+          expect(res.body).toBe(null);
+          return execute(`select * {:foo ?p ?o}`);
+        })
+        .then(res => {
+          expect(res.body.results.bindings).toHaveLength(1);
+        }));
+
+    it('should remove some data', () =>
+      execute(`select * {<urn:foo> ?p ?o}`)
+        .then(res => {
+          expect(res.body.results.bindings).toHaveLength(0);
+          return execute('insert data {<urn:foo> <urn:bar> <urn:baz>}');
+        })
+        .then(res => {
+          expect(res.status).toBe(200);
+          return execute(`select * {:foo ?p ?o}`);
+        })
+        .then(res => {
+          expect(res.status).toBe(200);
+          expect(res.body.results.bindings).toHaveLength(1);
+          return execute('delete data {<urn:foo> <urn:bar> <urn:baz>}');
+        })
+        .then(res => {
+          expect(res.status).toBe(200);
+          return execute(`select * {<urn:foo> ?p ?o}`);
+        })
+        .then(res => {
+          expect(res.body.results.bindings).toHaveLength(0);
+        }));
+
+    it('should work with a delete/insert', () =>
+      execute(`insert {?s :someProp 0} where {?s :bar :baz}`)
+        .then(() =>
+          execute(`
+          delete {?s :someProp ?o}
+          insert {?s :someProp 42}
+          where {?s :someProp ?o}
+        `)
+        )
+        .then(res => {
+          expect(res.status).toBe(200);
+          return Promise.all([
+            execute('select * {?s :someProp 42}'),
+            execute('select * {?s :someProp 0}'),
+          ]).then(([found, notfound]) => {
+            expect(found.body.results.bindings).toHaveLength(1);
+            expect(notfound.body.results.bindings).toHaveLength(0);
+          });
+        })
+        .then(() => execute('delete where {?s :someProp ?o}')));
+  });
 });

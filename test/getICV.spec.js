@@ -22,12 +22,11 @@ describe('icv', () => {
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
 
-  it('should return an empty string if no constraint axioms stored', () => {
+  it('should return an empty string if no constraint axioms stored', () =>
     icv.get(conn, database).then(res => {
       expect(res.status).toBe(200);
-      expect(res.body.length).toBe(0);
-    });
-  });
+      expect(res.body).toBe(null);
+    }));
 
   it('should return stored constraint axioms for a database', () =>
     icv
