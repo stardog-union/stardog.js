@@ -9,13 +9,9 @@ const {
 
 describe('dropDB()', () => {
   const database = generateDatabaseName();
-  let conn;
+  const conn = ConnectionFactory();
 
   beforeAll(seedDatabase(database));
-  beforeEach(() => {
-    conn = ConnectionFactory();
-  });
-
   it('should not drop an non-existent DB', () =>
     db.drop(conn, 'xxxx').then(res => {
       expect(res.status).toBe(404);

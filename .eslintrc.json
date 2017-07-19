@@ -16,7 +16,7 @@
         "argsIgnorePattern": "params" // igore only these for the time being
       }
     ],
-    "prettier/prettier": ["error", {
+    "prettier/prettier": ["warn", {
       "singleQuote": true,
       "trailingComma": "es5"
     }]

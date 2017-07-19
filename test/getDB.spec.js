@@ -21,7 +21,7 @@ describe('getDB()', () => {
 
   it('A response of the DB info should not be empty', () =>
     db.get(conn, database).then(res => {
-      expect(res.body.length).toBe(7482);
+      expect(res.body.length).toBeGreaterThan(0);
       expect(
         res.body.includes(
           'overbites terminals giros podgy vagus kinkiest xix recollected'

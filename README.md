@@ -67,7 +67,6 @@ const conn = new Connection({
   username: 'admin',
   password: 'admin',
   endpoint: 'http://localhost:5820',
-  database: 'myDB'
 });
 
 query.execute(conn, 'select distinct ?s where { ?s ?p ?o }', {
