@@ -20,15 +20,12 @@ declare namespace Stardog {
             'application/json' |
             'text/boolean';
 
-        export interface Message {
-            status: string;
-            statusText: string;
-        }
-
         export interface Body {
             status: string;
             statusText: string;
             result: object | string | boolean | null;
+            ok: boolean;
+            headers: Headers;
         }
     }
 
@@ -53,15 +50,15 @@ declare namespace Stardog {
     /** Stardog HTTP server actions. */
     export namespace server {
         /** Shuts down a Stardog server. */
-        function shutdown(conn: Connection, params?: Object): Promise<HTTP.Message>;
+        function shutdown(conn: Connection, params?: Object): Promise<HTTP.Body>;
     }
 
     /** Stardog database actions. */
     export namespace db {
         /** Creates a new database. */
-        function create(conn: Connection, database: string, databaseOptions?: Object, options?: { files: string[] }, params?: Object): Promise<HTTP.Message>;
+        function create(conn: Connection, database: string, databaseOptions?: Object, options?: { files: string[] }, params?: Object): Promise<HTTP.Body>;
         /** Deletes a database. */
-        function drop(conn: Connection, database: string, params?: Object): Promise<HTTP.Message>;
+        function drop(conn: Connection, database: string, params?: Object): Promise<HTTP.Body>;
         /** Gets information about a database. */
         function get(conn: Connection, database: string, params?: Object): Promise<HTTP.Body>;
         /** Sets a database offline. */
@@ -69,7 +66,7 @@ declare namespace Stardog {
         /** Sets a database online. */
         function online(conn: Connection, database: string, params?: Object): Promise<HTTP.Body>;
         /** Optimizes a database. */
-        function optimize(conn: Connection, database: string, params?: Object): Promise<HTTP.Message>;
+        function optimize(conn: Connection, database: string, params?: Object): Promise<HTTP.Body>;
         /** Makes a copy of a database. */
         function copy(conn: Connection, database: string, destination: string, params?: Object): Promise<HTTP.Body>;
         /** Gets a list of all databases on a Stardog server. */
@@ -88,7 +85,7 @@ declare namespace Stardog {
             /** Gets set of options on a database. */
             function get(conn: Connection, database: string, params?: Object): Promise<HTTP.Body>;
             /** Sets options on a database. */
-            function set(conn: Connection, database: string, databaseOptions: Object, params?: Object): Promise<HTTP.Message>;
+            function set(conn: Connection, database: string, databaseOptions: Object, params?: Object): Promise<HTTP.Body>;
         }
 
         /** Methods for managing transactions in a database. */
@@ -130,9 +127,9 @@ declare namespace Stardog {
             /** Gets the set of integrity constraints on a given database. */
             function get(conn: Connection, database: string, options: Object, params?: Object): Promise<HTTP.Body>;
             /** Sets a new set of integrity constraints on a given database. */
-            function set(conn: Connection, database: string, icvAxioms: string, options?: { contentType: HTTP.ContentMimeTypes }, params?: Object): Promise<HTTP.Message>;
+            function set(conn: Connection, database: string, icvAxioms: string, options?: { contentType: HTTP.ContentMimeTypes }, params?: Object): Promise<HTTP.Body>;
             /** Removes all integrity constraints from a given database. */
-            function clear(conn: Connection, database: string, options: Object, params?: Object): Promise<HTTP.Message>;
+            function clear(conn: Connection, database: string, options: Object, params?: Object): Promise<HTTP.Body>;
             /** Converts a set of integrity constraints into an equivalent SPARQL query for a given database. */
             function convert(conn: Connection, database: string, icvAxioms: string, options: { contentType: HTTP.ContentMimeTypes }, params?: { graphUri: string }): Promise<HTTP.Body>;
         }
@@ -155,7 +152,7 @@ declare namespace Stardog {
         /** Gets a list of actively running queries. */
         function list(conn: Connection): Promise<HTTP.Body>;
         /** Kills an actively running query. */
-        function kill(conn: Connection, queryId: string): Promise<HTTP.Message>;
+        function kill(conn: Connection, queryId: string): Promise<HTTP.Body>;
         /** Gets information about an actively running query. */
         function get(conn: Connection, queryId: string): Promise<HTTP.Body>;
 
@@ -214,7 +211,7 @@ declare namespace Stardog {
         /** Verifies that a user is enabled. */
         function enabled(conn: Connection, username: string, params?: Object): Promise<HTTP.Body>;
         /** Enables/disables a user. */
-        function enable(conn: Connection, username: string, enabled: boolean, params?: Object): Promise<HTTP.Message>;
+        function enable(conn: Connection, username: string, enabled: boolean, params?: Object): Promise<HTTP.Body>;
         /** Sets roles for a user. */
         function setRoles(conn: Connection, username: string, params?: Object): Promise<HTTP.Body>;
         /** Gets a list of roles assigned to a user. */
@@ -244,17 +241,17 @@ declare namespace Stardog {
 
         namespace role {
             /** Creates a new role. */
-            function create(conn: Connection, role: Role, params?: Object): Promise<HTTP.Message>;
+            function create(conn: Connection, role: Role, params?: Object): Promise<HTTP.Body>;
             /** Lists all existing roles. */
             function list(conn: Connection, params?: Object): Promise<HTTP.Body>;
             /** Deletes an existing role from the system. */
-            function remove(conn: Connection, role: Role, params?: Object): Promise<HTTP.Message>;
+            function remove(conn: Connection, role: Role, params?: Object): Promise<HTTP.Body>;
             /** Lists all users that have been assigned a given role. */
             function usersWithRole(conn: Connection, role: Role, params?: Object): Promise<HTTP.Body>;
             /** Adds a permission over a given resource to a given role. */
             function assignPermission(conn: Connection, role: Role, permission: Permission, params?: Object): Promise<HTTP.Body>;
             /** Removes a permission over a given resource from a given role. */
-            function deletePermission(conn: Connection, role: Role, permission: Permission, params?: Object): Promise<HTTP.Message>;
+            function deletePermission(conn: Connection, role: Role, permission: Permission, params?: Object): Promise<HTTP.Body>;
             /** Lists all permissions assigned to a given role. */
             function permissions(conn: Connection, role: Role, params?: Object): Promise<HTTP.Body>;
         }
