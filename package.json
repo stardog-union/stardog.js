@@ -12,7 +12,7 @@
     "query"
   ],
   "main": "lib/index.js",
-  "browser": "dist/stardog.umd.js",
+  "browser": "dist/stardog.js",
   "types": "lib/index.d.ts",
   "author": {
     "name": "Stardog Union",
