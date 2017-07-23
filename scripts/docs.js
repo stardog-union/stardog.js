@@ -5,33 +5,78 @@ const typedocs = require('typedocs');
 const fs = require('fs');
 const path = require('path');
 
-
 const pathToDeclaration = path.resolve(`${__dirname}/../lib/index.d.ts`);
 const pathToREADME = path.resolve(`${__dirname}/../README.md`);
-console.log(pathToDeclaration);
-console.log(pathToREADME)
-function getMarkdown(obj) {
-  const kind = obj.kind;
+
+const getType = type => {
+  if (
+    type.startsWith('string') ||
+    type.startsWith('Object') ||
+    type.startsWith('array') ||
+    type.startsWith('boolean')
+  ) {
+    return `\`${type}\``;
+  }
+  if (type.startsWith('{')) {
+    const customType = type.split(': ').pop().split(' ').shift();
+    if (
+      customType.startsWith('string') ||
+      customType.startsWith('Object') ||
+      customType.startsWith('array') ||
+      customType.startsWith('boolean')
+    ) {
+      return `\`${type}\``;
+    }
+    const typeHeader = customType.split('.').pop();
+    const replaced = type.replace(customType, getType(typeHeader));
+    return replaced;
+  }
+  const name = type.split('.').pop();
+  return `[\`${name}\`](#${name.toLowerCase()})`;
+};
+
+const getPath = obj => {
+  if (
+    obj.parent === null ||
+    obj.parent === undefined ||
+    obj.parent.name === `"${pathToDeclaration}"`
+  )
+    return obj.name;
+  return `${getPath(obj.parent)}.${obj.name}`;
+};
+
+const getMarkdown = (obj, parent = null) => {
+  const { kind } = obj;
   /* FunctionDeclaration */
   if (kind === 216) {
+    const { type } = obj;
+    const typeName = type.slice(type.indexOf('<') + 1, type.lastIndexOf('>'));
+    const typeHeading = typeName.split('.').pop();
     return ''.concat(
-      `### ${obj.name}\n\n`,
+      `#### <a name="${obj.name.toLowerCase()}">\`${getPath(
+        parent
+      )}.${obj.name}(${obj.parameters
+        .map(param => param.name)
+        .join(', ')})\`</a>\n\n`,
       `${obj.documentation}\n\n`,
-      `Expects the following parameters:\n${obj.parameters.reduce(
-        (acc, val) => acc.concat(`- ${val.name} (\`${val.type}\`)\n`),
+      `Expects the following parameters:\n\n${obj.parameters.reduce(
+        (acc, val) => acc.concat(`- ${val.name} (${getType(val.type)})\n\n`),
         ''
       )}`,
-      '\n'
+      `Returns [\`${type}\`](#${typeHeading.toLowerCase()})`,
+      '\n\n'
     );
   }
   /* ClassDeclaration */
   if (kind === 217) {
-    let md = `## Class ${obj.name}\n\n`;
-    const constructor = obj.members.shift().parameters[0];
-    md += `Constructed with:\n- ${constructor.name} (\`${constructor.type}\`)\n`;
+    const param = obj.members.shift().parameters[0];
+    let md = ''.concat(
+      `## <a name="${obj.name.toLowerCase()}">${obj.name}</a> (Class)\n\n`,
+      `Constructed with:\n- ${param.name} (${getType(param.type)})\n`
+    );
     if (obj.members) {
       obj.members.forEach(child => {
-        md = md.concat(getMarkdown(child));
+        md = md.concat(getMarkdown(child, obj));
       });
     }
     return md;
@@ -39,11 +84,26 @@ function getMarkdown(obj) {
   /* InterfaceDeclaration */
   if (kind === 218) {
     return ''.concat(
-      `### ${obj.name}\n\n`,
-      `Object with the following values:\n${obj.members.reduce(
+      `#### <a name="${obj.name.toLowerCase()}">${obj.name}</a>`,
+      obj.extends
+        ? ` extends [${obj.extends.types[0]}](#${obj.extends.types[0]
+            .split('.')
+            .pop()
+            .toLowerCase()})`
+        : '',
+      `\n\n`,
+      `Object with the following values:\n\n${obj.members.reduce(
         (acc, val) => acc.concat(`- ${val.name} (\`${val.type}\`)\n`),
         ''
       )}`,
+      '\n'
+    );
+  }
+  /* TypeDeclaration */
+  if (kind === 219) {
+    return ''.concat(
+      `#### <a name="${obj.name.toLowerCase()}">${obj.name}</a>\n\n`,
+      `One of the following values:\n\n\`${obj.type}\``,
       '\n'
     );
   }
@@ -53,36 +113,39 @@ function getMarkdown(obj) {
   }
   /* MethodSignature */
   if (kind === 143) {
-    let md = `### ${obj.name ? obj.name : ''}\n\n`;
-    md += `Method takes the following params:\n${obj.parameters.reduce(
-      (acc, val) => acc.concat(`- ${val.name} (\`${val.type}\`)\n`),
-      ''
-    )}\n`;
-    return md;
+    return ''.concat(
+      `### <a name="${obj.name ? obj.name.toLowerCase() : ''}">`,
+      obj.name ? `${getPath(parent)}.${obj.name}` : '',
+      `(${obj.parameters.map(param => param.name).join(', ')})`,
+      `</a>\n\n`,
+      obj.parameters.length
+        ? `Takes the following params:\n${obj.parameters.reduce(
+            (acc, val) => acc.concat(`- ${val.name} (${getType(val.type)})\n`),
+            ''
+          )}\n`
+        : '',
+      `Returns ${getType(obj.type)}\n`
+    );
   }
   /* ModuleDeclaration */
   if (kind === 221) {
-    let md = `## ${obj.name}\n\n`;
+    let md = `## <a name="${obj.name.toLowerCase()}">${obj.name}</a>\n\n`;
     if (obj.members) {
       obj.members.forEach(child => {
-        md = md.concat(getMarkdown(child));
+        md = md.concat(getMarkdown(child, obj));
       });
     }
     return md;
   }
-  /* Parameter */
-  // if (kind === 139) {
-  //   return 'Parameterrrr';
-  // }
   return '';
-}
+};
 
 Promise.resolve(typedocs.generate([pathToDeclaration]))
-  // .then(res => console.log(res))
-  .then(res =>
-    res
-      .filter(value => value.name && value.name === `"${pathToDeclaration}"`)[0]
-      .members.filter(x => x.kind === 217 || x.kind === 221)
+  .then(
+    res =>
+      res.filter(
+        value => value.name && value.name === `"${pathToDeclaration}"`
+      )[0].members
   )
   .then(res => {
     let markdown = '';
@@ -91,11 +154,21 @@ Promise.resolve(typedocs.generate([pathToDeclaration]))
     });
     return markdown;
   })
-  .then(markdown => {
-    fs.readFile(pathToREADME, 'utf8', (err, data) => {
-      data = data.split('## API');
-      data = data[0].concat('## API\n\n', markdown);
-      fs.writeFile(pathToREADME, data, error => error);
-    });
-  })
+  .then(
+    markdown =>
+      new Promise((resolve, reject) => {
+        fs.readFile(pathToREADME, 'utf8', (err, data) => {
+          if (err) return reject(err);
+          data = data.slice(0, data.indexOf('<!--- API Goes Here --->'));
+          data = data.concat('<!--- API Goes Here --->\n# API\n\n', markdown);
+          return fs.writeFile(pathToREADME, data, error => {
+            if (error) {
+              return reject(error);
+            }
+            return resolve('Success');
+          });
+        });
+      })
+  )
+  .then(console.log)
   .catch(console.err);
