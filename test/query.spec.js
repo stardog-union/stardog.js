@@ -310,11 +310,6 @@ describe('query.execute()', () => {
           expect(res.status).toBe(200);
         }));
 
-    it('should support "load silent"', () =>
-      execute('load silent <http://not.a.real.website/at#all>').then(res => {
-        expect(res.status).toBe(200);
-      }));
-
     it('should support "clear"', () =>
       execute('insert data {:foo :bar :baz, :qux}')
         .then(res => {
