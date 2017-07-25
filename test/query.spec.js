@@ -195,8 +195,12 @@ describe('query.execute()', () => {
   });
 
   describe('update', () => {
-    it('should insert some data', () =>
-      execute(`insert data {:foo :bar :baz}`)
+    let clearDatabase = () => execute('clear all');
+    afterEach(clearDatabase);
+
+    it('should support "insert data"', () => {
+      let data = '{:foo :bar :baz}';
+      return execute(`insert data ${data}`)
         .then(res => {
           expect(res.status).toBe(200);
           expect(res.body).toBe(null);
@@ -204,33 +208,37 @@ describe('query.execute()', () => {
         })
         .then(res => {
           expect(res.body.results.bindings).toHaveLength(1);
-        }));
+        });
+    });
 
-    it('should remove some data', () =>
-      execute(`select * {<urn:foo> ?p ?o}`)
+    it('should support "delete data"', () => {
+      let data = '<urn:foo> <urn:bar> <urn:baz>';
+      let select = `select * {<urn:foo> ?p ?o}`;
+      return execute(select)
         .then(res => {
           expect(res.body.results.bindings).toHaveLength(0);
-          return execute('insert data {<urn:foo> <urn:bar> <urn:baz>}');
+          return execute(`insert data {${data}}`);
         })
         .then(res => {
           expect(res.status).toBe(200);
-          return execute(`select * {:foo ?p ?o}`);
+          return execute(select);
         })
         .then(res => {
           expect(res.status).toBe(200);
           expect(res.body.results.bindings).toHaveLength(1);
-          return execute('delete data {<urn:foo> <urn:bar> <urn:baz>}');
+          return execute(`delete data {${data}}`);
         })
         .then(res => {
           expect(res.status).toBe(200);
-          return execute(`select * {<urn:foo> ?p ?o}`);
+          return execute(select);
         })
         .then(res => {
           expect(res.body.results.bindings).toHaveLength(0);
-        }));
+        });
+    });
 
-    it('should work with a delete/insert', () =>
-      execute(`insert {?s :someProp 0} where {?s :bar :baz}`)
+    it('should support "delete/insert"', () =>
+      execute(`insert data {:foo :someProp 0}`)
         .then(() =>
           execute(`
           delete {?s :someProp ?o}
@@ -240,14 +248,222 @@ describe('query.execute()', () => {
         )
         .then(res => {
           expect(res.status).toBe(200);
-          return Promise.all([
-            execute('select * {?s :someProp 42}'),
-            execute('select * {?s :someProp 0}'),
-          ]).then(([found, notfound]) => {
-            expect(found.body.results.bindings).toHaveLength(1);
-            expect(notfound.body.results.bindings).toHaveLength(0);
-          });
+          return execute('select * {:foo :someProp ?o}');
         })
-        .then(() => execute('delete where {?s :someProp ?o}')));
+        .then(res => {
+          expect(res.status).toBe(200);
+          expect(res.body.results.bindings).toHaveLength(1);
+          expect(res.body.results.bindings[0].o.value).toBe('42');
+        }));
+
+    it('should support "delete where"', () => {
+      let bgp = '{:a ?p ?o}';
+      return execute('insert data {:a :b :c; :d :e; :f :g}')
+        .then(res => {
+          expect(res.status).toBe(200);
+          return execute(`select * ${bgp}`);
+        })
+        .then(res => {
+          expect(res.status).toBe(200);
+          expect(res.body.results.bindings).toHaveLength(3);
+          return execute(`delete where ${bgp}`);
+        })
+        .then(res => {
+          expect(res.status).toBe(200);
+          return execute(`select * ${bgp}`);
+        })
+        .then(res => {
+          expect(res.status).toBe(200);
+          expect(res.body.results.bindings).toHaveLength(0);
+        });
+    });
+
+    it('should support "insert where"', () => {
+      let select = 'select * {:A ?p :B}';
+      return execute('insert data {:A :prop1 :B}')
+        .then(res => {
+          expect(res.status).toBe(200);
+          return execute(select);
+        })
+        .then(res => {
+          expect(res.status).toBe(200);
+          expect(res.body.results.bindings).toHaveLength(1);
+          return execute('insert {?s :prop2 ?o} where {?s :prop1 ?o}');
+        })
+        .then(res => {
+          expect(res.status).toBe(200);
+          return execute(select);
+        })
+        .then(res => {
+          expect(res.status).toBe(200);
+          expect(res.body.results.bindings).toHaveLength(2);
+        });
+    });
+
+    it('should support "load"', () =>
+      // Requires a publicly available RDF file, but we can test the failure case
+      execute('load <http://not.a.real.website/at#all>')
+        .then(res => {
+          expect(res.status).toBeGreaterThanOrEqual(400);
+          return execute('load silent <http://not.a.real.website/at#all>');
+        })
+        .then(res => {
+          // silent must always return success
+          expect(res.status).toBe(200);
+        }));
+
+    it('should support "load silent"', () =>
+      execute('load silent <http://not.a.real.website/at#all>').then(res => {
+        expect(res.status).toBe(200);
+      }));
+
+    it('should support "clear"', () =>
+      execute('insert data {:foo :bar :baz, :qux}')
+        .then(res => {
+          expect(res.status).toBe(200);
+          return execute('select * {:foo :bar ?o}');
+        })
+        .then(res => {
+          expect(res.status).toBe(200);
+          expect(res.body.results.bindings).toHaveLength(2);
+          return execute('clear all');
+        })
+        .then(res => {
+          expect(res.status).toBe(200);
+          return execute('select * {?s ?p ?o}');
+        })
+        .then(res => {
+          expect(res.status).toBe(200);
+          expect(res.body.results.bindings).toHaveLength(0);
+        }));
+
+    it('should support "create"', () =>
+      execute('create graph <http://my.graph>').then(res => {
+        expect(res.status).toBe(200);
+      }));
+
+    it('should support "drop"', () => {
+      let graph = '<http://test.drop.graph>';
+      let select = `select * { graph ${graph} { ?s ?p ?o } }`;
+      return execute(`insert data { graph ${graph} {:a :b :c, :d}}`)
+        .then(res => {
+          expect(res.status).toBe(200);
+          return execute(select);
+        })
+        .then(res => {
+          expect(res.status).toBe(200);
+          expect(res.body.results.bindings).toHaveLength(2);
+          return execute(`drop graph ${graph}`);
+        })
+        .then(res => {
+          expect(res.status).toBe(200);
+          return execute(select);
+        })
+        .then(res => {
+          expect(res.status).toBe(200);
+          expect(res.body.results.bindings).toHaveLength(0);
+        });
+    });
+
+    it('should support "copy"', () => {
+      let graph1 = '<http://test.graph/1>';
+      let graph2 = '<http://test.graph/2>';
+      return execute(`insert data { graph ${graph1} {:a :b :c, :d}}`)
+        .then(res => {
+          expect(res.status).toBe(200);
+          return Promise.all([
+            execute(`select * { graph ${graph1} { ?s ?p ?o } }`),
+            execute(`select * { graph ${graph2} { ?s ?p ?o } }`),
+          ]);
+        })
+        .then(([res1, res2]) => {
+          expect(res1.status).toBe(200);
+          expect(res2.status).toBe(200);
+          expect(res1.body.results.bindings).toHaveLength(2);
+          expect(res2.body.results.bindings).toHaveLength(0);
+          return execute(`copy ${graph1} to ${graph2}`);
+        })
+        .then(res => {
+          expect(res.status).toBe(200);
+          return Promise.all([
+            execute(`select * { graph ${graph1} { ?s ?p ?o } }`),
+            execute(`select * { graph ${graph2} { ?s ?p ?o } }`),
+          ]);
+        })
+        .then(([res1, res2]) => {
+          expect(res1.status).toBe(200);
+          expect(res2.status).toBe(200);
+          expect(res1.body.results.bindings).toHaveLength(2);
+          expect(res2.body.results.bindings).toHaveLength(2);
+        });
+    });
+
+    it('should support "move"', () => {
+      let graph1 = '<http://test.graph/1>';
+      let graph2 = '<http://test.graph/2>';
+      return execute(`insert data { graph ${graph1} {:a :b :c, :d}}`)
+        .then(res => {
+          expect(res.status).toBe(200);
+          return Promise.all([
+            execute(`select * { graph ${graph1} { ?s ?p ?o } }`),
+            execute(`select * { graph ${graph2} { ?s ?p ?o } }`),
+          ]);
+        })
+        .then(([res1, res2]) => {
+          expect(res1.status).toBe(200);
+          expect(res2.status).toBe(200);
+          expect(res1.body.results.bindings).toHaveLength(2);
+          expect(res2.body.results.bindings).toHaveLength(0);
+          return execute(`move ${graph1} to ${graph2}`);
+        })
+        .then(res => {
+          expect(res.status).toBe(200);
+          return Promise.all([
+            execute(`select * { graph ${graph1} { ?s ?p ?o } }`),
+            execute(`select * { graph ${graph2} { ?s ?p ?o } }`),
+          ]);
+        })
+        .then(([res1, res2]) => {
+          expect(res1.status).toBe(200);
+          expect(res2.status).toBe(200);
+          expect(res1.body.results.bindings).toHaveLength(0);
+          expect(res2.body.results.bindings).toHaveLength(2);
+        });
+    });
+
+    it('should support "add"', () => {
+      let graph1 = '<http://test.graph/1>';
+      let graph2 = '<http://test.graph/2>';
+      return execute(
+        `insert data { graph ${graph1} {:a :b :c, :d} . graph ${graph2} {:q :w :e, :r} }`
+      )
+        .then(res => {
+          expect(res.status).toBe(200);
+          return Promise.all([
+            execute(`select * { graph ${graph1} { ?s ?p ?o } }`),
+            execute(`select * { graph ${graph2} { ?s ?p ?o } }`),
+          ]);
+        })
+        .then(([res1, res2]) => {
+          expect(res1.status).toBe(200);
+          expect(res2.status).toBe(200);
+          expect(res1.body.results.bindings).toHaveLength(2);
+          expect(res2.body.results.bindings).toHaveLength(2);
+          return execute(`add ${graph1} to ${graph2}`);
+        })
+        .then(res => {
+          expect(res.status).toBe(200);
+          return Promise.all([
+            execute(`select * { graph ${graph1} { ?s ?p ?o } }`),
+            execute(`select * { graph ${graph2} { ?s ?p ?o } }`),
+          ]);
+        })
+        .then(([res1, res2]) => {
+          expect(res1.status).toBe(200);
+          expect(res2.status).toBe(200);
+          expect(res1.body.results.bindings).toHaveLength(2);
+          expect(res2.body.results.bindings).toHaveLength(4);
+        });
+    });
   });
 });
