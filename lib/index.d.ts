@@ -40,7 +40,7 @@ declare namespace Stardog {
 
     /** Describes the connection to a running Stardog server. */
     export class Connection {
-        constructor(ConnectionOptions);
+        constructor(options: ConnectionOptions);
 
         config(options: ConnectionOptions): void;
         headers(): Headers;

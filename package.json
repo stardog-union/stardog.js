@@ -92,17 +92,19 @@
     "rollup-plugin-eslint": "^3.0.0",
     "rollup-plugin-json": "^2.3.0",
     "rollup-plugin-node-resolve": "^3.0.0",
-    "rollup-plugin-uglify": "^2.0.1"
+    "rollup-plugin-uglify": "^2.0.1",
+    "typedocs": "^0.6.3"
   },
   "engines": {
     "node": ">=6.0.0"
   },
   "scripts": {
     "build": "node scripts/build",
+    "docs": "node scripts/docs",
     "test": "eslint '{lib,test}/**/*.js' --fix && jest test/*.spec.js --verbose -i",
     "precommit": "lint-staged",
     "format": "prettier '{lib,test}/**/*.js' --single-quote --trailing-comma es5 --write",
-    "version": "mdchangelog --remote stardog-union/stardog.js --no-prologue --order-milestones semver --order-issues closed_at --overwrite --no-orphan-issues",
+    "version": "mdchangelog --remote stardog-union/stardog.js --no-prologue --order-milestones semver --order-issues closed_at --overwrite --no-orphan-issues && npm run docs && git add README.md CHANGELOG.md",
     "prepublishOnly": "npm run build"
   },
   "lint-staged": {
