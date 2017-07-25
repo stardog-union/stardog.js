@@ -195,12 +195,10 @@ describe('query.execute()', () => {
   });
 
   describe('update', () => {
-    let clearDatabase = () => execute('clear all');
-    afterEach(clearDatabase);
+    afterEach(() => execute('clear all'));
 
     it('should support "insert data"', () => {
-      let data = '{:foo :bar :baz}';
-      return execute(`insert data ${data}`)
+      return execute('insert data {:foo :bar :baz}')
         .then(res => {
           expect(res.status).toBe(200);
           expect(res.body).toBe(null);
@@ -212,8 +210,8 @@ describe('query.execute()', () => {
     });
 
     it('should support "delete data"', () => {
-      let data = '<urn:foo> <urn:bar> <urn:baz>';
-      let select = `select * {<urn:foo> ?p ?o}`;
+      const data = '<urn:foo> <urn:bar> <urn:baz>';
+      const select = `select * {<urn:foo> ?p ?o}`;
       return execute(select)
         .then(res => {
           expect(res.body.results.bindings).toHaveLength(0);
@@ -257,7 +255,7 @@ describe('query.execute()', () => {
         }));
 
     it('should support "delete where"', () => {
-      let bgp = '{:a ?p ?o}';
+      const bgp = '{:a ?p ?o}';
       return execute('insert data {:a :b :c; :d :e; :f :g}')
         .then(res => {
           expect(res.status).toBe(200);
@@ -279,7 +277,7 @@ describe('query.execute()', () => {
     });
 
     it('should support "insert where"', () => {
-      let select = 'select * {:A ?p :B}';
+      const select = 'select * {:A ?p :B}';
       return execute('insert data {:A :prop1 :B}')
         .then(res => {
           expect(res.status).toBe(200);
@@ -343,8 +341,8 @@ describe('query.execute()', () => {
       }));
 
     it('should support "drop"', () => {
-      let graph = '<http://test.drop.graph>';
-      let select = `select * { graph ${graph} { ?s ?p ?o } }`;
+      const graph = '<http://test.drop.graph>';
+      const select = `select * { graph ${graph} { ?s ?p ?o } }`;
       return execute(`insert data { graph ${graph} {:a :b :c, :d}}`)
         .then(res => {
           expect(res.status).toBe(200);
@@ -366,8 +364,8 @@ describe('query.execute()', () => {
     });
 
     it('should support "copy"', () => {
-      let graph1 = '<http://test.graph/1>';
-      let graph2 = '<http://test.graph/2>';
+      const graph1 = '<http://test.graph/1>';
+      const graph2 = '<http://test.graph/2>';
       return execute(`insert data { graph ${graph1} {:a :b :c, :d}}`)
         .then(res => {
           expect(res.status).toBe(200);
@@ -399,8 +397,8 @@ describe('query.execute()', () => {
     });
 
     it('should support "move"', () => {
-      let graph1 = '<http://test.graph/1>';
-      let graph2 = '<http://test.graph/2>';
+      const graph1 = '<http://test.graph/1>';
+      const graph2 = '<http://test.graph/2>';
       return execute(`insert data { graph ${graph1} {:a :b :c, :d}}`)
         .then(res => {
           expect(res.status).toBe(200);
@@ -432,8 +430,8 @@ describe('query.execute()', () => {
     });
 
     it('should support "add"', () => {
-      let graph1 = '<http://test.graph/1>';
-      let graph2 = '<http://test.graph/2>';
+      const graph1 = '<http://test.graph/1>';
+      const graph2 = '<http://test.graph/2>';
       return execute(
         `insert data { graph ${graph1} {:a :b :c, :d} . graph ${graph2} {:q :w :e, :r} }`
       )
