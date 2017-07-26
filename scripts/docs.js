@@ -11,7 +11,7 @@ const pathToREADME = path.resolve(`${__dirname}/../README.md`);
 const getType = type => {
   if (
     type.startsWith('string') ||
-    type.startsWith('Object') ||
+    type.startsWith('object') ||
     type.startsWith('array') ||
     type.startsWith('boolean')
   ) {
@@ -21,7 +21,7 @@ const getType = type => {
     const customType = type.split(': ').pop().split(' ').shift();
     if (
       customType.startsWith('string') ||
-      customType.startsWith('Object') ||
+      customType.startsWith('object') ||
       customType.startsWith('array') ||
       customType.startsWith('boolean')
     ) {
