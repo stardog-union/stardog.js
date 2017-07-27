@@ -133,6 +133,62 @@ declare namespace Stardog {
             /** Converts a set of integrity constraints into an equivalent SPARQL query for a given database. */
             function convert(conn: Connection, database: string, icvAxioms: string, options: { contentType: HTTP.ContentMimeTypes }, params?: { graphUri: string }): Promise<HTTP.Body>;
         }
+
+        /** Commands that use the reasoning capabilities of a database */
+        namespace reasoning {
+            /**
+             * Provides an explanation for an inference within a transaction
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the name of the database
+             * @param {string} inference RDF representing the inference to be explained
+             * @param {object} options an object specifying the contentType of the RDF data (e.g., text/turtle)
+             * @param {object} params additional parameters if needed  
+             */
+            function explainInference(conn: Connection, database: string, inference: string, options: { contentType: string }, params?: object);
+
+            /**
+             * Provides the reason why a database is inconsistent, as reported by db.reasoning.consistency
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the name of the database
+             * @param {object} options an object optionally specifying the URI of a graph to evaluate
+             * @param {object} params additional parameters if needed  
+             */
+            function explainInconsistency(conn: Connection, database: string, options: { namedGraph: string }, params?: object);
+
+            /**
+             * Provides an explanation for an inference within a transaction
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the name of the database
+             * @param {string} transactionId: the UUID of the transaction as returned by db.transaction.begin
+             * @param {string} inference RDF representing the inference to be explained
+             * @param {TransactionOptions} options an object specifying the contentType of the RDF data (e.g., text/turtle)
+             * @param {object} params additional parameters if needed  
+             */
+            function explainInferenceInTx(conn: Connection, database: string, transactionId: string, inference: string, options: TransactionOptions, params?: object);
+
+            /**
+             * Provides the reason why a database is inconsistent, as reported by db.reasoning.consistency
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the name of the database
+             * @param {string} transactionId: the UUID of the transaction as returned by db.transaction.begin
+             * @param {object} options an object optionally specifying the URI of a graph to evaluate
+             * @param {object} params additional parameters if needed  
+             */
+            function explainInconsistencyInTx(conn: Connection, database: string, transactionId: string, options: { namedGraph: string }, params?: object);
+
+            /**
+             * Gets the reasoning schema of the database
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the name of the database
+             * @param {object} params additional parameters if needed  
+             */
+            function schema(conn: Connection, database: string, params?: object);
+        }
     }
 
     /** Query actions to perform on a database. */
