@@ -499,6 +499,15 @@ declare namespace Stardog {
          */
         function list(conn: Connection, params?: object): Promise<HTTP.Body>;
 
+        /**
+         * Gets all information for a given user.
+         * 
+         * @param {Connection} conn the Stardog server connection
+         * @param {username} string the username of the user
+         * @param {object} params additional parameters if needed
+         */
+        function get(conn: Connection, username: string, params?: object): Promise<HTTP.Body>;
+        
         /** 
          * Creates a new user. 
          * 
@@ -542,10 +551,10 @@ declare namespace Stardog {
          * 
          * @param {Connection} conn the Stardog server connection
          * @param {string} username the username of the user
-         * @param {string} roles the new list of roles for the user
+         * @param {string[]} roles the new list of roles for the user
          * @param {object} params additional parameters if needed
          */
-        function setRoles(conn: Connection, username: string, roles: string, params?: object): Promise<HTTP.Body>;
+        function setRoles(conn: Connection, username: string, roles: string[], params?: object): Promise<HTTP.Body>;
 
         /** 
          * Gets a list of roles assigned to a user. 
