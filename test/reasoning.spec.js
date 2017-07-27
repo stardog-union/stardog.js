@@ -24,7 +24,7 @@ describe('reasoning commands', () => {
   it('should be able to check consistency', () => {
     return reasoning.consistency(conn, database, {}).then(res => {
       expect(res.status).toBe(200);
-      expect(res.body).toEqual('true');
+      expect(res.body).toEqual(true);
     });
   });
 
