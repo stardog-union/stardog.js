@@ -62,11 +62,7 @@ describe('reasoning commands', () => {
       .then(res => {
         expect(res.status).toBe(200);
         expect(res.body.proofs).toBeTruthy();
-        // Makeshift 'finally'
-        return res;
-      })
-      .catch(res => res)
-      .then(res => commitTx(res.transactionId));
+      });
   });
 
   it('should explain inconsistency in a tx', () => {
@@ -83,11 +79,7 @@ describe('reasoning commands', () => {
       .then(res => {
         expect(res.status).toBe(200);
         expect(res.body.proofs).toBeTruthy();
-        // Makeshift 'finally'
-        return res;
-      })
-      .catch(res => res)
-      .then(res => commitTx(res.transactionId));
+      });
   });
 
   it('should successfully get the schema', () => {
