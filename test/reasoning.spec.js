@@ -49,7 +49,6 @@ describe('reasoning commands', () => {
     return beginTx()
       .then(res => {
         expect(res.status).toBe(200);
-        expect(res.body).toBeGUID();
         return reasoning.explainInferenceInTx(
           conn,
           database,
