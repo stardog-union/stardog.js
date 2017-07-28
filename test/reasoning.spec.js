@@ -16,7 +16,6 @@ describe('reasoning commands', () => {
   const conn = ConnectionFactory();
 
   const beginTx = transaction.begin.bind(null, conn, database);
-  const commitTx = transaction.commit.bind(null, conn, database);
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
