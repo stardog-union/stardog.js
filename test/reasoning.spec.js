@@ -1,6 +1,5 @@
 /* eslint-env jest */
 
-const fs = require('fs');
 const { db } = require('../lib');
 const {
   seedDatabase,
