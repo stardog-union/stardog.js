@@ -274,7 +274,7 @@ declare namespace Stardog {
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} icvAxioms an RDF block containing the axioms to be added
-             * @param {object} options an object specifying the contentType of the RDF data. Default: text/turtle
+             * @param {object} options an object specifying the contentType of the icvAxioms parameter. Default: text/turtle
              * @param {object} params additional parameters if needed
              */
             function add(conn: Connection, database: string, icvAxioms: string, options?: { contentType: HTTP.ContentMimeTypes }, params?: object): Promise<HTTP.Body>;
@@ -285,7 +285,7 @@ declare namespace Stardog {
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} icvAxioms an RDF block containing the axioms to be removed
-             * @param {object} options an object specifying the contentType of the RDF data. Default: text/turtle
+             * @param {object} options an object specifying the contentType of the icvAxioms parameter. Default: text/turtle
              * @param {object} params additional parameters if needed
              */
             function remove(conn: Connection, database: string, icvAxioms: string, options?: { contentType: HTTP.ContentMimeTypes }, params?: object): Promise<HTTP.Body>;
@@ -305,7 +305,7 @@ declare namespace Stardog {
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} icvAxioms an RDF block containing the axioms to be added
-             * @param {object} options an object specifying the contentType of the RDF data. Default: text/turtle
+             * @param {object} options an object specifying the contentType of the icvAxioms parameter. Default: text/turtle
              * @param {object} params additional parameters if needed
              */
             function convert(conn: Connection, database: string, icvAxioms: string, options: { contentType: HTTP.ContentMimeTypes }, params?: { graphUri: string }): Promise<HTTP.Body>;
@@ -316,7 +316,7 @@ declare namespace Stardog {
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} constraints an RDF block containing the constraints to be validated
-             * @param {object} options an object specifying the contentType of the RDF data. Default: text/turtle
+             * @param {object} options an object specifying the contentType of the constraints parameter. Default: text/turtle
              * @param {object} params additional parameters if needed
              */
             function validate(conn: Connection, database: string, constraints: string, options: { contentType: HTTP.ContentMimeTypes }, params?: { graphUri: string }): Promise<HTTP.Body>;
@@ -328,7 +328,7 @@ declare namespace Stardog {
              * @param {string} database the name of the database
              * @param {string} transactionId the UUID of the transaction as returned by db.transaction.begin
              * @param {string} constraints an RDF block containing the constraints to be validated
-             * @param {object} options an object specifying the contentType of the RDF data. Default: text/turtle
+             * @param {object} options an object specifying the contentType of the constraints parameter. Default: text/turtle
              * @param {object} params additional parameters if needed
              */
             function validateInTx(conn: Connection, database: string, constraints: string, transactionId: string, options: { contentType: HTTP.ContentMimeTypes }, params?: { graphUri: string }): Promise<HTTP.Body>;
@@ -339,7 +339,7 @@ declare namespace Stardog {
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} constraints an RDF block containing the constraints to be validated
-             * @param {object} options an object specifying the contentType of the RDF data. Default: text/turtle
+             * @param {object} options an object specifying the contentType of the constraints parameter. Default: text/turtle
              * @param {object} params additional parameters if needed
              */
             function violations(conn: Connection, database: string, constraints: string, options: { contentType: HTTP.ContentMimeTypes }, params?: { graphUri: string }): Promise<HTTP.Body>;
@@ -351,10 +351,10 @@ declare namespace Stardog {
              * @param {string} database the name of the database
              * @param {string} transactionId the UUID of the transaction as returned by db.transaction.begin
              * @param {string} constraints an RDF block containing the constraints to be validated
-             * @param {object} options an object specifying the contentType of the RDF data. Default: text/turtle
+             * @param {object} options an object specifying the contentType of the constraints parameter. Default: text/turtle
              * @param {object} params additional parameters if needed
              */
-            function violationsInTx(conn: Connection, database: string, constraints: string, options: { contentType: HTTP.ContentMimeTypes }, params?: { graphUri: string }): Promise<HTTP.Body>;
+            function violationsInTx(conn: Connection, database: string, constraints: string, options?: { contentType: HTTP.ContentMimeTypes }, params?: { graphUri: string }): Promise<HTTP.Body>;
         }
 
         /** Commands that use the reasoning capabilities of a database */
