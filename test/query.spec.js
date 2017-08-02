@@ -197,8 +197,8 @@ describe('query.execute()', () => {
   describe('update', () => {
     afterEach(() => execute('clear all'));
 
-    it('should support "insert data"', () => {
-      return execute('insert data {:foo :bar :baz}')
+    it('should support "insert data"', () =>
+      execute('insert data {:foo :bar :baz}')
         .then(res => {
           expect(res.status).toBe(200);
           expect(res.body).toBe(null);
@@ -206,8 +206,7 @@ describe('query.execute()', () => {
         })
         .then(res => {
           expect(res.body.results.bindings).toHaveLength(1);
-        });
-    });
+        }));
 
     it('should support "delete data"', () => {
       const data = '<urn:foo> <urn:bar> <urn:baz>';

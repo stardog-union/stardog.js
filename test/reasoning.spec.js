@@ -20,7 +20,7 @@ describe('reasoning commands', () => {
   afterAll(dropDatabase(database));
 
   it('should be able to check consistency', () =>
-    reasoning.consistency(conn, database, {}).then(res => {
+    reasoning.consistency(conn, database).then(res => {
       expect(res.status).toBe(200);
       // expect(res.body).toEqual(true);  Commented out until server is fixed
       expect(res.body).toEqual('true');
@@ -37,7 +37,7 @@ describe('reasoning commands', () => {
       }));
 
   it('should explain inconsistency', () =>
-    reasoning.explainInconsistency(conn, database, {}).then(res => {
+    reasoning.explainInconsistency(conn, database).then(res => {
       expect(res.status).toBe(200);
       expect(res.body.proofs).toBeTruthy();
     }));
@@ -45,7 +45,6 @@ describe('reasoning commands', () => {
   it.skip('should explain inferences in a tx', () =>
     beginTx()
       .then(res => {
-        console.info(res);
         expect(res.status).toBe(200);
         return reasoning.explainInferenceInTx(
           conn,
@@ -56,7 +55,6 @@ describe('reasoning commands', () => {
         );
       })
       .then(res => {
-        console.info(res);
         expect(res.status).toBe(200);
         expect(res.body.proofs).toBeTruthy();
       })
