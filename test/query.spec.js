@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-const { query } = require('../lib');
+const { query, db: { transaction } } = require('../lib');
 
 const {
   seedDatabase,
@@ -13,6 +13,7 @@ describe('query.execute()', () => {
   const database = generateDatabaseName();
   const conn = ConnectionFactory();
   const execute = query.execute.bind(null, conn, database);
+  const begin = transaction.begin.bind(null, conn, database);
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
@@ -23,6 +24,23 @@ describe('query.execute()', () => {
     }).then(res => {
       expect(res.body.results.bindings).toHaveLength(23);
     }));
+
+  it('Should be able to query in a transaction', () =>
+    begin()
+      .then(res => {
+        expect(res.status).toEqual(200);
+        return query.executeInTransaction(
+          conn,
+          database,
+          res.body,
+          'select distinct ?s where { ?s ?p ?o }',
+          { limit: 10 }
+        );
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+        expect(res.body.results.bindings).toHaveLength(10);
+      }));
 
   it('A query result should work with property paths', () =>
     execute(
