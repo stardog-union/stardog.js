@@ -155,7 +155,7 @@ declare namespace Stardog {
              * @param {object} options an object optionally specifying the URI of a graph to evaluate
              * @param {object} params additional parameters if needed  
              */
-            function explainInconsistency(conn: Connection, database: string, options: { namedGraph: string }, params?: object);
+            function explainInconsistency(conn: Connection, database: string, options?: { namedGraph: string }, params?: object);
 
             /**
              * Provides an explanation for an inference within a transaction
@@ -178,7 +178,7 @@ declare namespace Stardog {
              * @param {object} options an object optionally specifying the URI of a graph to evaluate
              * @param {object} params additional parameters if needed  
              */
-            function explainInconsistencyInTx(conn: Connection, database: string, transactionId: string, options: { namedGraph: string }, params?: object);
+            function explainInconsistencyInTx(conn: Connection, database: string, transactionId: string, options?: { namedGraph: string }, params?: object);
 
             /**
              * Gets the reasoning schema of the database
