@@ -1,5 +1,15 @@
 
-## [**1.0.0-rc1**](https://github.com/stardog-union/stardog.js/issues?milestone=4&state=open)
+## [**1.0.0-rc2**](https://github.com/stardog-union/stardog.js/issues?milestone=5&state=open)
+- [**#104**](https://github.com/stardog-union/stardog.js/issues/104) Check if user is valid
+- [**#107**](https://github.com/stardog-union/stardog.js/issues/107) user isValid
+- [**#106**](https://github.com/stardog-union/stardog.js/issues/106) 🔨 - Moving tx related functions and tests
+- [**#103**](https://github.com/stardog-union/stardog.js/issues/103) ✨ - Flesh out ICV endpoint and consolidate its tests
+- [**#101**](https://github.com/stardog-union/stardog.js/issues/101) Get a single user
+- [**#105**](https://github.com/stardog-union/stardog.js/issues/105) get single user info
+- [**#102**](https://github.com/stardog-union/stardog.js/issues/102) ✨ - Add reasoning endpoints and tests as part of #85
+- [**#97**](https://github.com/stardog-union/stardog.js/issues/97) Function parameter documentation
+
+## [**1.0.0-rc1**](https://github.com/stardog-union/stardog.js/issues?milestone=4&state=closed)
 - [**#51**](https://github.com/stardog-union/stardog.js/issues/51) Documentation
 - [**#99**](https://github.com/stardog-union/stardog.js/issues/99) ✅ - Add tests for update SPARQL queries. Fix #91
 - [**#96**](https://github.com/stardog-union/stardog.js/issues/96) Always set body

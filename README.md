@@ -147,7 +147,7 @@ Expects the following parameters:
 
 - conn ([`Connection`](#connection))
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -155,7 +155,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="create">`db.create(conn, database, databaseOptions, options, params)`</a>
 
-Creates a new database. 
+Creates a new database.
 
 Expects the following parameters:
 
@@ -163,17 +163,17 @@ Expects the following parameters:
 
 - database (`string`)
 
-- databaseOptions (`Object`)
+- databaseOptions (`object`)
 
 - options (`{ files: string[] }`)
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="drop">`db.drop(conn, database, params)`</a>
 
-Deletes a database. 
+Deletes a database.
 
 Expects the following parameters:
 
@@ -181,13 +181,13 @@ Expects the following parameters:
 
 - database (`string`)
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="get">`db.get(conn, database, params)`</a>
 
-Gets information about a database. 
+Gets an RDF representation of a database. See: https://www.w3.org/TR/sparql11-http-rdf-update/#http-get
 
 Expects the following parameters:
 
@@ -195,7 +195,7 @@ Expects the following parameters:
 
 - database (`string`)
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -209,7 +209,7 @@ Expects the following parameters:
 
 - database (`string`)
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -223,13 +223,13 @@ Expects the following parameters:
 
 - database (`string`)
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="optimize">`db.optimize(conn, database, params)`</a>
 
-Optimizes a database. 
+Optimizes a database.
 
 Expects the following parameters:
 
@@ -237,7 +237,7 @@ Expects the following parameters:
 
 - database (`string`)
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -253,7 +253,7 @@ Expects the following parameters:
 
 - destination (`string`)
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -265,7 +265,7 @@ Expects the following parameters:
 
 - conn ([`Connection`](#connection))
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -279,7 +279,7 @@ Expects the following parameters:
 
 - database (`string`)
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -295,9 +295,49 @@ Expects the following parameters:
 
 - transactionId (`string`)
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="add">`db.add(conn, database, transactionId, content, options, params)`</a>
+
+Adds data within a transaction. 
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- transactionId (`string`)
+
+- content (`string`)
+
+- options ([`TransactionOptions`](#transactionoptions))
+
+- params (`object`)
+
+Returns [`Promise<TransactionResponse>`](#transactionresponse)
+
+#### <a name="remove">`db.remove(conn, database, transactionId, content, options, params)`</a>
+
+Removes data within a transaction.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- transactionId (`string`)
+
+- content (`string`)
+
+- options ([`TransactionOptions`](#transactionoptions))
+
+- params (`object`)
+
+Returns [`Promise<TransactionResponse>`](#transactionresponse)
 
 #### <a name="namespaces">`db.namespaces(conn, database, params)`</a>
 
@@ -309,7 +349,7 @@ Expects the following parameters:
 
 - database (`string`)
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -341,7 +381,7 @@ Expects the following parameters:
 
 - database (`string`)
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -355,9 +395,9 @@ Expects the following parameters:
 
 - database (`string`)
 
-- databaseOptions (`Object`)
+- databaseOptions (`object`)
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -395,51 +435,13 @@ Expects the following parameters:
 
 - database (`string`)
 
-- params (`Object`)
-
-Returns [`Promise<TransactionResponse>`](#transactionresponse)
-
-#### <a name="query">`db.transaction.query(conn, database, transactionId, query, params)`</a>
-
-Evaluates a SPARQL query within a transaction. 
-
-Expects the following parameters:
-
-- conn ([`Connection`](#connection))
-
-- database (`string`)
-
-- transactionId (`string`)
-
-- query (`string`)
-
-- params (`Object`)
-
-Returns [`Promise<TransactionResponse>`](#transactionresponse)
-
-#### <a name="add">`db.transaction.add(conn, database, transactionId, content, options, params)`</a>
-
-Adds a set of statements to a transaction request. 
-
-Expects the following parameters:
-
-- conn ([`Connection`](#connection))
-
-- database (`string`)
-
-- transactionId (`string`)
-
-- content (`string`)
-
-- options ([`TransactionOptions`](#transactionoptions))
-
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<TransactionResponse>`](#transactionresponse)
 
 #### <a name="rollback">`db.transaction.rollback(conn, database, transactionId, params)`</a>
 
-Performs a rollback in a given transaction. 
+Rolls back a transaction, removing the transaction and undoing all changes
 
 Expects the following parameters:
 
@@ -449,7 +451,7 @@ Expects the following parameters:
 
 - transactionId (`string`)
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<TransactionResponse>`](#transactionresponse)
 
@@ -465,33 +467,13 @@ Expects the following parameters:
 
 - transactionId (`string`)
 
-- params (`Object`)
-
-Returns [`Promise<TransactionResponse>`](#transactionresponse)
-
-#### <a name="remove">`db.transaction.remove(conn, database, transactionId, content, options, params)`</a>
-
-Removes a set of statements from a transaction request. 
-
-Expects the following parameters:
-
-- conn ([`Connection`](#connection))
-
-- database (`string`)
-
-- transactionId (`string`)
-
-- content (`string`)
-
-- options ([`TransactionOptions`](#transactionoptions))
-
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<TransactionResponse>`](#transactionresponse)
 
 ## <a name="icv">icv</a>
 
-#### <a name="get">`db.icv.get(conn, database, options, params)`</a>
+#### <a name="get">`db.icv.get(conn, database, params)`</a>
 
 Gets the set of integrity constraints on a given database. 
 
@@ -501,15 +483,13 @@ Expects the following parameters:
 
 - database (`string`)
 
-- options (`Object`)
-
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="set">`db.icv.set(conn, database, icvAxioms, options, params)`</a>
+#### <a name="add">`db.icv.add(conn, database, icvAxioms, options, params)`</a>
 
-Sets a new set of integrity constraints on a given database. 
+Adds integrity constraints to a given database. 
 
 Expects the following parameters:
 
@@ -521,11 +501,29 @@ Expects the following parameters:
 
 - options ({ contentType: [`ContentMimeTypes`](#contentmimetypes) })
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="clear">`db.icv.clear(conn, database, options, params)`</a>
+#### <a name="remove">`db.icv.remove(conn, database, icvAxioms, options, params)`</a>
+
+Removes integrity constraints from a given database. 
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- icvAxioms (`string`)
+
+- options ({ contentType: [`ContentMimeTypes`](#contentmimetypes) })
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="clear">`db.icv.clear(conn, database, params)`</a>
 
 Removes all integrity constraints from a given database. 
 
@@ -535,15 +533,13 @@ Expects the following parameters:
 
 - database (`string`)
 
-- options (`Object`)
-
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="convert">`db.icv.convert(conn, database, icvAxioms, options, params)`</a>
 
-Converts a set of integrity constraints into an equivalent SPARQL query for a given database. 
+Converts a set of integrity constraints into an equivalent SPARQL query for a given database.
 
 Expects the following parameters:
 
@@ -556,6 +552,184 @@ Expects the following parameters:
 - options ({ contentType: [`ContentMimeTypes`](#contentmimetypes) })
 
 - params (`{ graphUri: string }`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="validate">`db.icv.validate(conn, database, constraints, options, params)`</a>
+
+Checks constraints to see if they are valid
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- constraints (`string`)
+
+- options ({ contentType: [`ContentMimeTypes`](#contentmimetypes) })
+
+- params (`{ graphUri: string }`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="validateintx">`db.icv.validateInTx(conn, database, constraints, transactionId, options, params)`</a>
+
+Checks constraints to see if they are valid within a transaction
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- constraints (`string`)
+
+- transactionId (`string`)
+
+- options ({ contentType: [`ContentMimeTypes`](#contentmimetypes) })
+
+- params (`{ graphUri: string }`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="violations">`db.icv.violations(conn, database, constraints, options, params)`</a>
+
+Accepts integrity constraints as RDF and returns the violation explanations, if any, as RDF.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- constraints (`string`)
+
+- options ({ contentType: [`ContentMimeTypes`](#contentmimetypes) })
+
+- params (`{ graphUri: string }`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="violationsintx">`db.icv.violationsInTx(conn, database, constraints, options, params)`</a>
+
+Accepts integrity constraints as RDF and returns the violation explanations, if any, as RDF.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- constraints (`string`)
+
+- options ({ contentType: [`ContentMimeTypes`](#contentmimetypes) })
+
+- params (`{ graphUri: string }`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+## <a name="reasoning">reasoning</a>
+
+#### <a name="consistency">`db.reasoning.consistency(conn, database, options, params)`</a>
+
+Returns if the database is consistent
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- options (`{ namedGraph: string }`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="explaininference">`db.reasoning.explainInference(conn, database, inference, config, params)`</a>
+
+Provides an explanation for an inference
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- inference (`string`)
+
+- config (`{ contentType: string }`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="explaininconsistency">`db.reasoning.explainInconsistency(conn, database, options, params)`</a>
+
+Provides the reason why a database is inconsistent, as reported by db.reasoning.consistency
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- options (`{ namedGraph: string }`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="explaininferenceintransaction">`db.reasoning.explainInferenceInTransaction(conn, database, transactionId, inference, config, params)`</a>
+
+Provides an explanation for an inference within a transaction
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- transactionId (`string`)
+
+- inference (`string`)
+
+- config ([`TransactionOptions`](#transactionoptions))
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="explaininconsistencyintransaction">`db.reasoning.explainInconsistencyInTransaction(conn, database, transactionId, options, params)`</a>
+
+Provides the reason why a database is inconsistent, as reported by db.reasoning.consistency
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- transactionId (`string`)
+
+- options (`{ namedGraph: string }`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="schema">`db.reasoning.schema(conn, database, params)`</a>
+
+Gets the reasoning schema of the database
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -580,7 +754,7 @@ Expects the following parameters:
 
 - config ([`PropertyOptions`](#propertyoptions))
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -596,7 +770,7 @@ Expects the following parameters:
 
 - query (`string`)
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -612,7 +786,25 @@ Expects the following parameters:
 
 - query (`string`)
 
-- params (`Object`)
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="executeintransaction">`query.executeInTransaction(conn, database, transactionId, query, params)`</a>
+
+Executes a query against a database within a transaction. 
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- transactionId (`string`)
+
+- query (`string`)
+
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -671,7 +863,7 @@ Expects the following parameters:
 
 - config ([`StoredQueryOptions`](#storedqueryoptions))
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -683,13 +875,13 @@ Expects the following parameters:
 
 - conn ([`Connection`](#connection))
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="remove">`query.stored.remove(conn, storedQuery, params)`</a>
 
-Removes a given stored query. 
+Removes a given stored query.
 
 Expects the following parameters:
 
@@ -697,7 +889,7 @@ Expects the following parameters:
 
 - storedQuery (`string`)
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -741,7 +933,21 @@ Expects the following parameters:
 
 - conn ([`Connection`](#connection))
 
-- params (`Object`)
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="get">`user.get(conn, username, params)`</a>
+
+Gets all information for a given user.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- username (`string`)
+
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -755,7 +961,7 @@ Expects the following parameters:
 
 - user ([`User`](#user))
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -771,13 +977,25 @@ Expects the following parameters:
 
 - password (`string`)
 
-- params (`Object`)
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="valid">`user.valid(conn, params)`</a>
+
+Verifies that a Connection's credentials are valid.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="enabled">`user.enabled(conn, username, params)`</a>
 
-Verifies that a user is enabled. 
+Verifies that a user is enabled.
 
 Expects the following parameters:
 
@@ -785,13 +1003,13 @@ Expects the following parameters:
 
 - username (`string`)
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="enable">`user.enable(conn, username, enabled, params)`</a>
 
-Enables/disables a user. 
+Enables/disables a user.
 
 Expects the following parameters:
 
@@ -801,11 +1019,11 @@ Expects the following parameters:
 
 - enabled (`boolean`)
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="setroles">`user.setRoles(conn, username, params)`</a>
+#### <a name="setroles">`user.setRoles(conn, username, roles, params)`</a>
 
 Sets roles for a user. 
 
@@ -815,7 +1033,9 @@ Expects the following parameters:
 
 - username (`string`)
 
-- params (`Object`)
+- roles (`string[]`)
+
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -829,13 +1049,13 @@ Expects the following parameters:
 
 - username (`string`)
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="assignpermission">`user.assignPermission(conn, username, params)`</a>
+#### <a name="assignpermission">`user.assignPermission(conn, username, permission, params)`</a>
 
-Creates a new permission for a user over a given <ResourceType>. 
+Creates a new permission for a user over a given resource. 
 
 Expects the following parameters:
 
@@ -843,13 +1063,15 @@ Expects the following parameters:
 
 - username (`string`)
 
-- params (`Object`)
+- permission ([`Permission`](#permission))
+
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="deletepermission">`user.deletePermission(conn, username, params)`</a>
+#### <a name="deletepermission">`user.deletePermission(conn, username, permission, params)`</a>
 
-Removes a permission for a user over a given <ResourceType>. 
+Removes a permission for a user over a given resource. 
 
 Expects the following parameters:
 
@@ -857,7 +1079,9 @@ Expects the following parameters:
 
 - username (`string`)
 
-- params (`Object`)
+- permission ([`Permission`](#permission))
+
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -871,7 +1095,7 @@ Expects the following parameters:
 
 - username (`string`)
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -885,13 +1109,13 @@ Expects the following parameters:
 
 - username (`string`)
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="superuser">`user.superUser(conn, username, params)`</a>
 
-Verifies that a user is a superuser. 
+Specifies whether a user is a superuser. 
 
 Expects the following parameters:
 
@@ -899,7 +1123,7 @@ Expects the following parameters:
 
 - username (`string`)
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -913,7 +1137,7 @@ Expects the following parameters:
 
 - username (`string`)
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -943,7 +1167,7 @@ Expects the following parameters:
 
 - role ([`Role`](#role))
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -955,7 +1179,7 @@ Expects the following parameters:
 
 - conn ([`Connection`](#connection))
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -969,7 +1193,7 @@ Expects the following parameters:
 
 - role ([`Role`](#role))
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -983,7 +1207,7 @@ Expects the following parameters:
 
 - role ([`Role`](#role))
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -999,7 +1223,7 @@ Expects the following parameters:
 
 - permission ([`Permission`](#permission))
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -1015,7 +1239,7 @@ Expects the following parameters:
 
 - permission ([`Permission`](#permission))
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -1029,7 +1253,7 @@ Expects the following parameters:
 
 - role ([`Role`](#role))
 
-- params (`Object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
