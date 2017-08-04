@@ -356,7 +356,7 @@ declare namespace Stardog {
              * @param {object} options an object optionally specifying the URI of a graph to evaluate
              * @param {object} params additional parameters if needed  
              */
-            function consistency(conn:Connection, database: string, options?: { namedGraph: string }, params?: object);
+            function consistency(conn:Connection, database: string, options?: { namedGraph: string }, params?: object): Promise<HTTP.Body>;
             /**
              * Provides an explanation for an inference
              * 
@@ -366,7 +366,7 @@ declare namespace Stardog {
              * @param {config} options an object specifying the contentType of the RDF data (e.g., text/turtle)
              * @param {object} params additional parameters if needed  
              */
-            function explainInference(conn: Connection, database: string, inference: string, config: { contentType: string }, params?: object);
+            function explainInference(conn: Connection, database: string, inference: string, config: { contentType: string }, params?: object): Promise<HTTP.Body>;
 
             /**
              * Provides the reason why a database is inconsistent, as reported by db.reasoning.consistency
@@ -376,7 +376,7 @@ declare namespace Stardog {
              * @param {object} options an object optionally specifying the URI of a graph to evaluate
              * @param {object} params additional parameters if needed  
              */
-            function explainInconsistency(conn: Connection, database: string, options?: { namedGraph: string }, params?: object);
+            function explainInconsistency(conn: Connection, database: string, options?: { namedGraph: string }, params?: object): Promise<HTTP.Body>;
 
             /**
              * Provides an explanation for an inference within a transaction
@@ -388,7 +388,7 @@ declare namespace Stardog {
              * @param {transaction.TransactionOptions} config an object specifying the contentType of the RDF data (e.g., text/turtle)
              * @param {object} params additional parameters if needed  
              */
-            function explainInferenceInTransaction(conn: Connection, database: string, transactionId: string, inference: string, config: transaction.TransactionOptions, params?: object);
+            function explainInferenceInTransaction(conn: Connection, database: string, transactionId: string, inference: string, config: transaction.TransactionOptions, params?: object): Promise<HTTP.Body>;
 
             /**
              * Provides the reason why a database is inconsistent, as reported by db.reasoning.consistency
@@ -399,7 +399,7 @@ declare namespace Stardog {
              * @param {object} options an object optionally specifying the URI of a graph to evaluate
              * @param {object} params additional parameters if needed  
              */
-            function explainInconsistencyInTransaction(conn: Connection, database: string, transactionId: string, options?: { namedGraph: string }, params?: object);
+            function explainInconsistencyInTransaction(conn: Connection, database: string, transactionId: string, options?: { namedGraph: string }, params?: object): Promise<HTTP.Body>;
 
             /**
              * Gets the reasoning schema of the database
@@ -408,7 +408,7 @@ declare namespace Stardog {
              * @param {string} database the name of the database
              * @param {object} params additional parameters if needed  
              */
-            function schema(conn: Connection, database: string, params?: object);
+            function schema(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
         }
     }
 
@@ -585,6 +585,14 @@ declare namespace Stardog {
          */
         function changePassword(conn: Connection, username: string, password: string, params?: object): Promise<HTTP.Body>;
 
+        /**
+         * Verifies that a Connection's credentials are valid.
+         * 
+         * @param {Connection} conn the Stardog server connection
+         * @param {object} params additional parameters if needed
+         */
+        function valid(conn: Connection, params?: object): Promise<HTTP.Body>;
+        
         /** 
          * Verifies that a user is enabled.
          * 
