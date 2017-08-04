@@ -99,7 +99,7 @@ describe('icv', () => {
       }));
 
   it('should report violations', () =>
-    icv.violations(conn, database, '', {}).then(res => {
+    icv.violations(conn, database, '').then(res => {
       expect(res.status).toBe(200);
       expect(res.body).toBeNull();
     }));
@@ -108,7 +108,7 @@ describe('icv', () => {
     beginTx()
       .then(res => {
         expect(res.status).toBe(200);
-        return icv.violationsInTx(conn, database, res.transactionId, '', {});
+        return icv.violationsInTx(conn, database, res.transactionId, '');
       })
       .then(res => {
         expect(res.status).toBe(200);
