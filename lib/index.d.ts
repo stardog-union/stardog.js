@@ -148,6 +148,30 @@ declare namespace Stardog {
         function clear(conn: Connection, database: string, transactionId: string, params?: object): Promise<HTTP.Body>;
 
         /** 
+         * Adds data within a transaction. 
+         * 
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} database the name of the database to which to add data
+         * @param {string} transactionId the UUID of the transaction as returned by db.transaction.begin
+         * @param {string} content a block of RDF data to add
+         * @param {object} options an object specifying the contentType of the RDF data (e.g., text/turtle)
+         * @param {object} params additional parameters if needed
+         */
+        function add(conn: Connection, database: string, transactionId: string, content: string, options: TransactionOptions, params?: object): Promise<TransactionResponse>;
+
+        /** 
+         * Removes data within a transaction.
+         * 
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} database the name of the database from which to remove data
+         * @param {string} transactionId the UUID of the transaction as returned by db.transaction.begin
+         * @param {string} content a block of RDF data to remove
+         * @param {object} options an object specifying the contentType of the RDF data. Default: text/turtle
+         * @param {object} params additional parameters if needed
+         */
+        function remove(conn: Connection, database: string, transactionId: string, content: string, options: TransactionOptions, params?: object): Promise<TransactionResponse>;
+
+        /** 
          * Gets a mapping of the namespaces used in a database. 
          * 
          * @param {Connection} conn the Stardog server connection
@@ -203,28 +227,6 @@ declare namespace Stardog {
             function begin(conn: Connection, database: string, params?: object): Promise<TransactionResponse>;
 
             /** 
-             * Evaluates a SPARQL query within a transaction. 
-             * 
-             * @param {Connection} conn the Stardog server connection
-             * @param {string} database the name of the database to query
-             * @param {string} transactionId the UUID of the transaction as returned by db.transaction.begin
-             * @param {object} params additional parameters if needed
-             */
-            function query(conn: Connection, database: string, transactionId: string, query: string, params?: object): Promise<TransactionResponse>;
-
-            /** 
-             * Adds data within a transaction. 
-             * 
-             * @param {Connection} conn the Stardog server connection
-             * @param {string} database the name of the database to which to add data
-             * @param {string} transactionId the UUID of the transaction as returned by db.transaction.begin
-             * @param {string} content a block of RDF data to add
-             * @param {object} options an object specifying the contentType of the RDF data (e.g., text/turtle)
-             * @param {object} params additional parameters if needed
-             */
-            function add(conn: Connection, database: string, transactionId: string, content: string, options: TransactionOptions, params?: object): Promise<TransactionResponse>;
-
-            /** 
              * Rolls back a transaction, removing the transaction and undoing all changes
              * 
              * @param {Connection} conn the Stardog server connection
@@ -243,18 +245,6 @@ declare namespace Stardog {
              * @param {object} params additional parameters if needed
              */
             function commit(conn: Connection, database: string, transactionId: string, params?: object): Promise<TransactionResponse>;
-            
-            /** 
-             * Removes data within a transaction.
-             * 
-             * @param {Connection} conn the Stardog server connection
-             * @param {string} database the name of the database from which to remove data
-             * @param {string} transactionId the UUID of the transaction as returned by db.transaction.begin
-             * @param {string} content a block of RDF data to remove
-             * @param {object} options an object specifying the contentType of the RDF data. Default: text/turtle
-             * @param {object} params additional parameters if needed
-             */
-            function remove(conn: Connection, database: string, transactionId: string, content: string, options: TransactionOptions, params?: object): Promise<TransactionResponse>;
         }
 
         /** Methods for managing integrity constraints in a database. */
@@ -459,6 +449,17 @@ declare namespace Stardog {
          * @param {object} params additional parameters if needed
          */
         function execute(conn: Connection, database: string, query: string, params?: object): Promise<HTTP.Body>;
+
+        /** 
+         * Executes a query against a database within a transaction. 
+         * 
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} database the name of the database
+         * @param {string} transactionId the UUID of the transaction as returned by db.transaction.begin
+         * @param {string} query the SPARQL query to be executed
+         * @param {object} params additional parameters if needed
+         */
+        function executeInTransaction(conn: Connection, database: string, transactionId: string, query: string, params?: object): Promise<HTTP.Body>;
 
         /** 
          * Gets a list of actively running queries. 

@@ -17,7 +17,7 @@ describe('transactions', () => {
 
   const begin = transaction.begin.bind(null, conn, database);
   const commit = transaction.commit.bind(null, conn, database);
-  const add = transaction.add.bind(null, conn, database);
+  const add = db.add.bind(null, conn, database);
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
@@ -41,25 +41,6 @@ describe('transactions', () => {
       };
     },
   });
-
-  it('Should be able to get a transaction and make a query', () =>
-    begin()
-      .then(res => {
-        expect(res.status).toEqual(200);
-        expect(res.body).toBe(res.transactionId);
-        expect(res.body).toBeGUID();
-        return transaction.query(
-          conn,
-          database,
-          res.body,
-          'select distinct ?s where { ?s ?p ?o }',
-          { limit: 10 }
-        );
-      })
-      .then(res => {
-        expect(res.status).toBe(200);
-        expect(res.body.results.bindings).toHaveLength(10);
-      }));
 
   it('Should be able to get a transaction, add a triple and rollback', () => {
     const triple =
@@ -125,7 +106,7 @@ describe('transactions', () => {
       .then(res => {
         expect(res.status).toBe(200);
         expect(res.transactionId).toBeGUID();
-        return transaction.remove(conn, database, res.transactionId, triple, {
+        return db.remove(conn, database, res.transactionId, triple, {
           contentType: 'text/turtle',
         });
       })
@@ -171,7 +152,7 @@ describe('transactions', () => {
         return begin();
       })
       .then(({ transactionId }) =>
-        transaction.remove(conn, database, transactionId, triple, {
+        db.remove(conn, database, transactionId, triple, {
           contentType: 'text/turtle',
         })
       )
