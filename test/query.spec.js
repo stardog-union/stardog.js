@@ -19,7 +19,7 @@ describe('query.execute()', () => {
   afterAll(dropDatabase(database));
 
   it('A query result should not be empty', () =>
-    execute('select distinct ?s where { ?s ?p ?o }', {
+    execute('select distinct ?s where { ?s ?p ?o }', undefined, {
       reasoning: true,
     }).then(res => {
       expect(res.body.results.bindings).toHaveLength(23);
@@ -34,6 +34,7 @@ describe('query.execute()', () => {
           database,
           res.body,
           'select distinct ?s where { ?s ?p ?o }',
+          undefined,
           { limit: 10 }
         );
       })
@@ -58,7 +59,7 @@ describe('query.execute()', () => {
     }));
 
   it('A query result should not have more bindings than its intended limit', () =>
-    execute('select * where { ?s ?p ?o }', {
+    execute('select * where { ?s ?p ?o }', undefined, {
       limit: 10,
     }).then(res => {
       expect(res.body.results.bindings).toHaveLength(10);
@@ -107,6 +108,7 @@ describe('query.execute()', () => {
   it('A query to Car must have result count to 3', () =>
     execute(
       'select distinct * where { ?s a <http://example.org/vehicles/Car> }',
+      undefined,
       {
         reasoning: true,
       }
@@ -124,6 +126,7 @@ describe('query.execute()', () => {
   it('A query to Vehicles must have result count to 3', () =>
     execute(
       'select distinct * where { ?s a <http://example.org/vehicles/Vehicle> }',
+      undefined,
       {
         reasoning: true,
       }
@@ -141,6 +144,7 @@ describe('query.execute()', () => {
   it('A query to Vehicles must have result count to 3', () =>
     execute(
       'select distinct ?s where { ?s a <http://example.org/vehicles/Vehicle> }',
+      undefined,
       {
         reasoning: true,
       }
@@ -151,6 +155,7 @@ describe('query.execute()', () => {
   it('A query to Car must have result count to 3', () =>
     execute(
       'select distinct ?s where { ?s a <http://example.org/vehicles/Car> }',
+      undefined,
       {
         reasoning: true,
       }
@@ -161,6 +166,7 @@ describe('query.execute()', () => {
   it('A query to Vehicle must have result count to 0 w/o reasoning', () =>
     execute(
       'select distinct ?s where { ?s a <http://example.org/vehicles/Vehicle> }',
+      undefined,
       {
         reasoning: false,
       }
@@ -189,10 +195,17 @@ describe('query.execute()', () => {
         expect(body[i]['@id'].startsWith('http://')).toBe(true);
       }
     }));
+  it('returns results for a construct query as a string blob', () =>
+    execute('construct where { ?s ?p ?o }', {
+      accept: 'text/turtle',
+    }).then(({ body }) => {
+      expect(body).toHaveLength(9321);
+    }));
 
   it('returns results as turle for descibe queries', () =>
     execute(
       'describe <http://localhost/publications/articles/Journal1/1940/Article1>',
+      undefined,
       {
         limit: 1,
       }

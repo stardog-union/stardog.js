@@ -18,7 +18,8 @@ declare namespace Stardog {
         export type AcceptMimeTypes =
             'text/plain' |
             'application/json' |
-            'text/boolean';
+            'text/boolean' | 
+            'text/turtle';
 
         export interface Body {
             status: string;
@@ -446,9 +447,10 @@ declare namespace Stardog {
          * @param {Connection} conn the Stardog server connection
          * @param {string} database the name of the database
          * @param {string} query the SPARQL query to be executed
+         * @param {object} options additional options to customize query
          * @param {object} params additional parameters if needed
          */
-        function execute(conn: Connection, database: string, query: string, params?: object): Promise<HTTP.Body>;
+        function execute(conn: Connection, database: string, query: string, options?: { accept: HTTP.AcceptMimeTypes }, params?: object): Promise<HTTP.Body>;
 
         /** 
          * Executes a query against a database within a transaction. 
@@ -457,9 +459,10 @@ declare namespace Stardog {
          * @param {string} database the name of the database
          * @param {string} transactionId the UUID of the transaction as returned by db.transaction.begin
          * @param {string} query the SPARQL query to be executed
+         * @param {object} options additional options to customize query
          * @param {object} params additional parameters if needed
          */
-        function executeInTransaction(conn: Connection, database: string, transactionId: string, query: string, params?: object): Promise<HTTP.Body>;
+        function executeInTransaction(conn: Connection, database: string, transactionId: string, query: string, options?: { accept: HTTP.AcceptMimeTypes }, params?: object): Promise<HTTP.Body>;
 
         /** 
          * Gets a list of actively running queries. 
