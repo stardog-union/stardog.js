@@ -384,7 +384,7 @@ declare namespace Stardog {
              * 
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
-             * @param {string} transactionId: the UUID of the transaction as returned by db.transaction.begin
+             * @param {string} transactionId the UUID of the transaction as returned by db.transaction.begin
              * @param {string} inference RDF representing the inference to be explained
              * @param {transaction.TransactionOptions} config an object specifying the contentType of the RDF data (e.g., text/turtle)
              * @param {object} params additional parameters if needed  
@@ -396,7 +396,7 @@ declare namespace Stardog {
              * 
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
-             * @param {string} transactionId: the UUID of the transaction as returned by db.transaction.begin
+             * @param {string} transactionId the UUID of the transaction as returned by db.transaction.begin
              * @param {object} options an object optionally specifying the URI of a graph to evaluate
              * @param {object} params additional parameters if needed  
              */
@@ -690,10 +690,6 @@ declare namespace Stardog {
          */
         function remove(conn: Connection, username: string, params?: object): Promise<HTTP.Body>;
 
-        interface Role {
-            rolename: string;
-        }
-
         interface Permission {
             action: Action,
             resourceType: ResourceType,
@@ -705,10 +701,10 @@ declare namespace Stardog {
              * Creates a new role. 
              * 
              * @param {Connection} conn the Stardog server connection
-             * @param {Role} role the role to be created
+             * @param {object} role the role to be created
              * @param {object} params additional parameters if needed
              */
-            function create(conn: Connection, role: Role, params?: object): Promise<HTTP.Body>;
+            function create(conn: Connection, role: { rolename: string }, params?: object): Promise<HTTP.Body>;
 
             /** 
              * Lists all existing roles. 
@@ -722,48 +718,48 @@ declare namespace Stardog {
              * Deletes an existing role from the system. 
              * 
              * @param {Connection} conn the Stardog server connection
-             * @param {Role} role the role to be deleted
+             * @param {string} role the role to be deleted
              * @param {object} params additional parameters if needed
              */
-            function remove(conn: Connection, role: Role, params?: object): Promise<HTTP.Body>;
+            function remove(conn: Connection, role: string, params?: object): Promise<HTTP.Body>;
 
             /** 
              * Lists all users that have been assigned a given role. 
              * 
              * @param {Connection} conn the Stardog server connection
-             * @param {Role} role the role to be queried
+             * @param {string} role the role to be queried
              * @param {object} params additional parameters if needed
              */
-            function usersWithRole(conn: Connection, role: Role, params?: object): Promise<HTTP.Body>;
+            function usersWithRole(conn: Connection, role: string, params?: object): Promise<HTTP.Body>;
 
             /** 
              * Adds a permission over a given resource to a given role. 
              * 
              * @param {Connection} conn the Stardog server connection
-             * @param {Role} role the role to be given the permission
+             * @param {string} role the role to be given the permission
              * @param {Permission} permission the permission to be added
              * @param {object} params additional parameters if needed
              */
-            function assignPermission(conn: Connection, role: Role, permission: Permission, params?: object): Promise<HTTP.Body>;
+            function assignPermission(conn: Connection, role: string, permission: Permission, params?: object): Promise<HTTP.Body>;
 
             /** 
              * Removes a permission over a given resource from a given role. 
              * 
              * @param {Connection} conn the Stardog server connection
-             * @param {Role} role the role from which to remove the permission
+             * @param {string} role the role from which to remove the permission
              * @param {Permission} permission the permission to be removed
              * @param {object} params additional parameters if needed
              */
-            function deletePermission(conn: Connection, role: Role, permission: Permission, params?: object): Promise<HTTP.Body>;
+            function deletePermission(conn: Connection, role: string, permission: Permission, params?: object): Promise<HTTP.Body>;
 
             /** 
              * Lists all permissions assigned to a given role. 
              * 
              * @param {Connection} conn the Stardog server connection
-             * @param {Role} role the role to be queried
+             * @param {string} role the role to be queried
              * @param {object} params additional parameters if needed
              */
-            function permissions(conn: Connection, role: Role, params?: object): Promise<HTTP.Body>;
+            function permissions(conn: Connection, role: string, params?: object): Promise<HTTP.Body>;
         }
     }
 }
