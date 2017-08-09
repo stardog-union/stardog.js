@@ -69,11 +69,11 @@ const conn = new Connection({
   endpoint: 'http://localhost:5820',
 });
 
-query.execute(conn, 'select distinct ?s where { ?s ?p ?o }', {
+query.execute(conn, 'myDatabaseName', 'select distinct ?s where { ?s ?p ?o }', {
   limit: 10,
-  offset: 0
-}).then(({ result }) => {
-  console.log(result.results.bindings);
+  offset: 0,
+}).then(({ body }) => {
+  console.log(body.results.bindings);
 });
 ```
 
