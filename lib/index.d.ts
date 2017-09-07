@@ -27,6 +27,7 @@ declare namespace Stardog {
             result: object | string | boolean | null;
             ok: boolean;
             headers: Headers;
+            body: any;
         }
     }
 
@@ -65,7 +66,7 @@ declare namespace Stardog {
          * @param {object} options an object specifying a list of RDF files to bulk load into the database at creation time
          * @param {object} params additional parameters if needed
          */
-        function create(conn: Connection, database: string, databaseOptions?: object, options?: { files: string[] }, params?: object): Promise<HTTP.Body>;
+        function create(conn: Connection, database: string, databaseOptions?: object, options?: { files: { filename: string}[] }, params?: object): Promise<HTTP.Body>;
 
         /**
          * Deletes a database.
