@@ -159,7 +159,7 @@ declare namespace Stardog {
          * @param {object} options an object specifying the contentType of the RDF data (e.g., text/turtle)
          * @param {object} params additional parameters if needed
          */
-        function add(conn: Connection, database: string, transactionId: string, content: string, options: TransactionOptions, params?: object): Promise<TransactionResponse>;
+        function add(conn: Connection, database: string, transactionId: string, content: string, options: transaction.TransactionOptions, params?: object): Promise<transaction.TransactionResponse>;
 
         /** 
          * Removes data within a transaction.
@@ -171,7 +171,7 @@ declare namespace Stardog {
          * @param {object} options an object specifying the contentType of the RDF data. Default: text/turtle
          * @param {object} params additional parameters if needed
          */
-        function remove(conn: Connection, database: string, transactionId: string, content: string, options: TransactionOptions, params?: object): Promise<TransactionResponse>;
+        function remove(conn: Connection, database: string, transactionId: string, content: string, options: transaction.TransactionOptions, params?: object): Promise<transaction.TransactionResponse>;
 
         /** 
          * Gets a mapping of the namespaces used in a database. 
