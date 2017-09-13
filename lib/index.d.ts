@@ -27,6 +27,7 @@ declare namespace Stardog {
             result: object | string | boolean | null;
             ok: boolean;
             headers: Headers;
+            body: any;
         }
     }
 
@@ -65,7 +66,7 @@ declare namespace Stardog {
          * @param {object} options an object specifying a list of RDF files to bulk load into the database at creation time
          * @param {object} params additional parameters if needed
          */
-        function create(conn: Connection, database: string, databaseOptions?: object, options?: { files: string[] }, params?: object): Promise<HTTP.Body>;
+        function create(conn: Connection, database: string, databaseOptions?: object, options?: { files: { filename: string}[] }, params?: object): Promise<HTTP.Body>;
 
         /**
          * Deletes a database.
@@ -158,7 +159,7 @@ declare namespace Stardog {
          * @param {object} options an object specifying the contentType of the RDF data (e.g., text/turtle)
          * @param {object} params additional parameters if needed
          */
-        function add(conn: Connection, database: string, transactionId: string, content: string, options: TransactionOptions, params?: object): Promise<TransactionResponse>;
+        function add(conn: Connection, database: string, transactionId: string, content: string, options: transaction.TransactionOptions, params?: object): Promise<transaction.TransactionResponse>;
 
         /** 
          * Removes data within a transaction.
@@ -170,7 +171,7 @@ declare namespace Stardog {
          * @param {object} options an object specifying the contentType of the RDF data. Default: text/turtle
          * @param {object} params additional parameters if needed
          */
-        function remove(conn: Connection, database: string, transactionId: string, content: string, options: TransactionOptions, params?: object): Promise<TransactionResponse>;
+        function remove(conn: Connection, database: string, transactionId: string, content: string, options: transaction.TransactionOptions, params?: object): Promise<transaction.TransactionResponse>;
 
         /** 
          * Gets a mapping of the namespaces used in a database. 
