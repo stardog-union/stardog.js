@@ -23,7 +23,7 @@ describe('exportDB()', () => {
   it('should return a response with content-disposition header and the attachment export file', () =>
     db.exportData(conn, database).then(res => {
       expect(res.status).toBe(200);
-      expect(res.body).toHaveLength(26);
+      expect(res.body).toHaveLength(33);
     }));
 
   it('should return a response with content-disposition header and the attachment export file when using graph-uri param', () =>
@@ -33,6 +33,6 @@ describe('exportDB()', () => {
       })
       .then(res => {
         expect(res.status).toBe(200);
-        expect(res.body).toHaveLength(26);
+        expect(res.body).toHaveLength(33);
       }));
 });

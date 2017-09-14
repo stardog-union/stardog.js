@@ -58,6 +58,9 @@ exports.seedDatabase = database => () => {
               'schema.ttl'
             ),
           },
+          {
+            filename: Path.resolve(basePath, 'fixtures', 'paths.ttl'),
+          },
         ],
       }
     )
