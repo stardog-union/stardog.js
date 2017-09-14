@@ -22,7 +22,7 @@ describe('query.execute()', () => {
     execute('select distinct ?s where { ?s ?p ?o }', undefined, {
       reasoning: true,
     }).then(res => {
-      expect(res.body.results.bindings).toHaveLength(23);
+      expect(res.body.results.bindings).toHaveLength(31);
     }));
 
   it('Should be able to query in a transaction', () =>
@@ -190,16 +190,16 @@ describe('query.execute()', () => {
 
   it('returns results for a construct query', () =>
     execute('construct where { ?s ?p ?o }').then(({ body }) => {
-      expect(body).toHaveLength(26);
+      expect(body).toHaveLength(33);
       for (let i = 0; i < body.length; i += 1) {
-        expect(body[i]['@id'].startsWith('http://')).toBe(true);
+        expect(body[i]['@id']).not.toBeNull();
       }
     }));
   it('returns results for a construct query as a string blob', () =>
     execute('construct where { ?s ?p ?o }', {
       accept: 'text/turtle',
     }).then(({ body }) => {
-      expect(body).toHaveLength(9321);
+      expect(body).toHaveLength(9843);
     }));
 
   it('returns results as turle for descibe queries', () =>
@@ -222,6 +222,65 @@ describe('query.execute()', () => {
       ).then(res => {
         expect(res.status).toBe(200);
         expect(res.body.results.bindings).toHaveLength(1);
+      }));
+  });
+
+  describe('paths', () => {
+    const prefixes = 'prefix : <urn:paths:> ';
+    it('should run a simple paths query', () =>
+      execute(
+        `${prefixes} paths from (:Alice as ?x) to ?y { ?x ?p ?y }`
+      ).then(res => {
+        expect(res.status).toBe(200);
+        expect(res.body.results.bindings).toHaveLength(11);
+      }));
+
+    it('should run a more specific query', () =>
+      execute(
+        `${prefixes} paths from (:Alice as ?x) to (:David as ?y) { ?x :knows ?y }`
+      ).then(res => {
+        expect(res.status).toBe(200);
+        expect(res.body.results.bindings).toHaveLength(2);
+      }));
+
+    it('should run a complex query', () =>
+      execute(
+        `${prefixes} paths from (:Alice as ?x) to (:David as ?y) { {?x ?p ?y} union {?y ?p ?x} }`
+      ).then(res => {
+        expect(res.status).toBe(200);
+        expect(res.body.results.bindings).toHaveLength(2);
+      }));
+
+    it('should return all paths', () =>
+      execute(
+        `${prefixes} paths all from (:Alice as ?x) to (:David as ?y) { {?x ?p ?y} union {?y ?p ?x} }`
+      ).then(res => {
+        expect(res.status).toBe(200);
+        expect(res.body.results.bindings).toHaveLength(7);
+      }));
+
+    it('should return cyclic paths', () =>
+      execute(
+        `${prefixes} paths cyclic from ?start to ?end { ?start :dependsOn ?end }`
+      ).then(res => {
+        expect(res.status).toBe(200);
+        expect(res.body.results.bindings).toHaveLength(17);
+      }));
+
+    it('runs queries with a limit', () =>
+      execute(
+        `${prefixes} paths from (:Alice as ?x) to ?y { ?x ?p ?y } limit 2`
+      ).then(res => {
+        expect(res.status).toBe(200);
+        expect(res.body.results.bindings).toHaveLength(4);
+      }));
+
+    it('runs queries with a max length', () =>
+      execute(
+        `${prefixes} paths from (:Alice as ?x) to ?y max length 2 { ?x ?p ?y }`
+      ).then(res => {
+        expect(res.status).toBe(200);
+        expect(res.body.results.bindings).toHaveLength(7);
       }));
   });
 

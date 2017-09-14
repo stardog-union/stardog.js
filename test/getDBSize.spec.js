@@ -22,6 +22,6 @@ describe('getDBSize()', () => {
   it('A response with the size of the DB should not be empty', () =>
     db.size(conn, database).then(res => {
       const sizeNum = parseInt(res.body, 10);
-      expect(sizeNum).toBe(82);
+      expect(sizeNum).toBe(93);
     }));
 });
