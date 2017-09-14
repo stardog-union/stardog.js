@@ -1,6 +1,6 @@
 {
   "name": "stardog",
-  "version": "1.0.0-rc2",
+  "version": "1.0.0-rc3",
   "description": "Stardog JavaScript Framework for node.js and the browser - Develop apps using the Stardog RDF Database & JS.",
   "keywords": [
     "stardog",
