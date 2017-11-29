@@ -61,6 +61,9 @@ exports.seedDatabase = database => () => {
           {
             filename: Path.resolve(basePath, 'fixtures', 'paths.ttl'),
           },
+          {
+            filename: Path.resolve(basePath, 'fixtures', 'ng_tests.trig'),
+          },
         ],
       }
     )
