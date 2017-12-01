@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 const Path = require('path');
+const fs = require('fs');
 const RandomString = require('randomstring');
 const { Connection, db } = require('../lib');
 
@@ -61,15 +62,31 @@ exports.seedDatabase = database => () => {
           {
             filename: Path.resolve(basePath, 'fixtures', 'paths.ttl'),
           },
-          {
-            filename: Path.resolve(basePath, 'fixtures', 'ng_tests.trig'),
-          },
         ],
       }
     )
     .then(res => {
       expect(res.status).toBe(201);
     });
+};
+
+exports.addTestData = (database, path, contentType) => {
+  const conn = exports.ConnectionFactory();
+  return db.transaction.begin(conn, database).then(txRes =>
+    Promise.resolve(
+      fs.readFileSync(Path.resolve(basePath, path), 'utf-8')
+    ).then(content =>
+      db
+        .add(conn, database, txRes.transactionId, content, { contentType })
+        .then(res => {
+          expect(res.status).toBe(200);
+          return db.transaction.commit(conn, database, txRes.transactionId);
+        })
+        .then(res => {
+          expect(res.status).toBe(200);
+        })
+    )
+  );
 };
 
 exports.dropDatabase = database => () => {

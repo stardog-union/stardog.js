@@ -6,6 +6,7 @@ const {
   dropDatabase,
   generateDatabaseName,
   ConnectionFactory,
+  addTestData,
 } = require('./setup-database');
 
 describe('graph store protocol', () => {
@@ -13,7 +14,11 @@ describe('graph store protocol', () => {
   const makeGraph = name => `http://example.org/namedgraphs#${name}`;
   let conn;
 
-  beforeAll(seedDatabase(database));
+  beforeAll(() =>
+    seedDatabase(database)().then(() =>
+      addTestData(database, 'fixtures/ng_tests.trig', 'application/trig')
+    )
+  );
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
@@ -42,8 +47,10 @@ describe('graph store protocol', () => {
         }));
 
     it('should retrieve other RDF serializations when specified', () =>
-      graph.doGet(conn, database, null, 'text/turtle').then(res => {
-        expect(res.body).toContain('dc:publisher');
+      graph.doGet(conn, database, null, 'application/rdf+xml').then(res => {
+        expect(res.body).toContain(
+          '<publisher xmlns="http://purl.org/dc/elements/1.1/"'
+        );
       }));
   });
 
@@ -106,7 +113,6 @@ describe('graph store protocol', () => {
           return graph.doGet(conn, database, makeGraph('bob'));
         })
         .then(res => {
-          console.info(res);
           expect(res.body).toContain('bob@oldcorp.example.org');
           expect(res.body).toContain('bob@newcorp.example.org');
         }));
