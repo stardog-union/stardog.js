@@ -14,11 +14,7 @@ describe('graph store protocol', () => {
   const makeGraph = name => `http://example.org/namedgraphs#${name}`;
   let conn;
 
-  beforeAll(() =>
-    seedDatabase(database)().then(() =>
-      addTestData(database, 'fixtures/ng_tests.trig', 'application/trig')
-    )
-  );
+  beforeAll(seedDatabase(database, ['fixtures/ng_tests.trig']));
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
@@ -48,9 +44,7 @@ describe('graph store protocol', () => {
 
     it('should retrieve other RDF serializations when specified', () =>
       graph.doGet(conn, database, null, 'application/rdf+xml').then(res => {
-        expect(res.body).toContain(
-          '<publisher xmlns="http://purl.org/dc/elements/1.1/"'
-        );
+        expect(res.body).toContain('<rdf:RDF');
       }));
   });
 

@@ -1,14 +1,13 @@
 /* eslint-env jest */
 
 const Path = require('path');
-const fs = require('fs');
 const RandomString = require('randomstring');
 const { Connection, db } = require('../lib');
 
 const dbs = new Set(); // used to keep track of DBs across runs
 const basePath = process.env.CIRCLECI ? '/var/opt/stardog/test/' : __dirname;
 
-exports.seedDatabase = database => () => {
+exports.seedDatabase = (database, addlFiles = []) => () => {
   const conn = exports.ConnectionFactory();
 
   return db
@@ -29,6 +28,9 @@ exports.seedDatabase = database => () => {
       {
         // Load everything into the DB
         files: [
+          ...addlFiles.map(relPath => ({
+            filename: Path.resolve(basePath, relPath),
+          })),
           {
             filename: Path.resolve(basePath, 'fixtures', 'api_tests.nt'),
           },
@@ -68,25 +70,6 @@ exports.seedDatabase = database => () => {
     .then(res => {
       expect(res.status).toBe(201);
     });
-};
-
-exports.addTestData = (database, path, contentType) => {
-  const conn = exports.ConnectionFactory();
-  return db.transaction.begin(conn, database).then(txRes =>
-    Promise.resolve(
-      fs.readFileSync(Path.resolve(basePath, path), 'utf-8')
-    ).then(content =>
-      db
-        .add(conn, database, txRes.transactionId, content, { contentType })
-        .then(res => {
-          expect(res.status).toBe(200);
-          return db.transaction.commit(conn, database, txRes.transactionId);
-        })
-        .then(res => {
-          expect(res.status).toBe(200);
-        })
-    )
-  );
 };
 
 exports.dropDatabase = database => () => {
