@@ -6,7 +6,6 @@ const {
   dropDatabase,
   generateDatabaseName,
   ConnectionFactory,
-  addTestData,
 } = require('./setup-database');
 
 describe('graph store protocol', () => {
