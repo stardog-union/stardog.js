@@ -28,9 +28,6 @@ describe('db.getOptions()', () => {
     options.get(conn, database).then(res => {
       expect(res.status).toEqual(200);
       expect(res.body).toMatchObject({
-        search: {
-          enabled: true,
-        },
         index: {
           type: 'Disk',
         },
