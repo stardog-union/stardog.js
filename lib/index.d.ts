@@ -412,6 +412,117 @@ declare namespace Stardog {
              */
             function schema(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
         }
+
+        /** Commands that use the versioning capabilities of a database */
+        namespace versioning {
+
+            /**
+             * Executes a SPARQL query over the versioning history
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the name of the database
+             * @param {string} query the SPARQL query to be executed
+             * @param {HTTP.RdfMimeType|HTTP.SparqlMimeType} accept the desired HTTP MIME type of the response. Default: application/sparql-results+json | application/ld+json
+             * @param {object} params additional parameters if needed
+             */
+            function query(conn: Connection, database: string, query: string, accept?: HTTP.RdfMimeType|HTTP.SparqlMimeType, params?: object): Promise<HTTP.Body>;
+
+            /**
+             * Commits a transaction into versioning
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the name of the database
+             * @param {string} transactionId the UUID of the transaction as returned by db.transaction.begin
+             * @param {string} commitMsg the commit message to associate with this commit
+             * @param {object} params additional parameters if needed 
+             */
+            function commit(conn: Connection, database: string, transactionId: string, commitMsg: string, params?: object): Promise<HTTP.Body>;
+
+            /**
+             * Creates a new tag
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the name of the database
+             * @param {string} revisionId the ID of the revision to tag
+             * @param {string} tagLogMsg the message to associate with the tag
+             * @param {object} params additional parameters if needed 
+             */
+            function createTag(conn: Connection, database: string, revisionId: string, tagLogMsg: string, params?: object): Promise<HTTP.Body>;
+
+            /**
+             * Deletes a tag
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the name of the database
+             * @param {string} revisionId the revision ID of the tag
+             * @param {object} params additional parameters if needed 
+             */
+            function deleteTag(conn: Connection, database: string, revisionId: string, params?: object): Promise<HTTP.Body>;
+
+            /**
+             * Reverts to a previous commit
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the name of the database
+             * @param {string} fromRevisionId the ID of the revision to revert from
+             * @param {string} toRevisionId the ID of the revision to revert to
+             * @param {string} logMsg the log message for the revert
+             * @param {object} params additional parameters if needed 
+             */
+            function revert(conn: Connection, database: string, fromRevisionId: string, toRevisionId: string, logMsg: string, params?: object): Promise<HTTP.Body>;
+        }
+
+        /** Commands that interact with the BITES (document store) API */
+        namespace docs {
+
+            /**
+             * Retrieves the size of the document store
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the name of the database
+             * @param {object} params additional parameters if needed 
+             */
+            function size(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
+
+            /**
+             * Clears the document store
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the name of the database
+             * @param {object} params additional parameters if needed 
+             */
+            function clear(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
+
+            /**
+             * Adds a document to the document store
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the name of the database
+             * @param {ReadStream} file the file to add
+             * @param {object} params additional parameters if needed 
+             */
+            function add(conn: Connection, database: string, file: ReadStream, params?: object): Promise<HTTP.Body>;
+
+            /**
+             * Removes a document from the document store
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the name of the database
+             * @param {string} fileName the name of the file
+             * @param {object} params additional parameters if needed 
+             */
+            function remove(conn: Connection, database: string, fileName: string, params?: object): Promise<HTTP.Body>;
+
+            /**
+             * Retrieves a document from the document store
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the name of the database
+             * @param {string} fileName the name of the file
+             * @param {object} params additional parameters if needed 
+             */
+            function get(conn: Connection, database: string, fileName: string, params?: object): Promise<HTTP.Body>;
+        }
     }
 
     /** Query actions to perform on a database. */
