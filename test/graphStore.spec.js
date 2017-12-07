@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-const graph = require('../lib/db/graph');
+const { graph } = require('../lib/db');
 const {
   seedDatabase,
   dropDatabase,
