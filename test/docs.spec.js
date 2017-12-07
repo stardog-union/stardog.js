@@ -31,7 +31,12 @@ describe('doc store', () => {
   describe('add', () => {
     it('adds a document to the store', () =>
       docs
-        .add(conn, database, getResource('fixtures/paths.ttl'), 'paths.ttl')
+        .add(
+          conn,
+          database,
+          getResource('fixtures/ng_tests.trig'),
+          'ng_tests.trig'
+        )
         .then(res => {
           expect(res.status).toBe(201);
         }));
@@ -47,10 +52,15 @@ describe('doc store', () => {
   describe('remove', () => {
     it('removes a document from the store', () =>
       docs
-        .add(conn, database, getResource('fixtures/paths.ttl'), 'paths.ttl')
+        .add(
+          conn,
+          database,
+          getResource('fixtures/ng_tests.trig'),
+          'ng_tests.trig'
+        )
         .then(res => {
           expect(res.status).toBe(201);
-          return docs.remove(conn, database, 'paths.ttl');
+          return docs.remove(conn, database, 'ng_tests.trig');
         })
         .then(res => {
           expect(res.status).toBe(204);
@@ -60,10 +70,15 @@ describe('doc store', () => {
   describe('get', () => {
     it('retrieves a document from the store', () =>
       docs
-        .add(conn, database, getResource('fixtures/paths.ttl'), 'paths.ttl')
+        .add(
+          conn,
+          database,
+          getResource('fixtures/ng_tests.trig'),
+          'ng_tests.trig'
+        )
         .then(res => {
           expect(res.status).toBe(201);
-          return docs.get(conn, database, 'paths.ttl');
+          return docs.get(conn, database, 'ng_tests.trig');
         })
         .then(res => {
           expect(res.status).toBe(200);
