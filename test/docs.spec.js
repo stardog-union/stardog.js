@@ -6,11 +6,11 @@ const {
   seedDatabase,
   dropDatabase,
   ConnectionFactory,
-  getResource,
 } = require('./setup-database');
 
 describe('doc store', () => {
   const database = generateDatabaseName();
+  const aFileName = 'myFile.txt';
   let conn;
 
   beforeEach(() => {
@@ -30,16 +30,9 @@ describe('doc store', () => {
 
   describe('add', () => {
     it('adds a document to the store', () =>
-      docs
-        .add(
-          conn,
-          database,
-          getResource('fixtures/ng_tests.trig'),
-          'ng_tests.trig'
-        )
-        .then(res => {
-          expect(res.status).toBe(201);
-        }));
+      docs.add(conn, database, aFileName, 'contents').then(res => {
+        expect(res.status).toBe(201);
+      }));
   });
 
   describe('clear', () => {
@@ -52,15 +45,10 @@ describe('doc store', () => {
   describe('remove', () => {
     it('removes a document from the store', () =>
       docs
-        .add(
-          conn,
-          database,
-          getResource('fixtures/ng_tests.trig'),
-          'ng_tests.trig'
-        )
+        .add(conn, database, aFileName, 'contents')
         .then(res => {
           expect(res.status).toBe(201);
-          return docs.remove(conn, database, 'ng_tests.trig');
+          return docs.remove(conn, database, aFileName);
         })
         .then(res => {
           expect(res.status).toBe(204);
@@ -70,15 +58,10 @@ describe('doc store', () => {
   describe('get', () => {
     it('retrieves a document from the store', () =>
       docs
-        .add(
-          conn,
-          database,
-          getResource('fixtures/ng_tests.trig'),
-          'ng_tests.trig'
-        )
+        .add(conn, database, aFileName, 'contents')
         .then(res => {
           expect(res.status).toBe(201);
-          return docs.get(conn, database, 'ng_tests.trig');
+          return docs.get(conn, database, aFileName);
         })
         .then(res => {
           expect(res.status).toBe(200);

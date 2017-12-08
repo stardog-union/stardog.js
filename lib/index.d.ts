@@ -498,10 +498,11 @@ declare namespace Stardog {
              * 
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
-             * @param {ReadStream} file the file to add
+             * @param {string} fileName the name of the file to add
+             * @param {string} fileContents the contents of the file to add
              * @param {object} params additional parameters if needed 
              */
-            function add(conn: Connection, database: string, file: ReadStream, params?: object): Promise<HTTP.Body>;
+            function add(conn: Connection, database: string, fileName: string, fileContents: string, params?: object): Promise<HTTP.Body>;
 
             /**
              * Removes a document from the document store

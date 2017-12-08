@@ -8,8 +8,6 @@ const { Connection, db } = require('../lib');
 const dbs = new Set(); // used to keep track of DBs across runs
 const basePath = process.env.CIRCLECI ? '/var/opt/stardog/test/' : __dirname;
 
-exports.getResource = file => fs.createReadStream(Path.resolve(basePath, file));
-
 exports.seedDatabase = database => () => {
   const conn = exports.ConnectionFactory();
 
