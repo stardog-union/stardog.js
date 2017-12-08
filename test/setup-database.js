@@ -1,6 +1,5 @@
 /* eslint-env jest */
 
-const fs = require('fs');
 const Path = require('path');
 const RandomString = require('randomstring');
 const { Connection, db } = require('../lib');
