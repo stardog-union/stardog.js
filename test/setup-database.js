@@ -7,7 +7,7 @@ const { Connection, db } = require('../lib');
 const dbs = new Set(); // used to keep track of DBs across runs
 const basePath = process.env.CIRCLECI ? '/var/opt/stardog/test/' : __dirname;
 
-exports.seedDatabase = database => () => {
+exports.seedDatabase = (database, addlFiles = []) => () => {
   const conn = exports.ConnectionFactory();
 
   return db
@@ -28,6 +28,9 @@ exports.seedDatabase = database => () => {
       {
         // Load everything into the DB
         files: [
+          ...addlFiles.map(relPath => ({
+            filename: Path.resolve(basePath, relPath),
+          })),
           {
             filename: Path.resolve(basePath, 'fixtures', 'api_tests.nt'),
           },
