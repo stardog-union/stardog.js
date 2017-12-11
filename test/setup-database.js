@@ -7,24 +7,18 @@ const { Connection, db } = require('../lib');
 const dbs = new Set(); // used to keep track of DBs across runs
 const basePath = process.env.CIRCLECI ? '/var/opt/stardog/test/' : __dirname;
 
-exports.seedDatabase = (database, addlFiles = []) => () => {
+exports.seedDatabase = (database, options = {}, addlFiles = []) => () => {
   const conn = exports.ConnectionFactory();
 
   return db
     .create(
       conn,
       database,
-      {
+      Object.assign(options, {
         index: {
           type: 'disk',
         },
-        search: {
-          enabled: true,
-        },
-        icv: {
-          enabled: true,
-        },
-      },
+      }),
       {
         // Load everything into the DB
         files: [

@@ -21,7 +21,7 @@ describe('icv', () => {
 
   const beginTx = transaction.begin.bind(null, conn, database);
 
-  beforeAll(seedDatabase(database));
+  beforeAll(seedDatabase(database, { icv: { enabled: true } }));
   afterAll(dropDatabase(database));
 
   it('should add integrity constraint axioms', () =>
@@ -50,8 +50,7 @@ describe('icv', () => {
       .then(res => {
         expect(res.status).toBe(200);
         expect(res.body.length).toBe(0);
-      })
-  );
+      }));
 
   it('should clear integrity constraint axioms', () =>
     icv

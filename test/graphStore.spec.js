@@ -13,7 +13,7 @@ describe('graph store protocol', () => {
   const makeGraph = name => `http://example.org/namedgraphs#${name}`;
   let conn;
 
-  beforeAll(seedDatabase(database, ['fixtures/ng_tests.trig']));
+  beforeAll(seedDatabase(database, {}, ['fixtures/ng_tests.trig']));
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
