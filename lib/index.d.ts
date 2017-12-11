@@ -6,20 +6,14 @@ import Headers from 'fetch-ponyfill';
 
 declare namespace Stardog {
     namespace HTTP {
-        export type ContentMimeTypes =
-            'application/x-turtle' |
-            'text/turtle' |
-            'application/rdf+xml' |
-            'text/plain' |
-            'application/x-trig' |
-            'text/x-nquads' |
-            'application/trix';
-
-        export type AcceptMimeTypes =
-            'text/plain' |
-            'application/json' |
-            'text/boolean' | 
-            'text/turtle';
+        export enum RdfMimeType {
+            JSONLD = 'application/ld+json',
+            TURTLE = 'text/turtle',
+            RDFXML = 'application/rdf+xml',
+            NTRIPLES = 'application/n-triples',
+            NQUADS = 'application/n-quads',
+            TRIG = 'application/trig'
+        }
 
         export enum SparqlMimeType {
             JSON = 'application/sparql-results+json',
@@ -192,10 +186,10 @@ declare namespace Stardog {
          * 
          * @param {Connection} conn the Stardog server connection
          * @param {string} database the name of the database to clear
-         * @param {object} options an object specifying the desired HTTP MIME type. Default: text/turtle
+         * @param {object} options an object specifying the desired HTTP MIME type. Default: application/ld+json
          * @param {object} params an object specifying the URI of a named graph to export. Default: ALL
          */
-        function exportData(conn: Connection, database: string, options?: { mimeType: HTTP.AcceptMimeTypes }, params?: { graphUri: string }): Promise<HTTP.Body>;
+        function exportData(conn: Connection, database: string, options?: { mimeType: HTTP.RdfMimeType }, params?: { graphUri: string }): Promise<HTTP.Body>;
 
         /** Database options. */
         namespace options {
@@ -203,6 +197,55 @@ declare namespace Stardog {
             function get(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
             /** Sets options on a database. */
             function set(conn: Connection, database: string, databaseOptions: object, params?: object): Promise<HTTP.Body>;
+        }
+
+        /** Wrapper methods for using the SPARQL Graph Store Protocol. See https://www.w3.org/TR/sparql11-http-rdf-update */
+        namespace graph {
+
+            /**
+             * Retrieves the specified named graph
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the name of the database
+             * @param {string} graphUri the URI of the graph to retrieve, or null for the default graph
+             * @param {HTTP.RdfMimeType} accept The desired HTTP MIME type. Default: application/ld+json
+             * @param {object} params additional parameters if needed
+             */
+            function doGet(conn: Connection, database: string, graphUri?: string, accept?: HTTP.RdfMimeType, params?: object): Promise<HTTP.Body>;
+
+            /**
+             * Stores the given RDF data in the specified named graph
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the name of the database
+             * @param {string} graphData the RDF data to be stored
+             * @param {string} graphUri the URI of the graph to retrieve, or null for the default graph
+             * @param {HTTP.RdfMimeType} contentType The HTTP MIME type of graphData. Default: application/ld+json
+             * @param {object} params additional parameters if needed
+             */
+            function doPut(conn: Connection, database: string, graphData: string, graphUri?: string, contentType?: HTTP.RdfMimeType, params?: object): Promise<HTTP.Body>;
+
+            /**
+             * Deletes the specified named graph
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the name of the database
+             * @param {string} graphUri the URI of the graph to retrieve, or null for the default graph
+             * @param {object} params additional parameters if needed
+             */
+            function doDelete(conn: Connection, database: string, graphUri?: string, params?: object): Promise<HTTP.Body>;
+
+            /**
+             * Merges the given RDF data into the specified named graph
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the name of the database
+             * @param {string} graphData the RDF data to be stored
+             * @param {string} graphUri the URI of the graph to retrieve, or null for the default graph
+             * @param {HTTP.RdfMimeType} contentType The HTTP MIME type of graphData. Default: application/ld+json
+             * @param {object} params additional parameters if needed
+             */
+            function doPost(conn: Connection, database: string, graphUri?: string, options?: { contentType: HTTP.RdfMimeType }, params?: object): Promise<HTTP.Body>;
         }
 
         /** Methods for managing transactions in a database. */
@@ -220,7 +263,7 @@ declare namespace Stardog {
             }
 
             interface TransactionOptions {
-                contentType: HTTP.ContentMimeTypes,
+                contentType: HTTP.RdfMimeType,
                 encoding: Encodings
             }
 
@@ -274,7 +317,7 @@ declare namespace Stardog {
              * @param {object} options an object specifying the contentType of the icvAxioms parameter. Default: text/turtle
              * @param {object} params additional parameters if needed
              */
-            function add(conn: Connection, database: string, icvAxioms: string, options?: { contentType: HTTP.ContentMimeTypes }, params?: object): Promise<HTTP.Body>;
+            function add(conn: Connection, database: string, icvAxioms: string, options?: { contentType: HTTP.RdfMimeType }, params?: object): Promise<HTTP.Body>;
 
             /** 
              * Removes integrity constraints from a given database. 
@@ -285,7 +328,7 @@ declare namespace Stardog {
              * @param {object} options an object specifying the contentType of the icvAxioms parameter. Default: text/turtle
              * @param {object} params additional parameters if needed
              */
-            function remove(conn: Connection, database: string, icvAxioms: string, options?: { contentType: HTTP.ContentMimeTypes }, params?: object): Promise<HTTP.Body>;
+            function remove(conn: Connection, database: string, icvAxioms: string, options?: { contentType: HTTP.RdfMimeType }, params?: object): Promise<HTTP.Body>;
 
             /** 
              * Removes all integrity constraints from a given database. 
@@ -305,7 +348,7 @@ declare namespace Stardog {
              * @param {object} options an object specifying the contentType of the icvAxioms parameter. Default: text/turtle
              * @param {object} params additional parameters if needed
              */
-            function convert(conn: Connection, database: string, icvAxioms: string, options: { contentType: HTTP.ContentMimeTypes }, params?: { graphUri: string }): Promise<HTTP.Body>;
+            function convert(conn: Connection, database: string, icvAxioms: string, options: { contentType: HTTP.RdfMimeType }, params?: { graphUri: string }): Promise<HTTP.Body>;
 
             /**
              * Checks constraints to see if they are valid
@@ -316,7 +359,7 @@ declare namespace Stardog {
              * @param {object} options an object specifying the contentType of the constraints parameter. Default: text/turtle
              * @param {object} params additional parameters if needed
              */
-            function validate(conn: Connection, database: string, constraints: string, options: { contentType: HTTP.ContentMimeTypes }, params?: { graphUri: string }): Promise<HTTP.Body>;
+            function validate(conn: Connection, database: string, constraints: string, options: { contentType: HTTP.RdfMimeType }, params?: { graphUri: string }): Promise<HTTP.Body>;
 
             /**
              * Checks constraints to see if they are valid within a transaction
@@ -328,7 +371,7 @@ declare namespace Stardog {
              * @param {object} options an object specifying the contentType of the constraints parameter. Default: text/turtle
              * @param {object} params additional parameters if needed
              */
-            function validateInTx(conn: Connection, database: string, constraints: string, transactionId: string, options: { contentType: HTTP.ContentMimeTypes }, params?: { graphUri: string }): Promise<HTTP.Body>;
+            function validateInTx(conn: Connection, database: string, constraints: string, transactionId: string, options: { contentType: HTTP.RdfMimeType }, params?: { graphUri: string }): Promise<HTTP.Body>;
 
             /**
              * Accepts integrity constraints as RDF and returns the violation explanations, if any, as RDF.
@@ -339,7 +382,7 @@ declare namespace Stardog {
              * @param {object} options an object specifying the contentType of the constraints parameter. Default: text/turtle
              * @param {object} params additional parameters if needed
              */
-            function violations(conn: Connection, database: string, constraints: string, options: { contentType: HTTP.ContentMimeTypes }, params?: { graphUri: string }): Promise<HTTP.Body>;
+            function violations(conn: Connection, database: string, constraints: string, options: { contentType: HTTP.RdfMimeType }, params?: { graphUri: string }): Promise<HTTP.Body>;
 
             /**
              * Accepts integrity constraints as RDF and returns the violation explanations, if any, as RDF.
@@ -351,7 +394,7 @@ declare namespace Stardog {
              * @param {object} options an object specifying the contentType of the constraints parameter. Default: text/turtle
              * @param {object} params additional parameters if needed
              */
-            function violationsInTx(conn: Connection, database: string, constraints: string, options?: { contentType: HTTP.ContentMimeTypes }, params?: { graphUri: string }): Promise<HTTP.Body>;
+            function violationsInTx(conn: Connection, database: string, constraints: string, options?: { contentType: HTTP.RdfMimeType }, params?: { graphUri: string }): Promise<HTTP.Body>;
         }
 
         /** Commands that use the reasoning capabilities of a database */
@@ -568,7 +611,7 @@ declare namespace Stardog {
          * @param {object} options additional options to customize query
          * @param {object} params additional parameters if needed
          */
-        function execute(conn: Connection, database: string, query: string, options?: { accept: HTTP.AcceptMimeTypes }, params?: object): Promise<HTTP.Body>;
+        function execute(conn: Connection, database: string, query: string, options?: { accept: HTTP.RdfMimeType }, params?: object): Promise<HTTP.Body>;
 
         /** 
          * Executes a query against a database within a transaction. 
@@ -580,7 +623,7 @@ declare namespace Stardog {
          * @param {object} options additional options to customize query
          * @param {object} params additional parameters if needed
          */
-        function executeInTransaction(conn: Connection, database: string, transactionId: string, query: string, options?: { accept: HTTP.AcceptMimeTypes }, params?: object): Promise<HTTP.Body>;
+        function executeInTransaction(conn: Connection, database: string, transactionId: string, query: string, options?: { accept: HTTP.RdfMimeType }, params?: object): Promise<HTTP.Body>;
 
         /** 
          * Gets a list of actively running queries. 
