@@ -196,9 +196,7 @@ describe('query.execute()', () => {
       }
     }));
   it('returns results for a construct query as a string blob', () =>
-    execute('construct where { ?s ?p ?o }', {
-      accept: 'text/turtle',
-    }).then(({ body }) => {
+    execute('construct where { ?s ?p ?o }', 'text/turtle').then(({ body }) => {
       expect(body).toHaveLength(9843);
     }));
 
@@ -228,12 +226,12 @@ describe('query.execute()', () => {
   describe('paths', () => {
     const prefixes = 'prefix : <urn:paths:> ';
     it('should run a simple paths query', () =>
-      execute(
-        `${prefixes} paths from (:Alice as ?x) to ?y { ?x ?p ?y }`
-      ).then(res => {
-        expect(res.status).toBe(200);
-        expect(res.body.results.bindings).toHaveLength(11);
-      }));
+      execute(`${prefixes} paths from (:Alice as ?x) to ?y { ?x ?p ?y }`).then(
+        res => {
+          expect(res.status).toBe(200);
+          expect(res.body.results.bindings).toHaveLength(11);
+        }
+      ));
 
     it('should run a more specific query', () =>
       execute(
