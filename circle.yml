@@ -8,7 +8,7 @@ machine:
   post:
     - echo $LICENSE | base64 --decode > ${HOME}/${CIRCLE_PROJECT_REPONAME}/stardog-license-key.bin
     - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD --email "ty@stardog.com" complexible-eps-docker.jfrog.io
-    - docker pull complexible-eps-docker.jfrog.io/stardog:5.0.3
+    - docker pull complexible-eps-docker.jfrog.io/stardog:5.1.0
     - docker build -t this/here/starduck ${HOME}/${CIRCLE_PROJECT_REPONAME}/.
     - docker run --name stargoose -p 127.0.0.1:5820:5820 -d -it this/here/starduck
 test:
