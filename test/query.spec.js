@@ -51,6 +51,7 @@ describe('query.execute()', () => {
                <http://purl.org/dc/elements/1.1/creator> ?c . 
           ?c (<http://xmlns.com/foaf/0.1/firstName> | <http://xmlns.com/foaf/0.1/lastName>)+ ?name
         }`,
+      undefined,
       {
         reasoning: true,
       }
