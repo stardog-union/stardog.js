@@ -923,6 +923,52 @@ declare namespace Stardog {
             function permissions(conn: Connection, role: string, params?: object): Promise<HTTP.Body>;
         }
     }
+
+    /** Actions to work with server-wide stored functions */
+    export namespace storedFunctions {
+        /**
+         * Adds one or more stored functions to the server
+         * 
+         * @param {Connection} conn the Stardog server connection
+         * @param {String} functions one or more stored function definitions
+         * @param {object} params additional parameters if needed
+         */
+        function add(conn: Connection, functions: string, params?: object): Promise<HTTP.Body>
+
+        /**
+         * Retrieves the specified function definition
+         * 
+         * @param {Connection} conn the Stardog server connection
+         * @param {String} name the name of the function
+         * @param {object} params additional parameters if needed
+         */
+        function get(conn: Connection, name: string, params?: object): Promise<HTTP.Body>
+
+        /**
+         * Removes a stored function from the server
+         * 
+         * @param {Connection} conn the Stardog server connection
+         * @param {String} name the name of the function
+         * @param {object} params additional parameters if needed
+         */
+        function remove(conn: Connection, name: string, params?: object): Promise<HTTP.Body>
+
+        /**
+         * Removes all stored functions from the server
+         * 
+         * @param {Connection} conn the Stardog server connection
+         * @param {object} params additional parameters if needed
+         */
+        function clear(conn: Connection, params?: object): Promise<HTTP.Body>
+
+        /**
+         * Retrieves an export of all stored functions on the server
+         * 
+         * @param {Connection} conn the Stardog server connection
+         * @param {object} params additional parameters if needed
+         */
+        function getAll(conn: Connection, params?: object): Promise<HTTP.Body>
+    }
 }
 
 // No idea why I need this, but this is what removes the extra level of nesting
