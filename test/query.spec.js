@@ -189,19 +189,22 @@ describe('query.execute()', () => {
       expect(res.body).toBe(false);
     }));
 
-  it('returns results for a construct query', () =>
-    execute('construct where { ?s ?p ?o }').then(({ body }) => {
+  it('returns results for a construct query as json-ld', () =>
+    execute(
+      'construct where { ?s ?p ?o }',
+      'application/ld+json'
+    ).then(({ body }) => {
       expect(body).toHaveLength(33);
       for (let i = 0; i < body.length; i += 1) {
         expect(body[i]['@id']).not.toBeNull();
       }
     }));
   it('returns results for a construct query as a string blob', () =>
-    execute('construct where { ?s ?p ?o }', 'text/turtle').then(({ body }) => {
+    execute('construct where { ?s ?p ?o }').then(({ body }) => {
       expect(body).toHaveLength(9843);
     }));
 
-  it('returns results as turle for descibe queries', () =>
+  it('returns results for a describe query as a string blobl', () =>
     execute(
       'describe <http://localhost/publications/articles/Journal1/1940/Article1>',
       undefined,
@@ -209,9 +212,7 @@ describe('query.execute()', () => {
         limit: 1,
       }
     ).then(({ body }) => {
-      expect(body[0]['@id']).toBe(
-        'http://localhost/publications/articles/Journal1/1940/Article1'
-      );
+      expect(body).toHaveLength(1903);
     }));
 
   describe('group_concat', () => {
@@ -265,12 +266,12 @@ describe('query.execute()', () => {
       }));
 
     it('runs queries with a limit', () =>
-      execute(`${prefixes} paths start ?x = :Alice end ?y via ?p limit 2`).then(
-        res => {
-          expect(res.status).toBe(200);
-          expect(res.body.results.bindings).toHaveLength(4);
-        }
-      ));
+      execute(
+        `${prefixes} paths start ?x = :Alice end ?y via ?p limit 2`
+      ).then(res => {
+        expect(res.status).toBe(200);
+        expect(res.body.results.bindings).toHaveLength(4);
+      }));
 
     it('runs queries with a max length', () =>
       execute(
