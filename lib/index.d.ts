@@ -613,10 +613,10 @@ declare namespace Stardog {
          * @param {Connection} conn the Stardog server connection
          * @param {string} database the name of the database
          * @param {string} query the SPARQL query to be executed
-         * @param {object} options additional options to customize query
+         * @param {HTTP.RdfMimeType} accept The desired HTTP MIME type of the results
          * @param {object} params additional parameters if needed
          */
-        function execute(conn: Connection, database: string, query: string, options?: { accept: HTTP.RdfMimeType }, params?: object): Promise<HTTP.Body>;
+        function execute(conn: Connection, database: string, query: string, accept?: HTTP.RdfMimeType, params?: object): Promise<HTTP.Body>;
 
         /** 
          * Executes a query against a database within a transaction. 
