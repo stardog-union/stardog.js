@@ -82,24 +82,6 @@ query.execute(conn, 'myDatabaseName', 'select distinct ?s where { ?s ?p ?o }', {
 
 ## <a name="http">HTTP</a>
 
-#### <a name="contentmimetypes">ContentMimeTypes</a>
-
-One of the following values:
-
-`'application/x-turtle' |
-            'text/turtle' |
-            'application/rdf+xml' |
-            'text/plain' |
-            'application/x-trig' |
-            'text/x-nquads' |
-            'application/trix'`
-#### <a name="acceptmimetypes">AcceptMimeTypes</a>
-
-One of the following values:
-
-`'text/plain' |
-            'application/json' |
-            'text/boolean'`
 #### <a name="body">Body</a>
 
 Object with the following values:
@@ -109,6 +91,7 @@ Object with the following values:
 - result (`object | string | boolean | null`)
 - ok (`boolean`)
 - headers (`Headers`)
+- body (`any`)
 
 #### <a name="connectionoptions">ConnectionOptions</a>
 
@@ -165,7 +148,7 @@ Expects the following parameters:
 
 - databaseOptions (`object`)
 
-- options (`{ files: string[] }`)
+- options (`{ files: { filename: string}[] }`)
 
 - params (`object`)
 
@@ -317,7 +300,7 @@ Expects the following parameters:
 
 - params (`object`)
 
-Returns [`Promise<TransactionResponse>`](#transactionresponse)
+Returns [`Promise<transaction.TransactionResponse>`](#transactionresponse)
 
 #### <a name="remove">`db.remove(conn, database, transactionId, content, options, params)`</a>
 
@@ -337,7 +320,7 @@ Expects the following parameters:
 
 - params (`object`)
 
-Returns [`Promise<TransactionResponse>`](#transactionresponse)
+Returns [`Promise<transaction.TransactionResponse>`](#transactionresponse)
 
 #### <a name="namespaces">`db.namespaces(conn, database, params)`</a>
 
@@ -363,7 +346,7 @@ Expects the following parameters:
 
 - database (`string`)
 
-- options ({ mimeType: [`AcceptMimeTypes`](#acceptmimetypes) })
+- options ({ mimeType: [`RdfMimeType`](#rdfmimetype) })
 
 - params (`{ graphUri: string }`)
 
@@ -401,6 +384,80 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+## <a name="graph">graph</a>
+
+#### <a name="doget">`db.graph.doGet(conn, database, graphUri, accept, params)`</a>
+
+Retrieves the specified named graph
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- graphUri (`string`)
+
+- accept ([`RdfMimeType`](#rdfmimetype))
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="doput">`db.graph.doPut(conn, database, graphData, graphUri, contentType, params)`</a>
+
+Stores the given RDF data in the specified named graph
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- graphData (`string`)
+
+- graphUri (`string`)
+
+- contentType ([`RdfMimeType`](#rdfmimetype))
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="dodelete">`db.graph.doDelete(conn, database, graphUri, params)`</a>
+
+Deletes the specified named graph
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- graphUri (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="dopost">`db.graph.doPost(conn, database, graphUri, options, params)`</a>
+
+Merges the given RDF data into the specified named graph
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- graphUri (`string`)
+
+- options ({ contentType: [`RdfMimeType`](#rdfmimetype) })
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 ## <a name="transaction">transaction</a>
 
 #### <a name="encodings">Encodings</a>
@@ -422,7 +479,7 @@ Object with the following values:
 
 Object with the following values:
 
-- contentType (`HTTP.ContentMimeTypes`)
+- contentType (`HTTP.RdfMimeType`)
 - encoding (`Encodings`)
 
 #### <a name="begin">`db.transaction.begin(conn, database, params)`</a>
@@ -499,7 +556,7 @@ Expects the following parameters:
 
 - icvAxioms (`string`)
 
-- options ({ contentType: [`ContentMimeTypes`](#contentmimetypes) })
+- options ({ contentType: [`RdfMimeType`](#rdfmimetype) })
 
 - params (`object`)
 
@@ -517,7 +574,7 @@ Expects the following parameters:
 
 - icvAxioms (`string`)
 
-- options ({ contentType: [`ContentMimeTypes`](#contentmimetypes) })
+- options ({ contentType: [`RdfMimeType`](#rdfmimetype) })
 
 - params (`object`)
 
@@ -549,7 +606,7 @@ Expects the following parameters:
 
 - icvAxioms (`string`)
 
-- options ({ contentType: [`ContentMimeTypes`](#contentmimetypes) })
+- options ({ contentType: [`RdfMimeType`](#rdfmimetype) })
 
 - params (`{ graphUri: string }`)
 
@@ -567,7 +624,7 @@ Expects the following parameters:
 
 - constraints (`string`)
 
-- options ({ contentType: [`ContentMimeTypes`](#contentmimetypes) })
+- options ({ contentType: [`RdfMimeType`](#rdfmimetype) })
 
 - params (`{ graphUri: string }`)
 
@@ -587,7 +644,7 @@ Expects the following parameters:
 
 - transactionId (`string`)
 
-- options ({ contentType: [`ContentMimeTypes`](#contentmimetypes) })
+- options ({ contentType: [`RdfMimeType`](#rdfmimetype) })
 
 - params (`{ graphUri: string }`)
 
@@ -605,7 +662,7 @@ Expects the following parameters:
 
 - constraints (`string`)
 
-- options ({ contentType: [`ContentMimeTypes`](#contentmimetypes) })
+- options ({ contentType: [`RdfMimeType`](#rdfmimetype) })
 
 - params (`{ graphUri: string }`)
 
@@ -623,7 +680,7 @@ Expects the following parameters:
 
 - constraints (`string`)
 
-- options ({ contentType: [`ContentMimeTypes`](#contentmimetypes) })
+- options ({ contentType: [`RdfMimeType`](#rdfmimetype) })
 
 - params (`{ graphUri: string }`)
 
@@ -733,6 +790,178 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+## <a name="versioning">versioning</a>
+
+#### <a name="query">`db.versioning.query(conn, database, query, accept, params)`</a>
+
+Executes a SPARQL query over the versioning history
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- query (`string`)
+
+- accept ([`SparqlMimeType`](#sparqlmimetype))
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="commit">`db.versioning.commit(conn, database, transactionId, commitMsg, params)`</a>
+
+Commits a transaction into versioning
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- transactionId (`string`)
+
+- commitMsg (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="createtag">`db.versioning.createTag(conn, database, revisionId, tagLogMsg, params)`</a>
+
+Creates a new tag
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- revisionId (`string`)
+
+- tagLogMsg (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="deletetag">`db.versioning.deleteTag(conn, database, revisionId, params)`</a>
+
+Deletes a tag
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- revisionId (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="revert">`db.versioning.revert(conn, database, fromRevisionId, toRevisionId, logMsg, params)`</a>
+
+Reverts to a previous commit
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- fromRevisionId (`string`)
+
+- toRevisionId (`string`)
+
+- logMsg (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+## <a name="docs">docs</a>
+
+#### <a name="size">`db.docs.size(conn, database, params)`</a>
+
+Retrieves the size of the document store
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="clear">`db.docs.clear(conn, database, params)`</a>
+
+Clears the document store
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="add">`db.docs.add(conn, database, fileName, fileContents, params)`</a>
+
+Adds a document to the document store
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- fileName (`string`)
+
+- fileContents (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="remove">`db.docs.remove(conn, database, fileName, params)`</a>
+
+Removes a document from the document store
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- fileName (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="get">`db.docs.get(conn, database, fileName, params)`</a>
+
+Retrieves a document from the document store
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- fileName (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 ## <a name="query">query</a>
 
 #### <a name="propertyoptions">PropertyOptions</a>
@@ -774,7 +1003,7 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="execute">`query.execute(conn, database, query, params)`</a>
+#### <a name="execute">`query.execute(conn, database, query, accept, params)`</a>
 
 Executes a query against a database. 
 
@@ -786,11 +1015,13 @@ Expects the following parameters:
 
 - query (`string`)
 
+- accept ([`RdfMimeType`](#rdfmimetype))
+
 - params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="executeintransaction">`query.executeInTransaction(conn, database, transactionId, query, params)`</a>
+#### <a name="executeintransaction">`query.executeInTransaction(conn, database, transactionId, query, options, params)`</a>
 
 Executes a query against a database within a transaction. 
 
@@ -803,6 +1034,8 @@ Expects the following parameters:
 - transactionId (`string`)
 
 - query (`string`)
+
+- options ({ accept: [`RdfMimeType`](#rdfmimetype) })
 
 - params (`object`)
 
@@ -888,6 +1121,104 @@ Expects the following parameters:
 - conn ([`Connection`](#connection))
 
 - storedQuery (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+## <a name="graphql">graphql</a>
+
+#### <a name="execute">`query.graphql.execute(conn, database, query, variables, params)`</a>
+
+Executes a GraphQL query
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- query (`string`)
+
+- variables (`object`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="listschemas">`query.graphql.listSchemas(conn, database, params)`</a>
+
+Retrieves a list of GraphQL schemas in the database
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="addschema">`query.graphql.addSchema(conn, database, name, schema, params)`</a>
+
+Adds a GraphQL schema to the database
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- name (`string`)
+
+- schema (`object`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="getschema">`query.graphql.getSchema(conn, database, name, params)`</a>
+
+Retrieves a GraphQL schema from the database
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- name (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="removeschema">`query.graphql.removeSchema(conn, database, name, params)`</a>
+
+Removes a GraphQL schemafrom  the database
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- name (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="clearschemas">`query.graphql.clearSchemas(conn, database, params)`</a>
+
+Clears all GraphQL schemas in the database
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
 
 - params (`object`)
 
@@ -1141,12 +1472,6 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="role">Role</a>
-
-Object with the following values:
-
-- rolename (`string`)
-
 #### <a name="permission">Permission</a>
 
 Object with the following values:
@@ -1165,7 +1490,7 @@ Expects the following parameters:
 
 - conn ([`Connection`](#connection))
 
-- role ([`Role`](#role))
+- role (`{ rolename: string }`)
 
 - params (`object`)
 
@@ -1191,7 +1516,7 @@ Expects the following parameters:
 
 - conn ([`Connection`](#connection))
 
-- role ([`Role`](#role))
+- role (`string`)
 
 - params (`object`)
 
@@ -1205,7 +1530,7 @@ Expects the following parameters:
 
 - conn ([`Connection`](#connection))
 
-- role ([`Role`](#role))
+- role (`string`)
 
 - params (`object`)
 
@@ -1219,7 +1544,7 @@ Expects the following parameters:
 
 - conn ([`Connection`](#connection))
 
-- role ([`Role`](#role))
+- role (`string`)
 
 - permission ([`Permission`](#permission))
 
@@ -1235,7 +1560,7 @@ Expects the following parameters:
 
 - conn ([`Connection`](#connection))
 
-- role ([`Role`](#role))
+- role (`string`)
 
 - permission ([`Permission`](#permission))
 
@@ -1251,7 +1576,191 @@ Expects the following parameters:
 
 - conn ([`Connection`](#connection))
 
-- role ([`Role`](#role))
+- role (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+## <a name="virtualgraphs">virtualGraphs</a>
+
+#### <a name="options">Options</a>
+
+Object with the following values:
+
+- jdbc.username (`string`)
+- jdbc.password (`string`)
+- jdbc.driver (`string`)
+- jdbc.url (`string`)
+- namespaces (`string`)
+
+#### <a name="list">`virtualGraphs.list(conn, params)`</a>
+
+Retrieve a list of virtual graphs
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="add">`virtualGraphs.add(conn, name, mappings, options, params)`</a>
+
+Add a virtual graph to the system
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+- mappings (`string`)
+
+- options ([`Options`](#options))
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="update">`virtualGraphs.update(conn, name, mappings, options, params)`</a>
+
+Update a virtual graph in the system
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+- mappings (`string`)
+
+- options ([`Options`](#options))
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="remove">`virtualGraphs.remove(conn, name, params)`</a>
+
+Remove a virtual graph from the system
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="available">`virtualGraphs.available(conn, name, params)`</a>
+
+Determine if the named virtual graph is available
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="options">`virtualGraphs.options(conn, name, params)`</a>
+
+Retrieve a virtual graph's options
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="mappings">`virtualGraphs.mappings(conn, name, params)`</a>
+
+Retrieve a virtual graph's mappings
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+## <a name="storedfunctions">storedFunctions</a>
+
+#### <a name="add">`storedFunctions.add(conn, functions, params)`</a>
+
+Adds one or more stored functions to the server
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- functions (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="get">`storedFunctions.get(conn, name, params)`</a>
+
+Retrieves the specified function definition
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="remove">`storedFunctions.remove(conn, name, params)`</a>
+
+Removes a stored function from the server
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="clear">`storedFunctions.clear(conn, params)`</a>
+
+Removes all stored functions from the server
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="getall">`storedFunctions.getAll(conn, params)`</a>
+
+Retrieves an export of all stored functions on the server
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
 
 - params (`object`)
 
