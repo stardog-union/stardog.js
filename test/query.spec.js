@@ -204,7 +204,7 @@ describe('query.execute()', () => {
       expect(body).toHaveLength(9843);
     }));
 
-  it('returns results for a describe query as a string blobl', () =>
+  it('returns results for a describe query as a string blob', () =>
     execute(
       'describe <http://localhost/publications/articles/Journal1/1940/Article1>',
       undefined,

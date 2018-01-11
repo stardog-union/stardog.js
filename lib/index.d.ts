@@ -20,6 +20,11 @@ declare namespace Stardog {
             XML = 'application/sparql-results+xml'
         }
 
+        export enum SparqlMimeType {
+            JSON = 'application/sparql-results+json',
+            XML = 'application/sparql-results+xml'
+        }
+
         export interface Body {
             status: string;
             statusText: string;
@@ -684,6 +689,70 @@ declare namespace Stardog {
              */
             function remove(conn: Connection, storedQuery: string, params?: object): Promise<HTTP.Body>
         }
+
+        /** GraphQL queries and schema management */
+        namespace graphql {
+
+            /**
+             * Executes a GraphQL query
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the database name
+             * @param {string} query the query to run
+             * @param {object} variables Variable definitions for the query
+             * @param {object} params additional parameters if needed
+             */
+            function execute(conn: Connection, database: string, query: string, variables?: object, params?: object): Promise<HTTP.Body>
+
+            /**
+             * Retrieves a list of GraphQL schemas in the database
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the database name
+             * @param {object} params additional parameters if needed
+             */
+            function listSchemas(conn: Connection, database: string, params?: object): Promise<HTTP.Body>
+
+            /**
+             * Adds a GraphQL schema to the database
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the database name
+             * @param {string} name the name of the schema
+             * @param {object} schema an object representing the schema
+             * @param {object} params additional parameters if needed 
+             */
+            function addSchema(conn: Connection, database: string, name: string, schema: object, params?: object): Promise<HTTP.Body>
+
+            /**
+             * Retrieves a GraphQL schema from the database
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the database name
+             * @param {string} name the name of the schema
+             * @param {object} params additional parameters if needed 
+             */
+            function getSchema(conn: Connection, database: string, name: string, params?: object): Promise<HTTP.Body>
+
+            /**
+             * Removes a GraphQL schemafrom  the database
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the database name
+             * @param {string} name the name of the schema
+             * @param {object} params additional parameters if needed 
+             */
+            function removeSchema(conn: Connection, database: string, name: string, params?: object): Promise<HTTP.Body>
+
+            /**
+             * Clears all GraphQL schemas in the database
+             * 
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the database name
+             * @param {object} params additional parameters if needed 
+             */
+            function clearSchemas(conn: Connection, database: string, params?: object): Promise<HTTP.Body>
+        }
     }
 
     /** Administrative actions for managing users, roles, and their permissions. */
@@ -922,6 +991,129 @@ declare namespace Stardog {
              */
             function permissions(conn: Connection, role: string, params?: object): Promise<HTTP.Body>;
         }
+    }
+
+    export namespace virtualGraphs {
+
+        interface Options {
+            "jdbc.username": string,
+            "jdbc.password": string,
+            "jdbc.driver": string,
+            "jdbc.url": string,
+            namespaces: string
+        }
+
+        /**
+         * Retrieve a list of virtual graphs
+         * 
+         * @param {Connection} conn the Stardog server connection
+         * @param {object} params additional parameters if needed
+         */
+        function list(conn: Connection, params?: object): Promise<HTTP.Body>;
+
+        /**
+         * Add a virtual graph to the system
+         * 
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the graph name
+         * @param {string} mappings an RDF block specifying the mappings
+         * @param {Options} options the JDBC (and other) options for the graph
+         * @param {object} params additional parameters if needed
+         */
+        function add(conn: Connection, name: string, mappings: string, options: Options, params?: object): Promise<HTTP.Body>;
+
+        /**
+         * Update a virtual graph in the system
+         * 
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the graph name
+         * @param {string} mappings an RDF block specifying the mappings
+         * @param {Options} options the JDBC (and other) options for the graph
+         * @param {object} params additional parameters if needed
+         */
+        function update(conn: Connection, name: string, mappings: string, options: Options, params?: object): Promise<HTTP.Body>;
+
+        /**
+         * Remove a virtual graph from the system
+         * 
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the graph name
+         * @param {object} params additional parameters if needed
+         */
+        function remove(conn: Connection, name: string, params?: object): Promise<HTTP.Body>;
+
+        /**
+         * Determine if the named virtual graph is available
+         * 
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the graph name
+         * @param {object} params additional parameters if needed
+         */
+        function available(conn: Connection, name: string, params?: object): Promise<HTTP.Body>;
+
+        /**
+         * Retrieve a virtual graph's options
+         * 
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the graph name
+         * @param {object} params additional parameters if needed
+         */
+        function options(conn: Connection, name: string, params?: object): Promise<HTTP.Body>;
+
+        /**
+         * Retrieve a virtual graph's mappings
+         * 
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the graph name
+         * @param {object} params additional parameters if needed
+         */
+        function mappings(conn: Connection, name: string, params?: object): Promise<HTTP.Body>;
+    }
+
+    /** Actions to work with server-wide stored functions */
+    export namespace storedFunctions {
+        /**
+         * Adds one or more stored functions to the server
+         * 
+         * @param {Connection} conn the Stardog server connection
+         * @param {String} functions one or more stored function definitions
+         * @param {object} params additional parameters if needed
+         */
+        function add(conn: Connection, functions: string, params?: object): Promise<HTTP.Body>
+
+        /**
+         * Retrieves the specified function definition
+         * 
+         * @param {Connection} conn the Stardog server connection
+         * @param {String} name the name of the function
+         * @param {object} params additional parameters if needed
+         */
+        function get(conn: Connection, name: string, params?: object): Promise<HTTP.Body>
+
+        /**
+         * Removes a stored function from the server
+         * 
+         * @param {Connection} conn the Stardog server connection
+         * @param {String} name the name of the function
+         * @param {object} params additional parameters if needed
+         */
+        function remove(conn: Connection, name: string, params?: object): Promise<HTTP.Body>
+
+        /**
+         * Removes all stored functions from the server
+         * 
+         * @param {Connection} conn the Stardog server connection
+         * @param {object} params additional parameters if needed
+         */
+        function clear(conn: Connection, params?: object): Promise<HTTP.Body>
+
+        /**
+         * Retrieves an export of all stored functions on the server
+         * 
+         * @param {Connection} conn the Stardog server connection
+         * @param {object} params additional parameters if needed
+         */
+        function getAll(conn: Connection, params?: object): Promise<HTTP.Body>
     }
 }
 
