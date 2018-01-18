@@ -1,6 +1,6 @@
 {
   "name": "stardog",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Stardog JavaScript Framework for node.js and the browser - Develop apps using the Stardog RDF Database & JS.",
   "keywords": [
     "stardog",
@@ -53,6 +53,10 @@
     {
       "name": "Stephen Nowell",
       "email": "stephen@stardog.com"
+    },
+    {
+      "name": "Jason Rogers",
+      "email": "jason@stardog.com"
     },
     {
       "name": "Adam Bretz",
