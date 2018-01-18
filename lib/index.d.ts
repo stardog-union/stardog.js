@@ -20,11 +20,6 @@ declare namespace Stardog {
             XML = 'application/sparql-results+xml'
         }
 
-        export enum SparqlMimeType {
-            JSON = 'application/sparql-results+json',
-            XML = 'application/sparql-results+xml'
-        }
-
         export interface Body {
             status: string;
             statusText: string;
