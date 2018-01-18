@@ -6,19 +6,15 @@ import Headers from 'fetch-ponyfill';
 
 declare namespace Stardog {
     namespace HTTP {
-        export enum RdfMimeType {
-            JSONLD = 'application/ld+json',
-            TURTLE = 'text/turtle',
-            RDFXML = 'application/rdf+xml',
-            NTRIPLES = 'application/n-triples',
-            NQUADS = 'application/n-quads',
-            TRIG = 'application/trig'
-        }
+        export type RdfMimeType = 'application/ld+json'
+            | 'text/turtle'
+            | 'application/rdf+xml'
+            | 'application/n-triples'
+            | 'application/n-quads'
+            | 'application/trig';
 
-        export enum SparqlMimeType {
-            JSON = 'application/sparql-results+json',
-            XML = 'application/sparql-results+xml'
-        }
+        export type SparqlMimeType = 'application/sparql-results+json'
+            | 'application/sparql-results+xml';
 
         export interface Body {
             status: string;
