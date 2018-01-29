@@ -16,6 +16,13 @@ declare namespace Stardog {
         export type SparqlMimeType = 'application/sparql-results+json'
             | 'application/sparql-results+xml';
 
+        export type AcceptMimeType = RdfMimeType
+          | SparqlMimeType
+          | 'text/plain'
+          | 'text/boolean'
+          | 'application/json'
+          | '*/*';
+
         export interface Body {
             status: string;
             statusText: string;
@@ -573,6 +580,8 @@ declare namespace Stardog {
     /** Query actions to perform on a database. */
     export namespace query {
 
+        export type QueryType = 'select' | 'ask' | 'construct' | 'describe' | 'update' | 'paths' | null;
+
         interface PropertyOptions {
             uri: string,
             property: string
@@ -743,6 +752,22 @@ declare namespace Stardog {
              * @param {object} params additional parameters if needed 
              */
             function clearSchemas(conn: Connection, database: string, params?: object): Promise<HTTP.Body>
+        }
+
+        namespace utils {
+            /**
+             * Returns the QueryType (as a string or null) for the given query.
+             *
+             * @param {string} query the query for which to get the QueryType
+             */
+            function queryType(query: string): QueryType;
+
+            /**
+             * Returns the default HTTP `Accept` MIME type for the given query.
+             *
+             * @param {string} query the query for which to get the AcceptMimeType
+             */
+            function mimeType(query: string): AcceptMimeType;
         }
     }
 
