@@ -767,7 +767,7 @@ declare namespace Stardog {
              *
              * @param {string} query the query for which to get the AcceptMimeType
              */
-            function mimeType(query: string): AcceptMimeType;
+            function mimeType(query: string): HTTP.AcceptMimeType;
         }
     }
 
