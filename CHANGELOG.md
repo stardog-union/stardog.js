@@ -1,5 +1,23 @@
 
-## [**1.0.0-rc2**](https://github.com/stardog-union/stardog.js/issues?milestone=5&state=open)
+## [**1.0.2**](https://github.com/stardog-union/stardog.js/issues?milestone=8&state=open)
+- [**#142**](https://github.com/stardog-union/stardog.js/issues/142) Null pointer when query is unknown type
+
+## [**1.0.0**](https://github.com/stardog-union/stardog.js/issues?milestone=7&state=closed)
+- [**#135**](https://github.com/stardog-union/stardog.js/issues/135) Handle duplicate vars in paths query responses
+- [**#125**](https://github.com/stardog-union/stardog.js/issues/125) Virtual Graph API
+- [**#130**](https://github.com/stardog-union/stardog.js/issues/130) GraphQL
+- [**#131**](https://github.com/stardog-union/stardog.js/issues/131) Stored Functions
+- [**#124**](https://github.com/stardog-union/stardog.js/issues/124) BITES API
+- [**#123**](https://github.com/stardog-union/stardog.js/issues/123) Versioning API
+- [**#120**](https://github.com/stardog-union/stardog.js/issues/120) Graph store protocol
+
+## [**1.0.0-rc3**](https://github.com/stardog-union/stardog.js/issues?milestone=6&state=closed)
+- [**#112**](https://github.com/stardog-union/stardog.js/issues/112) incorrect `Role` param for user.role functions
+- [**#111**](https://github.com/stardog-union/stardog.js/issues/111) ⚡️ - Expose mechanism to override accept header
+- [**#110**](https://github.com/stardog-union/stardog.js/issues/110) Query string parameters not sending upstream
+- [**#109**](https://github.com/stardog-union/stardog.js/issues/109) Allow to customize accept header
+
+## [**1.0.0-rc2**](https://github.com/stardog-union/stardog.js/issues?milestone=5&state=closed)
 - [**#104**](https://github.com/stardog-union/stardog.js/issues/104) Check if user is valid
 - [**#107**](https://github.com/stardog-union/stardog.js/issues/107) user isValid
 - [**#106**](https://github.com/stardog-union/stardog.js/issues/106) 🔨 - Moving tx related functions and tests

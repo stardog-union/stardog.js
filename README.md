@@ -82,6 +82,32 @@ query.execute(conn, 'myDatabaseName', 'select distinct ?s where { ?s ?p ?o }', {
 
 ## <a name="http">HTTP</a>
 
+#### <a name="rdfmimetype">RdfMimeType</a>
+
+One of the following values:
+
+`'application/ld+json'
+            | 'text/turtle'
+            | 'application/rdf+xml'
+            | 'application/n-triples'
+            | 'application/n-quads'
+            | 'application/trig'`
+#### <a name="sparqlmimetype">SparqlMimeType</a>
+
+One of the following values:
+
+`'application/sparql-results+json'
+            | 'application/sparql-results+xml'`
+#### <a name="acceptmimetype">AcceptMimeType</a>
+
+One of the following values:
+
+`RdfMimeType
+          | SparqlMimeType
+          | 'text/plain'
+          | 'text/boolean'
+          | 'application/json'
+          | '*/*'`
 #### <a name="body">Body</a>
 
 Object with the following values:
@@ -964,6 +990,11 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 ## <a name="query">query</a>
 
+#### <a name="querytype">QueryType</a>
+
+One of the following values:
+
+`'select' | 'ask' | 'construct' | 'describe' | 'update' | 'paths' | null`
 #### <a name="propertyoptions">PropertyOptions</a>
 
 Object with the following values:
@@ -1223,6 +1254,28 @@ Expects the following parameters:
 - params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
+
+## <a name="utils">utils</a>
+
+#### <a name="querytype">`query.utils.queryType(query)`</a>
+
+Returns the QueryType (as a string or null) for the given query.
+
+Expects the following parameters:
+
+- query (`string`)
+
+Returns [`QueryType`](#querytyp)
+
+#### <a name="mimetype">`query.utils.mimeType(query)`</a>
+
+Returns the default HTTP `Accept` MIME type for the given query.
+
+Expects the following parameters:
+
+- query (`string`)
+
+Returns [`HTTP.AcceptMimeType`](#acceptmimetyp)
 
 ## <a name="user">user</a>
 
