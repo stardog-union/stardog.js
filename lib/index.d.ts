@@ -2,7 +2,8 @@
 
 /** stardog.js: The Stardog JS API*/
 
-import Headers from 'fetch-ponyfill';
+import { Agent } from 'http';
+import { RequestInfo as NodeFetchRequestInfo, RequestInit as NodeFetchRequestInit } from 'node-fetch';
 
 declare namespace Stardog {
     namespace HTTP {
@@ -39,14 +40,19 @@ declare namespace Stardog {
         password: string;
     }
 
+    export interface FetchMetadata {
+        agent: Agent;
+        shouldUseAgent?(input: RequestInfo | NodeFetchRequestInfo, options?: RequestInit | NodeFetchRequestInit): boolean;
+    }
+
     /** Current version of stardog.js. Maps to package.json */
     export const version: string;
 
     /** Describes the connection to a running Stardog server. */
     export class Connection {
-        constructor(options: ConnectionOptions);
+        constructor(options: ConnectionOptions, fetchMetadata?: FetchMetadata);
 
-        config(options: ConnectionOptions): void;
+        config(options: ConnectionOptions, fetchMetadata?: FetchMetadata): void;
         headers(): Headers;
         uri(...resource: string[]): string;
     }
