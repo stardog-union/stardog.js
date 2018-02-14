@@ -3,7 +3,7 @@
 /** stardog.js: The Stardog JS API*/
 
 import { Agent } from 'http';
-import { RequestInfo as NodeFetchRequestInfo, RequestInit as NodeFetchRequestInit } from 'node-fetch';
+import { Request as NodeFetchRequest, RequestInit as NodeFetchRequestInit } from 'node-fetch';
 
 declare namespace Stardog {
     namespace HTTP {
@@ -40,9 +40,8 @@ declare namespace Stardog {
         password: string;
     }
 
-    export interface FetchMetadata {
-        agent: Agent;
-        shouldUseAgent?(input: RequestInfo | NodeFetchRequestInfo, options?: RequestInit | NodeFetchRequestInit): boolean;
+    interface ConnectionMeta {
+        createRequest?({ uri, Request, }: { uri: string; Request: { new (input: string | Request | NodeFetchRequest, init?: RequestInit | NodeFetchRequestInit): Request | NodeFetchRequest } }): string | Request | NodeFetchRequest;
     }
 
     /** Current version of stardog.js. Maps to package.json */
@@ -50,9 +49,9 @@ declare namespace Stardog {
 
     /** Describes the connection to a running Stardog server. */
     export class Connection {
-        constructor(options: ConnectionOptions, fetchMetadata?: FetchMetadata);
+        constructor(options: ConnectionOptions, meta?: ConnectionMeta);
 
-        config(options: ConnectionOptions, fetchMetadata?: FetchMetadata): void;
+        config(options: ConnectionOptions, meta?: ConnectionMeta): void;
         headers(): Headers;
         uri(...resource: string[]): string;
     }
