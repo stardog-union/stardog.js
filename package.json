@@ -1,6 +1,6 @@
 {
   "name": "stardog",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Stardog JavaScript Framework for node.js and the browser - Develop apps using the Stardog RDF Database & JS.",
   "keywords": [
     "stardog",
@@ -79,7 +79,8 @@
     "form-data": "^2.2.0",
     "isomorphic-base64": "^1.0.2",
     "lodash": "^4.17.4",
-    "querystring": "^0.2.0"
+    "querystring": "^0.2.0",
+    "string.prototype.startswith": "^0.2.0"
   },
   "devDependencies": {
     "@types/jest": "^20.0.2",
