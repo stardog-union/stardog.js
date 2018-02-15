@@ -2,7 +2,6 @@
 
 /** stardog.js: The Stardog JS API*/
 
-import { Agent } from 'http';
 import { Request as NodeFetchRequest, RequestInit as NodeFetchRequestInit } from 'node-fetch';
 
 declare namespace Stardog {
@@ -50,13 +49,31 @@ declare namespace Stardog {
     /** Optional meta-configuration for a Connection */
     interface ConnectionMeta {
         /**
-         * If defined, this method is called whenever a `fetch` call is about
-         * to be made for a given Connection. The method should return a
-         * `Request` object (either a browser `Request` or a `node-fetch`
-         * `Request`) or a string URI, which will be passed as the first
-         * argument to the imminent `fetch` call. This is useful in cases where
-         * fetch needs to allow connections with self-signed certificates, for
-         * example.
+         * Sometimes you might need to override stardog.js's default `fetch`
+         * behavior, which, among other things, disallows fetching via HTTPS
+         * from servers with self-signed certificates in Node. Defininig this
+         * method allows you to provide a custom Request (or URI) to stardog.js
+         * whenever a fetch call is about to occur using your Connection object
+         * (e.g., you can provide a Request object with an HTTPS agent that
+         * allows self-signed certificates). The defined method will be called
+         * with an object containing both the full URI that is about to be
+         * fetched and a constructor for Request objects (as a convenience,
+         * since the Request constructor will differ depending on whether the
+         * environment is browser-like or Node-like). You can use this URI and
+         * constructor to construct and return the thing that you would like
+         * stardog.js to pass as the first argument to the corresponding
+         * `fetch` call (either a string URI or a Request object). For example,
+         * you could return a Request object that is initialized with the
+         * same URI passed from stardog.js, but that has a custom `agent`
+         * attached:
+         *
+         * ```
+         *  {
+         *    createRequest: ({ uri, Request }) => new Request(uri, {
+         *      agent: new http.Agent(. . .),
+         *    }),
+         *  }
+         * ```
          *
          * @param {Object} requestData
          * @param {string} requestData.uri the full URI about to be fetched; includes all URI parts (protocol, hostname, path, query string, etc.)
