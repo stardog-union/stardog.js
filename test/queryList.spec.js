@@ -14,6 +14,5 @@ describe('queryList()', () => {
     query.list(conn).then(res => {
       expect(res.status).toEqual(200);
       expect(res.body.queries).toHaveLength(0);
-    })
-  );
+    }));
 });

@@ -69,4 +69,77 @@ describe('Stardog.Connection', () => {
       expect(headers.get('Authorization')).toBe('Basic YWRtaW46YWRtaW4=');
     });
   });
+
+  describe('request()', () => {
+    it('returns the same value as uri() when `createRequest` is not set', () => {
+      const c = new Connection({
+        username: 'admin',
+        password: 'admin',
+        endpoint: 'http://localhost:5820/DB/',
+      });
+      expect(c.request('admin', 'databases', 'foo', 'bar')).toBe(
+        c.uri('admin', 'databases', 'foo', 'bar')
+      );
+    });
+
+    it('returns the result of `createRequest` when it is set', () => {
+      const c = new Connection(
+        {
+          username: 'admin',
+          password: 'admin',
+          endpoint: 'http://localhost:5820/DB/',
+        },
+        {
+          createRequest: () => 'foo',
+        }
+      );
+      expect(c.request('admin', 'databases', 'foo', 'bar')).toBe('foo');
+    });
+
+    it('passes the result of `uri()` and a `Request` ctor to `createRequest`', () => {
+      const c = new Connection({
+        username: 'admin',
+        password: 'admin',
+        endpoint: 'http://localhost:5820/DB/',
+      });
+      c.meta = {
+        createRequest: ({ uri }) => `${uri}foo`,
+      };
+      expect(c.request('admin', 'databases', 'foo', 'bar')).toBe(
+        `${c.uri('admin', 'databases', 'foo', 'bar')}foo`
+      );
+      c.meta = {
+        createRequest: ({ Request }) => Request,
+      };
+      const Result = c.request('admin', 'databases', 'foo', 'bar');
+      expect(Result).toBeInstanceOf(Function);
+      expect(Result.name).toBe('Request');
+      expect(
+        new Result(c.uri('admin', 'databases', 'foo', 'bar'))
+      ).toHaveProperty('method', 'GET');
+    });
+
+    // safety check only because a previous method was going to do this
+    it('does not alter requests for any other Connection objects', () => {
+      const c = new Connection({
+        username: 'admin',
+        password: 'admin',
+        endpoint: 'http://localhost:5820/DB/',
+      });
+      const c2 = new Connection(
+        {
+          username: 'admin',
+          password: 'admin',
+          endpoint: 'http://localhost:5820/DB/',
+        },
+        {
+          createRequest: () => 'foo',
+        }
+      );
+      expect(c2.request('admin', 'databases', 'foo', 'bar')).toBe('foo');
+      expect(c.request('admin', 'databases', 'foo', 'bar')).toBe(
+        c.uri('admin', 'databases', 'foo', 'bar')
+      );
+    });
+  });
 });

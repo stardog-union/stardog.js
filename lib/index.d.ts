@@ -2,7 +2,7 @@
 
 /** stardog.js: The Stardog JS API*/
 
-import Headers from 'fetch-ponyfill';
+import { Request as NodeFetchRequest, RequestInit as NodeFetchRequestInit } from 'node-fetch';
 
 declare namespace Stardog {
     namespace HTTP {
@@ -39,14 +39,58 @@ declare namespace Stardog {
         password: string;
     }
 
+    // Kind of a hack, but necessary to get around the way TS libs define the `Request` object.
+    type RequestConstructor = {
+      new (input: string | Request, init?: RequestInit): Request;
+    };
+
+    type RequestCreator<Constructor = RequestConstructor, ReturnType = string | Request> = ({ uri, Request }: { uri: string; Request: Constructor }) => ReturnType;
+
+    /** Optional meta-configuration for a Connection */
+    interface ConnectionMeta {
+        /**
+         * Sometimes you might need to override stardog.js's default `fetch`
+         * behavior, which, among other things, disallows fetching via HTTPS
+         * from servers with self-signed certificates in Node. Defininig this
+         * method allows you to provide a custom Request (or URI) to stardog.js
+         * whenever a fetch call is about to occur using your Connection object
+         * (e.g., you can provide a Request object with an HTTPS agent that
+         * allows self-signed certificates). The defined method will be called
+         * with an object containing both the full URI that is about to be
+         * fetched and a constructor for Request objects (as a convenience,
+         * since the Request constructor will differ depending on whether the
+         * environment is browser-like or Node-like). You can use this URI and
+         * constructor to construct and return the thing that you would like
+         * stardog.js to pass as the first argument to the corresponding
+         * `fetch` call (either a string URI or a Request object). For example,
+         * you could return a Request object that is initialized with the
+         * same URI passed from stardog.js, but that has a custom `agent`
+         * attached:
+         *
+         * ```
+         *  {
+         *    createRequest: ({ uri, Request }) => new Request(uri, {
+         *      agent: new http.Agent(. . .),
+         *    }),
+         *  }
+         * ```
+         *
+         * @param {Object} requestData
+         * @param {string} requestData.uri the full URI about to be fetched; includes all URI parts (protocol, hostname, path, query string, etc.)
+         * @param {RequestConstructor | Class<NodeFetchRequest>} requestData.Request a request constructor, conforming either to the browser's Request spec or to `node-fetch`'s Request, depending on environment
+         * @returns {string | Request | NodeFetchRequest} a string URI or a Request object
+         */
+        createRequest?: RequestCreator<RequestConstructor | typeof NodeFetchRequest, string | (Request | NodeFetchRequest)>;
+    }
+
     /** Current version of stardog.js. Maps to package.json */
     export const version: string;
 
     /** Describes the connection to a running Stardog server. */
     export class Connection {
-        constructor(options: ConnectionOptions);
+        constructor(options: ConnectionOptions, meta?: ConnectionMeta);
 
-        config(options: ConnectionOptions): void;
+        config(options: ConnectionOptions, meta?: ConnectionMeta): void;
         headers(): Headers;
         uri(...resource: string[]): string;
     }

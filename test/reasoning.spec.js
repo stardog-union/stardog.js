@@ -56,8 +56,7 @@ describe('reasoning commands', () => {
       .then(res => {
         expect(res.status).toBe(200);
         expect(res.body.proofs).toBeTruthy();
-      })
-  );
+      }));
 
   it.skip('should explain inconsistency in a tx', () =>
     beginTx()
@@ -73,8 +72,7 @@ describe('reasoning commands', () => {
       .then(res => {
         expect(res.status).toBe(200);
         expect(res.body.proofs).toBeTruthy();
-      })
-  );
+      }));
 
   it('should successfully get the schema', () =>
     reasoning.schema(conn, database).then(res => {
