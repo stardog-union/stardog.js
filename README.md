@@ -127,14 +127,33 @@ Object with the following values:
 - username (`string`)
 - password (`string`)
 
+#### <a name="requestconstructor">RequestConstructor</a>
+
+One of the following values:
+
+`{
+      new (input: string | Request, init?: RequestInit): Request;
+    }`
+#### <a name="requestcreator">RequestCreator</a>
+
+One of the following values:
+
+`({ uri, Request }: { uri: string; Request: Constructor }) => ReturnType`
+#### <a name="connectionmeta">ConnectionMeta</a>
+
+Object with the following values:
+
+- createRequest (`RequestCreator<RequestConstructor | typeof NodeFetchRequest, string | (Request | NodeFetchRequest)>`)
+
 ## <a name="connection">Connection</a> (Class)
 
 Constructed with:
 - options ([`ConnectionOptions`](#connectionoptions))
-### <a name="config">Connection.config(options)</a>
+### <a name="config">Connection.config(options, meta)</a>
 
 Takes the following params:
 - options ([`ConnectionOptions`](#connectionoptions))
+- meta ([`ConnectionMeta`](#connectionmeta))
 
 Returns [`void`](#void)
 ### <a name="headers">Connection.headers()</a>
