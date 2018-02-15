@@ -40,8 +40,30 @@ declare namespace Stardog {
         password: string;
     }
 
+    // Kind of a hack, but necessary to get around the way TS libs define the `Request` object.
+    type RequestConstructor = {
+      new (input: string | Request, init?: RequestInit): Request;
+    };
+
+    type RequestCreator<Constructor = RequestConstructor, ReturnType = string | Request> = ({ uri, Request }: { uri: string; Request: Constructor }) => ReturnType;
+
+    /** Optional meta-configuration for a Connection */
     interface ConnectionMeta {
-        createRequest?({ uri, Request, }: { uri: string; Request: { new (input: string | Request | NodeFetchRequest, init?: RequestInit | NodeFetchRequestInit): Request | NodeFetchRequest } }): string | Request | NodeFetchRequest;
+        /**
+         * If defined, this method is called whenever a `fetch` call is about
+         * to be made for a given Connection. The method should return a
+         * `Request` object (either a browser `Request` or a `node-fetch`
+         * `Request`) or a string URI, which will be passed as the first
+         * argument to the imminent `fetch` call. This is useful in cases where
+         * fetch needs to allow connections with self-signed certificates, for
+         * example.
+         *
+         * @param {Object} requestData
+         * @param {string} requestData.uri the full URI about to be fetched; includes all URI parts (protocol, hostname, path, query string, etc.)
+         * @param {RequestConstructor | Class<NodeFetchRequest>} requestData.Request a request constructor, conforming either to the browser's Request spec or to `node-fetch`'s Request, depending on environment
+         * @returns {string | Request | NodeFetchRequest} a string URI or a Request object
+         */
+        createRequest?: RequestCreator<RequestConstructor | typeof NodeFetchRequest, string | (Request | NodeFetchRequest)>;
     }
 
     /** Current version of stardog.js. Maps to package.json */
