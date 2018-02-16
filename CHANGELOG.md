@@ -1,6 +1,18 @@
 
+## [**1.1.1**](https://github.com/stardog-union/stardog.js/issues?milestone=13&state=open)
+- [**#148**](https://github.com/stardog-union/stardog.js/issues/148) Typings for Connection are missing the (new) `meta` property
+
+## [**1.1.0**](https://github.com/stardog-union/stardog.js/issues?milestone=12&state=open)
+- [**#146**](https://github.com/stardog-union/stardog.js/issues/146) Support fetch from behind proxies and/or to endpoints with self-signed certs
+
+## [**1.0.3**](https://github.com/stardog-union/stardog.js/issues?milestone=10&state=open)
+- [**#144**](https://github.com/stardog-union/stardog.js/issues/144) Expose utils for use by consumers of Stardog.js
+
 ## [**1.0.2**](https://github.com/stardog-union/stardog.js/issues?milestone=8&state=open)
 - [**#142**](https://github.com/stardog-union/stardog.js/issues/142) Null pointer when query is unknown type
+
+## [**1.0.1**](https://github.com/stardog-union/stardog.js/issues?milestone=9&state=open)
+- [**#139**](https://github.com/stardog-union/stardog.js/issues/139) mimeType issue
 
 ## [**1.0.0**](https://github.com/stardog-union/stardog.js/issues?milestone=7&state=closed)
 - [**#135**](https://github.com/stardog-union/stardog.js/issues/135) Handle duplicate vars in paths query responses
@@ -55,11 +67,6 @@
 - [**#64**](https://github.com/stardog-union/stardog.js/issues/64) Add Prettier precommit hook
 - [**#61**](https://github.com/stardog-union/stardog.js/issues/61) Prettier
 
-## [**stardog.js-0.0.3**](https://github.com/stardog-union/stardog.js/issues?milestone=1&state=closed)
-- [**#3**](https://github.com/stardog-union/stardog.js/issues/3) Support reasoning in query answering
-- [**#9**](https://github.com/stardog-union/stardog.js/issues/9) Close #3: Adding reasoning test cases + data
-- [**#8**](https://github.com/stardog-union/stardog.js/issues/8) add reasoning configuration to connection
-
 ## [**stardog.js-0.0.5**](https://github.com/stardog-union/stardog.js/issues?milestone=2&state=closed)
 - [**#24**](https://github.com/stardog-union/stardog.js/issues/24) Set up automated testing for the browser
 - [**#18**](https://github.com/stardog-union/stardog.js/issues/18) Named parameters object?
@@ -69,3 +76,8 @@
 - [**#37**](https://github.com/stardog-union/stardog.js/issues/37) Call to `getPrefixes` is returning a fixed set of namespaces
 - [**#32**](https://github.com/stardog-union/stardog.js/issues/32) (feature req) Specifying reasoning level per-query
 - [**#33**](https://github.com/stardog-union/stardog.js/issues/33) Implement Query Management API
+
+## [**stardog.js-0.0.3**](https://github.com/stardog-union/stardog.js/issues?milestone=1&state=closed)
+- [**#3**](https://github.com/stardog-union/stardog.js/issues/3) Support reasoning in query answering
+- [**#9**](https://github.com/stardog-union/stardog.js/issues/9) Close #3: Adding reasoning test cases + data
+- [**#8**](https://github.com/stardog-union/stardog.js/issues/8) add reasoning configuration to connection

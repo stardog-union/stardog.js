@@ -126,6 +126,7 @@ Object with the following values:
 - endpoint (`string`)
 - username (`string`)
 - password (`string`)
+- meta (`ConnectionMeta`)
 
 #### <a name="requestconstructor">RequestConstructor</a>
 
