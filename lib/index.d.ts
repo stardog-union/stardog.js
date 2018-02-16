@@ -37,6 +37,7 @@ declare namespace Stardog {
         endpoint: string;
         username: string;
         password: string;
+        meta?: ConnectionMeta;
     }
 
     // Kind of a hack, but necessary to get around the way TS libs define the `Request` object.
@@ -44,7 +45,7 @@ declare namespace Stardog {
       new (input: string | Request, init?: RequestInit): Request;
     };
 
-    type RequestCreator<Constructor = RequestConstructor, ReturnType = string | Request> = ({ uri, Request }: { uri: string; Request: Constructor }) => ReturnType;
+    type RequestCreator<Constructor, ReturnType> = ({ uri, Request }: { uri: string; Request: Constructor }) => ReturnType;
 
     /** Optional meta-configuration for a Connection */
     interface ConnectionMeta {
