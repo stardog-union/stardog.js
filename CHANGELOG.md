@@ -1,17 +1,20 @@
 
-## [**1.1.1**](https://github.com/stardog-union/stardog.js/issues?milestone=13&state=open)
+## [**1.2.0**](https://github.com/stardog-union/stardog.js/issues?milestone=14&state=closed)
+- [**#150**](https://github.com/stardog-union/stardog.js/issues/150) Should allow other authorization methods besides 'Basic'
+
+## [**1.1.1**](https://github.com/stardog-union/stardog.js/issues?milestone=13&state=closed)
 - [**#148**](https://github.com/stardog-union/stardog.js/issues/148) Typings for Connection are missing the (new) `meta` property
 
-## [**1.1.0**](https://github.com/stardog-union/stardog.js/issues?milestone=12&state=open)
+## [**1.1.0**](https://github.com/stardog-union/stardog.js/issues?milestone=12&state=closed)
 - [**#146**](https://github.com/stardog-union/stardog.js/issues/146) Support fetch from behind proxies and/or to endpoints with self-signed certs
 
-## [**1.0.3**](https://github.com/stardog-union/stardog.js/issues?milestone=10&state=open)
+## [**1.0.3**](https://github.com/stardog-union/stardog.js/issues?milestone=10&state=closed)
 - [**#144**](https://github.com/stardog-union/stardog.js/issues/144) Expose utils for use by consumers of Stardog.js
 
-## [**1.0.2**](https://github.com/stardog-union/stardog.js/issues?milestone=8&state=open)
+## [**1.0.2**](https://github.com/stardog-union/stardog.js/issues?milestone=8&state=closed)
 - [**#142**](https://github.com/stardog-union/stardog.js/issues/142) Null pointer when query is unknown type
 
-## [**1.0.1**](https://github.com/stardog-union/stardog.js/issues?milestone=9&state=open)
+## [**1.0.1**](https://github.com/stardog-union/stardog.js/issues?milestone=9&state=closed)
 - [**#139**](https://github.com/stardog-union/stardog.js/issues/139) mimeType issue
 
 ## [**1.0.0**](https://github.com/stardog-union/stardog.js/issues?milestone=7&state=closed)

@@ -145,6 +145,7 @@ One of the following values:
 Object with the following values:
 
 - createRequest (`RequestCreator<RequestConstructor | typeof NodeFetchRequest, string | (Request | NodeFetchRequest)>`)
+- createHeaders (`(defaults: { headers: Headers; }) => Headers`)
 
 ## <a name="connection">Connection</a> (Class)
 
