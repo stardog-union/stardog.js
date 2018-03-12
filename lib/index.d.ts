@@ -2,7 +2,10 @@
 
 /** stardog.js: The Stardog JS API*/
 
-import { Request as NodeFetchRequest, RequestInit as NodeFetchRequestInit } from 'node-fetch';
+import {
+  Request as NodeFetchRequest,
+  RequestInit as NodeFetchRequestInit,
+} from 'node-fetch';
 
 declare namespace Stardog {
     namespace HTTP {
@@ -82,6 +85,13 @@ declare namespace Stardog {
          * @returns {string | Request | NodeFetchRequest} a string URI or a Request object
          */
         createRequest?: RequestCreator<RequestConstructor | typeof NodeFetchRequest, string | (Request | NodeFetchRequest)>;
+
+        /**
+         * Pass this method on `ConnectionMeta` if you need to override or add
+         * headers for a connection. The method will receive an object with the
+         * default stardog.js connection headers.
+         */
+        createHeaders?: (defaults: { headers: Headers; }) => Headers;
     }
 
     /** Current version of stardog.js. Maps to package.json */
