@@ -642,6 +642,10 @@ declare namespace Stardog {
             property: string
         }
 
+        interface AdditionalHandlers {
+            onResponseStart(res: Response): void;
+        }
+
         /** 
          * Gets the values for a specific property of a URI individual. 
          * 
@@ -670,8 +674,9 @@ declare namespace Stardog {
          * @param {string} query the SPARQL query to be executed
          * @param {HTTP.RdfMimeType} accept The desired HTTP MIME type of the results
          * @param {object} params additional parameters if needed
+         * @param {object} additionalHandlers additional response handlers (currently only `onResponseStart`)
          */
-        function execute(conn: Connection, database: string, query: string, accept?: HTTP.RdfMimeType, params?: object): Promise<HTTP.Body>;
+        function execute(conn: Connection, database: string, query: string, accept?: HTTP.RdfMimeType, params?: object, additionalHandlers: AdditionalHandlers): Promise<HTTP.Body>;
 
         /** 
          * Executes a query against a database within a transaction. 
