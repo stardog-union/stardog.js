@@ -224,32 +224,6 @@ describe('query.execute()', () => {
       }));
   });
 
-  describe('additionalHandlers', () => {
-    it('onResponseStart should be called when execute response begins', () => {
-      let responseCompleted = false;
-
-      execute(`select distinct ?s where { ?s ?p ?o }`, undefined, undefined, {
-        onResponseStart(res) {
-          expect(res.status).toBe(200);
-          expect(responseCompleted).toBe(false);
-        },
-      }).then(() => {
-        responseCompleted = true;
-      });
-    });
-
-    it('should not interfere with the full response being passed back', () => {
-      execute(`select distinct ?s where { ?s ?p ?o }`, undefined, undefined, {
-        onResponseStart(res) {
-          return res;
-        },
-      }).then(res => {
-        expect(res.status).toBe(200);
-        expect(res.body.results.bindings).toHaveLength(33);
-      });
-    });
-  });
-
   describe('paths', () => {
     const prefixes = 'prefix : <urn:paths:> ';
     it('should run a simple paths query', () =>

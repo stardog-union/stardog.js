@@ -149,9 +149,9 @@ describe('Stardog.Connection', () => {
       const Result = c.request('admin', 'databases', 'foo', 'bar');
       expect(Result).toBeInstanceOf(Function);
       expect(Result.name).toBe('Request');
-      expect(new Result(c.uri('admin', 'databases', 'foo', 'bar')).method).toBe(
-        'GET'
-      );
+      expect(
+        new Result(c.uri('admin', 'databases', 'foo', 'bar'))
+      ).toHaveProperty('method', 'GET');
     });
 
     // safety check only because a previous method was going to do this
