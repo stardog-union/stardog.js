@@ -1,4 +1,7 @@
 
+## [**1.2.1**](https://github.com/stardog-union/stardog.js/issues?milestone=15&state=open)
+- [**#152**](https://github.com/stardog-union/stardog.js/issues/152) db.add/remove not handling certain content correctly
+
 ## [**1.2.0**](https://github.com/stardog-union/stardog.js/issues?milestone=14&state=closed)
 - [**#150**](https://github.com/stardog-union/stardog.js/issues/150) Should allow other authorization methods besides 'Basic'
 
