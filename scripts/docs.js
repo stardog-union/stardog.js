@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable import/no-extraneous-dependencies */
 
-const typedocs = require('typedocs');
+const typedocs = require('typedocs/out');
 const fs = require('fs');
 const path = require('path');
 
@@ -9,6 +9,10 @@ const pathToDeclaration = path.resolve(`${__dirname}/../lib/index.d.ts`);
 const pathToREADME = path.resolve(`${__dirname}/../README.md`);
 
 const getType = type => {
+  if (!type) {
+    return `\`object\``;
+  }
+
   if (
     type.startsWith('string') ||
     type.startsWith('object') ||
