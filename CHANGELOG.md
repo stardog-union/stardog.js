@@ -1,4 +1,7 @@
 
+## [**1.2.2**](https://github.com/stardog-union/stardog.js/issues?milestone=16&state=open)
+- [**#158**](https://github.com/stardog-union/stardog.js/issues/158) Resolve security vulnerability in transitive dependency (marked 0.3.6)
+
 ## [**1.2.1**](https://github.com/stardog-union/stardog.js/issues?milestone=15&state=open)
 - [**#152**](https://github.com/stardog-union/stardog.js/issues/152) db.add/remove not handling certain content correctly
 
