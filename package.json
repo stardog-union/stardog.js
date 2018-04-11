@@ -117,7 +117,7 @@
     "precommit": "lint-staged",
     "format": "prettier '{lib,test}/**/*.js' --single-quote --trailing-comma es5 --write",
     "version": "mdchangelog --remote stardog-union/stardog.js --no-prologue --order-milestones semver --order-issues closed_at --overwrite --no-orphan-issues && npm run docs && git add README.md CHANGELOG.md",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "node scripts/triggerAnnoyingAlert.js && npm run build"
   },
   "lint-staged": {
     "linters": {
