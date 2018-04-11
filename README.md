@@ -49,6 +49,12 @@ npm test
 
 Fork, clone and develop, write or amend tests, and then open a PR. All PRs go against "master". This project uses [prettier](https://github.com/prettier/prettier) on file commit, so don't worry about style as it'll just get rewritten when you commit your changes.
 
+### Releasing
+
+If you have publishing rights, BE SURE TO RUN `npm version (major|minor|patch)` IMMEDIATELY BEFORE PUBLISHING. This will ensure that the build is up-to-date and will also (1) bump the version number in package.json accordingly, (2) create a git tag matching the version number, and (3) automatically update the README and the CHANGELOG using our type declarations and data from the stardog.js GitHub repo. For this process to work correctly, you will need to have generated a GitHub OAuth token and assigned it to the `MDCHANGELOG_TOKEN` environment variable (because this process uses [mdchangelog](https://www.npmjs.com/package/mdchangelog)). In order to ensure that this process is followed, there will be a very annoying alert triggered whenever you publish; if you're all set, just ignore the alert.
+
+After releasing, be sure to push to master, including the tags (so that the release is reflected on GitHub).
+
 ## Version details
 
 The current version of stardog.js has been tested against version 5.2.0 of Stardog. You are encouraged to use this library if you are using version 5 or greater of Stardog. However, there is very little code that is version specific in stardog.js. It is essentially just a convenience wrapper around `fetch`. It is very likely that many of the exposed methods will work on older versions of Stardog, but this has not been tested.
