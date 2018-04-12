@@ -676,7 +676,7 @@ declare namespace Stardog {
          * @param {object} params additional parameters if needed
          * @param {object} additionalHandlers additional response handlers (currently only `onResponseStart`)
          */
-        function execute(conn: Connection, database: string, query: string, accept?: HTTP.RdfMimeType, params?: object, additionalHandlers: AdditionalHandlers): Promise<HTTP.Body>;
+        function execute(conn: Connection, database: string, query: string, accept?: HTTP.RdfMimeType, params?: object, additionalHandlers?: AdditionalHandlers): Promise<HTTP.Body>;
 
         /** 
          * Executes a query against a database within a transaction. 
