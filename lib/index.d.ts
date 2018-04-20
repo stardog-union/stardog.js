@@ -27,7 +27,7 @@ declare namespace Stardog {
           | '*/*';
 
         export interface Body {
-            status: string;
+            status: number;
             statusText: string;
             result: object | string | boolean | null;
             ok: boolean;
