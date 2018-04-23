@@ -118,7 +118,7 @@ One of the following values:
 
 Object with the following values:
 
-- status (`string`)
+- status (`number`)
 - statusText (`string`)
 - result (`object | string | boolean | null`)
 - ok (`boolean`)
