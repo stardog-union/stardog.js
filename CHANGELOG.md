@@ -1,8 +1,11 @@
 
-## [**1.2.2**](https://github.com/stardog-union/stardog.js/issues?milestone=16&state=open)
+## [**v1.2.3**](https://github.com/stardog-union/stardog.js/issues?milestone=18&state=open)
+- [**#162**](https://github.com/stardog-union/stardog.js/issues/162) Typings bug: status type in HTTP.Body should be number, not string
+
+## [**1.2.2**](https://github.com/stardog-union/stardog.js/issues?milestone=16&state=closed)
 - [**#158**](https://github.com/stardog-union/stardog.js/issues/158) Resolve security vulnerability in transitive dependency (marked 0.3.6)
 
-## [**1.2.1**](https://github.com/stardog-union/stardog.js/issues?milestone=15&state=open)
+## [**1.2.1**](https://github.com/stardog-union/stardog.js/issues?milestone=15&state=closed)
 - [**#152**](https://github.com/stardog-union/stardog.js/issues/152) db.add/remove not handling certain content correctly
 
 ## [**1.2.0**](https://github.com/stardog-union/stardog.js/issues?milestone=14&state=closed)
