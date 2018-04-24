@@ -75,7 +75,7 @@ const conn = new Connection({
   endpoint: 'http://localhost:5820',
 });
 
-query.execute(conn, 'myDatabaseName', 'select distinct ?s where { ?s ?p ?o }', 'application/ld+json', {
+query.execute(conn, 'myDatabaseName', 'select distinct ?s where { ?s ?p ?o }', 'application/sparql-results+json', {
   limit: 10,
   offset: 0,
 }).then(({ body }) => {
