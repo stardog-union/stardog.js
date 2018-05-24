@@ -187,6 +187,21 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="status">`server.status(conn, params)`</a>
+
+Retrieves general status information about a Stardog server. By
+default, also includes status information about all databases on
+that server. If `params.databases` is `false`, however, then the
+information about databases is omitted.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- params (`{ databases?: boolean; }`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 ## <a name="db">db</a>
 
 #### <a name="create">`db.create(conn, database, databaseOptions, options, params)`</a>
@@ -1570,7 +1585,7 @@ Expects the following parameters:
 
 - conn ([`Connection`](#connection))
 
-- role (`{ rolename: string }`)
+- role (`{ name: string }`)
 
 - params (`object`)
 
