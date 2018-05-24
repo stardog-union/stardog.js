@@ -110,6 +110,14 @@ declare namespace Stardog {
     export namespace server {
         /** Shuts down a Stardog server. */
         function shutdown(conn: Connection, params?: object): Promise<HTTP.Body>;
+
+        /**
+         * Retrieves general status information about a Stardog server. By
+         * default, also includes status information about all databases on
+         * that server. If `params.databases` is `false`, however, then the
+         * information about databases is omitted.
+         */
+        function status(conn: Connection, params?: { databases?: boolean; }): Promise<HTTP.Body>;
     }
 
     /** Stardog database actions. */
