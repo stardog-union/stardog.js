@@ -1005,7 +1005,7 @@ declare namespace Stardog {
              * @param {object} role the role to be created
              * @param {object} params additional parameters if needed
              */
-            function create(conn: Connection, role: { rolename: string }, params?: object): Promise<HTTP.Body>;
+            function create(conn: Connection, role: { name: string }, params?: object): Promise<HTTP.Body>;
 
             /** 
              * Lists all existing roles. 
