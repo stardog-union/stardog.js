@@ -74,19 +74,16 @@ exports.dropDatabase = database => () => {
 };
 
 exports.generateDatabaseName = () => {
-  const database = `stardogjs-${RandomString.generate({
-    length: 25,
-    charset: 'alphabetic',
-  })}`;
+  const database = exports.generateRandomString();
   dbs.add(database);
   return database;
 };
 
 exports.generateRandomString = () =>
-  RandomString.generate({
+  `stardogjs${RandomString.generate({
     length: 10,
     charset: 'alphabetic',
-  });
+  })}`;
 
 exports.ConnectionFactory = () =>
   new Connection({

@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { db: { icv, transaction } } = require('../lib');
+const { db: { icv, transaction, list } } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
@@ -19,9 +19,12 @@ describe('icv', () => {
   const database = generateDatabaseName();
   const conn = ConnectionFactory();
 
-  const beginTx = transaction.begin.bind(null, conn, database);
-
-  beforeAll(seedDatabase(database, { icv: { enabled: true } }));
+  beforeAll(
+    seedDatabase(database, {
+      icv: { enabled: true },
+      transaction: { isolation: 'SERIALIZABLE' },
+    })
+  );
   afterAll(dropDatabase(database));
 
   it('should add integrity constraint axioms', () =>
@@ -81,7 +84,8 @@ describe('icv', () => {
       }));
 
   it('should validate constraints in a transaction', () =>
-    beginTx()
+    transaction
+      .begin(conn, database)
       .then(res => {
         expect(res.status).toBe(200);
         return icv.validateInTx(conn, database, res.transactionId, icvAxioms, {
@@ -100,12 +104,15 @@ describe('icv', () => {
     }));
 
   it('should report violations in a transaction', () =>
-    beginTx()
+    list(conn)
+      .then(console.log)
+      .then(() => transaction.begin(conn, database))
       .then(res => {
         expect(res.status).toBe(200);
         return icv.violationsInTx(conn, database, res.transactionId, '');
       })
       .then(res => {
+        console.log(JSON.stringify(res, null, 2));
         expect(res.status).toBe(200);
         expect(res.body).toBeNull();
       }));
