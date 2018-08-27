@@ -22,6 +22,14 @@ To install stardog.js run:
 npm install stardog
 ```
 
+## Usage
+
+Stardog.js conforms to the [Universal Module Definition](https://github.com/umdjs/umd) API. To use it in Node.js, simply `require` or `import` it as you would any other Node module. To use it in the browser, you can either:
+
+1. Do the same as you would with Node.js, in which case you'll have to use [webpack](https://webpack.js.org/), [parcel](https://parceljs.org/), [browserify](http://browserify.org/), or some other module bundler,
+2. Use [require.js](https://requirejs.org/) or some other module loader, or
+3. Directly import the built stardog.js file in your HTML (e.g., `<script src="./node_modules/stardog/dist/stardog.js"></script>`) and then reference the global `stardogjs` object (e.g., `stardogjs.query.execute(/* . . . */)`).
+
 ## Development
 
 To get started, just clone the project. You'll need a local copy of Stardog to be able to run the tests. For more information on starting the Stardog DB service and how it works, go to [Stardog's documentation](http://docs.stardog.com), where you'll find everything you need to get up and running with Stardog.
