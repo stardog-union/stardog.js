@@ -3,8 +3,9 @@
 /** stardog.js: The Stardog JS API*/
 
 import {
-  Request as NodeFetchRequest,
-  RequestInit as NodeFetchRequestInit,
+  Headers,
+  Request,
+  RequestInit,
 } from 'node-fetch';
 
 declare namespace Stardog {
@@ -81,10 +82,10 @@ declare namespace Stardog {
          *
          * @param {Object} requestData
          * @param {string} requestData.uri the full URI about to be fetched; includes all URI parts (protocol, hostname, path, query string, etc.)
-         * @param {RequestConstructor | Class<NodeFetchRequest>} requestData.Request a request constructor, conforming either to the browser's Request spec or to `node-fetch`'s Request, depending on environment
-         * @returns {string | Request | NodeFetchRequest} a string URI or a Request object
+         * @param {RequestConstructor} requestData.Request a request constructor, conforming either to the browser's Request spec or to `node-fetch`'s Request, depending on environment
+         * @returns {string | Request} a string URI or a Request object
          */
-        createRequest?: RequestCreator<RequestConstructor | typeof NodeFetchRequest, string | (Request | NodeFetchRequest)>;
+        createRequest?: RequestCreator<RequestConstructor, string | Request>;
 
         /**
          * Pass this method on `ConnectionMeta` if you need to override or add
@@ -676,10 +677,10 @@ declare namespace Stardog {
          * @param {Connection} conn the Stardog server connection
          * @param {string} database the name of the database
          * @param {string} query the SPARQL query to be executed
-         * @param {HTTP.RdfMimeType} accept The desired HTTP MIME type of the results
+         * @param {HTTP.AcceptMimeType} accept The desired HTTP MIME type of the results
          * @param {object} params additional parameters if needed
          */
-        function execute(conn: Connection, database: string, query: string, accept?: HTTP.RdfMimeType, params?: object): Promise<HTTP.Body>;
+        function execute(conn: Connection, database: string, query: string, accept?: HTTP.AcceptMimeType, params?: object): Promise<HTTP.Body>;
 
         /** 
          * Executes a query against a database within a transaction. 
