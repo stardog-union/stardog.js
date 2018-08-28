@@ -20,7 +20,7 @@ jobs:
     - checkout
     # Prepare for artifact and test results  collection equivalent to how it was done on 1.0.
     # These steps could be consolidated, but I left them separate since that was what was generated.
-    - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
+    - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS ${HOME}/${CIRCLE_PROJECT_REPONAME}
     - run:
         working_directory: *working_directory
         command: echo $LICENSE | base64 --decode > ${HOME}/${CIRCLE_PROJECT_REPONAME}/stardog-license-key.bin
