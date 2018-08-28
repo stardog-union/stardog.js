@@ -23,9 +23,6 @@ jobs:
     - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
     - run:
         working_directory: *working_directory
-        command: 'sudo docker info >/dev/null 2>&1 || sudo service docker start; '
-    - run:
-        working_directory: *working_directory
         command: echo $LICENSE | base64 --decode > ${HOME}/${CIRCLE_PROJECT_REPONAME}/stardog-license-key.bin
     - run:
         working_directory: *working_directory
