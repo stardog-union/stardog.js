@@ -23,9 +23,6 @@ jobs:
     - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
     - run:
         working_directory: *working_directory
-        command: nvm install 6.10.0 && nvm alias default 6.10.0
-    - run:
-        working_directory: *working_directory
         command: 'sudo docker info >/dev/null 2>&1 || sudo service docker start; '
     - run:
         working_directory: *working_directory
