@@ -17,7 +17,6 @@ jobs:
     # https://circleci.com/docs/2.0/circleci-images/
     docker:
     - image: circleci/node:6.14-stretch
-      command: /sbin/init
     steps:
     - checkout
     # Prepare for artifact and test results  collection equivalent to how it was done on 1.0.
