@@ -12,10 +12,8 @@ jobs:
     environment:
       CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
       CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
-    # To see the list of pre-built images that CircleCI provides for most common languages see
-    # https://circleci.com/docs/2.0/circleci-images/
-    docker:
-    - image: circleci/node:6.14-stretch
+    machine:
+      docker_layer_caching: true
     steps:
     - checkout
     # Prepare for artifact and test results  collection equivalent to how it was done on 1.0.
