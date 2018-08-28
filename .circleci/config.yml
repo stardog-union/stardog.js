@@ -26,7 +26,7 @@ jobs:
         command: echo $LICENSE | base64 --decode > ${HOME}/${CIRCLE_PROJECT_REPONAME}/stardog-license-key.bin
     - run:
         working_directory: *working_directory
-        command: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD --email "ty@stardog.com" complexible-eps-docker.jfrog.io
+        command: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD complexible-eps-docker.jfrog.io
     - run:
         working_directory: *working_directory
         command: docker build -t this/here/starduck ${HOME}/${CIRCLE_PROJECT_REPONAME}/.
