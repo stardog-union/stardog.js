@@ -13,7 +13,7 @@
     "no-unused-vars": [
       "error",
       {
-        "argsIgnorePattern": "params" // igore only these for the time being
+        "argsIgnorePattern": "params"
       }
     ],
     "prettier/prettier": ["warn", {
