@@ -8,9 +8,6 @@
 - [**#165**](https://github.com/stardog-union/stardog.js/issues/165) Add method for retrieving server status info
 - [**#164**](https://github.com/stardog-union/stardog.js/issues/164) Typing for role creation is incorrect
 
-## [**v1.2.4**](https://github.com/stardog-union/stardog.js/issues?milestone=19&state=closed)
-- [**#168**](https://github.com/stardog-union/stardog.js/issues/168) Fix documentation query.execute example
-
 ## [**v1.2.3**](https://github.com/stardog-union/stardog.js/issues?milestone=18&state=closed)
 - [**#162**](https://github.com/stardog-union/stardog.js/issues/162) Typings bug: status type in HTTP.Body should be number, not string
 
