@@ -1077,6 +1077,7 @@ declare namespace Stardog {
 
         interface SharedOptions {
           base?: string;
+          'mappings.syntax': string;
           'percent.encode'?: boolean;
           'optimize.import'?: boolean;
           'query.translation'?: 'DEFAULT' | 'LEGACY';
@@ -1106,6 +1107,8 @@ declare namespace Stardog {
           'csv.skip.empty'?: boolean;
         }
 
+        type AllVgOptions = SharedOptions & RdbmsOptions & MongoOptions & CsvOptions;
+
         interface MappingsRequestOptions {
           untransformed?: boolean;
           syntax?: string;
@@ -1126,7 +1129,7 @@ declare namespace Stardog {
          * @param {string} mappings an RDF block specifying the mappings
          * @param {Options} options the JDBC (and other) options for the graph
          */
-        function add<T extends SharedOptions>(conn: Connection, name: string, mappings: string, options: T): Promise<HTTP.Body>;
+        function add<T extends AllVgOptions>(conn: Connection, name: string, mappings: string, options: T): Promise<HTTP.Body>;
 
         /**
          * Update a virtual graph in the system
@@ -1136,7 +1139,7 @@ declare namespace Stardog {
          * @param {string} mappings an RDF block specifying the mappings
          * @param {Options} options the JDBC (and other) options for the graph
          */
-        function update<T extends SharedOptions>(conn: Connection, name: string, mappings: string, options: T): Promise<HTTP.Body>;
+        function update<T extends AllVgOptions>(conn: Connection, name: string, mappings: string, options: T): Promise<HTTP.Body>;
 
         /**
          * Remove a virtual graph from the system
