@@ -192,4 +192,46 @@ describe('virtual_graphs', () => {
           expect(res.body).toContain('subjectMap');
         }));
   });
+
+  describe('mappings', () => {
+    it('accepts options that trigger a request for untransformed mappings', () =>
+      assureExists()
+        .then(() =>
+          vGraphs.mappings(conn, aVGName, { preferUntransformed: true })
+        )
+        .then(res => {
+          expect(res.url).toBe(
+            conn.uri(
+              'admin',
+              'virtual_graphs',
+              aVGName,
+              'mappingsString',
+              'SMS2'
+            )
+          );
+          return vGraphs.mappings(conn, aVGName, {
+            preferUntransformed: true,
+            syntax: 'R2RML',
+          });
+        })
+        .then(res => {
+          expect(res.url).toBe(
+            conn.uri(
+              'admin',
+              'virtual_graphs',
+              aVGName,
+              'mappingsString',
+              'R2RML'
+            )
+          );
+          return vGraphs.mappings(conn, aVGName, {
+            preferUntransformed: false,
+          });
+        })
+        .then(res => {
+          expect(res.url).toBe(
+            conn.uri('admin', 'virtual_graphs', aVGName, 'mappings')
+          );
+        }));
+  });
 });
