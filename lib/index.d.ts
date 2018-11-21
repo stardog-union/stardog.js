@@ -1075,21 +1075,51 @@ declare namespace Stardog {
 
     export namespace virtualGraphs {
 
-        interface Options {
-            "jdbc.username": string,
-            "jdbc.password": string,
-            "jdbc.driver": string,
-            "jdbc.url": string,
-            namespaces: string
+        interface SharedOptions {
+          base?: string;
+          'mappings.syntax': string;
+          'percent.encode'?: boolean;
+          'optimize.import'?: boolean;
+          'query.translation'?: 'DEFAULT' | 'LEGACY';
+        }
+
+        interface RdbmsOptions extends SharedOptions {
+          'jdbc.url'?: string;
+          'jdbc.username'?: string;
+          'jdbc.password'?: string;
+          'jdbc.driver'?: string;
+          'parser.sql.quoting'?: 'NATIVE' | 'ANSI';
+          'sql.functions'?: string;
+          'sql.schemas'?: string;
+          'default.mappings.include.tables'?: string;
+          'default.mappings.exclude.tables'?: string;
+        }
+
+        interface MongoOptions extends SharedOptions {
+          'mongodb.uri'?: string;
+        }
+
+        interface CsvOptions extends SharedOptions {
+          'csv.separator'?: string;
+          'csv.quote'?: string;
+          'csv.escape'?: string;
+          'csv.header'?: boolean;
+          'csv.skip.empty'?: boolean;
+        }
+
+        type AllVgOptions = SharedOptions & RdbmsOptions & MongoOptions & CsvOptions;
+
+        interface MappingsRequestOptions {
+          preferUntransformed?: boolean;
+          syntax?: string;
         }
 
         /**
          * Retrieve a list of virtual graphs
          * 
          * @param {Connection} conn the Stardog server connection
-         * @param {object} params additional parameters if needed
          */
-        function list(conn: Connection, params?: object): Promise<HTTP.Body>;
+        function list(conn: Connection): Promise<HTTP.Body>;
 
         /**
          * Add a virtual graph to the system
@@ -1098,9 +1128,8 @@ declare namespace Stardog {
          * @param {string} name the graph name
          * @param {string} mappings an RDF block specifying the mappings
          * @param {Options} options the JDBC (and other) options for the graph
-         * @param {object} params additional parameters if needed
          */
-        function add(conn: Connection, name: string, mappings: string, options: Options, params?: object): Promise<HTTP.Body>;
+        function add<T extends AllVgOptions>(conn: Connection, name: string, mappings: string, options: T): Promise<HTTP.Body>;
 
         /**
          * Update a virtual graph in the system
@@ -1109,45 +1138,40 @@ declare namespace Stardog {
          * @param {string} name the graph name
          * @param {string} mappings an RDF block specifying the mappings
          * @param {Options} options the JDBC (and other) options for the graph
-         * @param {object} params additional parameters if needed
          */
-        function update(conn: Connection, name: string, mappings: string, options: Options, params?: object): Promise<HTTP.Body>;
+        function update<T extends AllVgOptions>(conn: Connection, name: string, mappings: string, options: T): Promise<HTTP.Body>;
 
         /**
          * Remove a virtual graph from the system
          * 
          * @param {Connection} conn the Stardog server connection
          * @param {string} name the graph name
-         * @param {object} params additional parameters if needed
          */
-        function remove(conn: Connection, name: string, params?: object): Promise<HTTP.Body>;
+        function remove(conn: Connection, name: string): Promise<HTTP.Body>;
 
         /**
          * Determine if the named virtual graph is available
          * 
          * @param {Connection} conn the Stardog server connection
          * @param {string} name the graph name
-         * @param {object} params additional parameters if needed
          */
-        function available(conn: Connection, name: string, params?: object): Promise<HTTP.Body>;
+        function available(conn: Connection, name: string): Promise<HTTP.Body>;
 
         /**
          * Retrieve a virtual graph's options
          * 
          * @param {Connection} conn the Stardog server connection
          * @param {string} name the graph name
-         * @param {object} params additional parameters if needed
          */
-        function options(conn: Connection, name: string, params?: object): Promise<HTTP.Body>;
+        function options(conn: Connection, name: string): Promise<HTTP.Body>;
 
         /**
          * Retrieve a virtual graph's mappings
          * 
          * @param {Connection} conn the Stardog server connection
          * @param {string} name the graph name
-         * @param {object} params additional parameters if needed
          */
-        function mappings(conn: Connection, name: string, params?: object): Promise<HTTP.Body>;
+        function mappings(conn: Connection, name: string, requestOptions?: MappingsRequestOptions): Promise<HTTP.Body>;
     }
 
     /** Actions to work with server-wide stored functions */
