@@ -1110,7 +1110,7 @@ declare namespace Stardog {
         type AllVgOptions = SharedOptions & RdbmsOptions & MongoOptions & CsvOptions;
 
         interface MappingsRequestOptions {
-          untransformed?: boolean;
+          preferUntransformed?: boolean;
           syntax?: string;
         }
 
