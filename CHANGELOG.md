@@ -1,4 +1,10 @@
 
+## [**v1.4.0**](https://github.com/stardog-union/stardog.js/issues?milestone=23&state=closed)
+- [**#180**](https://github.com/stardog-union/stardog.js/issues/180) Update mappings call to support requesting untransformed mappings
+
+## [**v1.3.2**](https://github.com/stardog-union/stardog.js/issues?milestone=22&state=closed)
+- [**#178**](https://github.com/stardog-union/stardog.js/issues/178) query.executeInTransaction sends update queries to query endpoint
+
 ## [**v1.3.1**](https://github.com/stardog-union/stardog.js/issues?milestone=21&state=closed)
 - [**#173**](https://github.com/stardog-union/stardog.js/issues/173) Upgrade CI configuration to CircleCI v2
 - [**#170**](https://github.com/stardog-union/stardog.js/issues/170) In-browser usage is undocumented
