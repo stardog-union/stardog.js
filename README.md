@@ -1687,17 +1687,59 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 ## <a name="virtualgraphs">virtualGraphs</a>
 
-#### <a name="options">Options</a>
+#### <a name="sharedoptions">SharedOptions</a>
 
 Object with the following values:
 
+- base (`string`)
+- mappings.syntax (`string`)
+- percent.encode (`boolean`)
+- optimize.import (`boolean`)
+- query.translation (`'DEFAULT' | 'LEGACY'`)
+
+#### <a name="rdbmsoptions">RdbmsOptions</a> extends [SharedOptions](#sharedoptions)
+
+Object with the following values:
+
+- jdbc.url (`string`)
 - jdbc.username (`string`)
 - jdbc.password (`string`)
 - jdbc.driver (`string`)
-- jdbc.url (`string`)
-- namespaces (`string`)
+- parser.sql.quoting (`'NATIVE' | 'ANSI'`)
+- sql.functions (`string`)
+- sql.schemas (`string`)
+- default.mappings.include.tables (`string`)
+- default.mappings.exclude.tables (`string`)
 
-#### <a name="list">`virtualGraphs.list(conn, params)`</a>
+#### <a name="mongooptions">MongoOptions</a> extends [SharedOptions](#sharedoptions)
+
+Object with the following values:
+
+- mongodb.uri (`string`)
+
+#### <a name="csvoptions">CsvOptions</a> extends [SharedOptions](#sharedoptions)
+
+Object with the following values:
+
+- csv.separator (`string`)
+- csv.quote (`string`)
+- csv.escape (`string`)
+- csv.header (`boolean`)
+- csv.skip.empty (`boolean`)
+
+#### <a name="allvgoptions">AllVgOptions</a>
+
+One of the following values:
+
+`SharedOptions & RdbmsOptions & MongoOptions & CsvOptions`
+#### <a name="mappingsrequestoptions">MappingsRequestOptions</a>
+
+Object with the following values:
+
+- preferUntransformed (`boolean`)
+- syntax (`string`)
+
+#### <a name="list">`virtualGraphs.list(conn)`</a>
 
 Retrieve a list of virtual graphs
 
@@ -1705,11 +1747,9 @@ Expects the following parameters:
 
 - conn ([`Connection`](#connection))
 
-- params (`object`)
-
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="add">`virtualGraphs.add(conn, name, mappings, options, params)`</a>
+#### <a name="add">`virtualGraphs.add(conn, name, mappings, options)`</a>
 
 Add a virtual graph to the system
 
@@ -1721,13 +1761,11 @@ Expects the following parameters:
 
 - mappings (`string`)
 
-- options ([`Options`](#options))
-
-- params (`object`)
+- options ([`T`](#t))
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="update">`virtualGraphs.update(conn, name, mappings, options, params)`</a>
+#### <a name="update">`virtualGraphs.update(conn, name, mappings, options)`</a>
 
 Update a virtual graph in the system
 
@@ -1739,13 +1777,11 @@ Expects the following parameters:
 
 - mappings (`string`)
 
-- options ([`Options`](#options))
-
-- params (`object`)
+- options ([`T`](#t))
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="remove">`virtualGraphs.remove(conn, name, params)`</a>
+#### <a name="remove">`virtualGraphs.remove(conn, name)`</a>
 
 Remove a virtual graph from the system
 
@@ -1755,11 +1791,9 @@ Expects the following parameters:
 
 - name (`string`)
 
-- params (`object`)
-
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="available">`virtualGraphs.available(conn, name, params)`</a>
+#### <a name="available">`virtualGraphs.available(conn, name)`</a>
 
 Determine if the named virtual graph is available
 
@@ -1769,11 +1803,9 @@ Expects the following parameters:
 
 - name (`string`)
 
-- params (`object`)
-
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="options">`virtualGraphs.options(conn, name, params)`</a>
+#### <a name="options">`virtualGraphs.options(conn, name)`</a>
 
 Retrieve a virtual graph's options
 
@@ -1783,11 +1815,9 @@ Expects the following parameters:
 
 - name (`string`)
 
-- params (`object`)
-
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="mappings">`virtualGraphs.mappings(conn, name, params)`</a>
+#### <a name="mappings">`virtualGraphs.mappings(conn, name, requestOptions)`</a>
 
 Retrieve a virtual graph's mappings
 
@@ -1797,7 +1827,7 @@ Expects the following parameters:
 
 - name (`string`)
 
-- params (`object`)
+- requestOptions ([`MappingsRequestOptions`](#mappingsrequestoptions))
 
 Returns [`Promise<HTTP.Body>`](#body)
 
