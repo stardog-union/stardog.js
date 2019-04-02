@@ -200,6 +200,125 @@ describe('query.execute()', () => {
     ));
   it('returns results for a construct query as a string blob', () =>
     execute('construct where { ?s ?p ?o }').then(({ body }) => {
+      expect(body).toEqual(
+        '<http://localhost/publications/articles/Journal1/1940/Article1> a <http://localhost/vocabulary/bench/Article> ;\n' +
+          '\t<http://purl.org/dc/elements/1.1/creator> <http://localhost/persons/Paul_Erdoes> ;\n' +
+          '\t<http://swrc.ontoware.org/ontology#journal> <http://localhost/publications/journals/Journal1/1940> ;\n' +
+          '\t<http://localhost/vocabulary/bench/abstract> "unmuzzling measles decentralizing hogfishes gantleted richer succories dwelling scrapped prat islanded burlily thanklessly swiveled polers oinked apnea maxillary dumpers bering evasiveness toto teashop reaccepts gunneries exorcises pirog desexes summable heliocentricity excretions recelebrating dually plateauing reoccupations embossers cerebrum gloves mohairs admiralties bewigged playgoers cheques batting waspishly stilbestrol villainousness miscalling firefanged skeins equalled sandwiching bewitchment cheaters riffled kerneling napoleons rifer splinting surmisers satisfying undamped sharpers forbearer anesthetization undermentioned outflanking funnyman commuted lachrymation floweret arcadian acridities unrealistic substituting surges preheats loggias reconciliating photocatalyst lenity tautological jambing sodality outcrop slipcases phenylketonuria grunts venturers valiantly unremorsefully extradites stollens ponderers conditione loathly cancels debiting parrots paraguayans resonates" ;\n' +
+          '\t<http://localhost/vocabulary/bench/cdrom> "http://www.hogfishes.tld/richer/succories.html" ;\n' +
+          '\t<http://www.w3.org/2000/01/rdf-schema#seeAlso> "http://www.gantleted.tld/succories/dwelling.html" ;\n' +
+          '\t<http://swrc.ontoware.org/ontology#month> 4 ;\n' +
+          '\t<http://swrc.ontoware.org/ontology#note> "overbites terminals giros podgy vagus kinkiest xix recollected" ;\n' +
+          '\t<http://swrc.ontoware.org/ontology#pages> 110 ;\n' +
+          '\t<http://purl.org/dc/elements/1.1/title> "richer dwelling scrapped" ;\n' +
+          '\t<http://xmlns.com/foaf/0.1/homepage> "http://www.succories.tld/scrapped/prat.html" .\n' +
+          '\n' +
+          '<http://localhost/persons/Paul_Erdoes> a <http://xmlns.com/foaf/0.1/Person> ;\n' +
+          '\t<http://xmlns.com/foaf/0.1/firstName> "Paul" ;\n' +
+          '\t<http://xmlns.com/foaf/0.1/lastName> "Erdoes" .\n' +
+          '\n' +
+          '<http://localhost/publications/articles/Journal1/1940/Article2> a <http://localhost/vocabulary/bench/Article> ;\n' +
+          '\t<http://purl.org/dc/elements/1.1/creator> <http://localhost/persons/John_Erdoes> ;\n' +
+          '\t<http://swrc.ontoware.org/ontology#journal> <http://localhost/publications/journals/Journal1/1940> ;\n' +
+          '\t<http://localhost/vocabulary/bench/abstract> "unmuzzling measles decentralizing hogfishes gantleted richer succories dwelling scrapped prat islanded burlily thanklessly swiveled polers oinked apnea maxillary dumpers bering evasiveness toto teashop reaccepts gunneries exorcises pirog desexes summable heliocentricity excretions recelebrating dually plateauing reoccupations embossers cerebrum gloves mohairs admiralties bewigged playgoers cheques batting waspishly stilbestrol villainousness miscalling firefanged skeins equalled sandwiching bewitchment cheaters riffled kerneling napoleons rifer splinting surmisers satisfying undamped sharpers forbearer anesthetization undermentioned outflanking funnyman commuted lachrymation floweret arcadian acridities unrealistic substituting surges preheats loggias reconciliating photocatalyst lenity tautological jambing sodality outcrop slipcases phenylketonuria grunts venturers valiantly unremorsefully extradites stollens ponderers conditione loathly cancels debiting parrots paraguayans resonates" ;\n' +
+          '\t<http://localhost/vocabulary/bench/cdrom> "http://www.hogfishes.tld/richer/succories.html" ;\n' +
+          '\t<http://www.w3.org/2000/01/rdf-schema#seeAlso> "http://www.gantleted.tld/succories/dwelling.html" ;\n' +
+          '\t<http://swrc.ontoware.org/ontology#month> 8 ;\n' +
+          '\t<http://swrc.ontoware.org/ontology#note> "overbites terminals giros podgy vagus kinkiest xix recollected" ;\n' +
+          '\t<http://swrc.ontoware.org/ontology#pages> 240 ;\n' +
+          '\t<http://purl.org/dc/elements/1.1/title> "richer dwelling scrapped" ;\n' +
+          '\t<http://xmlns.com/foaf/0.1/homepage> "http://www.succories.tld/scrapped/prat2.html" .\n' +
+          '\n' +
+          '<http://localhost/persons/John_Erdoes> a <http://xmlns.com/foaf/0.1/Person> ;\n' +
+          '\t<http://xmlns.com/foaf/0.1/firstName> "John" ;\n' +
+          '\t<http://xmlns.com/foaf/0.1/lastName> "Erdoes" .\n' +
+          '\n' +
+          '<http://localhost/publications/articles/Journal1/1940/Article3> a <http://localhost/vocabulary/bench/Article> ;\n' +
+          '\t<http://purl.org/dc/elements/1.1/creator> <http://localhost/persons/John_Perez> ;\n' +
+          '\t<http://swrc.ontoware.org/ontology#journal> <http://localhost/publications/journals/Journal1/1940> ;\n' +
+          '\t<http://localhost/vocabulary/bench/abstract> "unmuzzling measles decentralizing hogfishes gantleted richer succories dwelling scrapped prat islanded burlily thanklessly swiveled polers oinked apnea maxillary dumpers bering evasiveness toto teashop reaccepts gunneries exorcises pirog desexes summable heliocentricity excretions recelebrating dually plateauing reoccupations embossers cerebrum gloves mohairs admiralties bewigged playgoers cheques batting waspishly stilbestrol villainousness miscalling firefanged skeins equalled sandwiching bewitchment cheaters riffled kerneling napoleons rifer splinting surmisers satisfying undamped sharpers forbearer anesthetization undermentioned outflanking funnyman commuted lachrymation floweret arcadian acridities unrealistic substituting surges preheats loggias reconciliating photocatalyst lenity tautological jambing sodality outcrop slipcases phenylketonuria grunts venturers valiantly unremorsefully extradites stollens ponderers conditione loathly cancels debiting parrots paraguayans resonates" ;\n' +
+          '\t<http://localhost/vocabulary/bench/cdrom> "http://www.hogfishes.tld/richer/succories.html" ;\n' +
+          '\t<http://www.w3.org/2000/01/rdf-schema#seeAlso> "http://www.gantleted.tld/succories/dwelling.html" ;\n' +
+          '\t<http://swrc.ontoware.org/ontology#month> 12 ;\n' +
+          '\t<http://swrc.ontoware.org/ontology#note> "overbites terminals giros podgy vagus kinkiest xix recollected" ;\n' +
+          '\t<http://swrc.ontoware.org/ontology#pages> 840 ;\n' +
+          '\t<http://purl.org/dc/elements/1.1/title> "richer dwelling scrapped 2" ;\n' +
+          '\t<http://xmlns.com/foaf/0.1/homepage> "http://www.succories.tld/scrapped/prat2.html" .\n' +
+          '\n' +
+          '<http://localhost/persons/John_Perez> a <http://xmlns.com/foaf/0.1/Person> ;\n' +
+          '\t<http://xmlns.com/foaf/0.1/firstName> "John" ;\n' +
+          '\t<http://xmlns.com/foaf/0.1/lastName> "Perez" .\n' +
+          '\n' +
+          '<http://myvehicledata.com/FordFiesta> a <http://example.org/vehicles/Car> .\n' +
+          '\n' +
+          '<http://example.org/vehicles/Car> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://example.org/vehicles/Vehicle> .\n' +
+          '\n' +
+          '<http://myvehicledata.com/AudiA8> a <http://example.org/vehicles/Car> .\n' +
+          '\n' +
+          '<http://myvehicledata.com/FerrariEnzo> a <http://example.org/vehicles/SportsCar> .\n' +
+          '\n' +
+          '<http://example.org/vehicles/SportsCar> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://example.org/vehicles/Car> .\n' +
+          '\n' +
+          '<http://example.org/vehicles/Vehicle> a <http://www.w3.org/2000/01/rdf-schema#Class> .\n' +
+          '\n' +
+          '<http://example.org/issues#issue7> a <http://example.org/issues#Issue> , <http://example.org/issues#SecurityIssue> ;\n' +
+          '\t<http://example.org/issues#state> <http://example.org/issues#unassigned> ;\n' +
+          '\t<http://example.org/issues#reportedBy> <http://example.org/issues#user6> , <http://example.org/issues#user2> ;\n' +
+          '\t<http://example.org/issues#reportedOn> "2012-12-31T23:57:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;\n' +
+          '\t<http://example.org/issues#reproducedBy> <http://example.org/issues#user2> , <http://example.org/issues#user1> ;\n' +
+          '\t<http://example.org/issues#reproducedOn> "2012-10-31T23:57:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;\n' +
+          '\t<http://example.org/issues#related> <http://example.org/issues#issue4> , <http://example.org/issues#issue3> , <http://example.org/issues#issue2> .\n' +
+          '\n' +
+          '<http://example.org/issues#Issue> a <http://www.w3.org/2002/07/owl#Class> .\n' +
+          '\n' +
+          '<http://example.org/issues#SecurityIssue> a <http://www.w3.org/2002/07/owl#Class> ;\n' +
+          '\t<http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://example.org/issues#Issue> .\n' +
+          '\n' +
+          '<http://example.org/issues#state> a <http://www.w3.org/2002/07/owl#ObjectProperty> .\n' +
+          '\n' +
+          '<http://example.org/issues#unassigned> a <http://example.org/issues#ValidState> .\n' +
+          '\n' +
+          '<http://example.org/issues#reportedBy> a <http://www.w3.org/2002/07/owl#ObjectProperty> .\n' +
+          '\n' +
+          '<http://example.org/issues#user6> a <http://xmlns.com/foaf/0.1/Agent> ;\n' +
+          '\t<http://xmlns.com/foaf/0.1/givenName> "Bob" ;\n' +
+          '\t<http://xmlns.com/foaf/0.1/phone> <tel:+.555.222.2222> ;\n' +
+          '\t<http://xmlns.com/foaf/0.1/mbox> <mailto:alice@example.com> .\n' +
+          '\n' +
+          '<http://example.org/issues#user2> a <http://xmlns.com/foaf/0.1/Person> ;\n' +
+          '\t<http://xmlns.com/foaf/0.1/givenName> "Alice" ;\n' +
+          '\t<http://xmlns.com/foaf/0.1/familyName> "Smith" ;\n' +
+          '\t<http://xmlns.com/foaf/0.1/phone> <tel:+1.555.222.2222> ;\n' +
+          '\t<http://xmlns.com/foaf/0.1/mbox> <mailto:alice@example.com> .\n' +
+          '\n' +
+          '<http://example.org/issues#reportedOn> a <http://www.w3.org/2002/07/owl#DatatypeProperty> .\n' +
+          '\n' +
+          '<http://example.org/issues#reproducedBy> a <http://www.w3.org/2002/07/owl#ObjectProperty> .\n' +
+          '\n' +
+          '<http://example.org/issues#reproducedOn> a <http://www.w3.org/2002/07/owl#DatatypeProperty> .\n' +
+          '\n' +
+          '<http://example.org/issues#related> a <http://www.w3.org/2002/07/owl#ObjectProperty> .\n' +
+          '\n' +
+          '<http://example.org/issues#issue4> <http://example.org/issues#state> <http://example.org/issues#unsinged> ;\n' +
+          '\t<http://example.org/issues#reportedOn> "2012-12-31T23:57:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .\n' +
+          '\n' +
+          '<http://example.org/issues#assigned> a <http://example.org/issues#ValidState> .\n' +
+          '\n' +
+          '<urn:paths:Alice> <urn:paths:knows> <urn:paths:Bob> .\n' +
+          '\n' +
+          '<urn:paths:Bob> <urn:paths:knows> <urn:paths:David> ;\n' +
+          '\t<urn:paths:worksWith> <urn:paths:Charlie> .\n' +
+          '\n' +
+          '<urn:paths:Charlie> <urn:paths:parentOf> <urn:paths:Eve> .\n' +
+          '\n' +
+          '<urn:paths:Eve> <urn:paths:knows> <urn:paths:David> .\n' +
+          '\n' +
+          '<urn:paths:Thing1> <urn:paths:dependsOn> <urn:paths:Thing2> , <urn:paths:Thing3> .\n' +
+          '\n' +
+          '<urn:paths:Thing2> <urn:paths:dependsOn> <urn:paths:Thing1> , <urn:paths:Thing3> .\n' +
+          '\n' +
+          '<urn:paths:Thing3> <urn:paths:dependsOn> <urn:paths:Thing1> , <urn:paths:Thing2> .'
+      );
       expect(body).toHaveLength(9843);
     }));
 
@@ -211,6 +330,19 @@ describe('query.execute()', () => {
         limit: 1,
       }
     ).then(({ body }) => {
+      expect(body).toEqual(
+        '<http://localhost/publications/articles/Journal1/1940/Article1> a <http://localhost/vocabulary/bench/Article> ;\n' +
+          '\t<http://purl.org/dc/elements/1.1/creator> <http://localhost/persons/Paul_Erdoes> ;\n' +
+          '\t<http://swrc.ontoware.org/ontology#journal> <http://localhost/publications/journals/Journal1/1940> ;\n' +
+          '\t<http://localhost/vocabulary/bench/abstract> "unmuzzling measles decentralizing hogfishes gantleted richer succories dwelling scrapped prat islanded burlily thanklessly swiveled polers oinked apnea maxillary dumpers bering evasiveness toto teashop reaccepts gunneries exorcises pirog desexes summable heliocentricity excretions recelebrating dually plateauing reoccupations embossers cerebrum gloves mohairs admiralties bewigged playgoers cheques batting waspishly stilbestrol villainousness miscalling firefanged skeins equalled sandwiching bewitchment cheaters riffled kerneling napoleons rifer splinting surmisers satisfying undamped sharpers forbearer anesthetization undermentioned outflanking funnyman commuted lachrymation floweret arcadian acridities unrealistic substituting surges preheats loggias reconciliating photocatalyst lenity tautological jambing sodality outcrop slipcases phenylketonuria grunts venturers valiantly unremorsefully extradites stollens ponderers conditione loathly cancels debiting parrots paraguayans resonates" ;\n' +
+          '\t<http://localhost/vocabulary/bench/cdrom> "http://www.hogfishes.tld/richer/succories.html" ;\n' +
+          '\t<http://www.w3.org/2000/01/rdf-schema#seeAlso> "http://www.gantleted.tld/succories/dwelling.html" ;\n' +
+          '\t<http://swrc.ontoware.org/ontology#month> 4 ;\n' +
+          '\t<http://swrc.ontoware.org/ontology#note> "overbites terminals giros podgy vagus kinkiest xix recollected" ;\n' +
+          '\t<http://swrc.ontoware.org/ontology#pages> 110 ;\n' +
+          '\t<http://purl.org/dc/elements/1.1/title> "richer dwelling scrapped" ;\n' +
+          '\t<http://xmlns.com/foaf/0.1/homepage> "http://www.succories.tld/scrapped/prat.html" .'
+      );
       expect(body).toHaveLength(1903);
     }));
 
