@@ -109,4 +109,21 @@ describe('icv', () => {
         expect(res.status).toBe(200);
         expect(res.body).toBeNull();
       }));
+
+  it('should produce violation reports', () =>
+    icv.report(conn, database, '').then(res => {
+      expect(res.status).toBe(200);
+      expect(res.body).toMatchSnapshot();
+    }));
+
+  it('should produce violation reports in a transaction', () =>
+    beginTx()
+      .then(res => {
+        expect(res.status).toBe(200);
+        return icv.reportInTransaction(conn, database, res.transactionId, '');
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+        expect(res.body).toMatchSnapshot();
+      }));
 });
