@@ -438,7 +438,7 @@ declare namespace Stardog {
              * @param {object} options an object specifying the contentType of the constraints parameter. Default: text/turtle
              * @param {object} params additional parameters if needed
              */
-            function validateInTx(conn: Connection, database: string, constraints: string, transactionId: string, options: { contentType: HTTP.RdfMimeType }, params?: { graphUri: string }): Promise<HTTP.Body>;
+            function validateInTx(conn: Connection, database: string, transactionId: string, constraints: string, options: { contentType: HTTP.RdfMimeType }, params?: { graphUri: string }): Promise<HTTP.Body>;
 
             /**
              * Accepts integrity constraints as RDF and returns the violation explanations, if any, as RDF.
@@ -461,7 +461,30 @@ declare namespace Stardog {
              * @param {object} options an object specifying the contentType of the constraints parameter. Default: text/turtle
              * @param {object} params additional parameters if needed
              */
-            function violationsInTx(conn: Connection, database: string, constraints: string, options?: { contentType: HTTP.RdfMimeType }, params?: { graphUri: string }): Promise<HTTP.Body>;
+            function violationsInTx(conn: Connection, database: string, transactionId: string, constraints: string, options?: { contentType: HTTP.RdfMimeType }, params?: { graphUri: string }): Promise<HTTP.Body>;
+
+            /**
+             * Accepts integrity constraints as RDF and returns a validation report.
+             *
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the name of the database
+             * @param {string} constraints an RDF block containing the constraints to be validated
+             * @param {object} options an object specifying the contentType of the constraints parameter (default: text/turtle) and/or the accept type for the results (default: application/ld+json)
+             * @param {object} params additional parameters if needed
+             */
+            function report(conn: Connection, database: string, constraints: string, options?: { contentType?: HTTP.RdfMimeType, accept?: HTTP.AcceptMimeType }, params?: { graphUri: string }): Promise<HTTP.Body>;
+
+            /**
+             * Accepts integrity constraints as RDF and returns a validation report.
+             *
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the name of the database
+             * @param {string} transactionId the UUID of the transaction as returned by db.transaction.begin
+             * @param {string} constraints an RDF block containing the constraints to be validated
+             * @param {object} options an object specifying the contentType of the constraints parameter (default: text/turtle) and/or the accept type for the results (default: application/ld+json)
+             * @param {object} params additional parameters if needed
+             */
+            function reportInTx(conn: Connection, database: string, transactionId: string, constraints: string, options?: { contentType?: HTTP.RdfMimeType, accept?: HTTP.AcceptMimeType }, params?: { graphUri: string }): Promise<HTTP.Body>;
         }
 
         /** Commands that use the reasoning capabilities of a database */
