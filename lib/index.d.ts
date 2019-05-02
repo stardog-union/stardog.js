@@ -777,6 +777,15 @@ declare namespace Stardog {
             function list(conn: Connection, params?: object): Promise<HTTP.Body>
 
             /**
+                * Updates a given stored query and creates it if the name does not already refer to a stored query.
+                *
+                * @param {Connection} conn the Stardog server connection
+                * @param {StoredQueryOptions} config an object specifying the options to set on the updated query
+                * @param {object} params additional parameters if needed
+                */
+            function update(conn: Connection, config: StoredQueryOptions, params?: object): Promise<HTTP.Body>
+
+            /**
              * Removes a given stored query.
              *
              * @param {Connection} conn the Stardog server connection

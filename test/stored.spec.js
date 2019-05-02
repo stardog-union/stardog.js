@@ -67,6 +67,29 @@ describe('stored', () => {
         });
     });
   });
+  describe('update()', () => {
+    const name = generateRandomString();
+    it('inserts a new query', () =>
+      stored
+        .update(conn, {
+          name,
+          database,
+          query: 'select ?type { ?s a ?type }',
+        })
+        .then(res => {
+          expect(res.status).toBe(204);
+        }));
+    it('updates an existing query', () =>
+      stored
+        .update(conn, {
+          name,
+          database,
+          query: 'select distinct ?type { ?s a ?type }',
+        })
+        .then(res => {
+          expect(res.status).toBe(204);
+        }));
+  });
   describe('delete()', () => {
     it('removes a stored query', () => {
       const name = generateRandomString();
