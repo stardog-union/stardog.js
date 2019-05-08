@@ -113,17 +113,27 @@ describe('icv', () => {
   it('should produce violation reports', () =>
     icv.report(conn, database, '').then(res => {
       expect(res.status).toBe(200);
-      expect(res.body).toMatchSnapshot();
+      expect(res.body.length).not.toBe(0);
+      expect(res.body[0]).toHaveProperty('@id');
+      expect(res.body[0]).toHaveProperty('@type');
+      // Can't use `toHaveProperty` below because jest thinks it's a path for nested properties
+      expect(res.body[0]['http://www.w3.org/ns/shacl#conforms']).toBeDefined();
     }));
 
   it('should produce violation reports in a transaction', () =>
     beginTx()
       .then(res => {
         expect(res.status).toBe(200);
-        return icv.reportInTransaction(conn, database, res.transactionId, '');
+        return icv.reportInTx(conn, database, res.transactionId, '');
       })
       .then(res => {
         expect(res.status).toBe(200);
-        expect(res.body).toMatchSnapshot();
+        expect(res.body.length).not.toBe(0);
+        expect(res.body[0]).toHaveProperty('@id');
+        expect(res.body[0]).toHaveProperty('@type');
+        // Can't use `toHaveProperty` below because jest thinks it's a path for nested properties
+        expect(
+          res.body[0]['http://www.w3.org/ns/shacl#conforms']
+        ).toBeDefined();
       }));
 });
