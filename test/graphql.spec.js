@@ -1,11 +1,40 @@
 /* eslint-env jest */
 
 const { db, query: { graphql } } = require('../lib');
+const { server } = require('../lib');
+const semver = require('semver');
 const {
   generateDatabaseName,
   dropDatabase,
   ConnectionFactory,
 } = require('./setup-database');
+
+const textPlan =
+  'prefix : <http://api.stardog.com/>\n\nFrom all\nProjection(?0, ?1) [#1]\n`─ MergeJoin(?0) [#1]\n   +─ Scan[POSC](?0, <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>, :Character) [#1]\n   `─ Scan[PSOC](?0, :name, ?1) [#1]\n';
+
+const jsonPlan = {
+  cardinality: 1,
+  children: [
+    {
+      cardinality: 1,
+      children: [
+        {
+          cardinality: 1,
+          children: [],
+          label:
+            'Scan[POSC](?0, <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>, :Character)',
+        },
+        {
+          cardinality: 1,
+          children: [],
+          label: 'Scan[PSOC](?0, :name, ?1)',
+        },
+      ],
+      label: 'MergeJoin(?0)',
+    },
+  ],
+  label: 'Projection(?0, ?1)',
+};
 
 describe('graphql', () => {
   const database = generateDatabaseName();
@@ -96,61 +125,55 @@ type Episode {
       expect(res.body.data).toBeInstanceOf(Array);
     }));
 
-  it('explain', () =>
-    graphql
-      .execute(conn, database, '{ Character { name }}', { '@explain': true })
-      .then(res => {
-        expect(res.status).toBe(200);
-        expect(res.body).toHaveProperty('data');
-        expect(res.body.data).toEqual({
-          fields: { '0': { '1': 'name' } },
-          plan:
-            'prefix : <http://api.stardog.com/>\n\nFrom all\nProjection(?0, ?1) [#1]\n`─ MergeJoin(?0) [#1]\n   +─ Scan[POSC](?0, <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>, :Character) [#1]\n   `─ Scan[PSOC](?0, :name, ?1) [#1]\n',
-          sparql:
-            'SELECT *\nFROM <tag:stardog:api:context:all>\n{\n?0 rdf:type :Character .\n?0 :name ?1 .\n}\n',
-        });
-      }));
-
-  it('explainAsJson', () =>
-    graphql
-      .execute(conn, database, '{ Character { name }}', {
+  it('explainAsJson=false', () =>
+    Promise.all([
+      server.status(conn, { databases: false }),
+      graphql.execute(conn, database, '{ Character { name }}', {
         '@explain': true,
-        '@explainAsJson': true,
-      })
-      .then(res => {
+        '@explainAsJson': false,
+      }),
+    ]).then(results => {
+      const [statusRes, res] = results;
+      const stardogVersion = statusRes.body['dbms.version'].value;
+      // > 6.1.3 captures snapshot versions of 6.1.4
+      if (semver.gt(stardogVersion, '6.1.3')) {
         expect(res.status).toBe(200);
         expect(res.body).toHaveProperty('data');
         expect(res.body.data).toEqual({
           fields: { '0': { '1': 'name' } },
-          plan: {
-            dataset: { from: 'all' },
-            plan: {
-              cardinality: 1,
-              children: [
-                {
-                  cardinality: 1,
-                  children: [
-                    {
-                      cardinality: 1,
-                      children: [],
-                      label:
-                        'Scan[POSC](?0, <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>, :Character)',
-                    },
-                    {
-                      cardinality: 1,
-                      children: [],
-                      label: 'Scan[PSOC](?0, :name, ?1)',
-                    },
-                  ],
-                  label: 'MergeJoin(?0)',
-                },
-              ],
-              label: 'Projection(?0, ?1)',
-            },
-            prefixes: { '': 'http://api.stardog.com/' },
-          },
+          plan: textPlan,
           sparql:
             'SELECT *\nFROM <tag:stardog:api:context:all>\n{\n?0 rdf:type :Character .\n?0 :name ?1 .\n}\n',
         });
-      }));
+      } else {
+        // Argument is not supported before 6.1.4
+        expect(res.status).toBe(400);
+      }
+    }));
+
+  it('explain', () =>
+    Promise.all([
+      server.status(conn, { databases: false }),
+      graphql.execute(conn, database, '{ Character { name }}', {
+        '@explain': true,
+      }),
+    ]).then(results => {
+      const [statusRes, res] = results;
+      const stardogVersion = statusRes.body['dbms.version'].value;
+      expect(res.status).toBe(200);
+      expect(res.body).toHaveProperty('data');
+      expect(res.body.data).toEqual({
+        sparql:
+          'SELECT *\nFROM <tag:stardog:api:context:all>\n{\n?0 rdf:type :Character .\n?0 :name ?1 .\n}\n',
+        fields: { '0': { '1': 'name' } },
+        // > 6.1.3 captures snapshot versions of 6.1.4
+        plan: semver.gt(stardogVersion, '6.1.3')
+          ? {
+              dataset: { from: 'all' },
+              plan: jsonPlan,
+              prefixes: { '': 'http://api.stardog.com/' },
+            }
+          : textPlan,
+      });
+    }));
 });

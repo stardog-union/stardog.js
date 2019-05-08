@@ -105,6 +105,7 @@
     "rollup-plugin-json": "^2.3.0",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^2.0.1",
+    "semver": "^5.5.0",
     "typedocs": "^0.6.5"
   },
   "engines": {
