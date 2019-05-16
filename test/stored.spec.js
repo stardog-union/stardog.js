@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-const { query: { stored } } = require('../lib');
+const { Connection, query: { stored } } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,
@@ -88,6 +88,44 @@ describe('stored', () => {
         })
         .then(res => {
           expect(res.status).toBe(204);
+        }));
+    it('returns the delete response when theres a non 404 error', () =>
+      stored
+        .update(
+          new Connection({
+            username: 'foo',
+            password: 'bar',
+            endpoint: 'http://localhost:5820',
+          }),
+          {
+            name,
+            database,
+            query: 'select ?type { ?s a ?type }',
+          },
+          {},
+          '6.2.1'
+        )
+        .then(res => {
+          expect(res.url).toBe('http://localhost:5820/admin/queries/stored');
+          expect(res.status).toBe(401);
+        }));
+    it('returns null when the stardog version cannot be retrieved', () =>
+      stored
+        .update(
+          new Connection({
+            username: 'foo',
+            password: 'bar',
+            endpoint: 'http://localhost:5820',
+          }),
+          {
+            name,
+            database,
+            query: 'select ?type { ?s a ?type }',
+          },
+          {}
+        )
+        .then(res => {
+          expect(res).toBe(null);
         }));
   });
   describe('delete()', () => {

@@ -210,6 +210,24 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="version">`server.version(version, conn)`</a>
+
+Returns a promise that resolves to `version`, or, the version of the server at
+`conn`. Returns `null` if neither parameter is provided.
+
+Used by other methods in this library to handle Stardog API breaking changes
+while avoiding an extra request when the caller knows the server's current
+version.
+
+Expects the following paramters:
+
+- version (`string`)
+
+- conn ([`Connection`](#connection))
+
+Returns [`Promise<string>`]
+
+
 ## <a name="db">db</a>
 
 #### <a name="create">`db.create(conn, database, databaseOptions, options, params)`</a>
