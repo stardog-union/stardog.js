@@ -79,7 +79,8 @@
     "form-data": "^2.2.0",
     "isomorphic-base64": "^1.0.2",
     "lodash": "^4.17.4",
-    "querystring": "^0.2.0"
+    "querystring": "^0.2.0",
+    "semver": "^5.5.0"
   },
   "devDependencies": {
     "@types/jest": "^20.0.2",
