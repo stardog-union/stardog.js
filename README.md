@@ -468,6 +468,18 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="get">`db.options.getDbConfigProperties(conn, params)`</a>
+
+Gets all possible database options with their default values.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 ## <a name="graph">graph</a>
 
 #### <a name="doget">`db.graph.doGet(conn, database, graphUri, accept, params)`</a>

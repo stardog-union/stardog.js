@@ -33,4 +33,10 @@ describe('db.getOptions()', () => {
         },
       });
     }));
+
+  it('should get all db config properties', () =>
+    options.get(conn, database).then(res => {
+      expect(res.status).toEqual(200);
+      expect(typeof res.body).toEqual('object');
+    }));
 });

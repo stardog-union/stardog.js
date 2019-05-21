@@ -263,6 +263,8 @@ declare namespace Stardog {
 
         /** Database options. */
         namespace options {
+            /** Gets all possible database options with their default values. */
+            function getDbConfigProperties(conn: Connection, params?: object): Promise<HTTP.Body>;
             /** Gets set of options on a database. */
             function get(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
             /** Sets options on a database. */
