@@ -452,6 +452,20 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="get">`db.options.getAll(conn, database, params)`</a>
+
+Gets all options on a database. 
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 #### <a name="set">`db.options.set(conn, database, databaseOptions, params)`</a>
 
 Sets options on a database. 

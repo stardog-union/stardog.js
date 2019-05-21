@@ -24,7 +24,7 @@ describe('db.getOptions()', () => {
       expect(res.status).toEqual(404);
     }));
 
-  it('should get the options of an DB', () =>
+  it('should get the options of a DB', () =>
     options.get(conn, database).then(res => {
       expect(res.status).toEqual(200);
       expect(res.body).toMatchObject({
@@ -32,6 +32,12 @@ describe('db.getOptions()', () => {
           type: 'Disk',
         },
       });
+    }));
+
+  it('should get all the options of a DB', () =>
+    options.get(conn, database).then(res => {
+      expect(res.status).toEqual(200);
+      expect(typeof res.body).toEqual('object');
     }));
 
   it('should get all db config properties', () =>
