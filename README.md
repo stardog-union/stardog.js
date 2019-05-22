@@ -65,7 +65,7 @@ After releasing, be sure to push to master, including the tags (so that the rele
 
 ## Version details
 
-The current version of stardog.js has been tested against version 6.1.2 of Stardog. You are encouraged to use this library if you are using version 5 or greater of Stardog. However, there is very little code that is version specific in stardog.js. It is essentially just a convenience wrapper around `fetch`. It is very likely that many of the exposed methods will work on older versions of Stardog, but this has not been tested.
+The current version of stardog.js has been tested against version 6.2.0 of Stardog. You are encouraged to use this library if you are using version 5 or greater of Stardog. However, there is very little code that is version specific in stardog.js. It is essentially just a convenience wrapper around `fetch`. It is very likely that many of the exposed methods will work on older versions of Stardog, but this has not been tested.
 
 If you are using a really old version of Stardog (<= 3.0.0) you should stick with the legacy version of the library which is version 0.3.1.
 
@@ -209,24 +209,6 @@ Expects the following parameters:
 - params (`{ databases?: boolean; }`)
 
 Returns [`Promise<HTTP.Body>`](#body)
-
-#### <a name="version">`server.version(version, conn)`</a>
-
-Returns a promise that resolves to `version`, or, the version of the server at
-`conn`. Returns `null` if neither parameter is provided.
-
-Used by other methods in this library to handle Stardog API breaking changes
-while avoiding an extra request when the caller knows the server's current
-version.
-
-Expects the following paramters:
-
-- version (`string`)
-
-- conn ([`Connection`](#connection))
-
-Returns [`Promise<string>`]
-
 
 ## <a name="db">db</a>
 
