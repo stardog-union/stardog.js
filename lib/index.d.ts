@@ -787,13 +787,14 @@ declare namespace Stardog {
             function list(conn: Connection, params?: object): Promise<HTTP.Body>
 
             /**
-                * Updates a given stored query and creates it if the name does not already refer to a stored query.
+                * Updates a given stored query and creates it if the name does not refer to an existing stored query.
                 *
                 * @param {Connection} conn the Stardog server connection
                 * @param {StoredQueryOptions} config an object specifying the options to set on the updated query
                 * @param {object} params additional parameters if needed
+                * @param {boolean} useUpdateMethod whether to use Stardog's HTTP PUT method, added in version 6.2.0. Default: false
                 */
-            function update(conn: Connection, config: StoredQueryOptions, params?: object): Promise<HTTP.Body>
+                function update(conn: Connection, config: StoredQueryOptions, params?: object, useUpdateMethod?: boolean): Promise<HTTP.Body>
 
             /**
              * Removes a given stored query.

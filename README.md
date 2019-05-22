@@ -1235,6 +1235,22 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="update">`query.update(conn, storedQuery, params, useUpdateMethod)`</a>
+
+Updates a given stored query and creates it if the name does not refer to an existing stored query.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- storedQuery (`string`)
+
+- params (`object`)
+
+- useUpdateMethod (`boolean`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 ## <a name="graphql">graphql</a>
 
 #### <a name="execute">`query.graphql.execute(conn, database, query, variables, params)`</a>

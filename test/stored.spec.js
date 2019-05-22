@@ -67,7 +67,9 @@ describe('stored', () => {
         });
     });
   });
-  describe('update()', () => {
+  // Covered below by `update(useUpdateMethod = false)`
+  // describe('replace()', () => {});
+  describe('update(useUpdateMethod = true)', () => {
     const name = generateRandomString();
     it('inserts a new query', () =>
       stored
@@ -102,14 +104,13 @@ describe('stored', () => {
             database,
             query: 'select ?type { ?s a ?type }',
           },
-          {},
-          '6.2.1'
+          {}
         )
         .then(res => {
           expect(res.url).toBe('http://localhost:5820/admin/queries/stored');
           expect(res.status).toBe(401);
         }));
-    it('returns null when the stardog version cannot be retrieved', () =>
+    it('returns 401 when the stardog version cannot be retrieved', () =>
       stored
         .update(
           new Connection({
@@ -125,7 +126,83 @@ describe('stored', () => {
           {}
         )
         .then(res => {
-          expect(res).toBe(null);
+          expect(res.status).toBe(401);
+        }));
+  });
+  describe('update(useUpdateMethod = false)', () => {
+    const name = generateRandomString();
+    it('inserts a new query', () =>
+      stored
+        .update(
+          conn,
+          {
+            name,
+            database,
+            query: 'select ?type { ?s a ?type }',
+          },
+          {},
+          false
+        )
+        .then(res => {
+          expect(res.status).toBe(204);
+        }));
+    it('updates an existing query', () =>
+      stored
+        .update(
+          conn,
+          {
+            name,
+            database,
+            query: 'select distinct ?type { ?s a ?type }',
+          },
+          {},
+          false
+        )
+        .then(res => {
+          expect(res.status).toBe(204);
+        }));
+    it('returns the delete response when theres a non 404 error', () =>
+      stored
+        .update(
+          new Connection({
+            username: 'foo',
+            password: 'bar',
+            endpoint: 'http://localhost:5820',
+          }),
+          {
+            name,
+            database,
+            query: 'select ?type { ?s a ?type }',
+          },
+          {},
+          false
+        )
+        .then(res => {
+          expect(res.url).toEqual(
+            expect.stringContaining(
+              'http://localhost:5820/admin/queries/stored'
+            )
+          );
+          expect(res.status).toBe(401);
+        }));
+    it('returns 401 when the stardog version cannot be retrieved', () =>
+      stored
+        .update(
+          new Connection({
+            username: 'foo',
+            password: 'bar',
+            endpoint: 'http://localhost:5820',
+          }),
+          {
+            name,
+            database,
+            query: 'select ?type { ?s a ?type }',
+          },
+          {},
+          false
+        )
+        .then(res => {
+          expect(res.status).toBe(401);
         }));
   });
   describe('delete()', () => {
