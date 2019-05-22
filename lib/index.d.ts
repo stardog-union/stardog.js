@@ -122,16 +122,6 @@ declare namespace Stardog {
          * information about databases is omitted.
          */
         function status(conn: Connection, params?: { databases?: boolean; }): Promise<HTTP.Body>;
-
-        /**
-         * Returns a promise that resolves to `version`, or, the version of the
-         * server at `conn`. Returns `null` if neither parameter is provided.
-         *
-         * Used by other methods in this library to handle Stardog API breaking
-         * changes while avoiding an extra request when the caller knows the
-         * server's current version.
-         */
-        function version(version: string, conn?: Connection): Promise<string>;
     }
 
     /** Stardog database actions. */
