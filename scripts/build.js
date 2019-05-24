@@ -75,7 +75,7 @@ del('dist/*')
   .then(() => {
     console.log(
       chalk.bgBlack.greenBright(
-        'All Stardog.js builds completeled successfully.'
+        'All Stardog.js builds completed successfully.'
       )
     );
   })
