@@ -430,6 +430,16 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 ## <a name="options">options</a>
 
+#### <a name="getavailable">`db.options.getAvailable(conn)`</a>
+
+Gets all available database options with their default values. 
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 #### <a name="get">`db.options.get(conn, database, params)`</a>
 
 Gets set of options on a database. 
@@ -441,6 +451,18 @@ Expects the following parameters:
 - database (`string`)
 
 - params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="getall">`db.options.getAll(conn, database)`</a>
+
+Gets all options on a database. 
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
