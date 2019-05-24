@@ -1,71 +1,84 @@
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable no-console */
-const chalk = require('chalk');
 const rollup = require('rollup');
+const chalk = require('chalk');
 const del = require('del');
-const commonJs = require('rollup-plugin-commonjs');
+const commonjs = require('rollup-plugin-commonjs');
 const resolve = require('rollup-plugin-node-resolve');
-const uglify = require('rollup-plugin-uglify');
-const babel = require('rollup-plugin-babel');
-const json = require('rollup-plugin-json');
+const { terser } = require('rollup-plugin-terser');
+const typescript = require('rollup-plugin-typescript2');
+const pkg = require('../package.json');
 
+const moduleName = 'stardogjs';
+const basePlugins = [
+  commonjs(),
+  resolve({
+    browser: true,
+    preferBuiltins: false, // for using `querystring` npm module, among others
+  }),
+  typescript({
+    typescript: require('typescript'), // use local typescript
+  }),
+];
 const entries = [
   {
-    dest: 'dist/stardog.js',
-    moduleName: 'stardogjs',
-    minify: false,
-    name: 'Uncommpressed UMD',
+    dest: pkg.browser,
+    name: 'UMD',
+    format: 'umd',
   },
   {
-    dest: 'dist/stardog.min.js',
-    moduleName: 'stardogjs',
-    minify: true,
-    name: 'Minified UMD',
+    dest: pkg.module,
+    name: 'ESM',
+    format: 'es',
   },
-];
+  {
+    dest: pkg.main,
+    name: 'CommonJS',
+    format: 'cjs',
+  },
+].reduce(
+  (decoratedEntries, entry) => [
+    ...decoratedEntries,
+    {
+      ...entry,
+      plugins: basePlugins,
+      sourceMap: false,
+    },
+    {
+      dest: entry.dest.replace(/\.(\w+)$/, '.min.$1'),
+      name: `Minified ${entry.dest}`,
+      format: entry.format,
+      plugins: [...basePlugins, terser()],
+      sourceMap: 'inline',
+    },
+  ],
+  []
+);
 
 del('dist/*')
   .then(() => {
     return Promise.all(
-      entries.map(config => {
-        console.log(chalk.yellow(`Starting build for ${config.name}...`));
-        const plugins = [
-          resolve({
-            browser: true,
-            preferBuiltins: false,
-          }),
-          json(),
-          commonJs(),
-          babel({
-            exclude: 'node_modules/**',
-            presets: ['es2015-rollup'],
-          }),
-        ];
-        if (config.minify) {
-          plugins.push(uglify());
-        }
+      entries.map((entry) => {
+        console.log(chalk.yellow(`Starting build for ${entry.name}...`));
         return rollup
           .rollup({
-            entry: 'lib/index.js',
+            input: 'lib/index.ts',
             treeshake: true,
-            plugins,
+            plugins: entry.plugins,
           })
-          .then(bundle => {
-            console.log(chalk.green(`${config.name} successfully rolled.`));
-            console.log(chalk.yellow(`Starting write for ${config.name}...`));
+          .then((bundle) => {
+            console.log(chalk.green(`${entry.name} successfully rolled.`));
+            console.log(chalk.yellow(`Starting write for ${entry.name}...`));
             return bundle.write({
-              format: 'umd',
-              dest: config.dest,
-              // Inject the version here because the JSON plugin here pulls everything in and freezes it, thus adding a lot of bloat.
-              // intro: `global.VERSION = '${pkg.version}';`,
-              sourceMap: config.minify ? 'inline' : false,
-              moduleName: 'stardogjs',
+              name: moduleName,
+              format: entry.format,
+              file: entry.dest,
+              intro: entry.format === 'umd' ? `global.VERSION = '${pkg.version}';` : '',
+              sourceMap: entry.sourceMap
             });
           })
           .then(() =>
             console.log(
               chalk.green(
-                `${config.name} successfully written to ${config.dest}.`
+                `${entry.name} successfully written to ${entry.dest}.`
               )
             )
           );
@@ -79,6 +92,6 @@ del('dist/*')
       )
     );
   })
-  .catch(e => {
+  .catch((e) => {
     console.error(chalk.bgBlack.red(e));
   });

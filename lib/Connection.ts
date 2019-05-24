@@ -1,19 +1,28 @@
-const { Headers, Request } = require('./fetch');
-const base64 = require('isomorphic-base64');
+import { Headers, Request } from './fetch';
+import * as base64 from 'isomorphic-base64';
 
-class Connection {
+export class Connection {
+  private endpoint: string;
+  private username: string;
+  private password: string;
+  private meta?;
+
   constructor(options = {}, meta) {
-    this.config(options, meta);
+    this.configure(options, meta);
   }
 
   // The (optional) `meta` argument is useful if the user wants to override the
   // ordinary creation of fetch requests or headers for a connection. Fetch
   // request creation can be overriden by providing a `createRequest` method on
   // `meta`, and header creation can be overriden with `createHeaders`.
-  config(options, meta) {
-    const config = Object.assign({}, this, options, { meta });
+  configure(options, meta) {
+    const config = {
+      ...(this as Connection),
+      ...options,
+      meta,
+    };
 
-    // If it ends with / slice it off
+    // If the endpoint ends with '/', slice it off.
     if (
       config.endpoint &&
       config.endpoint.lastIndexOf('/') === config.endpoint.length - 1
@@ -65,5 +74,3 @@ class Connection {
     });
   }
 }
-
-module.exports = Connection;

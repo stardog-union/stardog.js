@@ -1,13 +1,12 @@
-const { fetch } = require('../fetch');
-const qs = require('querystring');
-const { httpBody } = require('../response-transforms');
+import { fetch } from '../fetch';
+import qs from 'querystring';
+import { httpBody } from '../response-transforms';
 
-const doGet = (
+export const doGet = async (
   conn,
   database,
   graphUri = null,
-  accept = 'application/ld+json',
-  params = {}
+  accept = 'application/ld+json'
 ) => {
   const headers = conn.headers();
   headers.set('Accept', accept);
@@ -15,30 +14,33 @@ const doGet = (
     graphUri ? qs.stringify({ graph: graphUri }) : 'default'
   }`;
 
-  return fetch(conn.request(resource), {
+  const fetchResponse = await fetch(conn.request(resource), {
     headers,
-  }).then(httpBody);
+  });
+
+  return httpBody(fetchResponse);
 };
 
-const doDelete = (conn, database, graphUri = null, params = {}) => {
+export const doDelete = async (conn, database, graphUri = null) => {
   const headers = conn.headers();
   const resource = `${database}?${
     graphUri ? qs.stringify({ graph: graphUri }) : 'default'
   }`;
 
-  return fetch(conn.request(resource), {
+  const fetchResponse = await fetch(conn.request(resource), {
     headers,
     method: 'DELETE',
-  }).then(httpBody);
+  });
+
+  return httpBody(fetchResponse);
 };
 
-const doPut = (
+export const doPut = async (
   conn,
   database,
   graphData,
   graphUri = null,
-  contentType = 'application/ld+json',
-  params = {}
+  contentType = 'application/ld+json'
 ) => {
   const headers = conn.headers();
   headers.set('Content-Type', contentType);
@@ -46,20 +48,21 @@ const doPut = (
     graphUri ? qs.stringify({ graph: graphUri }) : 'default'
   }`;
 
-  return fetch(conn.request(resource), {
+  const fetchResponse = await fetch(conn.request(resource), {
     headers,
     method: 'PUT',
     body: graphData,
-  }).then(httpBody);
+  });
+
+  return httpBody(fetchResponse);
 };
 
-const doPost = (
+export const doPost = async (
   conn,
   database,
   graphData,
   graphUri = null,
-  contentType = 'application/ld+json',
-  params = {}
+  contentType = 'application/ld+json'
 ) => {
   const headers = conn.headers();
   headers.set('Content-Type', contentType);
@@ -67,11 +70,11 @@ const doPost = (
     graphUri ? qs.stringify({ graph: graphUri }) : 'default'
   }`;
 
-  return fetch(conn.request(resource), {
+  const fetchResponse = await fetch(conn.request(resource), {
     headers,
     method: 'POST',
     body: graphData,
-  }).then(httpBody);
-};
+  });
 
-module.exports = { doGet, doPut, doPost, doDelete };
+  return httpBody(fetchResponse);
+};

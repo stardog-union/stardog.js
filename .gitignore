@@ -1,4 +1,6 @@
 .DS_Store
+.rpt2_cache/
+.vscode/
 bower_components/
 node_modules/
 .*~

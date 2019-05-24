@@ -1,49 +1,62 @@
-const { fetch } = require('../fetch');
-const qs = require('querystring');
+import { fetch } from '../fetch';
+import qs from 'querystring';
+import { httpBody } from '../response-transforms';
 
-const { httpBody } = require('../response-transforms');
-
-const get = (conn, database, params = {}) => {
+export const get = (conn, database) => {
   const headers = conn.headers();
   headers.set('Accept', 'application/ld+json');
 
-  return fetch(conn.request(database, 'icv'), {
+  const fetchResponse = fetch(conn.request(database, 'icv'), {
     headers,
-  }).then(httpBody);
+  });
+
+  return httpBody(fetchResponse);
 };
 
-const add = (conn, database, icvAxioms, options = {}, params = {}) => {
+export const add = (conn, database, icvAxioms, options = {}) => {
   const headers = conn.headers();
   headers.set('Content-Type', options.contentType || 'text/turtle');
 
-  return fetch(conn.request(database, 'icv', 'add'), {
+  const fetchResponse = fetch(conn.request(database, 'icv', 'add'), {
     method: 'POST',
     body: icvAxioms,
     headers,
-  }).then(httpBody);
+  });
+
+  return httpBody(fetchResponse);
 };
 
-const remove = (conn, database, icvAxioms, options = {}, params = {}) => {
+export const remove = (conn, database, icvAxioms, options = {}) => {
   const headers = conn.headers();
   headers.set('Content-Type', options.contentType || 'text/turtle');
 
-  return fetch(conn.request(database, 'icv', 'remove'), {
+  const fetchResponse = fetch(conn.request(database, 'icv', 'remove'), {
     method: 'POST',
     body: icvAxioms,
     headers,
-  }).then(httpBody);
+  });
+
+  return httpBody(fetchResponse);
 };
 
-const clear = (conn, database, params = {}) => {
+export const clear = (conn, database) => {
   const headers = conn.headers();
 
-  return fetch(conn.request(database, 'icv', 'clear'), {
+  const fetchResponse = fetch(conn.request(database, 'icv', 'clear'), {
     method: 'POST',
     headers,
-  }).then(httpBody);
+  });
+
+  return httpBody(fetchResponse);
 };
 
-const convert = (conn, database, icvAxiom, options = {}, params = {}) => {
+export const convert = (
+  conn,
+  database,
+  icvAxiom,
+  options = {},
+  params = {}
+) => {
   const headers = conn.headers();
   headers.set('Content-Type', options.contentType || 'text/turtle');
 
@@ -54,14 +67,22 @@ const convert = (conn, database, icvAxiom, options = {}, params = {}) => {
   const query = qs.stringify(queryParams);
   const suffix = `convert${query.length > 0 ? `?${query}` : ''}`;
 
-  return fetch(conn.request(database, 'icv', suffix), {
+  const fetchResponse = fetch(conn.request(database, 'icv', suffix), {
     method: 'POST',
     body: icvAxiom,
     headers,
-  }).then(httpBody);
+  });
+
+  return httpBody(fetchResponse);
 };
 
-const validate = (conn, database, constraints, options = {}, params = {}) => {
+export const validate = (
+  conn,
+  database,
+  constraints,
+  options = {},
+  params = {}
+) => {
   const headers = conn.headers();
   headers.set('Content-Type', options.contentType || 'text/turtle');
   headers.set('Accept', 'text/boolean');
@@ -73,14 +94,16 @@ const validate = (conn, database, constraints, options = {}, params = {}) => {
   const query = qs.stringify(queryParams);
   const suffix = `validate${query.length > 0 ? `?${query}` : ''}`;
 
-  return fetch(conn.request(database, 'icv', suffix), {
+  const fetchResponse = fetch(conn.request(database, 'icv', suffix), {
     method: 'POST',
     body: constraints,
     headers,
-  }).then(httpBody);
+  });
+
+  return httpBody(fetchResponse);
 };
 
-const validateInTx = (
+export const validateInTx = (
   conn,
   database,
   transactionId,
@@ -99,14 +122,25 @@ const validateInTx = (
   const query = qs.stringify(queryParams);
   const suffix = `validate${query.length > 0 ? `?${query}` : ''}`;
 
-  return fetch(conn.request(database, 'icv', transactionId, suffix), {
-    method: 'POST',
-    body: constraints,
-    headers,
-  }).then(httpBody);
+  const fetchResponse = fetch(
+    conn.request(database, 'icv', transactionId, suffix),
+    {
+      method: 'POST',
+      body: constraints,
+      headers,
+    }
+  );
+
+  return httpBody(fetchResponse);
 };
 
-const violations = (conn, database, constraints, options = {}, params = {}) => {
+export const violations = (
+  conn,
+  database,
+  constraints,
+  options = {},
+  params = {}
+) => {
   const headers = conn.headers();
   headers.set('Content-Type', options.contentType || 'text/turtle');
   headers.set('Accept', '*/*');
@@ -118,14 +152,16 @@ const violations = (conn, database, constraints, options = {}, params = {}) => {
   const query = qs.stringify(queryParams);
   const suffix = `violations${query.length > 0 ? `?${query}` : ''}`;
 
-  return fetch(conn.request(database, 'icv', suffix), {
+  const fetchResponse = fetch(conn.request(database, 'icv', suffix), {
     method: 'POST',
     body: constraints,
     headers,
-  }).then(httpBody);
+  });
+
+  return httpBody(fetchResponse);
 };
 
-const violationsInTx = (
+export const violationsInTx = (
   conn,
   database,
   transactionId,
@@ -144,11 +180,16 @@ const violationsInTx = (
   const query = qs.stringify(queryParams);
   const suffix = `violations${query.length > 0 ? `?${query}` : ''}`;
 
-  return fetch(conn.request(database, 'icv', transactionId, suffix), {
-    method: 'POST',
-    body: constraints,
-    headers,
-  }).then(httpBody);
+  const fetchResponse = fetch(
+    conn.request(database, 'icv', transactionId, suffix),
+    {
+      method: 'POST',
+      body: constraints,
+      headers,
+    }
+  );
+
+  return httpBody(fetchResponse);
 };
 
 const report = (conn, database, constraints, options = {}, params = {}) => {

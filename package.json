@@ -1,6 +1,6 @@
 {
   "name": "stardog",
-  "version": "1.4.0",
+  "version": "2.0.0",
   "description": "Stardog JavaScript Framework for node.js and the browser - Develop apps using the Stardog RDF Database & JS.",
   "keywords": [
     "stardog",
@@ -11,9 +11,10 @@
     "linked data",
     "query"
   ],
-  "main": "lib/index.js",
+  "main": "dist/stardog.cjs.js",
   "browser": "dist/stardog.js",
-  "types": "lib/index.d.ts",
+  "module": "dist/stardog.esm.js",
+  "types": "dist/index.d.ts",
   "author": {
     "name": "Stardog Union",
     "url": "http://stardog.com"
@@ -74,39 +75,39 @@
     "url": "https://github.com/stardog-union/stardog.js/issues"
   },
   "dependencies": {
-    "fetch-ponyfill": "^6.0.0",
+    "fetch-ponyfill": "^6.0.2",
     "flat": "^2.0.1",
     "form-data": "^2.2.0",
     "isomorphic-base64": "^1.0.2",
-    "lodash": "^4.17.4",
+    "lodash.get": "^4.4.2",
+    "lodash.pick": "^4.4.0",
     "querystring": "^0.2.0"
   },
   "devDependencies": {
     "@types/jest": "^20.0.2",
+    "@types/node": "^10.12.12",
     "@types/node-fetch": "^1.6.7",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
-    "babel-preset-es2015-rollup": "^3.0.0",
     "chalk": "^2.0.1",
-    "eslint": "^4.2.0",
-    "eslint-config-airbnb-base": "^11.2.0",
-    "eslint-config-prettier": "^2.3.0",
-    "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-prettier": "^2.1.2",
     "husky": "^0.13.4",
-    "jest": "^23.5.0",
+    "jest": "^23.6.0",
     "lint-staged": "^4.0.0",
     "mdchangelog": "^0.8.0",
     "prettier": "^1.4.4",
     "randomstring": "^1.1.5",
-    "rollup": "^0.43.0",
-    "rollup-plugin-babel": "^2.7.1",
-    "rollup-plugin-commonjs": "^8.0.2",
+    "rollup": "^0.67.4",
+    "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-eslint": "^3.0.0",
     "rollup-plugin-json": "^2.3.0",
-    "rollup-plugin-node-resolve": "^3.0.0",
-    "rollup-plugin-uglify": "^2.0.1",
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup-plugin-terser": "^3.0.0",
+    "rollup-plugin-typescript2": "^0.18.1",
     "semver": "^5.5.0",
-    "typedocs": "^0.6.5"
+    "ts-jest": "^23.10.5",
+    "tslint": "^5.11.0",
+    "tslint-config-airbnb": "^5.11.1",
+    "tslint-config-prettier": "^1.17.0",
+    "typedocs": "^0.6.5",
+    "typescript": "^3.2.2"
   },
   "engines": {
     "node": ">=6.0.0"
@@ -114,16 +115,16 @@
   "scripts": {
     "build": "node scripts/build",
     "docs": "node scripts/docs",
-    "test": "eslint '{lib,test}/**/*.js' --fix && jest test/*.spec.js --verbose -i",
+    "test": "tslint '{lib,test}/**/*.[tj]s' --fix && jest test/*.spec.js --verbose -i",
     "precommit": "lint-staged",
-    "format": "prettier '{lib,test}/**/*.js' --single-quote --trailing-comma es5 --write",
+    "format": "prettier '{lib,test}/**/*.[tj]s' --write",
     "version": "mdchangelog --remote stardog-union/stardog.js --no-prologue --order-milestones semver --order-issues closed_at --overwrite --no-orphan-issues && npm run docs && git add README.md CHANGELOG.md",
     "prepublishOnly": "node scripts/triggerAnnoyingAlert.js && npm run build"
   },
   "lint-staged": {
     "linters": {
-      "{lib,test}/**/*.js": [
-        "prettier --single-quote --trailing-comma es5 --write",
+      "{lib,test}/**/*.[tj]s": [
+        "prettier --write",
         "git add"
       ]
     }

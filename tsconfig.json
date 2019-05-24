@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "noImplicitAny": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "sourceMap": true,
+    "stripInternal": true,
+    "declaration": true,
+    "declarationDir": "./dist/types",
+    "outDir": "./dist",
+    "lib": ["es2015", "dom"],
+    "baseUrl": ".",
+    "paths": {
+      "*": [
+        "lib/*"
+      ]
+    }
+  },
+  "include": [
+    "lib/**/*"
+  ],
+}

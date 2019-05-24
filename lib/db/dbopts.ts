@@ -1,7 +1,7 @@
 // These are the Stardog DB options that I know about as of 2017-06-29.
 // I got this list by running `stardog-admin metadata get <DATABASE>`
 
-module.exports = {
+export default {
   database: {
     archetypes: null,
     connection: {
