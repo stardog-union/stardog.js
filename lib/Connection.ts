@@ -1,25 +1,34 @@
-import { Headers, Request } from './fetch';
-import * as base64 from 'isomorphic-base64';
+import { RequestHeader, ContentType } from './constants';
+
+export interface ConnectionMeta {
+  createHeaders?(headersHolder: { headers: Headers }): Headers;
+  createRequest?(requestData: {
+    uri: string;
+    Request: typeof Request;
+  }): string | Request;
+}
+
+export interface ConnectionConfig {
+  endpoint: string;
+  username: string;
+  password: string;
+  meta?: ConnectionMeta;
+}
 
 export class Connection {
   private endpoint: string;
   private username: string;
   private password: string;
-  private meta?;
+  private meta?: ConnectionMeta;
 
-  constructor(options = {}, meta) {
-    this.configure(options, meta);
+  constructor(options: ConnectionConfig) {
+    this.configure(options);
   }
 
-  // The (optional) `meta` argument is useful if the user wants to override the
-  // ordinary creation of fetch requests or headers for a connection. Fetch
-  // request creation can be overriden by providing a `createRequest` method on
-  // `meta`, and header creation can be overriden with `createHeaders`.
-  configure(options, meta) {
+  configure(options: Partial<ConnectionConfig>) {
     const config = {
-      ...(this as Connection),
+      ...((<unknown>this) as ConnectionConfig),
       ...options,
-      meta,
     };
 
     // If the endpoint ends with '/', slice it off.
@@ -39,10 +48,10 @@ export class Connection {
   headers() {
     const headers = new Headers();
     headers.set(
-      'Authorization',
-      `Basic ${base64.btoa(`${this.username}:${this.password}`)}`
+      RequestHeader.AUTHORIZATION,
+      `Basic ${btoa(`${this.username}:${this.password}`)}`
     );
-    headers.set('Accept', '*/*');
+    headers.set(RequestHeader.ACCEPT, ContentType.ALL);
 
     if (this.meta && this.meta.createHeaders) {
       return this.meta.createHeaders({ headers });
@@ -51,11 +60,11 @@ export class Connection {
     return headers;
   }
 
-  uri(...resource) {
+  uri(...resource: string[]) {
     return `${this.endpoint}/${resource.join('/')}`;
   }
 
-  request(...resource) {
+  request(...resource: string[]) {
     if (!this.meta || !this.meta.createRequest) {
       // We *could* just return a new Request from this method at all times (in
       // this case, just `new Request(this.uri(...resource))`), but,

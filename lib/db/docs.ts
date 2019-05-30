@@ -1,64 +1,64 @@
-import FormData from 'form-data';
-import { fetch } from '../fetch';
-import { httpBody } from '../response-transforms';
+import { BaseDatabaseOptions } from 'types';
+import { RequestHeader, ContentType, RequestMethod } from '../constants';
+import { getFetchDispatcher } from 'requestUtils';
 
-export const size = async (conn, database) => {
-  const headers = conn.headers();
-  headers.set('Accept', 'text/plain');
+interface BaseDatabaseOptionsWithFileName extends BaseDatabaseOptions {
+  fileName: string;
+}
 
-  const fetchResponse = await fetch(conn.request(database, 'docs', 'size'), {
-    headers,
+const dispatchDbFetch = getFetchDispatcher();
+
+export const size = ({ connection, database }: BaseDatabaseOptions) =>
+  dispatchDbFetch({
+    connection,
+    requestHeaders: {
+      [RequestHeader.ACCEPT]: ContentType.TEXT_PLAIN,
+    },
+    pathSuffix: `${database}/docs/size`,
   });
 
-  return httpBody(fetchResponse);
-};
-
-export const clear = async (conn, database) => {
-  const headers = conn.headers();
-  const fetchResponse = await fetch(conn.request(database, 'docs'), {
-    method: 'DELETE',
-    headers,
+export const clear = ({ connection, database }: BaseDatabaseOptions) =>
+  dispatchDbFetch({
+    connection,
+    method: RequestMethod.DELETE,
+    pathSuffix: `${database}/docs`,
   });
 
-  return httpBody(fetchResponse);
-};
-
-export const add = async (conn, database, fileName, fileContents) => {
-  const headers = conn.headers();
+export const add = ({
+  connection,
+  database,
+  fileName,
+  fileContents,
+}: BaseDatabaseOptionsWithFileName & {
+  fileContents: string;
+}) => {
   const formData = new FormData();
-  formData.append('upload', new Buffer(fileContents), {
-    filename: fileName,
-  });
-  // Copy over formData headers, since node-fetch 2+ apparently doesn't do this
-  // automatically. See: https://github.com/bitinn/node-fetch/issues/368
-  const formDataHeaders = formData.getHeaders();
-  Object.keys(formDataHeaders).forEach((key) => {
-    headers.set(key, formDataHeaders[key]);
-  });
-  const fetchResponse = await fetch(conn.request(database, 'docs'), {
-    method: 'POST',
+  formData.append('upload', fileContents, fileName);
+  return dispatchDbFetch({
+    connection,
+    method: RequestMethod.POST,
     body: formData,
-    headers,
+    pathSuffix: `${database}/docs`,
   });
-
-  return httpBody(fetchResponse);
 };
 
-export const remove = async (conn, database, fileName) => {
-  const headers = conn.headers();
-  const fetchResponse = await fetch(conn.request(database, 'docs', fileName), {
-    method: 'DELETE',
-    headers,
+export const remove = async ({
+  connection,
+  database,
+  fileName,
+}: BaseDatabaseOptionsWithFileName) =>
+  dispatchDbFetch({
+    connection,
+    method: RequestMethod.DELETE,
+    pathSuffix: `${database}/docs/${fileName}`,
   });
 
-  return httpBody(fetchResponse);
-};
-
-export const get = async (conn, database, fileName) => {
-  const headers = conn.headers();
-  const fetchResponse = await fetch(conn.request(database, 'docs', fileName), {
-    headers,
+export const get = async ({
+  connection,
+  database,
+  fileName,
+}: BaseDatabaseOptionsWithFileName) =>
+  dispatchDbFetch({
+    connection,
+    pathSuffix: `${database}/docs/${fileName}`,
   });
-
-  return httpBody(fetchResponse);
-};

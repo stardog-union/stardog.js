@@ -1,252 +1,251 @@
-import { fetch } from '../fetch';
 import qs from 'querystring';
-import { httpBody } from '../response-transforms';
+import { BaseDatabaseOptions, BaseOptionsWithRequestHeaders } from 'types';
+import { RequestHeader, ContentType, RequestMethod } from '../constants';
 
-export const get = (conn, database) => {
-  const headers = conn.headers();
-  headers.set('Accept', 'application/ld+json');
+export interface IcvParams {
+  graphUri?: string;
+}
 
-  const fetchResponse = fetch(conn.request(database, 'icv'), {
+export const get = ({ connection, database }: BaseDatabaseOptions) => {
+  const headers = connection.headers();
+  headers.set(RequestHeader.ACCEPT, ContentType.LD_JSON);
+  return fetch(connection.request(database, 'icv'), {
     headers,
   });
-
-  return httpBody(fetchResponse);
 };
 
-export const add = (conn, database, icvAxioms, options = {}) => {
-  const headers = conn.headers();
-  headers.set('Content-Type', options.contentType || 'text/turtle');
+export const clear = (connection, database) => {
+  const headers = connection.headers();
+  return fetch(connection.request(database, 'icv', 'clear'), {
+    method: RequestMethod.POST,
+    headers,
+  });
+};
 
-  const fetchResponse = fetch(conn.request(database, 'icv', 'add'), {
-    method: 'POST',
+export const getPathSuffix = ({
+  suffixBase,
+  params = {},
+}: {
+  suffixBase: string;
+  params?: IcvParams;
+}) =>
+  !params.graphUri
+    ? suffixBase
+    : `${suffixBase}?${qs.stringify({ 'graph-uri': params.graphUri })}`;
+
+const getFetchInit = ({
+  connection,
+  icvAxioms,
+  requestHeaders = {},
+}: BaseOptionsWithRequestHeaders & { icvAxioms: string }) => {
+  const headers = connection.headers();
+  headers.set(
+    RequestHeader.CONTENT_TYPE,
+    requestHeaders.contentType || ContentType.TEXT_TURTLE
+  );
+  if (requestHeaders.accept) {
+    headers.set(RequestHeader.ACCEPT, requestHeaders.accept);
+  }
+
+  return {
+    method: RequestMethod.POST,
     body: icvAxioms,
     headers,
-  });
-
-  return httpBody(fetchResponse);
+  };
 };
 
-export const remove = (conn, database, icvAxioms, options = {}) => {
-  const headers = conn.headers();
-  headers.set('Content-Type', options.contentType || 'text/turtle');
+const postIcv = ({
+  connection,
+  icvAxioms,
+  resource,
+  requestHeaders = {},
+}: BaseOptionsWithRequestHeaders & {
+  icvAxioms: string;
+  resource: string | Request;
+}) => fetch(resource, getFetchInit({ connection, icvAxioms, requestHeaders }));
 
-  const fetchResponse = fetch(conn.request(database, 'icv', 'remove'), {
-    method: 'POST',
-    body: icvAxioms,
-    headers,
-  });
-
-  return httpBody(fetchResponse);
-};
-
-export const clear = (conn, database) => {
-  const headers = conn.headers();
-
-  const fetchResponse = fetch(conn.request(database, 'icv', 'clear'), {
-    method: 'POST',
-    headers,
-  });
-
-  return httpBody(fetchResponse);
-};
-
-export const convert = (
-  conn,
+const postIcvWithGraphUri = ({
+  suffixBase,
+  connection,
   database,
+  params = {},
+  ...requestData
+}: BaseDatabaseOptions & {
+  params?: IcvParams;
+  suffixBase: string;
+  icvAxioms: string;
+}) =>
+  postIcv({
+    ...requestData,
+    connection,
+    resource: connection.request(
+      database,
+      'icv',
+      getPathSuffix({ suffixBase, params })
+    ),
+  });
+
+export const add = ({
+  connection,
+  database,
+  ...icvRequestData
+}: BaseDatabaseOptions & {
+  icvAxioms: string;
+}) =>
+  postIcv({
+    ...icvRequestData,
+    connection,
+    resource: connection.request(database, 'icv', 'add'),
+  });
+
+export const remove = ({
+  connection,
+  database,
+  ...icvRequestData
+}: BaseDatabaseOptions & { icvAxioms: string }) =>
+  postIcv({
+    ...icvRequestData,
+    connection,
+    resource: connection.request(database, 'icv', 'remove'),
+  });
+
+export const convert = ({
+  connection,
   icvAxiom,
-  options = {},
-  params = {}
-) => {
-  const headers = conn.headers();
-  headers.set('Content-Type', options.contentType || 'text/turtle');
-
-  const queryParams = {};
-  if (params.graphUri) {
-    queryParams['graph-uri'] = params.graphUri;
-  }
-  const query = qs.stringify(queryParams);
-  const suffix = `convert${query.length > 0 ? `?${query}` : ''}`;
-
-  const fetchResponse = fetch(conn.request(database, 'icv', suffix), {
-    method: 'POST',
-    body: icvAxiom,
-    headers,
+  ...icvRequestData
+}: BaseDatabaseOptions & {
+  icvAxiom: string;
+  params?: IcvParams;
+}) =>
+  postIcvWithGraphUri({
+    ...icvRequestData,
+    connection,
+    icvAxioms: icvAxiom,
+    suffixBase: 'convert',
   });
 
-  return httpBody(fetchResponse);
-};
-
-export const validate = (
-  conn,
-  database,
+export const validate = ({
+  connection,
   constraints,
-  options = {},
-  params = {}
-) => {
-  const headers = conn.headers();
-  headers.set('Content-Type', options.contentType || 'text/turtle');
-  headers.set('Accept', 'text/boolean');
-
-  const queryParams = {};
-  if (params.graphUri) {
-    queryParams['graph-uri'] = params.graphUri;
-  }
-  const query = qs.stringify(queryParams);
-  const suffix = `validate${query.length > 0 ? `?${query}` : ''}`;
-
-  const fetchResponse = fetch(conn.request(database, 'icv', suffix), {
-    method: 'POST',
-    body: constraints,
-    headers,
+  requestHeaders = {},
+  ...icvRequestData
+}: BaseDatabaseOptions & {
+  constraints: string;
+  params?: IcvParams;
+}) =>
+  postIcvWithGraphUri({
+    ...icvRequestData,
+    connection,
+    icvAxioms: constraints,
+    suffixBase: 'validate',
+    requestHeaders: {
+      ...requestHeaders,
+      accept: ContentType.TEXT_BOOLEAN,
+    },
   });
 
-  return httpBody(fetchResponse);
-};
-
-export const validateInTx = (
-  conn,
-  database,
+export const validateInTx = ({
+  connection,
   transactionId,
   constraints,
-  options = {},
-  params = {}
-) => {
-  const headers = conn.headers();
-  headers.set('Content-Type', options.contentType || 'text/turtle');
-  headers.set('Accept', 'text/boolean');
-
-  const queryParams = {};
-  if (params.graphUri) {
-    queryParams['graph-uri'] = params.graphUri;
-  }
-  const query = qs.stringify(queryParams);
-  const suffix = `validate${query.length > 0 ? `?${query}` : ''}`;
-
-  const fetchResponse = fetch(
-    conn.request(database, 'icv', transactionId, suffix),
-    {
-      method: 'POST',
-      body: constraints,
-      headers,
-    }
-  );
-
-  return httpBody(fetchResponse);
-};
-
-export const violations = (
-  conn,
-  database,
-  constraints,
-  options = {},
-  params = {}
-) => {
-  const headers = conn.headers();
-  headers.set('Content-Type', options.contentType || 'text/turtle');
-  headers.set('Accept', '*/*');
-
-  const queryParams = {};
-  if (params.graphUri) {
-    queryParams['graph-uri'] = params.graphUri;
-  }
-  const query = qs.stringify(queryParams);
-  const suffix = `violations${query.length > 0 ? `?${query}` : ''}`;
-
-  const fetchResponse = fetch(conn.request(database, 'icv', suffix), {
-    method: 'POST',
-    body: constraints,
-    headers,
+  requestHeaders = {},
+  ...icvRequestData
+}: BaseDatabaseOptions & {
+  constraints: string;
+  transactionId: string;
+  params?: IcvParams;
+}) =>
+  postIcvWithGraphUri({
+    ...icvRequestData,
+    connection,
+    icvAxioms: constraints,
+    suffixBase: `${transactionId}/validate`,
+    requestHeaders: {
+      ...requestHeaders,
+      accept: ContentType.TEXT_BOOLEAN,
+    },
   });
 
-  return httpBody(fetchResponse);
-};
+export const violations = ({
+  connection,
+  constraints,
+  requestHeaders = {},
+  ...icvRequestData
+}: BaseDatabaseOptions & {
+  constraints: string;
+  params?: IcvParams;
+}) =>
+  postIcvWithGraphUri({
+    ...icvRequestData,
+    connection,
+    icvAxioms: constraints,
+    suffixBase: 'violations',
+    requestHeaders: {
+      ...requestHeaders,
+      accept: ContentType.ALL,
+    },
+  });
 
-export const violationsInTx = (
-  conn,
-  database,
+export const violationsInTx = ({
+  connection,
   transactionId,
   constraints,
-  options = {},
-  params = {}
-) => {
-  const headers = conn.headers();
-  headers.set('Content-Type', options.contentType || 'text/turtle');
-  headers.set('Accept', '*/*');
+  requestHeaders = {},
+  ...icvRequestData
+}: BaseDatabaseOptions & {
+  constraints: string;
+  transactionId: string;
+  params?: IcvParams;
+}) =>
+  postIcvWithGraphUri({
+    ...icvRequestData,
+    connection,
+    icvAxioms: constraints,
+    suffixBase: `${transactionId}/violations`,
+    requestHeaders: {
+      ...requestHeaders,
+      accept: ContentType.ALL,
+    },
+  });
 
-  const queryParams = {};
-  if (params.graphUri) {
-    queryParams['graph-uri'] = params.graphUri;
-  }
-  const query = qs.stringify(queryParams);
-  const suffix = `violations${query.length > 0 ? `?${query}` : ''}`;
+export const report = ({
+  connection,
+  constraints,
+  requestHeaders = {},
+  ...icvRequestData
+}: BaseDatabaseOptions & {
+  constraints: string;
+  params?: IcvParams;
+}) =>
+  postIcvWithGraphUri({
+    ...icvRequestData,
+    connection,
+    icvAxioms: constraints,
+    suffixBase: 'report',
+    requestHeaders: {
+      ...requestHeaders,
+      accept: requestHeaders.accept || ContentType.LD_JSON,
+    },
+  });
 
-  const fetchResponse = fetch(
-    conn.request(database, 'icv', transactionId, suffix),
-    {
-      method: 'POST',
-      body: constraints,
-      headers,
-    }
-  );
-
-  return httpBody(fetchResponse);
-};
-
-const report = (conn, database, constraints, options = {}, params = {}) => {
-  const headers = conn.headers();
-  headers.set('Content-Type', options.contentType || 'text/turtle');
-  headers.set('Accept', options.accept || 'application/ld+json');
-
-  const queryParams = {};
-  if (params.graphUri) {
-    queryParams['graph-uri'] = params.graphUri;
-  }
-  const query = qs.stringify(queryParams);
-  const suffix = `report${query.length > 0 ? `?${query}` : ''}`;
-
-  return fetch(conn.request(database, 'icv', suffix), {
-    method: 'POST',
-    body: constraints,
-    headers,
-  }).then(httpBody);
-};
-
-const reportInTx = (
-  conn,
-  database,
+export const reportInTx = ({
+  connection,
   transactionId,
   constraints,
-  options = {},
-  params = {}
-) => {
-  const headers = conn.headers();
-  headers.set('Content-Type', options.contentType || 'text/turtle');
-  headers.set('Accept', options.accept || 'application/ld+json');
-
-  const queryParams = {};
-  if (params.graphUri) {
-    queryParams['graph-uri'] = params.graphUri;
-  }
-  const query = qs.stringify(queryParams);
-  const suffix = `report${query.length > 0 ? `?${query}` : ''}`;
-
-  return fetch(conn.request(database, 'icv', transactionId, suffix), {
-    method: 'POST',
-    body: constraints,
-    headers,
-  }).then(httpBody);
-};
-
-module.exports = {
-  add,
-  remove,
-  get,
-  clear,
-  convert,
-  validate,
-  validateInTx,
-  violations,
-  violationsInTx,
-  report,
-  reportInTx,
-};
+  requestHeaders = {},
+  ...icvRequestData
+}: BaseDatabaseOptions & {
+  constraints: string;
+  transactionId: string;
+  params?: IcvParams;
+}) =>
+  postIcvWithGraphUri({
+    ...icvRequestData,
+    connection,
+    icvAxioms: constraints,
+    suffixBase: `${transactionId}/report`,
+    requestHeaders: {
+      ...requestHeaders,
+      accept: requestHeaders.accept || ContentType.LD_JSON,
+    },
+  });

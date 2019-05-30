@@ -1,80 +1,91 @@
-import { fetch } from '../fetch';
 import qs from 'querystring';
-import { httpBody } from '../response-transforms';
+import { BaseDatabaseOptions } from 'types';
+import {
+  RequestHeader,
+  ContentType,
+  DEFAULT_GRAPH,
+  RequestMethod,
+} from '../constants';
 
-export const doGet = async (
-  conn,
+export interface BaseDatabaseOptionsWithGraphUri extends BaseDatabaseOptions {
+  graphUri?: string;
+}
+
+export const doGet = ({
+  connection,
   database,
   graphUri = null,
-  accept = 'application/ld+json'
-) => {
-  const headers = conn.headers();
-  headers.set('Accept', accept);
+  requestHeaders = {},
+}: BaseDatabaseOptionsWithGraphUri) => {
+  const headers = connection.headers();
+  headers.set(
+    RequestHeader.ACCEPT,
+    requestHeaders.accept || ContentType.LD_JSON
+  );
   const resource = `${database}?${
-    graphUri ? qs.stringify({ graph: graphUri }) : 'default'
+    graphUri ? qs.stringify({ graph: graphUri }) : DEFAULT_GRAPH
   }`;
 
-  const fetchResponse = await fetch(conn.request(resource), {
+  return fetch(connection.request(resource), {
     headers,
   });
-
-  return httpBody(fetchResponse);
 };
 
-export const doDelete = async (conn, database, graphUri = null) => {
-  const headers = conn.headers();
-  const resource = `${database}?${
-    graphUri ? qs.stringify({ graph: graphUri }) : 'default'
-  }`;
-
-  const fetchResponse = await fetch(conn.request(resource), {
-    headers,
-    method: 'DELETE',
-  });
-
-  return httpBody(fetchResponse);
-};
-
-export const doPut = async (
-  conn,
+export const doDelete = ({
+  connection,
   database,
-  graphData,
   graphUri = null,
-  contentType = 'application/ld+json'
-) => {
-  const headers = conn.headers();
-  headers.set('Content-Type', contentType);
+}: BaseDatabaseOptionsWithGraphUri) => {
+  const headers = connection.headers();
   const resource = `${database}?${
-    graphUri ? qs.stringify({ graph: graphUri }) : 'default'
+    graphUri ? qs.stringify({ graph: graphUri }) : DEFAULT_GRAPH
   }`;
 
-  const fetchResponse = await fetch(conn.request(resource), {
+  return fetch(connection.request(resource), {
     headers,
-    method: 'PUT',
-    body: graphData,
+    method: RequestMethod.DELETE,
   });
-
-  return httpBody(fetchResponse);
 };
 
-export const doPost = async (
-  conn,
+const submit = ({
+  connection,
   database,
   graphData,
+  requestMethod,
   graphUri = null,
-  contentType = 'application/ld+json'
-) => {
-  const headers = conn.headers();
-  headers.set('Content-Type', contentType);
+  requestHeaders = {},
+}: BaseDatabaseOptionsWithGraphUri & {
+  graphData: string;
+  requestMethod: RequestMethod;
+}) => {
+  const headers = connection.headers();
+  headers.set(
+    RequestHeader.CONTENT_TYPE,
+    requestHeaders.contentType || ContentType.LD_JSON
+  );
   const resource = `${database}?${
-    graphUri ? qs.stringify({ graph: graphUri }) : 'default'
+    graphUri ? qs.stringify({ graph: graphUri }) : DEFAULT_GRAPH
   }`;
 
-  const fetchResponse = await fetch(conn.request(resource), {
+  return fetch(connection.request(resource), {
     headers,
-    method: 'POST',
+    method: requestMethod,
     body: graphData,
   });
-
-  return httpBody(fetchResponse);
 };
+
+export const doPut = (
+  putData: BaseDatabaseOptionsWithGraphUri & { graphData: string }
+) =>
+  submit({
+    ...putData,
+    requestMethod: RequestMethod.PUT,
+  });
+
+export const doPost = (
+  postData: BaseDatabaseOptionsWithGraphUri & { graphData: string }
+) =>
+  submit({
+    ...postData,
+    requestMethod: RequestMethod.POST,
+  });
