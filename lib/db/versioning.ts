@@ -2,9 +2,11 @@ import * as qs from 'querystring';
 import { mimeType } from 'query/utils';
 import { BaseDatabaseOptions } from 'types';
 import { RequestHeader, RequestMethod, ContentType } from '../constants';
-import { getFetchDispatcher } from 'requestUtils';
-
-const dispatchDbFetch = getFetchDispatcher();
+import {
+  getFetchDispatcher,
+  dispatchGenericFetch,
+  GenericFetchParams,
+} from 'requestUtils';
 
 export const executeQuery = ({
   connection,
@@ -41,8 +43,8 @@ export const executeQuery = ({
 const postAsPlainText = ({
   requestHeaders = {},
   ...args
-}: Parameters<typeof dispatchDbFetch>[0]) =>
-  dispatchDbFetch({
+}: GenericFetchParams) =>
+  dispatchGenericFetch({
     ...args,
     method: RequestMethod.POST,
     requestHeaders: {

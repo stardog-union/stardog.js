@@ -1,53 +1,49 @@
-import qs from 'querystring';
-import { BaseDatabaseOptions } from 'types';
 import {
   RequestHeader,
   ContentType,
   DEFAULT_GRAPH,
   RequestMethod,
 } from '../constants';
+import { getFetchDispatcher } from 'requestUtils';
+import { BaseDatabaseOptionsWithGraphUri } from 'types';
 
-export interface BaseDatabaseOptionsWithGraphUri extends BaseDatabaseOptions {
-  graphUri?: string;
-}
+const dispatchFetchWithGraphUri = getFetchDispatcher({
+  allowedQueryParams: ['graph-uri', DEFAULT_GRAPH],
+});
 
-export const doGet = ({
+export const getGraph = ({
   connection,
   database,
   graphUri = null,
   requestHeaders = {},
 }: BaseDatabaseOptionsWithGraphUri) => {
-  const headers = connection.headers();
-  headers.set(
-    RequestHeader.ACCEPT,
-    requestHeaders.accept || ContentType.LD_JSON
-  );
-  const resource = `${database}?${
-    graphUri ? qs.stringify({ graph: graphUri }) : DEFAULT_GRAPH
-  }`;
-
-  return fetch(connection.request(resource), {
-    headers,
+  const params = graphUri ? { 'graph-uri': graphUri } : { [DEFAULT_GRAPH]: '' };
+  return dispatchFetchWithGraphUri({
+    connection,
+    requestHeaders: {
+      [RequestHeader.ACCEPT]:
+        requestHeaders[RequestHeader.ACCEPT] || ContentType.LD_JSON,
+    },
+    params,
+    pathSuffix: database,
   });
 };
 
-export const doDelete = ({
+export const deleteGraph = ({
   connection,
   database,
   graphUri = null,
 }: BaseDatabaseOptionsWithGraphUri) => {
-  const headers = connection.headers();
-  const resource = `${database}?${
-    graphUri ? qs.stringify({ graph: graphUri }) : DEFAULT_GRAPH
-  }`;
-
-  return fetch(connection.request(resource), {
-    headers,
+  const params = graphUri ? { 'graph-uri': graphUri } : { [DEFAULT_GRAPH]: '' };
+  return dispatchFetchWithGraphUri({
+    connection,
     method: RequestMethod.DELETE,
+    params,
+    pathSuffix: database,
   });
 };
 
-const submit = ({
+const submitJson = ({
   connection,
   database,
   graphData,
@@ -58,34 +54,32 @@ const submit = ({
   graphData: string;
   requestMethod: RequestMethod;
 }) => {
-  const headers = connection.headers();
-  headers.set(
-    RequestHeader.CONTENT_TYPE,
-    requestHeaders.contentType || ContentType.LD_JSON
-  );
-  const resource = `${database}?${
-    graphUri ? qs.stringify({ graph: graphUri }) : DEFAULT_GRAPH
-  }`;
-
-  return fetch(connection.request(resource), {
-    headers,
+  const params = graphUri ? { 'graph-uri': graphUri } : { [DEFAULT_GRAPH]: '' };
+  return dispatchFetchWithGraphUri({
+    connection,
     method: requestMethod,
     body: graphData,
+    requestHeaders: {
+      [RequestHeader.CONTENT_TYPE]:
+        requestHeaders[RequestHeader.CONTENT_TYPE] || ContentType.LD_JSON,
+    },
+    params,
+    pathSuffix: database,
   });
 };
 
-export const doPut = (
+export const setGraph = (
   putData: BaseDatabaseOptionsWithGraphUri & { graphData: string }
 ) =>
-  submit({
+  submitJson({
     ...putData,
     requestMethod: RequestMethod.PUT,
   });
 
-export const doPost = (
+export const appendToGraph = (
   postData: BaseDatabaseOptionsWithGraphUri & { graphData: string }
 ) =>
-  submit({
+  submitJson({
     ...postData,
     requestMethod: RequestMethod.POST,
   });

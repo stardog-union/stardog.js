@@ -1,11 +1,9 @@
 import { BaseDatabaseOptions } from 'types';
-import { getFetchDispatcher } from 'requestUtils';
+import { dispatchGenericFetch } from 'requestUtils';
 import { RequestMethod, RequestHeader, ContentType } from '../constants';
 
-const dispatchDbFetch = getFetchDispatcher();
-
 export const begin = ({ connection, database }: BaseDatabaseOptions) =>
-  dispatchDbFetch({
+  dispatchGenericFetch({
     connection,
     method: RequestMethod.POST,
     requestHeaders: {
@@ -19,7 +17,7 @@ export const rollback = ({
   database,
   transactionId,
 }: BaseDatabaseOptions & { transactionId: string }) =>
-  dispatchDbFetch({
+  dispatchGenericFetch({
     connection,
     method: RequestMethod.POST,
     pathSuffix: `${database}/transaction/rolllback/${transactionId}`,
@@ -30,7 +28,7 @@ export const commit = ({
   database,
   transactionId,
 }: BaseDatabaseOptions & { transactionId: string }) =>
-  dispatchDbFetch({
+  dispatchGenericFetch({
     connection,
     method: RequestMethod.POST,
     pathSuffix: `${database}/transaction/commit/${transactionId}`,

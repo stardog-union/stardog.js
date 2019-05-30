@@ -18,3 +18,7 @@ export interface BaseOptionsWithRequestHeaders extends BaseOptions {
 export interface BaseDatabaseOptions extends BaseOptionsWithRequestHeaders {
   database: string;
 }
+
+export interface BaseDatabaseOptionsWithGraphUri extends BaseDatabaseOptions {
+  graphUri?: string;
+}

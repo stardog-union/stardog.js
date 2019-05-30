@@ -116,3 +116,6 @@ export const getFetchDispatcher = <T extends string>({
       getRequestInit({ connection, method, body, requestHeaders })
     );
 };
+
+export const dispatchGenericFetch = getFetchDispatcher();
+export type GenericFetchParams = Parameters<typeof dispatchGenericFetch>[0];

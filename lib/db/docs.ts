@@ -1,15 +1,13 @@
 import { BaseDatabaseOptions } from 'types';
 import { RequestHeader, ContentType, RequestMethod } from '../constants';
-import { getFetchDispatcher } from 'requestUtils';
+import { dispatchGenericFetch } from 'requestUtils';
 
 interface BaseDatabaseOptionsWithFileName extends BaseDatabaseOptions {
   fileName: string;
 }
 
-const dispatchDbFetch = getFetchDispatcher();
-
 export const size = ({ connection, database }: BaseDatabaseOptions) =>
-  dispatchDbFetch({
+  dispatchGenericFetch({
     connection,
     requestHeaders: {
       [RequestHeader.ACCEPT]: ContentType.TEXT_PLAIN,
@@ -18,7 +16,7 @@ export const size = ({ connection, database }: BaseDatabaseOptions) =>
   });
 
 export const clear = ({ connection, database }: BaseDatabaseOptions) =>
-  dispatchDbFetch({
+  dispatchGenericFetch({
     connection,
     method: RequestMethod.DELETE,
     pathSuffix: `${database}/docs`,
@@ -34,7 +32,7 @@ export const add = ({
 }) => {
   const formData = new FormData();
   formData.append('upload', fileContents, fileName);
-  return dispatchDbFetch({
+  return dispatchGenericFetch({
     connection,
     method: RequestMethod.POST,
     body: formData,
@@ -47,7 +45,7 @@ export const remove = async ({
   database,
   fileName,
 }: BaseDatabaseOptionsWithFileName) =>
-  dispatchDbFetch({
+  dispatchGenericFetch({
     connection,
     method: RequestMethod.DELETE,
     pathSuffix: `${database}/docs/${fileName}`,
@@ -58,7 +56,7 @@ export const get = async ({
   database,
   fileName,
 }: BaseDatabaseOptionsWithFileName) =>
-  dispatchDbFetch({
+  dispatchGenericFetch({
     connection,
     pathSuffix: `${database}/docs/${fileName}`,
   });

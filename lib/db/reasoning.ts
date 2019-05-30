@@ -1,7 +1,6 @@
 import { getFetchDispatcher } from 'requestUtils';
-import { BaseDatabaseOptionsWithGraphUri } from 'db/graph';
 import { RequestHeader, ContentType, RequestMethod } from '../constants';
-import { BaseDatabaseOptions } from 'types';
+import { BaseDatabaseOptions, BaseDatabaseOptionsWithGraphUri } from 'types';
 
 // TODO: Confirm whether this is really necessary.
 const jsonify = (res: Response) => {
@@ -9,7 +8,7 @@ const jsonify = (res: Response) => {
   return res;
 };
 
-const dispatchDbFetch = getFetchDispatcher({
+const dispatchFetchWithGraphUri = getFetchDispatcher({
   allowedQueryParams: ['graph-uri'],
 });
 
@@ -19,7 +18,7 @@ export const consistency = ({
   graphUri,
 }: BaseDatabaseOptionsWithGraphUri) => {
   const params = graphUri ? { 'graph-uri': graphUri } : null;
-  return dispatchDbFetch({
+  return dispatchFetchWithGraphUri({
     connection,
     pathSuffix: `${database}/reasoning/consistency`,
     params,
@@ -36,7 +35,7 @@ export const explainInference = ({
   inference,
   requestHeaders = {},
 }: BaseDatabaseOptions & { inference: string }) =>
-  dispatchDbFetch({
+  dispatchFetchWithGraphUri({
     connection,
     method: RequestMethod.POST,
     body: inference,
@@ -54,7 +53,7 @@ export const explainInconsistency = ({
   graphUri,
 }: BaseDatabaseOptionsWithGraphUri) => {
   const params = graphUri ? { 'graph-uri': graphUri } : null;
-  return dispatchDbFetch({
+  return dispatchFetchWithGraphUri({
     connection,
     method: RequestMethod.POST,
     requestHeaders: {
@@ -73,7 +72,7 @@ export const explainInferenceInTransaction = ({
   inference,
   requestHeaders = {},
 }: BaseDatabaseOptions & { transactionId: string; inference: string }) =>
-  dispatchDbFetch({
+  dispatchFetchWithGraphUri({
     connection,
     method: RequestMethod.POST,
     body: inference,
@@ -92,7 +91,7 @@ export const explainInconsistencyInTransaction = ({
   graphUri,
 }: BaseDatabaseOptionsWithGraphUri & { transactionId: string }) => {
   const params = graphUri ? { 'graph-uri': graphUri } : null;
-  return dispatchDbFetch({
+  return dispatchFetchWithGraphUri({
     connection,
     method: RequestMethod.POST,
     params,
@@ -101,7 +100,7 @@ export const explainInconsistencyInTransaction = ({
 };
 
 export const schema = ({ connection, database }: BaseDatabaseOptions) =>
-  dispatchDbFetch({
+  dispatchFetchWithGraphUri({
     connection,
     requestHeaders: {
       [RequestHeader.ACCEPT]: ContentType.LD_JSON,

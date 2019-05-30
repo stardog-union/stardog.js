@@ -1,7 +1,11 @@
 import flat from 'flat';
 import lodashGet from 'lodash.get';
 import { get as getOptions } from './options';
-import { BaseDatabaseOptions, BaseOptions } from 'types';
+import {
+  BaseDatabaseOptions,
+  BaseOptions,
+  BaseDatabaseOptionsWithGraphUri,
+} from 'types';
 import {
   RequestHeader,
   ContentType,
@@ -11,14 +15,13 @@ import {
 } from '../constants';
 import dbopts from 'db/dbopts';
 import { getFetchDispatcher } from 'requestUtils';
-import { BaseDatabaseOptionsWithGraphUri } from 'db/graph';
 
 const dispatchAdminDbFetch = getFetchDispatcher({
   basePath: `admin/databases`,
   allowedQueryParams: ['graph-uri', 'to'],
 });
 
-const dispatchDbFetch = getFetchDispatcher({
+const dispatchFetchWithGraphUri = getFetchDispatcher({
   allowedQueryParams: ['graph-uri'],
 });
 
@@ -58,7 +61,7 @@ export const drop = ({ connection, database }: BaseDatabaseOptions) =>
   });
 
 export const getDatabase = ({ connection, database }: BaseDatabaseOptions) =>
-  dispatchDbFetch({
+  dispatchFetchWithGraphUri({
     connection,
     pathSuffix: database,
   });
@@ -116,7 +119,7 @@ export const list = ({ connection }: BaseOptions) =>
   });
 
 export const size = ({ connection, database }: BaseDatabaseOptions) =>
-  dispatchDbFetch({
+  dispatchFetchWithGraphUri({
     connection,
     requestHeaders: {
       [RequestHeader.ACCEPT]: ContentType.TEXT_PLAIN,
@@ -131,7 +134,7 @@ export const clear = ({
   graphUri,
 }: BaseDatabaseOptionsWithGraphUri & { transactionId: string }) => {
   const params = graphUri ? { 'graph-uri': graphUri } : null;
-  return dispatchDbFetch({
+  return dispatchFetchWithGraphUri({
     connection,
     params,
     method: RequestMethod.POST,
@@ -157,7 +160,7 @@ export const add = ({
   content: any;
 }) => {
   const params = graphUri ? { 'graph-uri': graphUri } : null;
-  return dispatchDbFetch({
+  return dispatchFetchWithGraphUri({
     connection,
     params,
     method: RequestMethod.POST,
@@ -185,7 +188,7 @@ export const remove = ({
   content: any;
 }) => {
   const params = graphUri ? { 'graph-uri': graphUri } : null;
-  return dispatchDbFetch({
+  return dispatchFetchWithGraphUri({
     connection,
     params,
     method: RequestMethod.POST,
@@ -221,7 +224,7 @@ export const exportData = ({
   graphUri = ALL_GRAPHS,
   requestHeaders = {},
 }: BaseDatabaseOptionsWithGraphUri) =>
-  dispatchDbFetch({
+  dispatchFetchWithGraphUri({
     connection,
     requestHeaders: {
       [RequestHeader.ACCEPT]:
