@@ -22,3 +22,8 @@ export interface BaseDatabaseOptions extends BaseOptionsWithRequestHeaders {
 export interface BaseDatabaseOptionsWithGraphUri extends BaseDatabaseOptions {
   graphUri?: string;
 }
+
+export type JsonPrimitive = string | number | boolean | null;
+export type JsonValue = JsonPrimitive | JsonObject | JsonArray;
+export type JsonObject = { [key: string]: JsonValue };
+export interface JsonArray extends Array<JsonValue> {}

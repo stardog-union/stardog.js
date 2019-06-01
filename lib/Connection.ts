@@ -16,10 +16,10 @@ export interface ConnectionConfig {
 }
 
 export class Connection {
-  private endpoint: string;
-  private username: string;
-  private password: string;
-  private meta?: ConnectionMeta;
+  endpoint: string;
+  username: string;
+  password: string;
+  meta?: ConnectionMeta;
 
   constructor(options: ConnectionConfig) {
     this.configure(options);
@@ -27,7 +27,7 @@ export class Connection {
 
   configure(options: Partial<ConnectionConfig>) {
     const config = {
-      ...((<unknown>this) as ConnectionConfig),
+      ...this,
       ...options,
     };
 

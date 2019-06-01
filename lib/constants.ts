@@ -1,6 +1,7 @@
 export const enum ContentType {
   ALL = '*/*',
   FORM_URLENCODED = 'application/x-www-form-urlencoded',
+  GRAPHQL = 'application/graphql',
   JSON = 'application/json',
   LD_JSON = 'application/ld+json',
   SPARQL_RESULTS_JSON = 'application/sparql-results+json',

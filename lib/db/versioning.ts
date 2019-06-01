@@ -1,6 +1,11 @@
 import * as qs from 'querystring';
 import { mimeType } from 'query/utils';
-import { BaseDatabaseOptions } from 'types';
+import {
+  BaseDatabaseOptions,
+  JsonObject,
+  JsonPrimitive,
+  JsonValue,
+} from 'types';
 import { RequestHeader, RequestMethod, ContentType } from '../constants';
 import {
   getFetchDispatcher,
@@ -21,7 +26,7 @@ export const executeQuery = ({
     [RequestHeader.ACCEPT]: ReturnType<typeof mimeType>;
   };
   query: string;
-  params?: { [key: string]: string };
+  params?: JsonValue;
 }) => {
   const dispatchFetch = getFetchDispatcher({
     allowedQueryParams: Object.keys(params),
