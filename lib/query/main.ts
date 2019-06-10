@@ -1,13 +1,13 @@
 import * as qs from 'querystring';
 import { mimeType, queryType } from './utils';
-import { BaseDatabaseOptions, JsonValue, BaseOptions } from 'types';
+import { BaseDatabaseOptions, JsonValue, BaseOptions } from '../types';
 import {
   QueryType,
   RequestMethod,
   RequestHeader,
   ContentType,
 } from '../constants';
-import { dispatchGenericFetch, getFetchDispatcher } from 'request-utils';
+import { dispatchGenericFetch, getFetchDispatcher } from '../request-utils';
 
 const dispatchAdminQueriesFetch = getFetchDispatcher({
   basePath: 'admin/queries',

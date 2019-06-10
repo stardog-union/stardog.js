@@ -1,12 +1,12 @@
 import * as qs from 'querystring';
-import { mimeType } from 'query/utils';
-import { BaseDatabaseOptions, JsonValue } from 'types';
+import { mimeType } from '../query/utils';
+import { BaseDatabaseOptions, JsonValue } from '../types';
 import { RequestHeader, RequestMethod, ContentType } from '../constants';
 import {
   getFetchDispatcher,
   dispatchGenericFetch,
   GenericFetchParams,
-} from 'request-utils';
+} from '../request-utils';
 
 export const executeQuery = ({
   connection,

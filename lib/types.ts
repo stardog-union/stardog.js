@@ -1,4 +1,4 @@
-import { Connection } from 'Connection';
+import { Connection } from './Connection';
 import { RequestHeader } from './constants';
 
 export interface BaseOptions {

@@ -4,7 +4,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "sourceMap": true,
@@ -14,11 +14,6 @@
     "outDir": "./dist",
     "lib": ["es2015", "dom"],
     "baseUrl": ".",
-    "paths": {
-      "*": [
-        "lib/*"
-      ]
-    }
   },
   "include": [
     "lib/**/*"

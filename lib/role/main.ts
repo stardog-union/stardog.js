@@ -1,5 +1,5 @@
-import { getFetchDispatcher } from 'request-utils';
-import { BaseOptions, BaseRoleOptions, BasePermissionOptions } from 'types';
+import { getFetchDispatcher } from '../request-utils';
+import { BaseOptions, BaseRoleOptions, BasePermissionOptions } from '../types';
 import { RequestHeader, ContentType, RequestMethod } from '../constants';
 
 const dispatchRolesFetch = getFetchDispatcher({

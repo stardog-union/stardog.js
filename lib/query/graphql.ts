@@ -1,5 +1,5 @@
-import { BaseDatabaseOptions, JsonValue } from 'types';
-import { dispatchGenericFetch } from 'request-utils';
+import { BaseDatabaseOptions, JsonValue } from '../types';
+import { dispatchGenericFetch } from '../request-utils';
 import { RequestMethod, RequestHeader, ContentType } from '../constants';
 
 export const execute = ({

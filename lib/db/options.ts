@@ -1,13 +1,13 @@
-import { BaseDatabaseOptions } from 'types';
-import { getFetchDispatcher } from 'request-utils';
+import { BaseDatabaseOptions } from '../types';
+import { getFetchDispatcher } from '../request-utils';
 import {
   RequestHeader,
   ContentType,
   RequestMethod,
   ResponseStatus,
 } from '../constants';
-import dbopts from 'db/dbopts';
 import flat from 'flat';
+import dbopts from '../db/dbopts';
 
 const dispatchAdminDbFetch = getFetchDispatcher({
   basePath: `admin/databases`,
@@ -23,7 +23,7 @@ export const get = ({ connection, database }: BaseDatabaseOptions) =>
     },
     pathSuffix: `${database}/options`,
     body: JSON.stringify(flat(dbopts, { safe: true })),
-  }).then((res) => {
+  }).then((res: Response) => {
     if (res.status === ResponseStatus.OK) {
       return {
         ...res,

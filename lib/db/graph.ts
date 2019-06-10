@@ -4,8 +4,8 @@ import {
   DEFAULT_GRAPH,
   RequestMethod,
 } from '../constants';
-import { getFetchDispatcher } from 'request-utils';
-import { BaseDatabaseOptionsWithGraphUri } from 'types';
+import { getFetchDispatcher } from '../request-utils';
+import { BaseDatabaseOptionsWithGraphUri } from '../types';
 
 const dispatchFetchWithGraphUri = getFetchDispatcher({
   allowedQueryParams: ['graph-uri', DEFAULT_GRAPH],

@@ -1,6 +1,10 @@
 import qs from 'querystring';
 import { RequestMethod } from './constants';
-import { BaseOptionsWithRequestHeaders, BaseOptions } from 'types';
+import {
+  BaseOptionsWithRequestHeaders,
+  BaseOptions,
+  RequestHeaders,
+} from './types';
 
 const getRequestInit = ({
   connection,
@@ -14,7 +18,7 @@ const getRequestInit = ({
   const headers = connection.headers();
 
   if (requestHeaders) {
-    Object.keys(requestHeaders).forEach((headerKey) =>
+    Object.keys(requestHeaders).forEach((headerKey: keyof RequestHeaders) =>
       headers.set(headerKey, requestHeaders[headerKey])
     );
   }
@@ -40,7 +44,7 @@ const getRequestInfo = <T>({
 }: BaseOptions & {
   basePath: string;
   pathSuffix: string;
-  allowedParamsMap: T;
+  allowedParamsMap: null | { [K in keyof T]?: boolean };
   params: T;
 }): RequestInfo => {
   if (!params) {
@@ -57,20 +61,23 @@ const getRequestInfo = <T>({
     );
   }
 
-  const paramsKeys = Object.keys(params);
+  const paramsKeys: (keyof T)[] = Object.keys(params) as any;
 
   if (paramsKeys.length === 0) {
     // Empty params objects, so also nothing to do. (Not checked earlier to avoid unnecessary computation.)
     return connection.request(basePath, pathSuffix);
   }
 
-  const queryParamsMap = paramsKeys.reduce((paramsMap, param) => {
-    if (!allowedParamsMap[param]) {
+  const queryParamsMap: { [K in keyof T]: string } = paramsKeys.reduce(
+    (paramsMap, param) => {
+      if (!allowedParamsMap[param]) {
+        return paramsMap;
+      }
+      paramsMap[param] = params[param];
       return paramsMap;
-    }
-    paramsMap[param] = params[param];
-    return paramsMap;
-  }, {});
+    },
+    {} as any
+  );
   const queryString = qs.stringify(queryParamsMap);
 
   return connection.request(
@@ -97,10 +104,10 @@ export const getFetchDispatcher = <T extends string>({
     ? null
     : allowedQueryParams.reduce(
         (paramsMap, param) => {
-          paramsMap[param as string] = true;
+          paramsMap[param] = true;
           return paramsMap;
         },
-        {} as { [K in T]?: string }
+        {} as { [K in T]?: boolean }
       );
 
   return ({
@@ -123,7 +130,7 @@ export const getFetchDispatcher = <T extends string>({
         connection,
         basePath,
         pathSuffix,
-        allowedParamsMap,
+        allowedParamsMap: allowedParamsMap as any,
         params,
       }),
       getRequestInit({ connection, method, body, requestHeaders })

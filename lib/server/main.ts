@@ -1,5 +1,5 @@
-import { getFetchDispatcher } from 'request-utils';
-import { BaseOptions, JsonValue } from 'types';
+import { getFetchDispatcher } from '../request-utils';
+import { BaseOptions, JsonValue } from '../types';
 import { RequestHeader, ContentType } from '../constants';
 
 const dispatchAdminFetch = getFetchDispatcher({

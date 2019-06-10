@@ -1,6 +1,6 @@
-import { getFetchDispatcher } from 'request-utils';
+import { getFetchDispatcher } from '../request-utils';
 import { RequestHeader, ContentType, RequestMethod } from '../constants';
-import { BaseDatabaseOptions, BaseDatabaseOptionsWithGraphUri } from 'types';
+import { BaseDatabaseOptions, BaseDatabaseOptionsWithGraphUri } from '../types';
 
 // TODO: Confirm whether this is really necessary.
 const jsonify = (res: Response) => {

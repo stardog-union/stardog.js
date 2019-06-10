@@ -11,4 +11,5 @@ const utils = {
 };
 
 export * from './Connection';
+export * from './types';
 export { db, query, user, server, virtualGraph, storedFunction, utils };

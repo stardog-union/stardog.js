@@ -1,5 +1,5 @@
-import { getFetchDispatcher } from 'request-utils';
-import { JsonPrimitive, BaseVirtualGraphOptions, BaseOptions } from 'types';
+import { getFetchDispatcher } from '../request-utils';
+import { JsonPrimitive, BaseVirtualGraphOptions, BaseOptions } from '../types';
 import { RequestHeader, ContentType, RequestMethod } from '../constants';
 
 export interface MappingsRequestOptions {

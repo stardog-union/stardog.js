@@ -1,6 +1,6 @@
 import lodashPick from 'lodash.pick';
-import { getFetchDispatcher } from 'request-utils';
-import { BaseOptions, JsonPrimitive } from 'types';
+import { getFetchDispatcher } from '../request-utils';
+import { BaseOptions, JsonPrimitive } from '../types';
 import { RequestMethod, RequestHeader, ContentType } from '../constants';
 
 const dispatchAdminFetch = getFetchDispatcher({
@@ -21,12 +21,10 @@ export const create = ({
   connection,
   storedQueryData,
 }: BaseOptions & { storedQueryData: StoredQueryData }) => {
-  const body = lodashPick(storedQueryData, [
-    'name',
-    'database',
-    'query',
-    'shared',
-  ]);
+  const body: StoredQueryData & { creator: string } = lodashPick(
+    storedQueryData,
+    ['name', 'database', 'query', 'shared']
+  ) as any;
   body.creator = connection.username;
   body.shared = typeof body.shared === 'boolean' ? body.shared : false;
 

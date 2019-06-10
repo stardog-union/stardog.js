@@ -1,6 +1,6 @@
-import * as lodashPick from 'lodash.pick';
+import lodashPick from 'lodash.pick';
 import { RequestHeader, ContentType } from './constants';
-import { JsonPrimitive } from 'types';
+import { JsonPrimitive } from './types';
 
 const getAsTypedTuple = <T extends string[]>(...args: T): T => args;
 const FIELDS = getAsTypedTuple('status', 'statusText', 'headers', 'ok', 'url');
@@ -11,7 +11,7 @@ export const httpBody = async (res: Response) => {
   const response: Pick<Response, Fields> & { body: JsonPrimitive } = lodashPick(
     res,
     FIELDS
-  );
+  ) as any;
 
   if (contentType && contentType.indexOf('json') > -1) {
     response.body = await res.json();

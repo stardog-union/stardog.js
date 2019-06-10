@@ -5,7 +5,7 @@ import {
   BaseDatabaseOptions,
   BaseOptions,
   BaseDatabaseOptionsWithGraphUri,
-} from 'types';
+} from '../types';
 import {
   RequestHeader,
   ContentType,
@@ -13,8 +13,8 @@ import {
   ALL_GRAPHS,
   ResponseStatus,
 } from '../constants';
-import dbopts from 'db/dbopts';
-import { getFetchDispatcher } from 'request-utils';
+import dbopts from '../db/dbopts';
+import { getFetchDispatcher } from '../request-utils';
 
 const dispatchAdminDbFetch = getFetchDispatcher({
   basePath: `admin/databases`,
@@ -25,14 +25,20 @@ const dispatchFetchWithGraphUri = getFetchDispatcher({
   allowedQueryParams: ['graph-uri'],
 });
 
+type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object
+    ? DeepPartial<T[P]>
+    : T[P] extends (infer U)[] ? DeepPartial<U>[] : T[P]
+};
+
 export const create = ({
   connection,
   database,
-  databaseSettings = {},
-  files = [],
+  databaseSettings,
+  files = [] as { filename: string }[],
 }: BaseDatabaseOptions & {
-  databaseSettings: Partial<typeof dbopts>;
-  files: string[];
+  databaseSettings: DeepPartial<typeof dbopts>;
+  files: { filename: string }[];
 }) => {
   const dbOptions = flat(databaseSettings);
   const body = new FormData();
@@ -207,12 +213,19 @@ export const remove = ({
 export const namespaces = ({ connection, database }: BaseDatabaseOptions) =>
   getOptions({ connection, database }).then((res) => {
     if (res.status === ResponseStatus.OK) {
-      const namespaces = lodashGet(res, 'body.database.namespaces', []);
-      const names = namespaces.reduce((namespacesMap, namespace) => {
-        const [key, value] = namespace.split('=');
-        namespacesMap[key] = value;
-        return namespacesMap;
-      }, {});
+      const namespaces: string[] = lodashGet(
+        res,
+        'body.database.namespaces',
+        []
+      );
+      const names = namespaces.reduce(
+        (namespacesMap, namespace) => {
+          const [key, value] = namespace.split('=');
+          namespacesMap[key] = value;
+          return namespacesMap;
+        },
+        {} as { [key: string]: string }
+      );
       res.body = names;
     }
     return res;

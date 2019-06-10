@@ -1,5 +1,5 @@
-import { getFetchDispatcher } from 'request-utils';
-import { BaseOptions } from 'types';
+import { getFetchDispatcher } from '../request-utils';
+import { BaseOptions } from '../types';
 import { RequestMethod } from '../constants';
 
 const dispatchStoredFunctionsFetch = getFetchDispatcher({

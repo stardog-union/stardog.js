@@ -1,5 +1,5 @@
-import { BaseDatabaseOptions } from 'types';
-import { dispatchGenericFetch } from 'request-utils';
+import { BaseDatabaseOptions } from '../types';
+import { dispatchGenericFetch } from '../request-utils';
 import { RequestMethod, RequestHeader, ContentType } from '../constants';
 
 export const begin = ({ connection, database }: BaseDatabaseOptions) =>
