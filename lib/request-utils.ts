@@ -44,12 +44,23 @@ const getRequestInfo = <T>({
   params: T;
 }): RequestInfo => {
   if (!params) {
+    // No params, so nothing to do.
     return connection.request(basePath, pathSuffix);
+  }
+
+  if (!allowedParamsMap) {
+    // No restrictions specified, so all params allowed.
+    const queryString = qs.stringify(params);
+    return connection.request(
+      basePath,
+      `${pathSuffix}${queryString ? `?${queryString}` : ''}`
+    );
   }
 
   const paramsKeys = Object.keys(params);
 
   if (paramsKeys.length === 0) {
+    // Empty params objects, so also nothing to do. (Not checked earlier to avoid unnecessary computation.)
     return connection.request(basePath, pathSuffix);
   }
 
@@ -102,7 +113,9 @@ export const getFetchDispatcher = <T extends string>({
   }: BaseOptionsWithRequestHeaders & {
     method?: RequestMethod;
     body?: RequestInit['body'];
-    params?: { [K in T]?: string };
+    params?: typeof allowedQueryParams extends void[]
+      ? never
+      : { [K in T]?: string };
     pathSuffix?: string;
   }) =>
     fetch(

@@ -35,6 +35,10 @@ export interface BasePermissionOptions extends BaseOptionsWithRequestHeaders {
   permission: Permission;
 }
 
+export interface BaseVirtualGraphOptions extends BaseOptions {
+  name: string;
+}
+
 export interface Permission {
   action: Action;
   resourceType: ResourceType;

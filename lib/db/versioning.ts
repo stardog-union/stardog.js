@@ -1,17 +1,12 @@
 import * as qs from 'querystring';
 import { mimeType } from 'query/utils';
-import {
-  BaseDatabaseOptions,
-  JsonObject,
-  JsonPrimitive,
-  JsonValue,
-} from 'types';
+import { BaseDatabaseOptions, JsonValue } from 'types';
 import { RequestHeader, RequestMethod, ContentType } from '../constants';
 import {
   getFetchDispatcher,
   dispatchGenericFetch,
   GenericFetchParams,
-} from 'requestUtils';
+} from 'request-utils';
 
 export const executeQuery = ({
   connection,
@@ -40,7 +35,7 @@ export const executeQuery = ({
       ...requestHeaders,
       [RequestHeader.CONTENT_TYPE]: ContentType.FORM_URLENCODED,
     },
-    params,
+    params: params as any,
     pathSuffix: `${database}/vcs/query`,
   });
 };

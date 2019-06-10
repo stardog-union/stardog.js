@@ -7,7 +7,7 @@ import {
   RequestHeader,
   ContentType,
 } from '../constants';
-import { dispatchGenericFetch, getFetchDispatcher } from 'requestUtils';
+import { dispatchGenericFetch, getFetchDispatcher } from 'request-utils';
 
 const dispatchAdminQueriesFetch = getFetchDispatcher({
   basePath: 'admin/queries',
@@ -26,7 +26,6 @@ const dispatchQuery = ({
 }) => {
   const type = queryType(query);
   const resource = type === QueryType.UPDATE ? 'update' : 'query';
-  const queryString = qs.stringify(params);
 
   // TODO:
   // Paths queries will return duplicate variable names
@@ -45,7 +44,7 @@ const dispatchQuery = ({
     },
     pathSuffix: `${database}/${
       transactionId ? `${transactionId}/` : ''
-    }${resource}${queryString ? `?${queryString}` : ''}`,
+    }${resource}`,
   });
 };
 

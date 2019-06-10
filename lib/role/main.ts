@@ -1,12 +1,14 @@
-import { getFetchDispatcher } from 'requestUtils';
+import { getFetchDispatcher } from 'request-utils';
 import { BaseOptions, BaseRoleOptions, BasePermissionOptions } from 'types';
 import { RequestHeader, ContentType, RequestMethod } from '../constants';
 
 const dispatchRolesFetch = getFetchDispatcher({
   basePath: 'admin/roles',
+  allowedQueryParams: [],
 });
 const dispatchPermissionsFetch = getFetchDispatcher({
   basePath: 'admin/permissions',
+  allowedQueryParams: [],
 });
 
 const jsonAcceptHeaders = {

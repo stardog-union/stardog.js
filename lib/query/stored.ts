@@ -1,10 +1,11 @@
 import lodashPick from 'lodash.pick';
-import { getFetchDispatcher } from 'requestUtils';
+import { getFetchDispatcher } from 'request-utils';
 import { BaseOptions, JsonPrimitive } from 'types';
 import { RequestMethod, RequestHeader, ContentType } from '../constants';
 
 const dispatchAdminFetch = getFetchDispatcher({
   basePath: 'admin/queries/stored',
+  allowedQueryParams: [],
 });
 
 export interface StoredQueryData {

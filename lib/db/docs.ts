@@ -1,6 +1,6 @@
 import { BaseDatabaseOptions } from 'types';
 import { RequestHeader, ContentType, RequestMethod } from '../constants';
-import { dispatchGenericFetch } from 'requestUtils';
+import { dispatchGenericFetch } from 'request-utils';
 
 interface BaseDatabaseOptionsWithFileName extends BaseDatabaseOptions {
   fileName: string;

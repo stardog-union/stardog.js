@@ -1,5 +1,5 @@
 import { BaseDatabaseOptions } from 'types';
-import { getFetchDispatcher } from 'requestUtils';
+import { getFetchDispatcher } from 'request-utils';
 import {
   RequestHeader,
   ContentType,
@@ -11,6 +11,7 @@ import flat from 'flat';
 
 const dispatchAdminDbFetch = getFetchDispatcher({
   basePath: `admin/databases`,
+  allowedQueryParams: [],
 });
 
 export const get = ({ connection, database }: BaseDatabaseOptions) =>

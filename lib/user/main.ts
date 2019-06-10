@@ -1,5 +1,5 @@
 import { BaseOptions, BaseUserOptions, BasePermissionOptions } from 'types';
-import { getFetchDispatcher } from 'requestUtils';
+import { getFetchDispatcher } from 'request-utils';
 import { RequestMethod, RequestHeader, ContentType } from '../constants';
 
 const dispatchUsersFetch = getFetchDispatcher({

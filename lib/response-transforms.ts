@@ -1,10 +1,17 @@
-import lodashPick from 'lodash.pick';
+import * as lodashPick from 'lodash.pick';
+import { RequestHeader, ContentType } from './constants';
+import { JsonPrimitive } from 'types';
 
-const FIELDS = ['status', 'statusText', 'headers', 'ok', 'url'];
+const getAsTypedTuple = <T extends string[]>(...args: T): T => args;
+const FIELDS = getAsTypedTuple('status', 'statusText', 'headers', 'ok', 'url');
+type Fields = typeof FIELDS extends (infer U)[] ? U : never;
 
-export const httpBody = async (res) => {
-  const contentType = res.headers.get('content-type');
-  const response = lodashPick(res, FIELDS);
+export const httpBody = async (res: Response) => {
+  const contentType = res.headers.get(RequestHeader.CONTENT_TYPE);
+  const response: Pick<Response, Fields> & { body: JsonPrimitive } = lodashPick(
+    res,
+    FIELDS
+  );
 
   if (contentType && contentType.indexOf('json') > -1) {
     response.body = await res.json();
@@ -14,7 +21,7 @@ export const httpBody = async (res) => {
   const body = await res.text();
   response.body = body.trim();
 
-  if (contentType === 'text/boolean') {
+  if (contentType === ContentType.TEXT_BOOLEAN) {
     response.body = body.toLowerCase() === 'true';
   }
 
@@ -25,4 +32,5 @@ export const httpBody = async (res) => {
   return response;
 };
 
-export const httpMessage = (res) => lodashPick(res, FIELDS);
+export const httpMessage = (res: Response) =>
+  lodashPick(res, FIELDS) as Pick<Response, Fields>;

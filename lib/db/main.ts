@@ -14,7 +14,7 @@ import {
   ResponseStatus,
 } from '../constants';
 import dbopts from 'db/dbopts';
-import { getFetchDispatcher } from 'requestUtils';
+import { getFetchDispatcher } from 'request-utils';
 
 const dispatchAdminDbFetch = getFetchDispatcher({
   basePath: `admin/databases`,

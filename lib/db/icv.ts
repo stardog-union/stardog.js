@@ -1,6 +1,6 @@
 import { BaseDatabaseOptions, BaseDatabaseOptionsWithGraphUri } from 'types';
 import { RequestHeader, ContentType, RequestMethod } from '../constants';
-import { getFetchDispatcher } from 'requestUtils';
+import { getFetchDispatcher } from 'request-utils';
 
 const dispatchFetchWithGraphUri = getFetchDispatcher({
   allowedQueryParams: ['graph-uri'],

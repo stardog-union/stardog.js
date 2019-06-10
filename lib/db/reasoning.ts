@@ -1,4 +1,4 @@
-import { getFetchDispatcher } from 'requestUtils';
+import { getFetchDispatcher } from 'request-utils';
 import { RequestHeader, ContentType, RequestMethod } from '../constants';
 import { BaseDatabaseOptions, BaseDatabaseOptionsWithGraphUri } from 'types';
 
