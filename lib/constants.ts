@@ -4,6 +4,7 @@ export const enum ContentType {
   GRAPHQL = 'application/graphql',
   JSON = 'application/json',
   LD_JSON = 'application/ld+json',
+  MULTIPART_FORM_DATA = 'multipart/form-data',
   SPARQL_RESULTS_JSON = 'application/sparql-results+json',
   TEXT_PLAIN = 'text/plain',
   TEXT_TURTLE = 'text/turtle',

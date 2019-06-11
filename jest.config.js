@@ -1,8 +1,12 @@
 module.exports = {
-  roots: ['<rootDir>'],
+  roots: ['<rootDir>/test'],
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
   },
   setupFilesAfterEnv: ['./jest.setup.js'],
-  globalSetup: './test/setup-database.ts',
+  globals: {
+    'ts-jest': {
+      diagnostics: false,
+    },
+  },
 };

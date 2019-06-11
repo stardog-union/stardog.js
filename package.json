@@ -75,7 +75,7 @@
     "url": "https://github.com/stardog-union/stardog.js/issues"
   },
   "dependencies": {
-    "fetch-ponyfill": "^6.0.2",
+    "fetch-ponyfill": "^6.1.0",
     "flat": "^2.0.1",
     "form-data": "^2.2.0",
     "isomorphic-base64": "^1.0.2",
@@ -85,6 +85,7 @@
   },
   "devDependencies": {
     "@types/flat": "0.0.28",
+    "@types/form-data": "^2.2.1",
     "@types/jest": "^24.0.13",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.pick": "^4.4.6",
@@ -118,7 +119,7 @@
   "scripts": {
     "build": "node scripts/build",
     "docs": "node scripts/docs",
-    "test": "tslint '{lib,test}/**/*.[tj]s' --fix && jest test/*.spec.js --verbose -i",
+    "test": "tslint '{lib,test}/**/*.ts' --fix && jest test/*.spec.ts --verbose -i",
     "precommit": "lint-staged",
     "format": "prettier '{lib,test}/**/*.[tj]s' --write",
     "version": "mdchangelog --remote stardog-union/stardog.js --no-prologue --order-milestones semver --order-issues closed_at --overwrite --no-orphan-issues && npm run docs && git add README.md CHANGELOG.md",

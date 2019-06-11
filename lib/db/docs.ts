@@ -1,3 +1,4 @@
+import FormData from 'form-data';
 import { BaseDatabaseOptions } from '../types';
 import { RequestHeader, ContentType, RequestMethod } from '../constants';
 import { dispatchGenericFetch } from '../request-utils';
@@ -32,11 +33,13 @@ export const add = ({
 }) => {
   const formData = new FormData();
   formData.append('upload', fileContents, fileName);
+
   return dispatchGenericFetch({
     connection,
     method: RequestMethod.POST,
-    body: formData,
+    body: formData as any, // form-data doesn't implement all `FormData` methods
     pathSuffix: `${database}/docs`,
+    requestHeaders: formData.getHeaders(), // node-fetch 2+ apparently doesn't copy over formData headers automatically: https://github.com/bitinn/node-fetch/issues/368
   });
 };
 

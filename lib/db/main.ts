@@ -1,3 +1,4 @@
+import FormData from 'form-data';
 import flat from 'flat';
 import lodashGet from 'lodash.get';
 import { get as getOptions } from './options';
@@ -54,8 +55,9 @@ export const create = ({
 
   return dispatchAdminDbFetch({
     connection,
-    body,
+    body: body as any, // form-data doesn't implement all `FormData` methods
     method: RequestMethod.POST,
+    requestHeaders: body.getHeaders(), // node-fetch 2+ apparently doesn't copy over formData headers automatically: https://github.com/bitinn/node-fetch/issues/368
   });
 };
 

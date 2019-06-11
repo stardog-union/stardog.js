@@ -1,3 +1,4 @@
+import { Headers } from './fetch';
 import { RequestHeader, ContentType } from './constants';
 
 export interface ConnectionMeta {

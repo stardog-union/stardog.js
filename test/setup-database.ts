@@ -10,7 +10,7 @@ export const seedDatabase = (
   options = {},
   addlFiles = []
 ) => () => {
-  const connection = exports.ConnectionFactory();
+  const connection = ConnectionFactory();
 
   return db
     .create({
@@ -53,7 +53,7 @@ export const seedDatabase = (
 };
 
 export const dropDatabase = (database: string) => () => {
-  const connection = exports.ConnectionFactory();
+  const connection = ConnectionFactory();
   return db
     .drop({
       connection,

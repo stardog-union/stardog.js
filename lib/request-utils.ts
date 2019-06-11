@@ -1,3 +1,4 @@
+import { fetch } from './fetch';
 import qs from 'querystring';
 import { RequestMethod } from './constants';
 import {
