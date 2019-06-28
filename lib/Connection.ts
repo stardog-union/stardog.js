@@ -1,4 +1,4 @@
-import { Headers } from './fetch';
+import { Headers, Request } from './fetch';
 import { RequestHeader, ContentType } from './constants';
 
 export interface ConnectionMeta {
@@ -22,7 +22,7 @@ export class Connection {
   password: string;
   meta?: ConnectionMeta;
 
-  constructor(options: ConnectionConfig) {
+  constructor(options: Partial<ConnectionConfig> = {}) {
     this.configure(options);
   }
 

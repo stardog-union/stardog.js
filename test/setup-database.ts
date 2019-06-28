@@ -73,7 +73,7 @@ export const generateDatabaseName = () => {
   return database;
 };
 
-export const generateRandomString = () =>
+export const generateRandomString = (): string =>
   RandomString.generate({
     length: 10,
     charset: 'alphabetic',

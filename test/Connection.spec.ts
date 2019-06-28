@@ -1,6 +1,5 @@
-/* eslint-env jest */
-
-const { Connection } = require('../lib');
+import { Connection } from '../lib';
+import { Headers, Request } from '../lib/fetch';
 
 describe('Stardog.Connection', () => {
   it('creates a new connection object', () => {
@@ -32,7 +31,7 @@ describe('Stardog.Connection', () => {
         password: 'foo',
         endpoint: undefined,
       });
-      c.config({
+      c.configure({
         username: 'adam',
         password: 'admin',
         endpoint: 'http://localhost:3000/DB',
@@ -70,36 +69,35 @@ describe('Stardog.Connection', () => {
     });
 
     it('returns the result of `createHeaders` when it is exists', () => {
-      const c = new Connection(
-        {
-          username: 'admin',
-          password: 'admin',
-          endpoint: 'http://localhost:5820/DB/',
+      const headers = new Headers({ lol: 'lol' });
+      const c = new Connection({
+        username: 'admin',
+        password: 'admin',
+        endpoint: 'http://localhost:5820/DB/',
+        meta: {
+          createHeaders: () => headers,
         },
-        {
-          createHeaders: () => 'lol',
-        }
-      );
-      expect(c.headers()).toBe('lol');
+      });
+      expect(c.headers()).toBeInstanceOf(Headers);
+      expect(c.headers().get('lol')).toBe('lol');
     });
 
     it('passes default headers to `createHeaders` for modification', () => {
-      const c = new Connection(
-        {
-          username: 'admin',
-          password: 'admin',
-          endpoint: 'http://localhost:5820/DB/',
-        },
-        {
+      const c = new Connection({
+        username: 'admin',
+        password: 'admin',
+        endpoint: 'http://localhost:5820/DB/',
+        meta: {
           createHeaders: ({ headers }) => {
             expect(headers.get('Authorization')).toBe('Basic YWRtaW46YWRtaW4=');
             headers.set('New-Header', 'headerz');
             headers.set('Authorization', 'Negotiate blahbadyblah');
             return headers;
           },
-        }
-      );
+        },
+      });
       const headers = c.headers();
+      expect(headers).toBeInstanceOf(Headers);
       expect(headers.get('New-Header')).toBe('headerz');
       expect(headers.get('Authorization')).toBe('Negotiate blahbadyblah');
     });
@@ -118,16 +116,14 @@ describe('Stardog.Connection', () => {
     });
 
     it('returns the result of `createRequest` when it exists', () => {
-      const c = new Connection(
-        {
-          username: 'admin',
-          password: 'admin',
-          endpoint: 'http://localhost:5820/DB/',
-        },
-        {
+      const c = new Connection({
+        username: 'admin',
+        password: 'admin',
+        endpoint: 'http://localhost:5820/DB/',
+        meta: {
           createRequest: () => 'foo',
-        }
-      );
+        },
+      });
       expect(c.request('admin', 'databases', 'foo', 'bar')).toBe('foo');
     });
 
@@ -144,14 +140,10 @@ describe('Stardog.Connection', () => {
         `${c.uri('admin', 'databases', 'foo', 'bar')}foo`
       );
       c.meta = {
-        createRequest: ({ Request }) => Request,
+        createRequest: ({ Request }) => new Request('test'),
       };
-      const Result = c.request('admin', 'databases', 'foo', 'bar');
-      expect(Result).toBeInstanceOf(Function);
-      expect(Result.name).toBe('Request');
-      expect(new Result(c.uri('admin', 'databases', 'foo', 'bar')).method).toBe(
-        'GET'
-      );
+      const result = c.request('admin', 'databases', 'foo', 'bar');
+      expect(result).toBeInstanceOf(Request);
     });
 
     // safety check only because a previous method was going to do this
@@ -161,16 +153,14 @@ describe('Stardog.Connection', () => {
         password: 'admin',
         endpoint: 'http://localhost:5820/DB/',
       });
-      const c2 = new Connection(
-        {
-          username: 'admin',
-          password: 'admin',
-          endpoint: 'http://localhost:5820/DB/',
-        },
-        {
+      const c2 = new Connection({
+        username: 'admin',
+        password: 'admin',
+        endpoint: 'http://localhost:5820/DB/',
+        meta: {
           createRequest: () => 'foo',
-        }
-      );
+        },
+      });
       expect(c2.request('admin', 'databases', 'foo', 'bar')).toBe('foo');
       expect(c.request('admin', 'databases', 'foo', 'bar')).toBe(
         c.uri('admin', 'databases', 'foo', 'bar')
