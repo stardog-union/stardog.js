@@ -48,7 +48,11 @@ describe('db.copy()', () => {
         database,
       })
       .then(() => db.copy({ connection, database, destination }))
-      .then((res) => console.log(res.status) || db.list({ connection }))
+      .then(() =>
+        db.list({
+          connection,
+        })
+      )
       .then((res) => {
         expect(res.status).toEqual(200);
         return res.json();

@@ -77,7 +77,7 @@ export const getDatabase = ({ connection, database }: BaseDatabaseOptions) =>
 export const offline = ({ connection, database }: BaseDatabaseOptions) =>
   dispatchAdminDbFetch({
     connection,
-    pathSuffix: `${database}/offine`,
+    pathSuffix: `${database}/offline`,
     method: RequestMethod.PUT,
     requestHeaders: {
       [RequestHeader.ACCEPT]: ContentType.JSON,
