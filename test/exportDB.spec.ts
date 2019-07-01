@@ -1,38 +1,41 @@
-/* eslint-env jest */
-
-const { db } = require('../lib');
-const {
+import { db } from '../lib';
+import {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   ConnectionFactory,
-} = require('./setup-database');
+} from './setup-database';
 
 describe('exportDB()', () => {
   const database = generateDatabaseName();
-  let conn;
+  let connection;
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = ConnectionFactory();
-    conn.config({ database });
+    connection = ConnectionFactory();
   });
 
   it('should return a response with content-disposition header and the attachment export file', () =>
-    db.exportData(conn, database).then(res => {
-      expect(res.status).toBe(200);
-      expect(res.body).toHaveLength(33);
-    }));
+    db
+      .exportData({ connection, database })
+      .then((res) => {
+        expect(res.status).toBe(200);
+        return res.json();
+      })
+      .then((body) => expect(body).toHaveLength(33)));
 
   it('should return a response with content-disposition header and the attachment export file when using graph-uri param', () =>
     db
-      .exportData(conn, database, undefined, {
+      .exportData({
+        connection,
+        database,
         graphUri: 'tag:stardog:api:context:default',
       })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(200);
-        expect(res.body).toHaveLength(33);
-      }));
+        return res.json();
+      })
+      .then((body) => expect(body).toHaveLength(33)));
 });
