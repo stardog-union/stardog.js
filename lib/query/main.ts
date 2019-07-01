@@ -79,17 +79,21 @@ export const property = ({
     }
     `,
     params,
+  }).then((res) => {
+    const resClone = res.clone(); // just being safe, since we're mutating
+    const originalJsonFn = resClone.json.bind(resClone);
+    resClone.json = () =>
+      originalJsonFn().then((json: any) => {
+        const bindings = (json.results || {}).bindings;
+        if (bindings && bindings.length > 0) {
+          return {
+            body: bindings[0].val.value,
+          };
+        }
+        return {};
+      });
+    return resClone;
   });
-// TODO: we used to do this. do we still want to?
-// .then((res) => {
-//   const values = lodashGet(res, 'body.results.bindings', []);
-//   if (values.length > 0) {
-//     return Object.assign({}, res, {
-//       body: values[0].val.value,
-//     });
-//   }
-//   return res;
-// });
 
 export const explain = ({
   connection,

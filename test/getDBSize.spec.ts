@@ -1,27 +1,28 @@
-/* eslint-env jest */
-
-const { db } = require('../lib');
-const {
+import { db } from '../lib';
+import {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   ConnectionFactory,
-} = require('./setup-database');
+} from './setup-database';
 
 describe('getDBSize()', () => {
   const database = generateDatabaseName();
-  let conn;
+  let connection;
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = ConnectionFactory();
+    connection = ConnectionFactory();
   });
 
   it('A response with the size of the DB should not be empty', () =>
-    db.size(conn, database).then(res => {
-      const sizeNum = parseInt(res.body, 10);
-      expect(sizeNum).toBe(93);
-    }));
+    db
+      .size({ connection, database })
+      .then((res) => res.json())
+      .then((body) => {
+        const sizeNum = parseInt(body, 10);
+        expect(sizeNum).toBe(93);
+      }));
 });

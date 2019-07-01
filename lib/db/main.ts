@@ -1,22 +1,22 @@
 import FormData from 'form-data';
 import flat from 'flat';
-import lodashGet from 'lodash.get';
 import { get as getOptions } from './options';
 import {
   BaseDatabaseOptions,
   BaseOptions,
   BaseDatabaseOptionsWithGraphUri,
+  DeepPartial,
 } from '../types';
 import {
   RequestHeader,
   ContentType,
   RequestMethod,
   ALL_GRAPHS,
-  ResponseStatus,
 } from '../constants';
 import dbopts from '../db/dbopts';
 import { getFetchDispatcher } from '../request-utils';
 
+const namespacesRequestOptionsToGet = { database: { namespaces: true } };
 const dispatchAdminDbFetch = getFetchDispatcher({
   basePath: `admin/databases`,
   allowedQueryParams: ['graph-uri', 'to'],
@@ -25,12 +25,6 @@ const dispatchAdminDbFetch = getFetchDispatcher({
 const dispatchFetchWithGraphUri = getFetchDispatcher({
   allowedQueryParams: ['graph-uri'],
 });
-
-type DeepPartial<T> = {
-  [P in keyof T]?: T[P] extends object
-    ? DeepPartial<T[P]>
-    : T[P] extends (infer U)[] ? DeepPartial<U>[] : T[P]
-};
 
 export const create = ({
   connection,
@@ -150,10 +144,11 @@ export const clear = ({
     requestHeaders: {
       [RequestHeader.ACCEPT]: ContentType.TEXT_PLAIN,
     },
-  }).then((res) => ({
-    ...res,
-    transactionId,
-  }));
+  }).then((res) => {
+    const resClone: any = res.clone(); // just being safe, since we're mutating
+    resClone.transactionId = transactionId;
+    return resClone;
+  });
 };
 
 export const add = ({
@@ -213,24 +208,27 @@ export const remove = ({
 };
 
 export const namespaces = ({ connection, database }: BaseDatabaseOptions) =>
-  getOptions({ connection, database }).then((res) => {
-    if (res.status === ResponseStatus.OK) {
-      const namespaces: string[] = lodashGet(
-        res,
-        'body.database.namespaces',
-        []
-      );
-      const names = namespaces.reduce(
-        (namespacesMap, namespace) => {
-          const [key, value] = namespace.split('=');
-          namespacesMap[key] = value;
-          return namespacesMap;
-        },
-        {} as { [key: string]: string }
-      );
-      res.body = names;
-    }
-    return res;
+  getOptions({
+    connection,
+    database,
+    optionsToGet: namespacesRequestOptionsToGet,
+  }).then((res) => {
+    const resClone = res.clone(); // just being safe, since we're mutating
+    const originalJsonFn = resClone.json.bind(resClone);
+    resClone.json = () =>
+      originalJsonFn().then((json: { 'database.namespaces': string[] }) => {
+        const namespaces = json['database.namespaces'] || [];
+        return namespaces.reduce(
+          (namespacesMap: { [key: string]: string }, namespace: string) => {
+            const [key, value] = namespace.split('=');
+            namespacesMap[key] = value;
+            return namespacesMap;
+          },
+          {} as { [key: string]: string }
+        );
+      });
+
+    return resClone;
   });
 
 export const exportData = ({

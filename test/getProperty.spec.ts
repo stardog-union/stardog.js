@@ -1,34 +1,34 @@
-/* eslint-env jest */
-
-const { query } = require('../lib');
-const {
+import { query } from '../lib';
+import {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   ConnectionFactory,
-} = require('./setup-database');
+} from './setup-database';
 
 describe('query.property()', () => {
   const database = generateDatabaseName();
-  let conn;
+  let connection;
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = ConnectionFactory();
-    conn.config({ database });
+    connection = ConnectionFactory();
   });
 
   it('Gets a specific property from the database', () =>
     query
-      .property(conn, database, {
+      .property({
+        connection,
+        database,
         uri: '<http://localhost/publications/articles/Journal1/1940/Article1>',
         property: '<http://localhost/vocabulary/bench/cdrom>',
       })
-      .then(res => {
-        expect(res.body).toEqual(
+      .then((res) => res.json())
+      .then((json) =>
+        expect(json.body).toEqual(
           'http://www.hogfishes.tld/richer/succories.html'
-        );
-      }));
+        )
+      ));
 });

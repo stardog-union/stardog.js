@@ -71,3 +71,9 @@ export type JsonPrimitive = string | number | boolean | null;
 export type JsonValue = JsonPrimitive | JsonObject | JsonArray;
 export type JsonObject = { [key: string]: JsonValue };
 export interface JsonArray extends Array<JsonValue> {}
+
+export type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object
+    ? DeepPartial<T[P]>
+    : T[P] extends (infer U)[] ? DeepPartial<U>[] : T[P]
+};
