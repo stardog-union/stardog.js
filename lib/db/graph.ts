@@ -1,3 +1,4 @@
+import * as qs from 'querystring';
 import {
   RequestHeader,
   ContentType,
@@ -17,15 +18,16 @@ export const getGraph = ({
   graphUri = null,
   requestHeaders = {},
 }: BaseDatabaseOptionsWithGraphUri) => {
-  const params = graphUri ? { 'graph-uri': graphUri } : { [DEFAULT_GRAPH]: '' };
+  const queryString = qs.stringify(
+    graphUri ? { graph: graphUri } : DEFAULT_GRAPH
+  );
   return dispatchFetchWithGraphUri({
     connection,
     requestHeaders: {
       [RequestHeader.ACCEPT]:
         requestHeaders[RequestHeader.ACCEPT] || ContentType.LD_JSON,
     },
-    params,
-    pathSuffix: database,
+    pathSuffix: `${database}?${queryString}`,
   });
 };
 
@@ -34,12 +36,13 @@ export const deleteGraph = ({
   database,
   graphUri = null,
 }: BaseDatabaseOptionsWithGraphUri) => {
-  const params = graphUri ? { 'graph-uri': graphUri } : { [DEFAULT_GRAPH]: '' };
+  const queryString = qs.stringify(
+    graphUri ? { graph: graphUri } : DEFAULT_GRAPH
+  );
   return dispatchFetchWithGraphUri({
     connection,
     method: RequestMethod.DELETE,
-    params,
-    pathSuffix: database,
+    pathSuffix: `${database}?${queryString}`,
   });
 };
 
@@ -54,7 +57,9 @@ const submitJson = ({
   graphData: string;
   requestMethod: RequestMethod;
 }) => {
-  const params = graphUri ? { 'graph-uri': graphUri } : { [DEFAULT_GRAPH]: '' };
+  const queryString = qs.stringify(
+    graphUri ? { graph: graphUri } : DEFAULT_GRAPH
+  );
   return dispatchFetchWithGraphUri({
     connection,
     method: requestMethod,
@@ -63,12 +68,11 @@ const submitJson = ({
       [RequestHeader.CONTENT_TYPE]:
         requestHeaders[RequestHeader.CONTENT_TYPE] || ContentType.LD_JSON,
     },
-    params,
-    pathSuffix: database,
+    pathSuffix: `${database}?${queryString}`,
   });
 };
 
-export const setGraph = (
+export const putGraph = (
   putData: BaseDatabaseOptionsWithGraphUri & { graphData: string }
 ) =>
   submitJson({
