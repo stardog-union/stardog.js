@@ -20,10 +20,13 @@ describe('doc store', () => {
 
   describe('size', () => {
     it('retrieves the size of the doc store', () =>
-      docs.size({ connection, database }).then((res) => {
-        expect(res.status).toBe(200);
-        expect(res.body).toBe('0');
-      }));
+      docs
+        .size({ connection, database })
+        .then((res) => {
+          expect(res.status).toBe(200);
+          return res.text();
+        })
+        .then((text) => expect(text).toBe('0')));
   });
 
   describe('add', () => {
@@ -80,9 +83,8 @@ describe('doc store', () => {
         })
         .then((res) => {
           expect(res.status).toBe(200);
-          return res;
+          return res.text();
         })
-        .then((res) => res.json())
-        .then((res) => expect(res.body.length).toBeGreaterThan(0)));
+        .then((text) => expect(text.length).toBeGreaterThan(0)));
   });
 });

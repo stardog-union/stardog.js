@@ -62,7 +62,7 @@ export class Connection {
   }
 
   uri(...resource: string[]) {
-    return `${this.endpoint}/${resource.join('/')}`;
+    return `${this.endpoint}/${resource.filter(Boolean).join('/')}`;
   }
 
   request(...resource: string[]) {

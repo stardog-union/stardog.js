@@ -95,14 +95,13 @@ export const explain = ({
   connection,
   database,
   query,
-  requestHeaders,
+  requestHeaders = {},
   params,
 }: BaseDatabaseOptions & {
   query: string;
   params?: JsonValue;
 }) => {
   const { Accept = ContentType.TEXT_PLAIN } = requestHeaders;
-  const queryString = qs.stringify(params);
 
   return dispatchGenericFetch({
     connection,
@@ -110,10 +109,10 @@ export const explain = ({
     body: qs.stringify({ query }),
     requestHeaders: {
       [RequestHeader.ACCEPT]: Accept,
-      [RequestHeader.CONTENT_ENCODING]: ContentType.FORM_URLENCODED,
+      [RequestHeader.CONTENT_TYPE]: ContentType.FORM_URLENCODED,
     },
     params: params as any,
-    pathSuffix: `${database}/explain${queryString ? `?${queryString}` : ''}`,
+    pathSuffix: `${database}/explain`,
   });
 };
 
