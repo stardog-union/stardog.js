@@ -31,6 +31,7 @@ export const add = ({
 }: BaseDatabaseOptionsWithFileName & {
   fileContents: string;
 }) => {
+  // @ts-ignore: form-data types are wrong; options argument should be optional
   const formData = new FormData();
   formData.append('upload', fileContents, fileName);
 

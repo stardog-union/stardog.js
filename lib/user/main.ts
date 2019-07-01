@@ -175,5 +175,5 @@ export const deleteUser = ({ connection, username }: BaseUserOptions) =>
   dispatchUsersFetch({
     connection,
     method: RequestMethod.DELETE,
-    pathSuffix: `${username}/superuser`,
+    pathSuffix: `${username}`,
   });

@@ -1,35 +1,36 @@
-/* eslint-env jest */
-
-const { db } = require('../lib');
-const {
+import { db } from '../lib';
+import {
   dropDatabase,
   generateDatabaseName,
   ConnectionFactory,
-} = require('./setup-database');
+} from './setup-database';
 
 describe('createDB()', () => {
   const database = generateDatabaseName();
-  let conn;
+  let connection;
 
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = ConnectionFactory();
-    conn.config({ database });
+    connection = ConnectionFactory();
   });
 
   it('should not be able to create a new db with the name of an existing DB', () =>
     db
-      .create(conn, database, {
-        index: {
-          type: 'disk',
+      .create({
+        connection,
+        database,
+        databaseSettings: {
+          index: {
+            type: 'disk',
+          },
         },
       })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(201);
-        return db.create(conn, database);
+        return db.create({ connection, database });
       })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(409);
       }));
 });

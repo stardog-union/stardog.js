@@ -1,60 +1,63 @@
-/* eslint-env jest */
-
-const { user } = require('../lib');
-const {
+import { user, Permission } from '../lib';
+import {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   generateRandomString,
   ConnectionFactory,
-} = require('./setup-database');
+} from './setup-database';
 
 describe('deletePermissionFromUser()', () => {
   const database = generateDatabaseName();
-  let conn;
+  let connection;
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = ConnectionFactory();
+    connection = ConnectionFactory();
   });
 
   it('should fail trying to delete a permssion to a non-existent user.', () => {
-    const permission = {
-      action: 'write',
-      resourceType: 'db',
-      resources: [database],
-    };
-
-    return user.deletePermission(conn, 'myuser', permission).then(res => {
-      expect(res.status).toBe(404);
-    });
-  });
-
-  it('should pass deleting a Permissions to a new user.', () => {
-    const name = generateRandomString();
-    const password = generateRandomString();
-    const permission = {
-      action: 'write',
+    const permission: Permission = {
+      action: 'WRITE',
       resourceType: 'db',
       resources: [database],
     };
 
     return user
-      .create(conn, {
-        name,
-        password,
+      .deletePermission({ connection, username: 'myuser', permission })
+      .then((res) => {
+        expect(res.status).toBe(404);
+      });
+  });
+
+  it('should pass deleting a Permissions to a new user.', () => {
+    const username = generateRandomString();
+    const password = generateRandomString();
+    const permission: Permission = {
+      action: 'WRITE',
+      resourceType: 'db',
+      resources: [database],
+    };
+
+    return user
+      .create({
+        connection,
+        user: {
+          name: username,
+          password,
+        },
       })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(201);
-        return user.assignPermission(conn, name, permission);
+        return user.assignPermission({ connection, username, permission });
       })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(201);
-        return user.deletePermission(conn, name, permission);
+        return user.deletePermission({ connection, username, permission });
       })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(201);
       });
   });

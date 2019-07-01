@@ -36,7 +36,7 @@ describe('db.copy()', () => {
         return res.json();
       })
       .then((bodyJson) => {
-        // Destination shouldn't be listed because it's not online yet and therefor didn't get copied.
+        // Destination shouldn't be listed because it's not online yet and therefore didn't get copied.
         expect(bodyJson.databases).not.toContain(destination);
         expect(bodyJson.databases).toContain(database);
       }));

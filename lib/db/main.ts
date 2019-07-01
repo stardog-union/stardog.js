@@ -35,11 +35,11 @@ type DeepPartial<T> = {
 export const create = ({
   connection,
   database,
-  databaseSettings,
+  databaseSettings = {},
   files = [] as { filename: string }[],
 }: BaseDatabaseOptions & {
-  databaseSettings: DeepPartial<typeof dbopts>;
-  files: { filename: string }[];
+  databaseSettings?: DeepPartial<typeof dbopts>;
+  files?: { filename: string }[];
 }) => {
   const dbOptions = flat(databaseSettings);
   const body = new FormData();
