@@ -17,8 +17,8 @@ export const executeQuery = ({
   },
   params = {},
 }: BaseDatabaseOptions & {
-  requestHeaders: BaseDatabaseOptions['requestHeaders'] & {
-    [RequestHeader.ACCEPT]: ReturnType<typeof mimeType>;
+  requestHeaders?: BaseDatabaseOptions['requestHeaders'] & {
+    [RequestHeader.ACCEPT]: ReturnType<typeof mimeType> | string;
   };
   query: string;
   params?: JsonValue;
