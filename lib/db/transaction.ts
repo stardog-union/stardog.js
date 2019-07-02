@@ -10,6 +10,12 @@ export const begin = ({ connection, database }: BaseDatabaseOptions) =>
       [RequestHeader.ACCEPT]: ContentType.ALL,
     },
     pathSuffix: `${database}/transaction/begin`,
+  }).then((res) => {
+    const resClone: any = res.clone();
+    return res.text().then((text) => {
+      resClone.transactionId = text;
+      return resClone;
+    });
   });
 
 export const rollback = ({

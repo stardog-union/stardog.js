@@ -67,27 +67,27 @@ export const remove = (
   });
 
 export const convert = ({
-  icvAxiom,
+  icvAxioms,
   ...icvRequestData
 }: BaseDatabaseOptionsWithGraphUri & {
-  icvAxiom: string;
+  icvAxioms: string;
 }) =>
   postIcv({
     ...icvRequestData,
-    icvAxioms: icvAxiom,
+    icvAxioms,
     resource: 'convert',
   });
 
 export const validate = ({
-  constraints,
+  icvAxioms,
   requestHeaders = {},
   ...icvRequestData
 }: BaseDatabaseOptionsWithGraphUri & {
-  constraints: string;
+  icvAxioms: string;
 }) =>
   postIcv({
     ...icvRequestData,
-    icvAxioms: constraints,
+    icvAxioms,
     resource: 'validate',
     requestHeaders: {
       ...requestHeaders,
@@ -97,16 +97,16 @@ export const validate = ({
 
 export const validateInTx = ({
   transactionId,
-  constraints,
+  icvAxioms,
   requestHeaders = {},
   ...icvRequestData
 }: BaseDatabaseOptionsWithGraphUri & {
-  constraints: string;
+  icvAxioms: string;
   transactionId: string;
 }) =>
   postIcv({
     ...icvRequestData,
-    icvAxioms: constraints,
+    icvAxioms,
     resource: `${transactionId}/validate`,
     requestHeaders: {
       ...requestHeaders,
@@ -115,15 +115,15 @@ export const validateInTx = ({
   });
 
 export const violations = ({
-  constraints,
+  icvAxioms,
   requestHeaders = {},
   ...icvRequestData
 }: BaseDatabaseOptionsWithGraphUri & {
-  constraints: string;
+  icvAxioms: string;
 }) =>
   postIcv({
     ...icvRequestData,
-    icvAxioms: constraints,
+    icvAxioms,
     resource: 'violations',
     requestHeaders: {
       ...requestHeaders,
@@ -133,16 +133,16 @@ export const violations = ({
 
 export const violationsInTx = ({
   transactionId,
-  constraints,
+  icvAxioms,
   requestHeaders = {},
   ...icvRequestData
 }: BaseDatabaseOptionsWithGraphUri & {
-  constraints: string;
+  icvAxioms: string;
   transactionId: string;
 }) =>
   postIcv({
     ...icvRequestData,
-    icvAxioms: constraints,
+    icvAxioms,
     resource: `${transactionId}/violations`,
     requestHeaders: {
       ...requestHeaders,
@@ -151,15 +151,15 @@ export const violationsInTx = ({
   });
 
 export const report = ({
-  constraints,
+  icvAxioms,
   requestHeaders = {},
   ...icvRequestData
 }: BaseDatabaseOptionsWithGraphUri & {
-  constraints: string;
+  icvAxioms: string;
 }) =>
   postIcv({
     ...icvRequestData,
-    icvAxioms: constraints,
+    icvAxioms,
     resource: 'report',
     requestHeaders: {
       ...requestHeaders,
@@ -169,16 +169,16 @@ export const report = ({
 
 export const reportInTx = ({
   transactionId,
-  constraints,
+  icvAxioms,
   requestHeaders = {},
   ...icvRequestData
 }: BaseDatabaseOptionsWithGraphUri & {
-  constraints: string;
+  icvAxioms: string;
   transactionId: string;
 }) =>
   postIcv({
     ...icvRequestData,
-    icvAxioms: constraints,
+    icvAxioms,
     resource: `${transactionId}/report`,
     requestHeaders: {
       ...requestHeaders,
