@@ -6,6 +6,7 @@ import {
   BaseOptions,
   BaseDatabaseOptionsWithGraphUri,
   DeepPartial,
+  RequestHeaders,
 } from '../types';
 import {
   RequestHeader,
@@ -134,7 +135,9 @@ export const clear = ({
   database,
   transactionId,
   graphUri,
-}: BaseDatabaseOptionsWithGraphUri & { transactionId: string }) => {
+}: BaseDatabaseOptionsWithGraphUri & { transactionId: string }): Promise<
+  Response & { transactionId: string }
+> => {
   const params = graphUri ? { 'graph-uri': graphUri } : null;
   return dispatchFetchWithGraphUri({
     connection,
@@ -161,21 +164,30 @@ export const add = ({
 }: BaseDatabaseOptionsWithGraphUri & {
   transactionId: string;
   content: any;
-}) => {
+}): Promise<Response & { transactionId: string }> => {
   const params = graphUri ? { 'graph-uri': graphUri } : null;
+  const headers: RequestHeaders = {
+    [RequestHeader.ACCEPT]: ContentType.TEXT_PLAIN,
+    [RequestHeader.CONTENT_TYPE]:
+      requestHeaders[RequestHeader.CONTENT_TYPE] || ContentType.TEXT_PLAIN,
+  };
+
+  if (requestHeaders[RequestHeader.CONTENT_ENCODING]) {
+    headers[RequestHeader.CONTENT_ENCODING] =
+      requestHeaders[RequestHeader.CONTENT_ENCODING];
+  }
+
   return dispatchFetchWithGraphUri({
     connection,
     params,
     method: RequestMethod.POST,
     body: content,
-    requestHeaders: {
-      [RequestHeader.ACCEPT]: ContentType.TEXT_PLAIN,
-      [RequestHeader.CONTENT_TYPE]:
-        requestHeaders[RequestHeader.CONTENT_TYPE] || ContentType.TEXT_PLAIN,
-      [RequestHeader.CONTENT_ENCODING]:
-        requestHeaders[RequestHeader.CONTENT_ENCODING],
-    },
+    requestHeaders: headers,
     pathSuffix: `${database}/${transactionId}/add`,
+  }).then((res) => {
+    const resClone: any = res.clone(); // just being safe, since we're mutating
+    resClone.transactionId = transactionId;
+    return resClone;
   });
 };
 
@@ -189,21 +201,30 @@ export const remove = ({
 }: BaseDatabaseOptionsWithGraphUri & {
   transactionId: string;
   content: any;
-}) => {
+}): Promise<Response & { transactionId: string }> => {
   const params = graphUri ? { 'graph-uri': graphUri } : null;
+  const headers: RequestHeaders = {
+    [RequestHeader.ACCEPT]: ContentType.TEXT_PLAIN,
+    [RequestHeader.CONTENT_TYPE]:
+      requestHeaders[RequestHeader.CONTENT_TYPE] || ContentType.TEXT_PLAIN,
+  };
+
+  if (requestHeaders[RequestHeader.CONTENT_ENCODING]) {
+    headers[RequestHeader.CONTENT_ENCODING] =
+      requestHeaders[RequestHeader.CONTENT_ENCODING];
+  }
+
   return dispatchFetchWithGraphUri({
     connection,
     params,
     method: RequestMethod.POST,
     body: content,
-    requestHeaders: {
-      [RequestHeader.ACCEPT]: ContentType.TEXT_PLAIN,
-      [RequestHeader.CONTENT_TYPE]:
-        requestHeaders[RequestHeader.CONTENT_TYPE] || ContentType.TEXT_PLAIN,
-      [RequestHeader.CONTENT_ENCODING]:
-        requestHeaders[RequestHeader.CONTENT_ENCODING],
-    },
+    requestHeaders: headers,
     pathSuffix: `${database}/${transactionId}/remove`,
+  }).then((res) => {
+    const resClone: any = res.clone(); // just being safe, since we're mutating
+    resClone.transactionId = transactionId;
+    return resClone;
   });
 };
 

@@ -37,7 +37,7 @@ export const set = ({
   connection,
   database,
   databaseOptions,
-}: BaseDatabaseOptions & { databaseOptions: typeof dbopts }) =>
+}: BaseDatabaseOptions & { databaseOptions: DeepPartial<typeof dbopts> }) =>
   dispatchAdminDbFetch({
     connection,
     method: RequestMethod.POST,
