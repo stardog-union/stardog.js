@@ -19,6 +19,7 @@ const dispatchQuery = ({
   query,
   params,
   transactionId,
+  requestHeaders = {},
 }: BaseDatabaseOptions & {
   query: string;
   params?: JsonValue;
@@ -26,6 +27,7 @@ const dispatchQuery = ({
 }) => {
   const type = queryType(query);
   const resource = type === QueryType.UPDATE ? 'update' : 'query';
+  const acceptHeader = requestHeaders[RequestHeader.ACCEPT] || mimeType(query);
 
   // TODO:
   // Paths queries will return duplicate variable names
@@ -40,7 +42,7 @@ const dispatchQuery = ({
     params: params as any,
     requestHeaders: {
       [RequestHeader.CONTENT_TYPE]: ContentType.FORM_URLENCODED,
-      [RequestHeader.ACCEPT]: mimeType(query),
+      [RequestHeader.ACCEPT]: acceptHeader,
     },
     pathSuffix: `${database}/${
       transactionId ? `${transactionId}/` : ''

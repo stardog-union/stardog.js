@@ -1,17 +1,15 @@
-/* eslint-env jest */
-
-const { db } = require('../lib');
-const {
+import { db } from '../lib';
+import {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   ConnectionFactory,
-} = require('./setup-database');
+} from './setup-database';
 
 describe('listDBs()', () => {
   const one = generateDatabaseName();
   const two = generateDatabaseName();
-  let conn;
+  let connection;
 
   beforeAll(seedDatabase(one));
   beforeAll(seedDatabase(two));
@@ -19,12 +17,15 @@ describe('listDBs()', () => {
   afterAll(dropDatabase(two));
 
   beforeEach(() => {
-    conn = ConnectionFactory();
+    connection = ConnectionFactory();
   });
 
   it('should list available databases', () => {
-    db.list(conn).then(res => {
-      expect(res.body.databases).toEqual(expect.arrayContaining([one, two]));
-    });
+    db
+      .list({ connection })
+      .then((res) => res.json())
+      .then((body) =>
+        expect(body.databases).toEqual(expect.arrayContaining([one, two]))
+      );
   });
 });

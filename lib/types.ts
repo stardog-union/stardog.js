@@ -56,7 +56,14 @@ export type Action =
   | 'WRITE'
   | 'GRANT'
   | 'REVOKE'
-  | 'EXECUTE';
+  | 'EXECUTE'
+  | 'create'
+  | 'delete'
+  | 'read'
+  | 'write'
+  | 'grant'
+  | 'revoke'
+  | 'execute';
 
 export type ResourceType =
   | 'db'

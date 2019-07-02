@@ -1,49 +1,55 @@
-/* eslint-env jest */
-
-const { user } = require('../lib');
-const {
+import { user, Permission } from '../lib';
+import {
   seedDatabase,
   dropDatabase,
   generateDatabaseName,
   generateRandomString,
   ConnectionFactory,
-} = require('./setup-database');
+} from './setup-database';
 
 describe('listUserPermissions()', () => {
   const database = generateDatabaseName();
-  let conn;
+  let connection;
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
 
   beforeEach(() => {
-    conn = ConnectionFactory();
+    connection = ConnectionFactory();
   });
 
   it('should fail trying to get the list of permissions of a non-existent user.', () =>
-    user.permissions(conn, 'myuser').then(res => {
+    user.permissions({ connection, username: 'myuser' }).then((res) => {
       expect(res.status).toBe(404);
     }));
 
   it('should list permissions assigned to a new user.', () => {
     const name = generateRandomString();
     const password = generateRandomString();
-    const permission = {
+    const permission: Permission = {
       action: 'write',
       resourceType: 'db',
       resources: [database],
     };
 
     return user
-      .create(conn, {
-        name,
-        password,
+      .create({
+        connection,
+        user: {
+          name,
+          password,
+        },
       })
-      .then(() => user.assignPermission(conn, name, permission))
-      .then(() => user.permissions(conn, name))
-      .then(res => {
+      .then(() =>
+        user.assignPermission({ connection, username: name, permission })
+      )
+      .then(() => user.permissions({ connection, username: name }))
+      .then((res) => {
         expect(res.status).toBe(200);
-        const resources = res.body.permissions.reduce(
+        return res.json();
+      })
+      .then((body) => {
+        const resources = body.permissions.reduce(
           (memo, perm) => memo.concat(perm.resource),
           []
         );
