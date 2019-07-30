@@ -63,7 +63,6 @@ describe('stored', () => {
             query: 'select distinct ?type {?s a ?type}',
             shared: true,
             creator: 'admin',
-            // TODO only assert presence of these when the version is >= 6.2.2
             description: null,
             reasoning: false,
           });
