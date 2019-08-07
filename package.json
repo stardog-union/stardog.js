@@ -14,7 +14,7 @@
   "main": "dist/stardog.cjs.js",
   "browser": "dist/stardog.js",
   "module": "dist/stardog.esm.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "author": {
     "name": "Stardog Union",
     "url": "http://stardog.com"
@@ -77,15 +77,15 @@
   "dependencies": {
     "fetch-ponyfill": "^6.1.0",
     "flat": "^2.0.1",
-    "form-data": "^2.2.0",
+    "form-data": "^2.5.0",
     "isomorphic-base64": "^1.0.2",
     "lodash.get": "^4.4.2",
     "lodash.pick": "^4.4.0",
     "querystring": "^0.2.0"
   },
   "devDependencies": {
+    "@gerrit0/typedoc": "^0.15.3",
     "@types/flat": "0.0.28",
-    "@types/form-data": "^2.2.1",
     "@types/jest": "^24.0.13",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.pick": "^4.4.6",
@@ -110,15 +110,14 @@
     "tslint": "^5.11.0",
     "tslint-config-airbnb": "^5.11.1",
     "tslint-config-prettier": "^1.17.0",
-    "typedocs": "^0.6.5",
-    "typescript": "^3.2.2"
+    "typescript": "^3.5.3"
   },
   "engines": {
     "node": ">=6.0.0"
   },
   "scripts": {
     "build": "node scripts/build",
-    "docs": "node scripts/docs",
+    "docs": "rimraf ./docs && typedoc --target ES5 --mode file --excludePrivate --exclude \"**/*+(fetch|request-utils).ts\" --out ./docs ./lib && node scripts/docs-hack.js",
     "test": "tslint '{lib,test}/**/*.ts' --fix && jest test/*.spec.ts --verbose -i",
     "precommit": "lint-staged",
     "format": "prettier '{lib,test}/**/*.[tj]s' --write",

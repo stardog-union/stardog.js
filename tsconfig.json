@@ -13,7 +13,7 @@
     "declarationDir": "./dist/types",
     "outDir": "./dist",
     "lib": ["es2015", "dom"],
-    "baseUrl": ".",
+    "baseUrl": "."
   },
   "include": [
     "lib/**/*"

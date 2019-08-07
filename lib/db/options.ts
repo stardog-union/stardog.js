@@ -9,41 +9,43 @@ const dispatchAdminDbFetch = getFetchDispatcher({
   allowedQueryParams: [],
 });
 
-export const get = ({
-  connection,
-  database,
-  optionsToGet = dbopts,
-}: BaseDatabaseOptions & { optionsToGet?: DeepPartial<typeof dbopts> }) =>
-  dispatchAdminDbFetch({
+export namespace db.options {
+  export const get = ({
     connection,
-    method: RequestMethod.PUT,
-    requestHeaders: {
-      [RequestHeader.CONTENT_TYPE]: ContentType.JSON,
-    },
-    pathSuffix: `${database}/options`,
-    body: JSON.stringify(flat(optionsToGet, { safe: true })),
-  });
-// }).then((res) => {
-//   if (res.status === ResponseStatus.OK) {
-//     return {
-//       ...res,
-//       body: flat.unflatten(res.body),
-//     };
-//   }
-//   return res;
-// });
+    database,
+    optionsToGet = dbopts,
+  }: BaseDatabaseOptions & { optionsToGet?: DeepPartial<typeof dbopts> }) =>
+    dispatchAdminDbFetch({
+      connection,
+      method: RequestMethod.PUT,
+      requestHeaders: {
+        [RequestHeader.CONTENT_TYPE]: ContentType.JSON,
+      },
+      pathSuffix: `${database}/options`,
+      body: JSON.stringify(flat(optionsToGet, { safe: true })),
+    });
+  // }).then((res) => {
+  //   if (res.status === ResponseStatus.OK) {
+  //     return {
+  //       ...res,
+  //       body: flat.unflatten(res.body),
+  //     };
+  //   }
+  //   return res;
+  // });
 
-export const set = ({
-  connection,
-  database,
-  databaseOptions,
-}: BaseDatabaseOptions & { databaseOptions: DeepPartial<typeof dbopts> }) =>
-  dispatchAdminDbFetch({
+  export const set = ({
     connection,
-    method: RequestMethod.POST,
-    requestHeaders: {
-      [RequestHeader.CONTENT_TYPE]: ContentType.JSON,
-    },
-    pathSuffix: `${database}/options`,
-    body: JSON.stringify(flat(databaseOptions, { safe: true })),
-  });
+    database,
+    databaseOptions,
+  }: BaseDatabaseOptions & { databaseOptions: DeepPartial<typeof dbopts> }) =>
+    dispatchAdminDbFetch({
+      connection,
+      method: RequestMethod.POST,
+      requestHeaders: {
+        [RequestHeader.CONTENT_TYPE]: ContentType.JSON,
+      },
+      pathSuffix: `${database}/options`,
+      body: JSON.stringify(flat(databaseOptions, { safe: true })),
+    });
+}

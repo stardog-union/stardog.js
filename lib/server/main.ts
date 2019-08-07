@@ -10,20 +10,22 @@ const jsonAcceptHeaders = {
   [RequestHeader.ACCEPT]: ContentType.JSON,
 };
 
-export const shutdown = ({ connection }: BaseOptions) =>
-  dispatchAdminFetch({
-    connection,
-    requestHeaders: jsonAcceptHeaders,
-    pathSuffix: 'shutdown',
-  }); // TODO: httpMessage?
+export namespace server {
+  export const shutdown = ({ connection }: BaseOptions) =>
+    dispatchAdminFetch({
+      connection,
+      requestHeaders: jsonAcceptHeaders,
+      pathSuffix: 'shutdown',
+    }); // TODO: httpMessage?
 
-export const status = ({
-  connection,
-  params,
-}: BaseOptions & { params?: JsonValue }) =>
-  dispatchAdminFetch({
+  export const status = ({
     connection,
-    requestHeaders: jsonAcceptHeaders,
-    pathSuffix: 'status',
-    params: params as any,
-  });
+    params,
+  }: BaseOptions & { params?: JsonValue }) =>
+    dispatchAdminFetch({
+      connection,
+      requestHeaders: jsonAcceptHeaders,
+      pathSuffix: 'status',
+      params: params as any,
+    });
+}

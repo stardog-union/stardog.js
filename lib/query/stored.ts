@@ -17,45 +17,47 @@ export interface StoredQueryData {
   [key: string]: JsonPrimitive | undefined;
 }
 
-export const create = ({
-  connection,
-  storedQueryData,
-}: BaseOptions & { storedQueryData: StoredQueryData }) => {
-  const body: StoredQueryData & { creator: string } = lodashPick(
+export namespace db.stored {
+  export const create = ({
+    connection,
     storedQueryData,
-    ['name', 'database', 'query', 'shared']
-  ) as any;
-  body.creator = connection.username;
-  body.shared = typeof body.shared === 'boolean' ? body.shared : false;
+  }: BaseOptions & { storedQueryData: StoredQueryData }) => {
+    const body: StoredQueryData & { creator: string } = lodashPick(
+      storedQueryData,
+      ['name', 'database', 'query', 'shared']
+    ) as any;
+    body.creator = connection.username;
+    body.shared = typeof body.shared === 'boolean' ? body.shared : false;
 
-  return dispatchAdminFetch({
-    connection,
-    method: RequestMethod.POST,
-    body: JSON.stringify(body),
-    requestHeaders: {
-      [RequestHeader.ACCEPT]: ContentType.JSON,
-      [RequestHeader.CONTENT_TYPE]: ContentType.JSON,
-    },
-  });
-};
+    return dispatchAdminFetch({
+      connection,
+      method: RequestMethod.POST,
+      body: JSON.stringify(body),
+      requestHeaders: {
+        [RequestHeader.ACCEPT]: ContentType.JSON,
+        [RequestHeader.CONTENT_TYPE]: ContentType.JSON,
+      },
+    });
+  };
 
-export const list = ({ connection }: BaseOptions) =>
-  dispatchAdminFetch({
-    connection,
-    requestHeaders: {
-      [RequestHeader.ACCEPT]: ContentType.JSON,
-    },
-  });
+  export const list = ({ connection }: BaseOptions) =>
+    dispatchAdminFetch({
+      connection,
+      requestHeaders: {
+        [RequestHeader.ACCEPT]: ContentType.JSON,
+      },
+    });
 
-export const deleteStoredQuery = ({
-  connection,
-  storedQuery,
-}: BaseOptions & { storedQuery: string }) =>
-  dispatchAdminFetch({
+  export const deleteStoredQuery = ({
     connection,
-    method: RequestMethod.DELETE,
-    requestHeaders: {
-      [RequestHeader.ACCEPT]: ContentType.JSON,
-    },
-    pathSuffix: storedQuery,
-  });
+    storedQuery,
+  }: BaseOptions & { storedQuery: string }) =>
+    dispatchAdminFetch({
+      connection,
+      method: RequestMethod.DELETE,
+      requestHeaders: {
+        [RequestHeader.ACCEPT]: ContentType.JSON,
+      },
+      pathSuffix: storedQuery,
+    });
+}

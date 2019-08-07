@@ -1,0 +1,2275 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>stardog</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">stardog</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1> stardog</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#stardogjs" id="stardogjs" style="color: inherit; text-decoration: none;">
+					<h1>Stardog.js</h1>
+				</a>
+				<p>Universal Javascript fetch wrapper for communicating with the Stardog HTTP server.</p>
+				<p><a href="https://www.npmjs.com/package/stardog"><img src="https://img.shields.io/npm/v/stardog.svg?style=flat-square" alt="npm"></a></p>
+				<p><a href="http://stardog.com"><img src="http://stardog.com/img/stardog.png" style="margin: 0 auto; display: block; width: 250px"/></a></p>
+				<a href="#what-is-it" id="what-is-it" style="color: inherit; text-decoration: none;">
+					<h2>What is it?</h2>
+				</a>
+				<p>This framework wraps all the functionality of a client for the Stardog DBMS, and provides access to a full set of functions such as executing SPARQL queries, administrative tasks on Stardog, and the use of the Reasoning API.</p>
+				<p>All the implementation uses the HTTP protocol, since most of Stardog functionality is available using this protocol. For more information, go to the Stardog&#39;s <a href="http://www.stardog.com/docs/#_network_programming">HTTP Programming</a> documentation.</p>
+				<p>This is a universal library and as such can be used in both the browser and Node.js.</p>
+				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+					<h2>Installation</h2>
+				</a>
+				<p>To install stardog.js run:</p>
+				<pre><code class="language-bash">npm install stardog</code></pre>
+				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+					<h2>Usage</h2>
+				</a>
+				<p>Stardog.js conforms to the <a href="https://github.com/umdjs/umd">Universal Module Definition</a> API. To use it in Node.js, simply <code>require</code> or <code>import</code> it as you would any other Node module. To use it in the browser, you can either:</p>
+				<ol>
+					<li>Do the same as you would with Node.js, in which case you&#39;ll have to use <a href="https://webpack.js.org/">webpack</a>, <a href="https://parceljs.org/">parcel</a>, <a href="http://browserify.org/">browserify</a>, or some other module bundler,</li>
+					<li>Use <a href="https://requirejs.org/">require.js</a> or some other module loader, or</li>
+					<li>Directly import the built stardog.js file in your HTML (e.g., <code>&lt;script src=&quot;./node_modules/stardog/dist/stardog.js&quot;&gt;&lt;/script&gt;</code>) and then reference the global <code>stardogjs</code> object (e.g., <code>stardogjs.query.execute(/* . . . */)</code>).</li>
+				</ol>
+				<a href="#development" id="development" style="color: inherit; text-decoration: none;">
+					<h2>Development</h2>
+				</a>
+				<p>To get started, just clone the project. You&#39;ll need a local copy of Stardog to be able to run the tests. For more information on starting the Stardog DB service and how it works, go to <a href="http://docs.stardog.com">Stardog&#39;s documentation</a>, where you&#39;ll find everything you need to get up and running with Stardog.</p>
+				<p>Go to <a href="http://stardog.com">http://stardog.com</a>, download and install the database and load the data provided in <code>data/</code> using the script in the repository.</p>
+				<ol>
+					<li>Start the Stardog server<pre><code class="language-bash">stardog-admin server start</code></pre>
+					</li>
+					<li>Install <code>stardog.js</code> dependencies:<pre><code class="language-bash">npm install</code></pre>
+					</li>
+				</ol>
+				<a href="#running-tests" id="running-tests" style="color: inherit; text-decoration: none;">
+					<h3>Running Tests</h3>
+				</a>
+				<p>In order to contribute changes, all test cases must pass. With the Stardog server running, execute the following command to run all test cases in <code>test/spec</code>:</p>
+				<pre><code class="language-bash">npm <span class="hljs-built_in">test</span></code></pre>
+				<a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
+					<h3>Contributing</h3>
+				</a>
+				<p>Fork, clone and develop, write or amend tests, and then open a PR. All PRs go against &quot;master&quot;. This project uses <a href="https://github.com/prettier/prettier">prettier</a> on file commit, so don&#39;t worry about style as it&#39;ll just get rewritten when you commit your changes.</p>
+				<a href="#releasing" id="releasing" style="color: inherit; text-decoration: none;">
+					<h3>Releasing</h3>
+				</a>
+				<p>If you have publishing rights, BE SURE TO RUN <code>npm version (major|minor|patch)</code> IMMEDIATELY BEFORE PUBLISHING. This will ensure that the build is up-to-date and will also (1) bump the version number in package.json accordingly, (2) create a git tag matching the version number, and (3) automatically update the README and the CHANGELOG using our type declarations and data from the stardog.js GitHub repo. For this process to work correctly, you will need to have generated a GitHub OAuth token and assigned it to the <code>MDCHANGELOG_TOKEN</code> environment variable (because this process uses <a href="https://www.npmjs.com/package/mdchangelog">mdchangelog</a>). In order to ensure that this process is followed, there will be a very annoying alert triggered whenever you publish; if you&#39;re all set, just ignore the alert.</p>
+				<p>After releasing, be sure to push to master, including the tags (so that the release is reflected on GitHub).</p>
+				<a href="#version-details" id="version-details" style="color: inherit; text-decoration: none;">
+					<h2>Version details</h2>
+				</a>
+				<p>The current version of stardog.js has been tested against version 6.1.2 of Stardog. You are encouraged to use this library if you are using version 5 or greater of Stardog. However, there is very little code that is version specific in stardog.js. It is essentially just a convenience wrapper around <code>fetch</code>. It is very likely that many of the exposed methods will work on older versions of Stardog, but this has not been tested.</p>
+				<p>If you are using a really old version of Stardog (&lt;= 3.0.0) you should stick with the legacy version of the library which is version 0.3.1.</p>
+				<a href="#discontinued-versions" id="discontinued-versions" style="color: inherit; text-decoration: none;">
+					<h3>Discontinued Versions</h3>
+				</a>
+				<p>All versions of stardog.js prior to v1.0.0 have been discontinued and will not receive updates of any kind. If you are using a legacy version of stardog.js you can find the original documentation <a href="http://stardog-union.github.io/stardog.js/docs/stardog.html">here</a>. The most recent legacy version is 0.3.1.</p>
+				<a href="#quick-example" id="quick-example" style="color: inherit; text-decoration: none;">
+					<h2>Quick Example</h2>
+				</a>
+				<pre><code class="language-js"><span class="hljs-keyword">const</span> { Connection, query } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'stardog'</span>);
+
+<span class="hljs-keyword">const</span> conn = <span class="hljs-keyword">new</span> Connection({
+  <span class="hljs-attr">username</span>: <span class="hljs-string">'admin'</span>,
+  <span class="hljs-attr">password</span>: <span class="hljs-string">'admin'</span>,
+  <span class="hljs-attr">endpoint</span>: <span class="hljs-string">'http://localhost:5820'</span>,
+});
+
+query.execute(conn, <span class="hljs-string">'myDatabaseName'</span>, <span class="hljs-string">'select distinct ?s where { ?s ?p ?o }'</span>, <span class="hljs-string">'application/sparql-results+json'</span>, {
+  <span class="hljs-attr">limit</span>: <span class="hljs-number">10</span>,
+  <span class="hljs-attr">offset</span>: <span class="hljs-number">0</span>,
+}).then(<span class="hljs-function">(<span class="hljs-params">{ body }</span>) =&gt;</span> {
+  <span class="hljs-built_in">console</span>.log(body.results.bindings);
+});</code></pre>
+				<!--- API Goes Here --->
+				<a href="#api" id="api" style="color: inherit; text-decoration: none;">
+					<h1>API</h1>
+				</a>
+				<a href="#a-namehttphttpa" id="a-namehttphttpa" style="color: inherit; text-decoration: none;">
+					<h2><a name="http">HTTP</a></h2>
+				</a>
+				<a href="#a-namerdfmimetyperdfmimetypea" id="a-namerdfmimetyperdfmimetypea" style="color: inherit; text-decoration: none;">
+					<h4><a name="rdfmimetype">RdfMimeType</a></h4>
+				</a>
+				<p>One of the following values:</p>
+				<p><code>&#39;application/ld+json&#39;
+            | &#39;text/turtle&#39;
+            | &#39;application/rdf+xml&#39;
+            | &#39;application/n-triples&#39;
+            | &#39;application/n-quads&#39;
+            | &#39;application/trig&#39;</code></p>
+				<a href="#a-namesparqlmimetypesparqlmimetypea" id="a-namesparqlmimetypesparqlmimetypea" style="color: inherit; text-decoration: none;">
+					<h4><a name="sparqlmimetype">SparqlMimeType</a></h4>
+				</a>
+				<p>One of the following values:</p>
+				<p><code>&#39;application/sparql-results+json&#39;
+            | &#39;application/sparql-results+xml&#39;</code></p>
+				<a href="#a-nameacceptmimetypeacceptmimetypea" id="a-nameacceptmimetypeacceptmimetypea" style="color: inherit; text-decoration: none;">
+					<h4><a name="acceptmimetype">AcceptMimeType</a></h4>
+				</a>
+				<p>One of the following values:</p>
+				<p><code>RdfMimeType
+          | SparqlMimeType
+          | &#39;text/plain&#39;
+          | &#39;text/boolean&#39;
+          | &#39;application/json&#39;
+          | &#39;*/*&#39;</code></p>
+				<a href="#a-nameexplainacceptmimetypeexplainacceptmimetypea" id="a-nameexplainacceptmimetypeexplainacceptmimetypea" style="color: inherit; text-decoration: none;">
+					<h4><a name="explainacceptmimetype">ExplainAcceptMimeType</a></h4>
+				</a>
+				<p>One of the following values:</p>
+				<p><code>&#39;text/plain&#39; (default)
+          | &#39;application/json&#39;</code></p>
+				<a href="#a-namebodybodya" id="a-namebodybodya" style="color: inherit; text-decoration: none;">
+					<h4><a name="body">Body</a></h4>
+				</a>
+				<p>Object with the following values:</p>
+				<ul>
+					<li>status (<code>number</code>)</li>
+					<li>statusText (<code>string</code>)</li>
+					<li>result (<code>object | string | boolean | null</code>)</li>
+					<li>ok (<code>boolean</code>)</li>
+					<li>headers (<code>Headers</code>)</li>
+					<li>body (<code>any</code>)</li>
+				</ul>
+				<a href="#a-nameconnectionoptionsconnectionoptionsa" id="a-nameconnectionoptionsconnectionoptionsa" style="color: inherit; text-decoration: none;">
+					<h4><a name="connectionoptions">ConnectionOptions</a></h4>
+				</a>
+				<p>Object with the following values:</p>
+				<ul>
+					<li>endpoint (<code>string</code>)</li>
+					<li>username (<code>string</code>)</li>
+					<li>password (<code>string</code>)</li>
+					<li>meta (<code>ConnectionMeta</code>)</li>
+				</ul>
+				<a href="#a-namerequestconstructorrequestconstructora" id="a-namerequestconstructorrequestconstructora" style="color: inherit; text-decoration: none;">
+					<h4><a name="requestconstructor">RequestConstructor</a></h4>
+				</a>
+				<p>One of the following values:</p>
+				<p><code>{
+      new (input: string | Request, init?: RequestInit): Request;
+    }</code></p>
+				<a href="#a-namerequestcreatorrequestcreatora" id="a-namerequestcreatorrequestcreatora" style="color: inherit; text-decoration: none;">
+					<h4><a name="requestcreator">RequestCreator</a></h4>
+				</a>
+				<p>One of the following values:</p>
+				<p><code>({ uri, Request }: { uri: string; Request: Constructor }) =&gt; ReturnType</code></p>
+				<a href="#a-nameconnectionmetaconnectionmetaa" id="a-nameconnectionmetaconnectionmetaa" style="color: inherit; text-decoration: none;">
+					<h4><a name="connectionmeta">ConnectionMeta</a></h4>
+				</a>
+				<p>Object with the following values:</p>
+				<ul>
+					<li>createRequest (<code>RequestCreator&lt;RequestConstructor, string | Request&gt;</code>)</li>
+					<li>createHeaders (<code>(defaults: { headers: Headers; }) =&gt; Headers</code>)</li>
+				</ul>
+				<a href="#a-nameconnectionconnectiona-class" id="a-nameconnectionconnectiona-class" style="color: inherit; text-decoration: none;">
+					<h2><a name="connection">Connection</a> (Class)</h2>
+				</a>
+				<p>Constructed with:</p>
+				<ul>
+					<li>options (<a href="#connectionoptions"><code>ConnectionOptions</code></a>)
+						<a href="#a-nameconfigconnectionconfigoptions-metaa" id="a-nameconfigconnectionconfigoptions-metaa" style="color: inherit; text-decoration: none;">
+							<h3><a name="config">Connection.config(options, meta)</a></h3>
+						</a>
+					</li>
+				</ul>
+				<p>Takes the following params:</p>
+				<ul>
+					<li>options (<a href="#connectionoptions"><code>ConnectionOptions</code></a>)</li>
+					<li>meta (<a href="#connectionmeta"><code>ConnectionMeta</code></a>)</li>
+				</ul>
+				<p>Returns <a href="#void"><code>void</code></a></p>
+				<a href="#a-nameheadersconnectionheadersa" id="a-nameheadersconnectionheadersa" style="color: inherit; text-decoration: none;">
+					<h3><a name="headers">Connection.headers()</a></h3>
+				</a>
+				<p>Returns <a href="#headers"><code>Headers</code></a></p>
+				<a href="#a-nameuriconnectionuriresourcea" id="a-nameuriconnectionuriresourcea" style="color: inherit; text-decoration: none;">
+					<h3><a name="uri">Connection.uri(resource)</a></h3>
+				</a>
+				<p>Takes the following params:</p>
+				<ul>
+					<li>resource (<code>string[]</code>)</li>
+				</ul>
+				<p>Returns <code>string</code></p>
+				<a href="#a-nameserverservera" id="a-nameserverservera" style="color: inherit; text-decoration: none;">
+					<h2><a name="server">server</a></h2>
+				</a>
+				<a href="#a-nameshutdowncodeservershutdownconn-paramscodea" id="a-nameshutdowncodeservershutdownconn-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="shutdown"><code>server.shutdown(conn, params)</code></a></h4>
+				</a>
+				<p>Shuts down a Stardog server. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namestatuscodeserverstatusconn-paramscodea" id="a-namestatuscodeserverstatusconn-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="status"><code>server.status(conn, params)</code></a></h4>
+				</a>
+				<p>Retrieves general status information about a Stardog server. By
+					default, also includes status information about all databases on
+					that server. If <code>params.databases</code> is <code>false</code>, however, then the
+				information about databases is omitted.</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>params (<code>{ databases?: boolean; }</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namedbdba" id="a-namedbdba" style="color: inherit; text-decoration: none;">
+					<h2><a name="db">db</a></h2>
+				</a>
+				<a href="#a-namecreatecodedbcreateconn-database-databaseoptions-options-paramscodea" id="a-namecreatecodedbcreateconn-database-databaseoptions-options-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="create"><code>db.create(conn, database, databaseOptions, options, params)</code></a></h4>
+				</a>
+				<p>Creates a new database.</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>databaseOptions (<code>object</code>)</p>
+					</li>
+					<li><p>options (<code>{ files: { filename: string}[] }</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namedropcodedbdropconn-database-paramscodea" id="a-namedropcodedbdropconn-database-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="drop"><code>db.drop(conn, database, params)</code></a></h4>
+				</a>
+				<p>Deletes a database.</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namegetcodedbgetconn-database-paramscodea" id="a-namegetcodedbgetconn-database-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="get"><code>db.get(conn, database, params)</code></a></h4>
+				</a>
+				<p>Gets an RDF representation of a database. See: <a href="https://www.w3.org/TR/sparql11-http-rdf-update/#http-get">https://www.w3.org/TR/sparql11-http-rdf-update/#http-get</a></p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameofflinecodedbofflineconn-database-paramscodea" id="a-nameofflinecodedbofflineconn-database-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="offline"><code>db.offline(conn, database, params)</code></a></h4>
+				</a>
+				<p>Sets a database offline. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameonlinecodedbonlineconn-database-paramscodea" id="a-nameonlinecodedbonlineconn-database-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="online"><code>db.online(conn, database, params)</code></a></h4>
+				</a>
+				<p>Sets a database online. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameoptimizecodedboptimizeconn-database-paramscodea" id="a-nameoptimizecodedboptimizeconn-database-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="optimize"><code>db.optimize(conn, database, params)</code></a></h4>
+				</a>
+				<p>Optimizes a database.</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namecopycodedbcopyconn-database-destination-paramscodea" id="a-namecopycodedbcopyconn-database-destination-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="copy"><code>db.copy(conn, database, destination, params)</code></a></h4>
+				</a>
+				<p>Makes a copy of a database. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>destination (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namelistcodedblistconn-paramscodea" id="a-namelistcodedblistconn-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="list"><code>db.list(conn, params)</code></a></h4>
+				</a>
+				<p>Gets a list of all databases on a Stardog server. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namesizecodedbsizeconn-database-paramscodea" id="a-namesizecodedbsizeconn-database-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="size"><code>db.size(conn, database, params)</code></a></h4>
+				</a>
+				<p>Gets number of triples in a database. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameclearcodedbclearconn-database-transactionid-paramscodea" id="a-nameclearcodedbclearconn-database-transactionid-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="clear"><code>db.clear(conn, database, transactionId, params)</code></a></h4>
+				</a>
+				<p>Clears the contents of a database. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>transactionId (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameaddcodedbaddconn-database-transactionid-content-options-paramscodea" id="a-nameaddcodedbaddconn-database-transactionid-content-options-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="add"><code>db.add(conn, database, transactionId, content, options, params)</code></a></h4>
+				</a>
+				<p>Adds data within a transaction. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>transactionId (<code>string</code>)</p>
+					</li>
+					<li><p>content (<code>string</code>)</p>
+					</li>
+					<li><p>options (<a href="#transactionoptions"><code>TransactionOptions</code></a>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#transactionresponse"><code>Promise&lt;transaction.TransactionResponse&gt;</code></a></p>
+				<a href="#a-nameremovecodedbremoveconn-database-transactionid-content-options-paramscodea" id="a-nameremovecodedbremoveconn-database-transactionid-content-options-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="remove"><code>db.remove(conn, database, transactionId, content, options, params)</code></a></h4>
+				</a>
+				<p>Removes data within a transaction.</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>transactionId (<code>string</code>)</p>
+					</li>
+					<li><p>content (<code>string</code>)</p>
+					</li>
+					<li><p>options (<a href="#transactionoptions"><code>TransactionOptions</code></a>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#transactionresponse"><code>Promise&lt;transaction.TransactionResponse&gt;</code></a></p>
+				<a href="#a-namenamespacescodedbnamespacesconn-database-paramscodea" id="a-namenamespacescodedbnamespacesconn-database-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="namespaces"><code>db.namespaces(conn, database, params)</code></a></h4>
+				</a>
+				<p>Gets a mapping of the namespaces used in a database. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameexportdatacodedbexportdataconn-database-options-paramscodea" id="a-nameexportdatacodedbexportdataconn-database-options-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="exportdata"><code>db.exportData(conn, database, options, params)</code></a></h4>
+				</a>
+				<p>Exports the contents of a database. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>options ({ mimeType: <a href="#rdfmimetype"><code>RdfMimeType</code></a> })</p>
+					</li>
+					<li><p>params (<code>{ graphUri: string }</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameoptionsoptionsa" id="a-nameoptionsoptionsa" style="color: inherit; text-decoration: none;">
+					<h2><a name="options">options</a></h2>
+				</a>
+				<a href="#a-namegetcodedboptionsgetconn-database-paramscodea" id="a-namegetcodedboptionsgetconn-database-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="get"><code>db.options.get(conn, database, params)</code></a></h4>
+				</a>
+				<p>Gets set of options on a database. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namesetcodedboptionssetconn-database-databaseoptions-paramscodea" id="a-namesetcodedboptionssetconn-database-databaseoptions-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="set"><code>db.options.set(conn, database, databaseOptions, params)</code></a></h4>
+				</a>
+				<p>Sets options on a database. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>databaseOptions (<code>object</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namegraphgrapha" id="a-namegraphgrapha" style="color: inherit; text-decoration: none;">
+					<h2><a name="graph">graph</a></h2>
+				</a>
+				<a href="#a-namedogetcodedbgraphdogetconn-database-graphuri-accept-paramscodea" id="a-namedogetcodedbgraphdogetconn-database-graphuri-accept-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="doget"><code>db.graph.doGet(conn, database, graphUri, accept, params)</code></a></h4>
+				</a>
+				<p>Retrieves the specified named graph</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>graphUri (<code>string</code>)</p>
+					</li>
+					<li><p>accept (<a href="#rdfmimetype"><code>RdfMimeType</code></a>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namedoputcodedbgraphdoputconn-database-graphdata-graphuri-contenttype-paramscodea" id="a-namedoputcodedbgraphdoputconn-database-graphdata-graphuri-contenttype-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="doput"><code>db.graph.doPut(conn, database, graphData, graphUri, contentType, params)</code></a></h4>
+				</a>
+				<p>Stores the given RDF data in the specified named graph</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>graphData (<code>string</code>)</p>
+					</li>
+					<li><p>graphUri (<code>string</code>)</p>
+					</li>
+					<li><p>contentType (<a href="#rdfmimetype"><code>RdfMimeType</code></a>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namedodeletecodedbgraphdodeleteconn-database-graphuri-paramscodea" id="a-namedodeletecodedbgraphdodeleteconn-database-graphuri-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="dodelete"><code>db.graph.doDelete(conn, database, graphUri, params)</code></a></h4>
+				</a>
+				<p>Deletes the specified named graph</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>graphUri (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namedopostcodedbgraphdopostconn-database-graphuri-options-paramscodea" id="a-namedopostcodedbgraphdopostconn-database-graphuri-options-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="dopost"><code>db.graph.doPost(conn, database, graphUri, options, params)</code></a></h4>
+				</a>
+				<p>Merges the given RDF data into the specified named graph</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>graphUri (<code>string</code>)</p>
+					</li>
+					<li><p>options ({ contentType: <a href="#rdfmimetype"><code>RdfMimeType</code></a> })</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nametransactiontransactiona" id="a-nametransactiontransactiona" style="color: inherit; text-decoration: none;">
+					<h2><a name="transaction">transaction</a></h2>
+				</a>
+				<a href="#a-nameencodingsencodingsa" id="a-nameencodingsencodingsa" style="color: inherit; text-decoration: none;">
+					<h4><a name="encodings">Encodings</a></h4>
+				</a>
+				<p>One of the following values:</p>
+				<p><code>&#39;gzip&#39; |
+                &#39;compress&#39; |
+                &#39;deflate&#39; |
+                &#39;identity&#39; |
+                &#39;br&#39;</code></p>
+				<a href="#a-nametransactionresponsetransactionresponsea-extends-a-hrefbodyhttpbodya" id="a-nametransactionresponsetransactionresponsea-extends-a-hrefbodyhttpbodya" style="color: inherit; text-decoration: none;">
+					<h4><a name="transactionresponse">TransactionResponse</a> extends <a href="#body">HTTP.Body</a></h4>
+				</a>
+				<p>Object with the following values:</p>
+				<ul>
+					<li>transactionId (<code>string</code>)</li>
+				</ul>
+				<a href="#a-nametransactionoptionstransactionoptionsa" id="a-nametransactionoptionstransactionoptionsa" style="color: inherit; text-decoration: none;">
+					<h4><a name="transactionoptions">TransactionOptions</a></h4>
+				</a>
+				<p>Object with the following values:</p>
+				<ul>
+					<li>contentType (<code>HTTP.RdfMimeType</code>)</li>
+					<li>encoding (<code>Encodings</code>)</li>
+				</ul>
+				<a href="#a-namebegincodedbtransactionbeginconn-database-paramscodea" id="a-namebegincodedbtransactionbeginconn-database-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="begin"><code>db.transaction.begin(conn, database, params)</code></a></h4>
+				</a>
+				<p>Begins a new transaction. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#transactionresponse"><code>Promise&lt;TransactionResponse&gt;</code></a></p>
+				<a href="#a-namerollbackcodedbtransactionrollbackconn-database-transactionid-paramscodea" id="a-namerollbackcodedbtransactionrollbackconn-database-transactionid-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="rollback"><code>db.transaction.rollback(conn, database, transactionId, params)</code></a></h4>
+				</a>
+				<p>Rolls back a transaction, removing the transaction and undoing all changes</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>transactionId (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#transactionresponse"><code>Promise&lt;TransactionResponse&gt;</code></a></p>
+				<a href="#a-namecommitcodedbtransactioncommitconn-database-transactionid-paramscodea" id="a-namecommitcodedbtransactioncommitconn-database-transactionid-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="commit"><code>db.transaction.commit(conn, database, transactionId, params)</code></a></h4>
+				</a>
+				<p>Commits a transaction to the database, removing the transaction and making its changes permanent. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>transactionId (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#transactionresponse"><code>Promise&lt;TransactionResponse&gt;</code></a></p>
+				<a href="#a-nameicvicva" id="a-nameicvicva" style="color: inherit; text-decoration: none;">
+					<h2><a name="icv">icv</a></h2>
+				</a>
+				<a href="#a-namegetcodedbicvgetconn-database-paramscodea" id="a-namegetcodedbicvgetconn-database-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="get"><code>db.icv.get(conn, database, params)</code></a></h4>
+				</a>
+				<p>Gets the set of integrity constraints on a given database. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameaddcodedbicvaddconn-database-icvaxioms-options-paramscodea" id="a-nameaddcodedbicvaddconn-database-icvaxioms-options-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="add"><code>db.icv.add(conn, database, icvAxioms, options, params)</code></a></h4>
+				</a>
+				<p>Adds integrity constraints to a given database. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>icvAxioms (<code>string</code>)</p>
+					</li>
+					<li><p>options ({ contentType: <a href="#rdfmimetype"><code>RdfMimeType</code></a> })</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameremovecodedbicvremoveconn-database-icvaxioms-options-paramscodea" id="a-nameremovecodedbicvremoveconn-database-icvaxioms-options-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="remove"><code>db.icv.remove(conn, database, icvAxioms, options, params)</code></a></h4>
+				</a>
+				<p>Removes integrity constraints from a given database. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>icvAxioms (<code>string</code>)</p>
+					</li>
+					<li><p>options ({ contentType: <a href="#rdfmimetype"><code>RdfMimeType</code></a> })</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameclearcodedbicvclearconn-database-paramscodea" id="a-nameclearcodedbicvclearconn-database-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="clear"><code>db.icv.clear(conn, database, params)</code></a></h4>
+				</a>
+				<p>Removes all integrity constraints from a given database. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameconvertcodedbicvconvertconn-database-icvaxioms-options-paramscodea" id="a-nameconvertcodedbicvconvertconn-database-icvaxioms-options-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="convert"><code>db.icv.convert(conn, database, icvAxioms, options, params)</code></a></h4>
+				</a>
+				<p>Converts a set of integrity constraints into an equivalent SPARQL query for a given database.</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>icvAxioms (<code>string</code>)</p>
+					</li>
+					<li><p>options ({ contentType: <a href="#rdfmimetype"><code>RdfMimeType</code></a> })</p>
+					</li>
+					<li><p>params (<code>{ graphUri: string }</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namevalidatecodedbicvvalidateconn-database-constraints-options-paramscodea" id="a-namevalidatecodedbicvvalidateconn-database-constraints-options-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="validate"><code>db.icv.validate(conn, database, constraints, options, params)</code></a></h4>
+				</a>
+				<p>Checks constraints to see if they are valid</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>constraints (<code>string</code>)</p>
+					</li>
+					<li><p>options ({ contentType: <a href="#rdfmimetype"><code>RdfMimeType</code></a> })</p>
+					</li>
+					<li><p>params (<code>{ graphUri: string }</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namevalidateintxcodedbicvvalidateintxconn-database-constraints-transactionid-options-paramscodea" id="a-namevalidateintxcodedbicvvalidateintxconn-database-constraints-transactionid-options-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="validateintx"><code>db.icv.validateInTx(conn, database, constraints, transactionId, options, params)</code></a></h4>
+				</a>
+				<p>Checks constraints to see if they are valid within a transaction</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>constraints (<code>string</code>)</p>
+					</li>
+					<li><p>transactionId (<code>string</code>)</p>
+					</li>
+					<li><p>options ({ contentType: <a href="#rdfmimetype"><code>RdfMimeType</code></a> })</p>
+					</li>
+					<li><p>params (<code>{ graphUri: string }</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameviolationscodedbicvviolationsconn-database-constraints-options-paramscodea" id="a-nameviolationscodedbicvviolationsconn-database-constraints-options-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="violations"><code>db.icv.violations(conn, database, constraints, options, params)</code></a></h4>
+				</a>
+				<p>Accepts integrity constraints as RDF and returns the violation explanations, if any, as RDF.</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>constraints (<code>string</code>)</p>
+					</li>
+					<li><p>options ({ contentType: <a href="#rdfmimetype"><code>RdfMimeType</code></a> })</p>
+					</li>
+					<li><p>params (<code>{ graphUri: string }</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameviolationsintxcodedbicvviolationsintxconn-database-constraints-options-paramscodea" id="a-nameviolationsintxcodedbicvviolationsintxconn-database-constraints-options-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="violationsintx"><code>db.icv.violationsInTx(conn, database, constraints, options, params)</code></a></h4>
+				</a>
+				<p>Accepts integrity constraints as RDF and returns the violation explanations, if any, as RDF.</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>constraints (<code>string</code>)</p>
+					</li>
+					<li><p>options ({ contentType: <a href="#rdfmimetype"><code>RdfMimeType</code></a> })</p>
+					</li>
+					<li><p>params (<code>{ graphUri: string }</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namereasoningreasoninga" id="a-namereasoningreasoninga" style="color: inherit; text-decoration: none;">
+					<h2><a name="reasoning">reasoning</a></h2>
+				</a>
+				<a href="#a-nameconsistencycodedbreasoningconsistencyconn-database-options-paramscodea" id="a-nameconsistencycodedbreasoningconsistencyconn-database-options-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="consistency"><code>db.reasoning.consistency(conn, database, options, params)</code></a></h4>
+				</a>
+				<p>Returns if the database is consistent</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>options (<code>{ namedGraph: string }</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameexplaininferencecodedbreasoningexplaininferenceconn-database-inference-config-paramscodea" id="a-nameexplaininferencecodedbreasoningexplaininferenceconn-database-inference-config-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="explaininference"><code>db.reasoning.explainInference(conn, database, inference, config, params)</code></a></h4>
+				</a>
+				<p>Provides an explanation for an inference</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>inference (<code>string</code>)</p>
+					</li>
+					<li><p>config (<code>{ contentType: string }</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameexplaininconsistencycodedbreasoningexplaininconsistencyconn-database-options-paramscodea" id="a-nameexplaininconsistencycodedbreasoningexplaininconsistencyconn-database-options-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="explaininconsistency"><code>db.reasoning.explainInconsistency(conn, database, options, params)</code></a></h4>
+				</a>
+				<p>Provides the reason why a database is inconsistent, as reported by db.reasoning.consistency</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>options (<code>{ namedGraph: string }</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameexplaininferenceintransactioncodedbreasoningexplaininferenceintransactionconn-database-transactionid-inference-config-paramscodea" id="a-nameexplaininferenceintransactioncodedbreasoningexplaininferenceintransactionconn-database-transactionid-inference-config-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="explaininferenceintransaction"><code>db.reasoning.explainInferenceInTransaction(conn, database, transactionId, inference, config, params)</code></a></h4>
+				</a>
+				<p>Provides an explanation for an inference within a transaction</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>transactionId (<code>string</code>)</p>
+					</li>
+					<li><p>inference (<code>string</code>)</p>
+					</li>
+					<li><p>config (<a href="#transactionoptions"><code>TransactionOptions</code></a>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameexplaininconsistencyintransactioncodedbreasoningexplaininconsistencyintransactionconn-database-transactionid-options-paramscodea" id="a-nameexplaininconsistencyintransactioncodedbreasoningexplaininconsistencyintransactionconn-database-transactionid-options-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="explaininconsistencyintransaction"><code>db.reasoning.explainInconsistencyInTransaction(conn, database, transactionId, options, params)</code></a></h4>
+				</a>
+				<p>Provides the reason why a database is inconsistent, as reported by db.reasoning.consistency</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>transactionId (<code>string</code>)</p>
+					</li>
+					<li><p>options (<code>{ namedGraph: string }</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameschemacodedbreasoningschemaconn-database-paramscodea" id="a-nameschemacodedbreasoningschemaconn-database-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="schema"><code>db.reasoning.schema(conn, database, params)</code></a></h4>
+				</a>
+				<p>Gets the reasoning schema of the database</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameversioningversioninga" id="a-nameversioningversioninga" style="color: inherit; text-decoration: none;">
+					<h2><a name="versioning">versioning</a></h2>
+				</a>
+				<a href="#a-namequerycodedbversioningqueryconn-database-query-accept-paramscodea" id="a-namequerycodedbversioningqueryconn-database-query-accept-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="query"><code>db.versioning.query(conn, database, query, accept, params)</code></a></h4>
+				</a>
+				<p>Executes a SPARQL query over the versioning history</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>query (<code>string</code>)</p>
+					</li>
+					<li><p>accept (<a href="#sparqlmimetype"><code>SparqlMimeType</code></a>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namecommitcodedbversioningcommitconn-database-transactionid-commitmsg-paramscodea" id="a-namecommitcodedbversioningcommitconn-database-transactionid-commitmsg-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="commit"><code>db.versioning.commit(conn, database, transactionId, commitMsg, params)</code></a></h4>
+				</a>
+				<p>Commits a transaction into versioning</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>transactionId (<code>string</code>)</p>
+					</li>
+					<li><p>commitMsg (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namecreatetagcodedbversioningcreatetagconn-database-revisionid-taglogmsg-paramscodea" id="a-namecreatetagcodedbversioningcreatetagconn-database-revisionid-taglogmsg-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="createtag"><code>db.versioning.createTag(conn, database, revisionId, tagLogMsg, params)</code></a></h4>
+				</a>
+				<p>Creates a new tag</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>revisionId (<code>string</code>)</p>
+					</li>
+					<li><p>tagLogMsg (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namedeletetagcodedbversioningdeletetagconn-database-revisionid-paramscodea" id="a-namedeletetagcodedbversioningdeletetagconn-database-revisionid-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="deletetag"><code>db.versioning.deleteTag(conn, database, revisionId, params)</code></a></h4>
+				</a>
+				<p>Deletes a tag</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>revisionId (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namerevertcodedbversioningrevertconn-database-fromrevisionid-torevisionid-logmsg-paramscodea" id="a-namerevertcodedbversioningrevertconn-database-fromrevisionid-torevisionid-logmsg-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="revert"><code>db.versioning.revert(conn, database, fromRevisionId, toRevisionId, logMsg, params)</code></a></h4>
+				</a>
+				<p>Reverts to a previous commit</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>fromRevisionId (<code>string</code>)</p>
+					</li>
+					<li><p>toRevisionId (<code>string</code>)</p>
+					</li>
+					<li><p>logMsg (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namedocsdocsa" id="a-namedocsdocsa" style="color: inherit; text-decoration: none;">
+					<h2><a name="docs">docs</a></h2>
+				</a>
+				<a href="#a-namesizecodedbdocssizeconn-database-paramscodea" id="a-namesizecodedbdocssizeconn-database-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="size"><code>db.docs.size(conn, database, params)</code></a></h4>
+				</a>
+				<p>Retrieves the size of the document store</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameclearcodedbdocsclearconn-database-paramscodea" id="a-nameclearcodedbdocsclearconn-database-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="clear"><code>db.docs.clear(conn, database, params)</code></a></h4>
+				</a>
+				<p>Clears the document store</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameaddcodedbdocsaddconn-database-filename-filecontents-paramscodea" id="a-nameaddcodedbdocsaddconn-database-filename-filecontents-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="add"><code>db.docs.add(conn, database, fileName, fileContents, params)</code></a></h4>
+				</a>
+				<p>Adds a document to the document store</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>fileName (<code>string</code>)</p>
+					</li>
+					<li><p>fileContents (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameremovecodedbdocsremoveconn-database-filename-paramscodea" id="a-nameremovecodedbdocsremoveconn-database-filename-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="remove"><code>db.docs.remove(conn, database, fileName, params)</code></a></h4>
+				</a>
+				<p>Removes a document from the document store</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>fileName (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namegetcodedbdocsgetconn-database-filename-paramscodea" id="a-namegetcodedbdocsgetconn-database-filename-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="get"><code>db.docs.get(conn, database, fileName, params)</code></a></h4>
+				</a>
+				<p>Retrieves a document from the document store</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>fileName (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namequeryquerya" id="a-namequeryquerya" style="color: inherit; text-decoration: none;">
+					<h2><a name="query">query</a></h2>
+				</a>
+				<a href="#a-namequerytypequerytypea" id="a-namequerytypequerytypea" style="color: inherit; text-decoration: none;">
+					<h4><a name="querytype">QueryType</a></h4>
+				</a>
+				<p>One of the following values:</p>
+				<p><code>&#39;select&#39; | &#39;ask&#39; | &#39;construct&#39; | &#39;describe&#39; | &#39;update&#39; | &#39;paths&#39; | null</code></p>
+				<a href="#a-namepropertyoptionspropertyoptionsa" id="a-namepropertyoptionspropertyoptionsa" style="color: inherit; text-decoration: none;">
+					<h4><a name="propertyoptions">PropertyOptions</a></h4>
+				</a>
+				<p>Object with the following values:</p>
+				<ul>
+					<li>uri (<code>string</code>)</li>
+					<li>property (<code>string</code>)</li>
+				</ul>
+				<a href="#a-namepropertycodequerypropertyconn-database-config-paramscodea" id="a-namepropertycodequerypropertyconn-database-config-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="property"><code>query.property(conn, database, config, params)</code></a></h4>
+				</a>
+				<p>Gets the values for a specific property of a URI individual. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>config (<a href="#propertyoptions"><code>PropertyOptions</code></a>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameexplaincodequeryexplainconn-database-query-accept-paramscodea" id="a-nameexplaincodequeryexplainconn-database-query-accept-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="explain"><code>query.explain(conn, database, query, accept, params)</code></a></h4>
+				</a>
+				<p>Gets the query plan generated by Stardog for a given SPARQL query. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>query (<code>string</code>)</p>
+					</li>
+					<li><p>accept (<a href="#explainacceptmimetype"><code>ExplainAcceptMimeType</code></a>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameexecutecodequeryexecuteconn-database-query-accept-paramscodea" id="a-nameexecutecodequeryexecuteconn-database-query-accept-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="execute"><code>query.execute(conn, database, query, accept, params)</code></a></h4>
+				</a>
+				<p>Executes a query against a database. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>query (<code>string</code>)</p>
+					</li>
+					<li><p>accept (<a href="#acceptmimetype"><code>AcceptMimeType</code></a>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameexecuteintransactioncodequeryexecuteintransactionconn-database-transactionid-query-options-paramscodea" id="a-nameexecuteintransactioncodequeryexecuteintransactionconn-database-transactionid-query-options-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="executeintransaction"><code>query.executeInTransaction(conn, database, transactionId, query, options, params)</code></a></h4>
+				</a>
+				<p>Executes a query against a database within a transaction. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>transactionId (<code>string</code>)</p>
+					</li>
+					<li><p>query (<code>string</code>)</p>
+					</li>
+					<li><p>options ({ accept: <a href="#rdfmimetype"><code>RdfMimeType</code></a> })</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namelistcodequerylistconncodea" id="a-namelistcodequerylistconncodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="list"><code>query.list(conn)</code></a></h4>
+				</a>
+				<p>Gets a list of actively running queries. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li>conn (<a href="#connection"><code>Connection</code></a>)</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namekillcodequerykillconn-queryidcodea" id="a-namekillcodequerykillconn-queryidcodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="kill"><code>query.kill(conn, queryId)</code></a></h4>
+				</a>
+				<p>Kills an actively running query. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>queryId (<code>string</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namegetcodequerygetconn-queryidcodea" id="a-namegetcodequerygetconn-queryidcodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="get"><code>query.get(conn, queryId)</code></a></h4>
+				</a>
+				<p>Gets information about an actively running query. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>queryId (<code>string</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namestoredqueryoptionsstoredqueryoptionsa" id="a-namestoredqueryoptionsstoredqueryoptionsa" style="color: inherit; text-decoration: none;">
+					<h4><a name="storedqueryoptions">StoredQueryOptions</a></h4>
+				</a>
+				<p>Object with the following values:</p>
+				<ul>
+					<li>name (<code>string</code>)</li>
+					<li>database (<code>string</code>)</li>
+					<li>query (<code>string</code>)</li>
+					<li>shared (<code>boolean</code>)</li>
+				</ul>
+				<a href="#a-namestoredstoreda" id="a-namestoredstoreda" style="color: inherit; text-decoration: none;">
+					<h2><a name="stored">stored</a></h2>
+				</a>
+				<a href="#a-namecreatecodequerystoredcreateconn-config-paramscodea" id="a-namecreatecodequerystoredcreateconn-config-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="create"><code>query.stored.create(conn, config, params)</code></a></h4>
+				</a>
+				<p>Stores a query in Stardog, either on the system level or for a given database. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>config (<a href="#storedqueryoptions"><code>StoredQueryOptions</code></a>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namelistcodequerystoredlistconn-paramscodea" id="a-namelistcodequerystoredlistconn-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="list"><code>query.stored.list(conn, params)</code></a></h4>
+				</a>
+				<p>Lists all stored queries. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameremovecodequerystoredremoveconn-storedquery-paramscodea" id="a-nameremovecodequerystoredremoveconn-storedquery-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="remove"><code>query.stored.remove(conn, storedQuery, params)</code></a></h4>
+				</a>
+				<p>Removes a given stored query.</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>storedQuery (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namegraphqlgraphqla" id="a-namegraphqlgraphqla" style="color: inherit; text-decoration: none;">
+					<h2><a name="graphql">graphql</a></h2>
+				</a>
+				<a href="#a-nameexecutecodequerygraphqlexecuteconn-database-query-variables-paramscodea" id="a-nameexecutecodequerygraphqlexecuteconn-database-query-variables-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="execute"><code>query.graphql.execute(conn, database, query, variables, params)</code></a></h4>
+				</a>
+				<p>Executes a GraphQL query</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>query (<code>string</code>)</p>
+					</li>
+					<li><p>variables (<code>object</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namelistschemascodequerygraphqllistschemasconn-database-paramscodea" id="a-namelistschemascodequerygraphqllistschemasconn-database-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="listschemas"><code>query.graphql.listSchemas(conn, database, params)</code></a></h4>
+				</a>
+				<p>Retrieves a list of GraphQL schemas in the database</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameaddschemacodequerygraphqladdschemaconn-database-name-schema-paramscodea" id="a-nameaddschemacodequerygraphqladdschemaconn-database-name-schema-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="addschema"><code>query.graphql.addSchema(conn, database, name, schema, params)</code></a></h4>
+				</a>
+				<p>Adds a GraphQL schema to the database</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>name (<code>string</code>)</p>
+					</li>
+					<li><p>schema (<code>object</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namegetschemacodequerygraphqlgetschemaconn-database-name-paramscodea" id="a-namegetschemacodequerygraphqlgetschemaconn-database-name-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="getschema"><code>query.graphql.getSchema(conn, database, name, params)</code></a></h4>
+				</a>
+				<p>Retrieves a GraphQL schema from the database</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>name (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameremoveschemacodequerygraphqlremoveschemaconn-database-name-paramscodea" id="a-nameremoveschemacodequerygraphqlremoveschemaconn-database-name-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="removeschema"><code>query.graphql.removeSchema(conn, database, name, params)</code></a></h4>
+				</a>
+				<p>Removes a GraphQL schemafrom  the database</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>name (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameclearschemascodequerygraphqlclearschemasconn-database-paramscodea" id="a-nameclearschemascodequerygraphqlclearschemasconn-database-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="clearschemas"><code>query.graphql.clearSchemas(conn, database, params)</code></a></h4>
+				</a>
+				<p>Clears all GraphQL schemas in the database</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>database (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameutilsutilsa" id="a-nameutilsutilsa" style="color: inherit; text-decoration: none;">
+					<h2><a name="utils">utils</a></h2>
+				</a>
+				<a href="#a-namequerytypecodequeryutilsquerytypequerycodea" id="a-namequerytypecodequeryutilsquerytypequerycodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="querytype"><code>query.utils.queryType(query)</code></a></h4>
+				</a>
+				<p>Returns the QueryType (as a string or null) for the given query.</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li>query (<code>string</code>)</li>
+				</ul>
+				<p>Returns <a href="#querytyp"><code>QueryType</code></a></p>
+				<a href="#a-namemimetypecodequeryutilsmimetypequerycodea" id="a-namemimetypecodequeryutilsmimetypequerycodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="mimetype"><code>query.utils.mimeType(query)</code></a></h4>
+				</a>
+				<p>Returns the default HTTP <code>Accept</code> MIME type for the given query.</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li>query (<code>string</code>)</li>
+				</ul>
+				<p>Returns <a href="#acceptmimetyp"><code>HTTP.AcceptMimeType</code></a></p>
+				<a href="#a-nameuserusera" id="a-nameuserusera" style="color: inherit; text-decoration: none;">
+					<h2><a name="user">user</a></h2>
+				</a>
+				<a href="#a-nameuserusera-1" id="a-nameuserusera-1" style="color: inherit; text-decoration: none;">
+					<h4><a name="user">User</a></h4>
+				</a>
+				<p>Object with the following values:</p>
+				<ul>
+					<li>username (<code>string</code>)</li>
+					<li>password (<code>string</code>)</li>
+					<li>superuser (<code>boolean</code>)</li>
+				</ul>
+				<a href="#a-nameactionactiona" id="a-nameactionactiona" style="color: inherit; text-decoration: none;">
+					<h4><a name="action">Action</a></h4>
+				</a>
+				<p>One of the following values:</p>
+				<p><code>&#39;CREATE&#39; |
+            &#39;DELETE&#39; |
+            &#39;READ&#39; |
+            &#39;WRITE&#39; |
+            &#39;GRANT&#39; |
+            &#39;REVOKE&#39; |
+            &#39;EXECUTE&#39;</code></p>
+				<a href="#a-nameresourcetyperesourcetypea" id="a-nameresourcetyperesourcetypea" style="color: inherit; text-decoration: none;">
+					<h4><a name="resourcetype">ResourceType</a></h4>
+				</a>
+				<p>One of the following values:</p>
+				<p><code>&#39;db&#39; |
+            &#39;user&#39; |
+            &#39;role&#39; |
+            &#39;admin&#39; |
+            &#39;metadata&#39; |
+            &#39;named-graph&#39; |
+            &#39;icv-constraints&#39;</code></p>
+				<a href="#a-namelistcodeuserlistconn-paramscodea" id="a-namelistcodeuserlistconn-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="list"><code>user.list(conn, params)</code></a></h4>
+				</a>
+				<p>Gets a list of users. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namegetcodeusergetconn-username-paramscodea" id="a-namegetcodeusergetconn-username-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="get"><code>user.get(conn, username, params)</code></a></h4>
+				</a>
+				<p>Gets all information for a given user.</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>username (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namecreatecodeusercreateconn-user-paramscodea" id="a-namecreatecodeusercreateconn-user-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="create"><code>user.create(conn, user, params)</code></a></h4>
+				</a>
+				<p>Creates a new user. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>user (<a href="#user"><code>User</code></a>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namechangepasswordcodeuserchangepasswordconn-username-password-paramscodea" id="a-namechangepasswordcodeuserchangepasswordconn-username-password-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="changepassword"><code>user.changePassword(conn, username, password, params)</code></a></h4>
+				</a>
+				<p>Changes a user&#39;s password. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>username (<code>string</code>)</p>
+					</li>
+					<li><p>password (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namevalidcodeuservalidconn-paramscodea" id="a-namevalidcodeuservalidconn-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="valid"><code>user.valid(conn, params)</code></a></h4>
+				</a>
+				<p>Verifies that a Connection&#39;s credentials are valid.</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameenabledcodeuserenabledconn-username-paramscodea" id="a-nameenabledcodeuserenabledconn-username-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="enabled"><code>user.enabled(conn, username, params)</code></a></h4>
+				</a>
+				<p>Verifies that a user is enabled.</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>username (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameenablecodeuserenableconn-username-enabled-paramscodea" id="a-nameenablecodeuserenableconn-username-enabled-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="enable"><code>user.enable(conn, username, enabled, params)</code></a></h4>
+				</a>
+				<p>Enables/disables a user.</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>username (<code>string</code>)</p>
+					</li>
+					<li><p>enabled (<code>boolean</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namesetrolescodeusersetrolesconn-username-roles-paramscodea" id="a-namesetrolescodeusersetrolesconn-username-roles-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="setroles"><code>user.setRoles(conn, username, roles, params)</code></a></h4>
+				</a>
+				<p>Sets roles for a user. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>username (<code>string</code>)</p>
+					</li>
+					<li><p>roles (<code>string[]</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namelistrolescodeuserlistrolesconn-username-paramscodea" id="a-namelistrolescodeuserlistrolesconn-username-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="listroles"><code>user.listRoles(conn, username, params)</code></a></h4>
+				</a>
+				<p>Gets a list of roles assigned to a user. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>username (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameassignpermissioncodeuserassignpermissionconn-username-permission-paramscodea" id="a-nameassignpermissioncodeuserassignpermissionconn-username-permission-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="assignpermission"><code>user.assignPermission(conn, username, permission, params)</code></a></h4>
+				</a>
+				<p>Creates a new permission for a user over a given resource. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>username (<code>string</code>)</p>
+					</li>
+					<li><p>permission (<a href="#permission"><code>Permission</code></a>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namedeletepermissioncodeuserdeletepermissionconn-username-permission-paramscodea" id="a-namedeletepermissioncodeuserdeletepermissionconn-username-permission-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="deletepermission"><code>user.deletePermission(conn, username, permission, params)</code></a></h4>
+				</a>
+				<p>Removes a permission for a user over a given resource. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>username (<code>string</code>)</p>
+					</li>
+					<li><p>permission (<a href="#permission"><code>Permission</code></a>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namepermissionscodeuserpermissionsconn-username-paramscodea" id="a-namepermissionscodeuserpermissionsconn-username-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="permissions"><code>user.permissions(conn, username, params)</code></a></h4>
+				</a>
+				<p>Gets a list of permissions assigned to user. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>username (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameeffectivepermissionscodeusereffectivepermissionsconn-username-paramscodea" id="a-nameeffectivepermissionscodeusereffectivepermissionsconn-username-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="effectivepermissions"><code>user.effectivePermissions(conn, username, params)</code></a></h4>
+				</a>
+				<p>Gets a list of a user&#39;s effective permissions. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>username (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namesuperusercodeusersuperuserconn-username-paramscodea" id="a-namesuperusercodeusersuperuserconn-username-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="superuser"><code>user.superUser(conn, username, params)</code></a></h4>
+				</a>
+				<p>Specifies whether a user is a superuser. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>username (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameremovecodeuserremoveconn-username-paramscodea" id="a-nameremovecodeuserremoveconn-username-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="remove"><code>user.remove(conn, username, params)</code></a></h4>
+				</a>
+				<p>Deletes a user. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>username (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namepermissionpermissiona" id="a-namepermissionpermissiona" style="color: inherit; text-decoration: none;">
+					<h4><a name="permission">Permission</a></h4>
+				</a>
+				<p>Object with the following values:</p>
+				<ul>
+					<li>action (<code>Action</code>)</li>
+					<li>resourceType (<code>ResourceType</code>)</li>
+					<li>resources (<code>string[]</code>)</li>
+				</ul>
+				<a href="#a-namerolerolea" id="a-namerolerolea" style="color: inherit; text-decoration: none;">
+					<h2><a name="role">role</a></h2>
+				</a>
+				<a href="#a-namecreatecodeuserrolecreateconn-role-paramscodea" id="a-namecreatecodeuserrolecreateconn-role-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="create"><code>user.role.create(conn, role, params)</code></a></h4>
+				</a>
+				<p>Creates a new role. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>role (<code>{ name: string }</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namelistcodeuserrolelistconn-paramscodea" id="a-namelistcodeuserrolelistconn-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="list"><code>user.role.list(conn, params)</code></a></h4>
+				</a>
+				<p>Lists all existing roles. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameremovecodeuserroleremoveconn-role-paramscodea" id="a-nameremovecodeuserroleremoveconn-role-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="remove"><code>user.role.remove(conn, role, params)</code></a></h4>
+				</a>
+				<p>Deletes an existing role from the system. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>role (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameuserswithrolecodeuserroleuserswithroleconn-role-paramscodea" id="a-nameuserswithrolecodeuserroleuserswithroleconn-role-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="userswithrole"><code>user.role.usersWithRole(conn, role, params)</code></a></h4>
+				</a>
+				<p>Lists all users that have been assigned a given role. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>role (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameassignpermissioncodeuserroleassignpermissionconn-role-permission-paramscodea" id="a-nameassignpermissioncodeuserroleassignpermissionconn-role-permission-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="assignpermission"><code>user.role.assignPermission(conn, role, permission, params)</code></a></h4>
+				</a>
+				<p>Adds a permission over a given resource to a given role. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>role (<code>string</code>)</p>
+					</li>
+					<li><p>permission (<a href="#permission"><code>Permission</code></a>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namedeletepermissioncodeuserroledeletepermissionconn-role-permission-paramscodea" id="a-namedeletepermissioncodeuserroledeletepermissionconn-role-permission-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="deletepermission"><code>user.role.deletePermission(conn, role, permission, params)</code></a></h4>
+				</a>
+				<p>Removes a permission over a given resource from a given role. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>role (<code>string</code>)</p>
+					</li>
+					<li><p>permission (<a href="#permission"><code>Permission</code></a>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namepermissionscodeuserrolepermissionsconn-role-paramscodea" id="a-namepermissionscodeuserrolepermissionsconn-role-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="permissions"><code>user.role.permissions(conn, role, params)</code></a></h4>
+				</a>
+				<p>Lists all permissions assigned to a given role. </p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>role (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namevirtualgraphsvirtualgraphsa" id="a-namevirtualgraphsvirtualgraphsa" style="color: inherit; text-decoration: none;">
+					<h2><a name="virtualgraphs">virtualGraphs</a></h2>
+				</a>
+				<a href="#a-namesharedoptionssharedoptionsa" id="a-namesharedoptionssharedoptionsa" style="color: inherit; text-decoration: none;">
+					<h4><a name="sharedoptions">SharedOptions</a></h4>
+				</a>
+				<p>Object with the following values:</p>
+				<ul>
+					<li>base (<code>string</code>)</li>
+					<li>mappings.syntax (<code>string</code>)</li>
+					<li>percent.encode (<code>boolean</code>)</li>
+					<li>optimize.import (<code>boolean</code>)</li>
+					<li>query.translation (<code>&#39;DEFAULT&#39; | &#39;LEGACY&#39;</code>)</li>
+				</ul>
+				<a href="#a-namerdbmsoptionsrdbmsoptionsa-extends-a-hrefsharedoptionssharedoptionsa" id="a-namerdbmsoptionsrdbmsoptionsa-extends-a-hrefsharedoptionssharedoptionsa" style="color: inherit; text-decoration: none;">
+					<h4><a name="rdbmsoptions">RdbmsOptions</a> extends <a href="#sharedoptions">SharedOptions</a></h4>
+				</a>
+				<p>Object with the following values:</p>
+				<ul>
+					<li>jdbc.url (<code>string</code>)</li>
+					<li>jdbc.username (<code>string</code>)</li>
+					<li>jdbc.password (<code>string</code>)</li>
+					<li>jdbc.driver (<code>string</code>)</li>
+					<li>parser.sql.quoting (<code>&#39;NATIVE&#39; | &#39;ANSI&#39;</code>)</li>
+					<li>sql.functions (<code>string</code>)</li>
+					<li>sql.schemas (<code>string</code>)</li>
+					<li>default.mappings.include.tables (<code>string</code>)</li>
+					<li>default.mappings.exclude.tables (<code>string</code>)</li>
+				</ul>
+				<a href="#a-namemongooptionsmongooptionsa-extends-a-hrefsharedoptionssharedoptionsa" id="a-namemongooptionsmongooptionsa-extends-a-hrefsharedoptionssharedoptionsa" style="color: inherit; text-decoration: none;">
+					<h4><a name="mongooptions">MongoOptions</a> extends <a href="#sharedoptions">SharedOptions</a></h4>
+				</a>
+				<p>Object with the following values:</p>
+				<ul>
+					<li>mongodb.uri (<code>string</code>)</li>
+				</ul>
+				<a href="#a-namecsvoptionscsvoptionsa-extends-a-hrefsharedoptionssharedoptionsa" id="a-namecsvoptionscsvoptionsa-extends-a-hrefsharedoptionssharedoptionsa" style="color: inherit; text-decoration: none;">
+					<h4><a name="csvoptions">CsvOptions</a> extends <a href="#sharedoptions">SharedOptions</a></h4>
+				</a>
+				<p>Object with the following values:</p>
+				<ul>
+					<li>csv.separator (<code>string</code>)</li>
+					<li>csv.quote (<code>string</code>)</li>
+					<li>csv.escape (<code>string</code>)</li>
+					<li>csv.header (<code>boolean</code>)</li>
+					<li>csv.skip.empty (<code>boolean</code>)</li>
+				</ul>
+				<a href="#a-nameallvgoptionsallvgoptionsa" id="a-nameallvgoptionsallvgoptionsa" style="color: inherit; text-decoration: none;">
+					<h4><a name="allvgoptions">AllVgOptions</a></h4>
+				</a>
+				<p>One of the following values:</p>
+				<p><code>SharedOptions &amp; RdbmsOptions &amp; MongoOptions &amp; CsvOptions</code></p>
+				<a href="#a-namemappingsrequestoptionsmappingsrequestoptionsa" id="a-namemappingsrequestoptionsmappingsrequestoptionsa" style="color: inherit; text-decoration: none;">
+					<h4><a name="mappingsrequestoptions">MappingsRequestOptions</a></h4>
+				</a>
+				<p>Object with the following values:</p>
+				<ul>
+					<li>preferUntransformed (<code>boolean</code>)</li>
+					<li>syntax (<code>string</code>)</li>
+				</ul>
+				<a href="#a-namelistcodevirtualgraphslistconncodea" id="a-namelistcodevirtualgraphslistconncodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="list"><code>virtualGraphs.list(conn)</code></a></h4>
+				</a>
+				<p>Retrieve a list of virtual graphs</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li>conn (<a href="#connection"><code>Connection</code></a>)</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameaddcodevirtualgraphsaddconn-name-mappings-optionscodea" id="a-nameaddcodevirtualgraphsaddconn-name-mappings-optionscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="add"><code>virtualGraphs.add(conn, name, mappings, options)</code></a></h4>
+				</a>
+				<p>Add a virtual graph to the system</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>name (<code>string</code>)</p>
+					</li>
+					<li><p>mappings (<code>string</code>)</p>
+					</li>
+					<li><p>options (<a href="#t"><code>T</code></a>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameupdatecodevirtualgraphsupdateconn-name-mappings-optionscodea" id="a-nameupdatecodevirtualgraphsupdateconn-name-mappings-optionscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="update"><code>virtualGraphs.update(conn, name, mappings, options)</code></a></h4>
+				</a>
+				<p>Update a virtual graph in the system</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>name (<code>string</code>)</p>
+					</li>
+					<li><p>mappings (<code>string</code>)</p>
+					</li>
+					<li><p>options (<a href="#t"><code>T</code></a>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameremovecodevirtualgraphsremoveconn-namecodea" id="a-nameremovecodevirtualgraphsremoveconn-namecodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="remove"><code>virtualGraphs.remove(conn, name)</code></a></h4>
+				</a>
+				<p>Remove a virtual graph from the system</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>name (<code>string</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameavailablecodevirtualgraphsavailableconn-namecodea" id="a-nameavailablecodevirtualgraphsavailableconn-namecodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="available"><code>virtualGraphs.available(conn, name)</code></a></h4>
+				</a>
+				<p>Determine if the named virtual graph is available</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>name (<code>string</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameoptionscodevirtualgraphsoptionsconn-namecodea" id="a-nameoptionscodevirtualgraphsoptionsconn-namecodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="options"><code>virtualGraphs.options(conn, name)</code></a></h4>
+				</a>
+				<p>Retrieve a virtual graph&#39;s options</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>name (<code>string</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namemappingscodevirtualgraphsmappingsconn-name-requestoptionscodea" id="a-namemappingscodevirtualgraphsmappingsconn-name-requestoptionscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="mappings"><code>virtualGraphs.mappings(conn, name, requestOptions)</code></a></h4>
+				</a>
+				<p>Retrieve a virtual graph&#39;s mappings</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>name (<code>string</code>)</p>
+					</li>
+					<li><p>requestOptions (<a href="#mappingsrequestoptions"><code>MappingsRequestOptions</code></a>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namestoredfunctionsstoredfunctionsa" id="a-namestoredfunctionsstoredfunctionsa" style="color: inherit; text-decoration: none;">
+					<h2><a name="storedfunctions">storedFunctions</a></h2>
+				</a>
+				<a href="#a-nameaddcodestoredfunctionsaddconn-functions-paramscodea" id="a-nameaddcodestoredfunctionsaddconn-functions-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="add"><code>storedFunctions.add(conn, functions, params)</code></a></h4>
+				</a>
+				<p>Adds one or more stored functions to the server</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>functions (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namegetcodestoredfunctionsgetconn-name-paramscodea" id="a-namegetcodestoredfunctionsgetconn-name-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="get"><code>storedFunctions.get(conn, name, params)</code></a></h4>
+				</a>
+				<p>Retrieves the specified function definition</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>name (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameremovecodestoredfunctionsremoveconn-name-paramscodea" id="a-nameremovecodestoredfunctionsremoveconn-name-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="remove"><code>storedFunctions.remove(conn, name, params)</code></a></h4>
+				</a>
+				<p>Removes a stored function from the server</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>name (<code>string</code>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-nameclearcodestoredfunctionsclearconn-paramscodea" id="a-nameclearcodestoredfunctionsclearconn-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="clear"><code>storedFunctions.clear(conn, params)</code></a></h4>
+				</a>
+				<p>Removes all stored functions from the server</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+				<a href="#a-namegetallcodestoredfunctionsgetallconn-paramscodea" id="a-namegetallcodestoredfunctionsgetallconn-paramscodea" style="color: inherit; text-decoration: none;">
+					<h4><a name="getall"><code>storedFunctions.getAll(conn, params)</code></a></h4>
+				</a>
+				<p>Retrieves an export of all stored functions on the server</p>
+				<p>Expects the following parameters:</p>
+				<ul>
+					<li><p>conn (<a href="#connection"><code>Connection</code></a>)</p>
+					</li>
+					<li><p>params (<code>object</code>)</p>
+					</li>
+				</ul>
+				<p>Returns <a href="#body"><code>Promise&lt;HTTP.Body&gt;</code></a></p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/db.html">db</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/query.html">query</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/role.html">role</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/server.html">server</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/storedfunction.html">stored<wbr>Function</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/user.html">user</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/utils.html">utils</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/virtualgraph.html">virtual<wbr>Graph</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-enum">
+						<a href="enums/contenttype.html" class="tsd-kind-icon">Content<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/querytype.html" class="tsd-kind-icon">Query<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/requestheader.html" class="tsd-kind-icon">Request<wbr>Header</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/requestmethod.html" class="tsd-kind-icon">Request<wbr>Method</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/responsestatus.html" class="tsd-kind-icon">Response<wbr>Status</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/connection.html" class="tsd-kind-icon">Connection</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/basedatabaseoptions.html" class="tsd-kind-icon">Base<wbr>Database<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="interfaces/basedatabaseoptionswithfilename.html" class="tsd-kind-icon">Base<wbr>Database<wbr>Options<wbr>With<wbr>File<wbr>Name</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/basedatabaseoptionswithgraphuri.html" class="tsd-kind-icon">Base<wbr>Database<wbr>Options<wbr>With<wbr>Graph<wbr>Uri</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/baseoptions.html" class="tsd-kind-icon">Base<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/baseoptionswithrequestheaders.html" class="tsd-kind-icon">Base<wbr>Options<wbr>With<wbr>Request<wbr>Headers</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/basepermissionoptions.html" class="tsd-kind-icon">Base<wbr>Permission<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/baseroleoptions.html" class="tsd-kind-icon">Base<wbr>Role<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/baseuseroptions.html" class="tsd-kind-icon">Base<wbr>User<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/basevirtualgraphoptions.html" class="tsd-kind-icon">Base<wbr>Virtual<wbr>Graph<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/connectionconfig.html" class="tsd-kind-icon">Connection<wbr>Config</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/connectionmeta.html" class="tsd-kind-icon">Connection<wbr>Meta</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/jsonarray.html" class="tsd-kind-icon">Json<wbr>Array</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/mappingsrequestoptions.html" class="tsd-kind-icon">Mappings<wbr>Request<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/permission.html" class="tsd-kind-icon">Permission</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/requestheaders.html" class="tsd-kind-icon">Request<wbr>Headers</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/role.html" class="tsd-kind-icon">Role</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/storedquerydata.html" class="tsd-kind-icon">Stored<wbr>Query<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#action" class="tsd-kind-icon">Action</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#deeppartial" class="tsd-kind-icon">Deep<wbr>Partial</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-is-not-exported">
+						<a href="globals.html#fields" class="tsd-kind-icon">Fields</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#jsonobject" class="tsd-kind-icon">Json<wbr>Object</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#jsonprimitive" class="tsd-kind-icon">Json<wbr>Primitive</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#jsonvalue" class="tsd-kind-icon">Json<wbr>Value</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#resourcetype" class="tsd-kind-icon">Resource<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#all_graphs" class="tsd-kind-icon">ALL_<wbr>GRAPHS</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#default_graph" class="tsd-kind-icon">DEFAULT_<wbr>GRAPH</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#fields" class="tsd-kind-icon">FIELDS</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#baseandcommentsmatcher" class="tsd-kind-icon">base<wbr>And<wbr>Comments<wbr>Matcher</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#dispatchadmindbfetch" class="tsd-kind-icon">dispatch<wbr>Admin<wbr>DbFetch</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#dispatchadminfetch" class="tsd-kind-icon">dispatch<wbr>Admin<wbr>Fetch</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#dispatchadminqueriesfetch" class="tsd-kind-icon">dispatch<wbr>Admin<wbr>Queries<wbr>Fetch</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#dispatchfetchwithgraphuri" class="tsd-kind-icon">dispatch<wbr>Fetch<wbr>With<wbr>Graph<wbr>Uri</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#dispatchpermissionsfetch" class="tsd-kind-icon">dispatch<wbr>Permissions<wbr>Fetch</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#dispatchrolesfetch" class="tsd-kind-icon">dispatch<wbr>Roles<wbr>Fetch</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#dispatchstoredfunctionsfetch" class="tsd-kind-icon">dispatch<wbr>Stored<wbr>Functions<wbr>Fetch</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#dispatchusersfetch" class="tsd-kind-icon">dispatch<wbr>Users<wbr>Fetch</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#dispatchvgfetch" class="tsd-kind-icon">dispatch<wbr>VgFetch</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#prefixmatcher" class="tsd-kind-icon">prefix<wbr>Matcher</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#whitespacematcher" class="tsd-kind-icon">whitespace<wbr>Matcher</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#dispatchaddorupdate" class="tsd-kind-icon">dispatch<wbr>Add<wbr>OrUpdate</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#dispatchquery" class="tsd-kind-icon">dispatch<wbr>Query</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-not-exported">
+						<a href="globals.html#getastypedtuple" class="tsd-kind-icon">get<wbr>AsTyped<wbr>Tuple</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#jsonify" class="tsd-kind-icon">jsonify</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#startswith" class="tsd-kind-icon">starts<wbr>With</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-is-not-exported">
+						<a href="globals.html#jsonacceptheaders" class="tsd-kind-icon">json<wbr>Accept<wbr>Headers</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-is-not-exported">
+						<a href="globals.html#jsoncontenttypeheaders" class="tsd-kind-icon">json<wbr>Content<wbr>Type<wbr>Headers</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-is-not-exported">
+						<a href="globals.html#namespacesrequestoptionstoget" class="tsd-kind-icon">namespaces<wbr>Request<wbr>Options<wbr>ToGet</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+
+<script>
+(function() {
+  var onlyExportedCheckbox = document.getElementById('tsd-filter-only-exported');
+  if (onlyExportedCheckbox && !onlyExportedCheckbox.checked) {
+    onlyExportedCheckbox.click();
+  }
+}())
+</script>
+
+</body>
+</html>

@@ -9,70 +9,72 @@ const baseAndCommentsMatcher = /^((base\s+<[^>]*>\s*)|([\t ]*#([^\n\r]*)))([\r|\
 const prefixMatcher = /prefix[^:]+:\s*<[^>]*>\s*/gi;
 const whitespaceMatcher = /\s/g;
 
-export const queryType = (query: string) => {
-  // Lifted from http://tinyurl.com/ybnd9wzl
-  // i'm almost certain I'm going to have to revisit this.
-  const q = query
-    // remove base information and comments
-    .replace(baseAndCommentsMatcher, '')
-    // remove prefix information
-    .replace(prefixMatcher, '')
-    // flatten everything down into a single string
-    .replace(whitespaceMatcher, '')
-    .toLowerCase();
+export namespace query.utils {
+  export const queryType = (query: string) => {
+    // Lifted from http://tinyurl.com/ybnd9wzl
+    // i'm almost certain I'm going to have to revisit this.
+    const q = query
+      // remove base information and comments
+      .replace(baseAndCommentsMatcher, '')
+      // remove prefix information
+      .replace(prefixMatcher, '')
+      // flatten everything down into a single string
+      .replace(whitespaceMatcher, '')
+      .toLowerCase();
 
-  if (startsWith(q, 'select')) {
-    return QueryType.SELECT;
-  }
+    if (startsWith(q, 'select')) {
+      return QueryType.SELECT;
+    }
 
-  if (startsWith(q, 'ask')) {
-    return QueryType.ASK;
-  }
+    if (startsWith(q, 'ask')) {
+      return QueryType.ASK;
+    }
 
-  if (startsWith(q, 'construct')) {
-    return QueryType.CONSTRUCT;
-  }
+    if (startsWith(q, 'construct')) {
+      return QueryType.CONSTRUCT;
+    }
 
-  if (startsWith(q, 'describe')) {
-    return QueryType.DESCRIBE;
-  }
+    if (startsWith(q, 'describe')) {
+      return QueryType.DESCRIBE;
+    }
 
-  if (
-    startsWith(q, 'insert') ||
-    startsWith(q, 'delete') ||
-    startsWith(q, 'with') ||
-    startsWith(q, 'load') ||
-    startsWith(q, 'clear') ||
-    startsWith(q, 'create') ||
-    startsWith(q, 'drop') ||
-    startsWith(q, 'copy') ||
-    startsWith(q, 'move') ||
-    startsWith(q, 'add')
-  ) {
-    return QueryType.UPDATE;
-  }
+    if (
+      startsWith(q, 'insert') ||
+      startsWith(q, 'delete') ||
+      startsWith(q, 'with') ||
+      startsWith(q, 'load') ||
+      startsWith(q, 'clear') ||
+      startsWith(q, 'create') ||
+      startsWith(q, 'drop') ||
+      startsWith(q, 'copy') ||
+      startsWith(q, 'move') ||
+      startsWith(q, 'add')
+    ) {
+      return QueryType.UPDATE;
+    }
 
-  if (startsWith(q, 'paths')) {
-    return QueryType.PATHS;
-  }
+    if (startsWith(q, 'paths')) {
+      return QueryType.PATHS;
+    }
 
-  return null;
-};
+    return null;
+  };
 
-export const mimeType = (query: string) => {
-  const type = queryType(query);
+  export const mimeType = (query: string) => {
+    const type = queryType(query);
 
-  switch (type) {
-    case QueryType.SELECT:
-    case QueryType.PATHS:
-      return ContentType.SPARQL_RESULTS_JSON;
-    case QueryType.ASK:
-    case QueryType.UPDATE:
-      return ContentType.TEXT_BOOLEAN;
-    case QueryType.CONSTRUCT:
-    case QueryType.DESCRIBE:
-      return ContentType.TEXT_TURTLE;
-    default:
-      return ContentType.ALL;
-  }
-};
+    switch (type) {
+      case QueryType.SELECT:
+      case QueryType.PATHS:
+        return ContentType.SPARQL_RESULTS_JSON;
+      case QueryType.ASK:
+      case QueryType.UPDATE:
+        return ContentType.TEXT_BOOLEAN;
+      case QueryType.CONSTRUCT:
+      case QueryType.DESCRIBE:
+        return ContentType.TEXT_TURTLE;
+      default:
+        return ContentType.ALL;
+    }
+  };
+}

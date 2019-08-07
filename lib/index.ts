@@ -5,11 +5,7 @@ import * as role from './role';
 import * as server from './server';
 import * as virtualGraph from './virtual-graph';
 import * as storedFunction from './stored-function';
-import * as transforms from './response-transforms';
-
-const utils = {
-  transforms,
-};
+import * as utils from './response-transforms';
 
 export * from './Connection';
 export * from './types';

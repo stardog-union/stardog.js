@@ -7,40 +7,45 @@ const dispatchStoredFunctionsFetch = getFetchDispatcher({
   allowedQueryParams: ['name'],
 });
 
-export const add = ({
-  connection,
-  functions,
-}: BaseOptions & { functions: string }) =>
-  dispatchStoredFunctionsFetch({
+export namespace storedFunction {
+  export const add = ({
     connection,
-    method: RequestMethod.POST,
-    body: functions,
-  });
+    functions,
+  }: BaseOptions & { functions: string }) =>
+    dispatchStoredFunctionsFetch({
+      connection,
+      method: RequestMethod.POST,
+      body: functions,
+    });
 
-export const get = ({ connection, name }: BaseOptions & { name: string }) =>
-  dispatchStoredFunctionsFetch({
-    connection,
-    params: {
-      name,
-    },
-  });
+  export const get = ({ connection, name }: BaseOptions & { name: string }) =>
+    dispatchStoredFunctionsFetch({
+      connection,
+      params: {
+        name,
+      },
+    });
 
-export const remove = ({ connection, name }: BaseOptions & { name: string }) =>
-  dispatchStoredFunctionsFetch({
+  export const remove = ({
     connection,
-    method: RequestMethod.DELETE,
-    params: {
-      name,
-    },
-  });
+    name,
+  }: BaseOptions & { name: string }) =>
+    dispatchStoredFunctionsFetch({
+      connection,
+      method: RequestMethod.DELETE,
+      params: {
+        name,
+      },
+    });
 
-export const clear = ({ connection }: BaseOptions) =>
-  dispatchStoredFunctionsFetch({
-    connection,
-    method: RequestMethod.DELETE,
-  });
+  export const clear = ({ connection }: BaseOptions) =>
+    dispatchStoredFunctionsFetch({
+      connection,
+      method: RequestMethod.DELETE,
+    });
 
-export const getAll = ({ connection }: BaseOptions) =>
-  dispatchStoredFunctionsFetch({
-    connection,
-  });
+  export const getAll = ({ connection }: BaseOptions) =>
+    dispatchStoredFunctionsFetch({
+      connection,
+    });
+}

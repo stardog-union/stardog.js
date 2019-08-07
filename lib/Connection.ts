@@ -30,7 +30,7 @@ export class Connection {
     const config = {
       ...this,
       ...options,
-    };
+    } as ConnectionConfig;
 
     // If the endpoint ends with '/', slice it off.
     if (

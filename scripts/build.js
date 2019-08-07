@@ -1,6 +1,7 @@
 const rollup = require('rollup');
 const chalk = require('chalk');
 const del = require('del');
+const path = require('path');
 const commonjs = require('rollup-plugin-commonjs');
 const resolve = require('rollup-plugin-node-resolve');
 const { terser } = require('rollup-plugin-terser');
@@ -16,6 +17,11 @@ const basePlugins = [
   }),
   typescript({
     typescript: require('typescript'), // use local typescript
+    tsconfigOverride: {
+      compilerOptions: {
+        declaration: false,
+      },
+    },
   }),
 ];
 const entries = [
@@ -88,7 +94,7 @@ del('dist/*')
   .then(() => {
     console.log(
       chalk.bgBlack.greenBright(
-        'All Stardog.js builds completeled successfully.'
+        'All Stardog.js builds completed successfully.'
       )
     );
   })
