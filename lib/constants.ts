@@ -5,10 +5,15 @@ export const enum ContentType {
   JSON = 'application/json',
   LD_JSON = 'application/ld+json',
   MULTIPART_FORM_DATA = 'multipart/form-data',
+  N_QUADS = 'application/n-quads',
+  N_TRIPLES = 'application/n-triples',
+  RDF_XML = 'application/rdf+xml',
   SPARQL_RESULTS_JSON = 'application/sparql-results+json',
+  SPARQL_RESULTS_XML = 'application/sparql-results+xml',
   TEXT_PLAIN = 'text/plain',
   TEXT_TURTLE = 'text/turtle',
   TEXT_BOOLEAN = 'text/boolean',
+  TRIG = 'application/trig',
 }
 
 export const enum RequestHeader {
