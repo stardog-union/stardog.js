@@ -754,7 +754,8 @@ declare namespace Stardog {
             database: string,
             query: string,
             /** Defaults to false. */
-            shared: boolean
+            shared: boolean,
+            reasoning?: boolean,
         }
 
         /** Manages stored queries. */
