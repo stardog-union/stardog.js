@@ -22,9 +22,16 @@ describe('icv', () => {
   const database = generateDatabaseName();
   const connection = ConnectionFactory();
 
-  const beginTx = transaction.begin.bind(null, { connection, database });
+  const beginTx: () => ReturnType<
+    typeof transaction.begin
+  > = transaction.begin.bind(null, { connection, database });
 
-  beforeAll(seedDatabase(database, { icv: { enabled: true } }));
+  beforeAll(
+    seedDatabase(database, {
+      icv: { enabled: true },
+      transaction: { isolation: 'SERIALIZABLE' }, // needed for ICV in Stardog 7.0
+    })
+  );
   afterAll(dropDatabase(database));
 
   it('should add integrity constraint axioms', () =>
@@ -116,23 +123,32 @@ describe('icv', () => {
       })
       .then((text) => expect(text).toBe('false')));
 
-  it('should validate constraints in a transaction', () =>
-    beginTx()
+  it('should validate constraints in a transaction', () => {
+    let transactionId: string;
+    return beginTx()
       .then((res) => {
         expect(res.status).toBe(200);
+        transactionId = res.transactionId;
         return icv.validateInTx({
           connection,
           database,
-          transactionId: res.transactionId,
+          transactionId,
           icvAxioms,
           requestHeaders: turtleRequestHeaders,
         });
       })
       .then((res) => {
         expect(res.status).toBe(200);
-        return res.text();
+        return transaction
+          .commit({
+            connection,
+            database,
+            transactionId,
+          })
+          .then(() => res.text());
       })
-      .then((text) => expect(text).toBe('false')));
+      .then((text) => expect(text).toBe('false'));
+  });
 
   it('should report violations', () =>
     icv
@@ -143,22 +159,32 @@ describe('icv', () => {
       })
       .then((text) => expect(text).toBe('')));
 
-  it('should report violations in a transaction', () =>
-    beginTx()
+  it('should report violations in a transaction', () => {
+    let transactionId: string;
+
+    return beginTx()
       .then((res) => {
         expect(res.status).toBe(200);
+        transactionId = res.transactionId;
         return icv.violationsInTx({
           connection,
           database,
-          transactionId: res.transactionId,
+          transactionId,
           icvAxioms: '',
         });
       })
       .then((res) => {
         expect(res.status).toBe(200);
-        return res.text();
+        return transaction
+          .commit({
+            connection,
+            database,
+            transactionId,
+          })
+          .then(() => res.text());
       })
-      .then((text) => expect(text).toBe('')));
+      .then((text) => expect(text).toBe(''));
+  });
 
   it('should produce violation reports', () =>
     icv
@@ -175,20 +201,29 @@ describe('icv', () => {
         expect(body[0]['http://www.w3.org/ns/shacl#conforms']).toBeDefined();
       }));
 
-  it('should produce violation reports in a transaction', () =>
-    beginTx()
+  it('should produce violation reports in a transaction', () => {
+    let transactionId: string;
+
+    return beginTx()
       .then((res) => {
         expect(res.status).toBe(200);
+        transactionId = res.transactionId;
         return icv.reportInTx({
           connection,
           database,
-          transactionId: res.transactionId,
+          transactionId,
           icvAxioms: '',
         });
       })
       .then((res) => {
         expect(res.status).toBe(200);
-        return res.json();
+        return transaction
+          .commit({
+            connection,
+            database,
+            transactionId,
+          })
+          .then(() => res.json());
       })
       .then((body) => {
         expect(body.length).not.toBe(0);
@@ -196,5 +231,6 @@ describe('icv', () => {
         expect(body[0]).toHaveProperty('@type');
         // Can't use `toHaveProperty` below because jest thinks it's a path for nested properties
         expect(body[0]['http://www.w3.org/ns/shacl#conforms']).toBeDefined();
-      }));
+      });
+  });
 });

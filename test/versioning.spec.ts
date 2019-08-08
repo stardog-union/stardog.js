@@ -9,7 +9,9 @@ import { RequestHeader, ContentType } from '../lib/constants';
 
 const { transaction, versioning } = db;
 
-describe('versioning', () => {
+// FIXME: Skipped for now due to versioning not working in Stardog 7+.
+// Unskip these when Stardog 7+ supports versioning.
+describe.skip('versioning', () => {
   const database = generateDatabaseName();
   let connection;
 

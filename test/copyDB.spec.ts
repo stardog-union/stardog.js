@@ -6,7 +6,9 @@ import {
   ConnectionFactory,
 } from './setup-database';
 
-describe('db.copy()', () => {
+// FIXME: Skipped for now because copy doesn't work in Stardog 7+. Unskip
+// if/when that changes.
+describe.skip('db.copy()', () => {
   const database = generateDatabaseName();
   const destination = generateDatabaseName();
   let connection: Connection;

@@ -118,7 +118,7 @@
   },
   "scripts": {
     "build": "node scripts/build",
-    "docs": "rimraf ./docs && typedoc --mode modules --excludePrivate --excludeExternals --exclude \"**/*+(fetch|request-utils|dbopts).ts\" --readme none --out ./docs ./lib",
+    "docs": "rimraf ./docs && typedoc --mode modules --excludePrivate --excludeExternals --exclude \"**/*+(fetch|request-utils|dbopts).ts\" --readme none --name stardog.js --out ./docs ./lib",
     "test": "tslint '{lib,test}/**/*.ts' --fix && jest test/*.spec.ts --verbose -i",
     "precommit": "lint-staged",
     "format": "prettier '{lib,test}/**/*.[tj]s' --write",
