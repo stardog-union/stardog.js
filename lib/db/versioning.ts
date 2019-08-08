@@ -1,5 +1,8 @@
+/**
+ * @module stardogjs.db.versioning
+ */
 import * as qs from 'querystring';
-import { query as queryUtils } from '../query/utils';
+import * as utils from '../query/utils';
 import { BaseDatabaseOptions, JsonValue } from '../types';
 import { RequestHeader, RequestMethod, ContentType } from '../constants';
 import {
@@ -8,103 +11,99 @@ import {
   GenericFetchParams,
 } from '../request-utils';
 
-export namespace db.versioning {
-  export const executeQuery = ({
-    connection,
-    database,
-    query,
-    requestHeaders = {
-      [RequestHeader.ACCEPT]: queryUtils.utils.mimeType(query),
-    },
-    params = {},
-  }: BaseDatabaseOptions & {
-    requestHeaders?: BaseDatabaseOptions['requestHeaders'] & {
-      [RequestHeader.ACCEPT]:
-        | ReturnType<typeof queryUtils.utils.mimeType>
-        | string;
-    };
-    query: string;
-    params?: JsonValue;
-  }) => {
-    const dispatchFetch = getFetchDispatcher({
-      allowedQueryParams: Object.keys(params),
-    });
-
-    return dispatchFetch({
-      connection,
-      method: RequestMethod.POST,
-      body: qs.stringify({ query }),
-      requestHeaders: {
-        ...requestHeaders,
-        [RequestHeader.CONTENT_TYPE]: ContentType.FORM_URLENCODED,
-      },
-      params: params as any,
-      pathSuffix: `${database}/vcs/query`,
-    });
+export const executeQuery = ({
+  connection,
+  database,
+  query,
+  requestHeaders = {
+    [RequestHeader.ACCEPT]: utils.mimeType(query),
+  },
+  params = {},
+}: BaseDatabaseOptions & {
+  requestHeaders?: BaseDatabaseOptions['requestHeaders'] & {
+    [RequestHeader.ACCEPT]: ReturnType<typeof utils.mimeType> | string;
   };
+  query: string;
+  params?: JsonValue;
+}) => {
+  const dispatchFetch = getFetchDispatcher({
+    allowedQueryParams: Object.keys(params),
+  });
 
-  const postAsPlainText = ({
-    requestHeaders = {},
-    ...args
-  }: GenericFetchParams) =>
-    dispatchGenericFetch({
-      ...args,
-      method: RequestMethod.POST,
-      requestHeaders: {
-        ...requestHeaders,
-        [RequestHeader.CONTENT_TYPE]: ContentType.TEXT_PLAIN,
-      },
-    });
-
-  export const commit = ({
+  return dispatchFetch({
     connection,
-    database,
-    transactionId,
-    commitMsg,
-  }: BaseDatabaseOptions & { transactionId: string; commitMsg: string }) =>
-    postAsPlainText({
-      connection,
-      body: commitMsg,
-      pathSuffix: `${database}/vcs/${transactionId}/commit_msg`,
-    });
+    method: RequestMethod.POST,
+    body: qs.stringify({ query }),
+    requestHeaders: {
+      ...requestHeaders,
+      [RequestHeader.CONTENT_TYPE]: ContentType.FORM_URLENCODED,
+    },
+    params: params as any,
+    pathSuffix: `${database}/vcs/query`,
+  });
+};
 
-  export const createTag = ({
-    connection,
-    database,
-    revisionId,
-    tagName,
-  }: BaseDatabaseOptions & { revisionId: string; tagName: string }) =>
-    postAsPlainText({
-      connection,
-      body: `"tag:stardog:api:versioning:version:${revisionId}", "${tagName}"`,
-      pathSuffix: `${database}/vcs/tags/create`,
-    });
+const postAsPlainText = ({
+  requestHeaders = {},
+  ...args
+}: GenericFetchParams) =>
+  dispatchGenericFetch({
+    ...args,
+    method: RequestMethod.POST,
+    requestHeaders: {
+      ...requestHeaders,
+      [RequestHeader.CONTENT_TYPE]: ContentType.TEXT_PLAIN,
+    },
+  });
 
-  export const deleteTag = ({
+export const commit = ({
+  connection,
+  database,
+  transactionId,
+  commitMsg,
+}: BaseDatabaseOptions & { transactionId: string; commitMsg: string }) =>
+  postAsPlainText({
     connection,
-    database,
-    tagName,
-  }: BaseDatabaseOptions & { tagName: string }) =>
-    postAsPlainText({
-      connection,
-      body: tagName,
-      pathSuffix: `${database}/vcs/tags/delete`,
-    });
+    body: commitMsg,
+    pathSuffix: `${database}/vcs/${transactionId}/commit_msg`,
+  });
 
-  export const revert = ({
+export const createTag = ({
+  connection,
+  database,
+  revisionId,
+  tagName,
+}: BaseDatabaseOptions & { revisionId: string; tagName: string }) =>
+  postAsPlainText({
     connection,
-    database,
-    fromRevisionId,
-    toRevisionId,
-    logMsg,
-  }: BaseDatabaseOptions & {
-    fromRevisionId: string;
-    toRevisionId: string;
-    logMsg: string;
-  }) =>
-    postAsPlainText({
-      connection,
-      body: `"tag:stardog:api:versioning:version:${toRevisionId}", "tag:stardog:api:versioning:version:${fromRevisionId}", "${logMsg}"`,
-      pathSuffix: `${database}/vcs/revert`,
-    });
-}
+    body: `"tag:stardog:api:versioning:version:${revisionId}", "${tagName}"`,
+    pathSuffix: `${database}/vcs/tags/create`,
+  });
+
+export const deleteTag = ({
+  connection,
+  database,
+  tagName,
+}: BaseDatabaseOptions & { tagName: string }) =>
+  postAsPlainText({
+    connection,
+    body: tagName,
+    pathSuffix: `${database}/vcs/tags/delete`,
+  });
+
+export const revert = ({
+  connection,
+  database,
+  fromRevisionId,
+  toRevisionId,
+  logMsg,
+}: BaseDatabaseOptions & {
+  fromRevisionId: string;
+  toRevisionId: string;
+  logMsg: string;
+}) =>
+  postAsPlainText({
+    connection,
+    body: `"tag:stardog:api:versioning:version:${toRevisionId}", "tag:stardog:api:versioning:version:${fromRevisionId}", "${logMsg}"`,
+    pathSuffix: `${database}/vcs/revert`,
+  });

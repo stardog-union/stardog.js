@@ -1,3 +1,6 @@
+/**
+ * @module stardogjs
+ */
 import { Headers, Request } from './fetch';
 import { RequestHeader, ContentType } from './constants';
 
@@ -26,8 +29,14 @@ export class Connection {
     this.configure(options);
   }
 
+  // @ts-ignore: The `typedoc` version we need to use to generate correct docs
+  // with the `typedoc-plugin-external-module-name` erroneously thinks
+  // `options` is unused, so we have to ts-ignore it.
   configure(options: Partial<ConnectionConfig>) {
     const config = {
+      // @ts-ignore: The `typedoc` version we need to use to generate correct
+      // docs with the `typedoc-plugin-external-module-name` erroneously thinks
+      // we can't spread `this`, so we have to ts-ignore it.
       ...this,
       ...options,
     } as ConnectionConfig;

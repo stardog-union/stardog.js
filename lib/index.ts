@@ -1,3 +1,6 @@
+/**
+ * @module stardogjs
+ */
 import * as db from './db';
 import * as query from './query';
 import * as user from './user';
@@ -9,4 +12,5 @@ import * as utils from './response-transforms';
 
 export * from './Connection';
 export * from './types';
+export * from './constants';
 export { db, query, user, role, server, virtualGraph, storedFunction, utils };

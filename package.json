@@ -84,7 +84,6 @@
     "querystring": "^0.2.0"
   },
   "devDependencies": {
-    "@gerrit0/typedoc": "^0.15.3",
     "@types/flat": "0.0.28",
     "@types/jest": "^24.0.13",
     "@types/lodash.get": "^4.4.6",
@@ -110,6 +109,8 @@
     "tslint": "^5.11.0",
     "tslint-config-airbnb": "^5.11.1",
     "tslint-config-prettier": "^1.17.0",
+    "typedoc": "^0.13.0",
+    "typedoc-plugin-external-module-name": "^2.1.0",
     "typescript": "^3.5.3"
   },
   "engines": {
@@ -117,7 +118,7 @@
   },
   "scripts": {
     "build": "node scripts/build",
-    "docs": "rimraf ./docs && typedoc --target ES5 --mode file --excludePrivate --exclude \"**/*+(fetch|request-utils).ts\" --out ./docs ./lib && node scripts/docs-hack.js",
+    "docs": "rimraf ./docs && typedoc --mode modules --excludePrivate --excludeExternals --exclude \"**/*+(fetch|request-utils|dbopts).ts\" --readme none --out ./docs ./lib",
     "test": "tslint '{lib,test}/**/*.ts' --fix && jest test/*.spec.ts --verbose -i",
     "precommit": "lint-staged",
     "format": "prettier '{lib,test}/**/*.[tj]s' --write",

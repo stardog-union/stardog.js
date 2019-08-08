@@ -1,3 +1,6 @@
+/**
+ * @module stardogjs.query
+ */
 import * as stored from './stored';
 import * as graphql from './graphql';
 import * as utils from './utils';

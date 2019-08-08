@@ -1,3 +1,6 @@
+/**
+ * @module stardogjs.db
+ */
 import * as icv from './icv';
 import * as transaction from './transaction';
 import * as options from './options';

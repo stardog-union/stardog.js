@@ -1,3 +1,6 @@
+/**
+ * @module stardogjs
+ */
 export const enum ContentType {
   ALL = '*/*',
   FORM_URLENCODED = 'application/x-www-form-urlencoded',

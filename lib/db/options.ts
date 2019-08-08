@@ -1,3 +1,6 @@
+/**
+ * @module stardogjs.db.options
+ */
 import { BaseDatabaseOptions, DeepPartial } from '../types';
 import { getFetchDispatcher } from '../request-utils';
 import { RequestHeader, ContentType, RequestMethod } from '../constants';
@@ -9,43 +12,41 @@ const dispatchAdminDbFetch = getFetchDispatcher({
   allowedQueryParams: [],
 });
 
-export namespace db.options {
-  export const get = ({
+export const get = ({
+  connection,
+  database,
+  optionsToGet = dbopts,
+}: BaseDatabaseOptions & { optionsToGet?: DeepPartial<typeof dbopts> }) =>
+  dispatchAdminDbFetch({
     connection,
-    database,
-    optionsToGet = dbopts,
-  }: BaseDatabaseOptions & { optionsToGet?: DeepPartial<typeof dbopts> }) =>
-    dispatchAdminDbFetch({
-      connection,
-      method: RequestMethod.PUT,
-      requestHeaders: {
-        [RequestHeader.CONTENT_TYPE]: ContentType.JSON,
-      },
-      pathSuffix: `${database}/options`,
-      body: JSON.stringify(flat(optionsToGet, { safe: true })),
-    });
-  // }).then((res) => {
-  //   if (res.status === ResponseStatus.OK) {
-  //     return {
-  //       ...res,
-  //       body: flat.unflatten(res.body),
-  //     };
-  //   }
-  //   return res;
-  // });
+    method: RequestMethod.PUT,
+    requestHeaders: {
+      [RequestHeader.CONTENT_TYPE]: ContentType.JSON,
+    },
+    pathSuffix: `${database}/options`,
+    body: JSON.stringify(flat(optionsToGet, { safe: true })),
+  });
+// }).then((res) => {
+//   if (res.status === ResponseStatus.OK) {
+//     return {
+//       ...res,
+//       body: flat.unflatten(res.body),
+//     };
+//   }
+//   return res;
+// });
 
-  export const set = ({
+export const set = ({
+  connection,
+  database,
+  databaseOptions,
+}: BaseDatabaseOptions & { databaseOptions: DeepPartial<typeof dbopts> }) =>
+  dispatchAdminDbFetch({
     connection,
-    database,
-    databaseOptions,
-  }: BaseDatabaseOptions & { databaseOptions: DeepPartial<typeof dbopts> }) =>
-    dispatchAdminDbFetch({
-      connection,
-      method: RequestMethod.POST,
-      requestHeaders: {
-        [RequestHeader.CONTENT_TYPE]: ContentType.JSON,
-      },
-      pathSuffix: `${database}/options`,
-      body: JSON.stringify(flat(databaseOptions, { safe: true })),
-    });
-}
+    method: RequestMethod.POST,
+    requestHeaders: {
+      [RequestHeader.CONTENT_TYPE]: ContentType.JSON,
+    },
+    pathSuffix: `${database}/options`,
+    body: JSON.stringify(flat(databaseOptions, { safe: true })),
+  });

@@ -1,3 +1,6 @@
+/**
+ * @module stardogjs
+ */
 import { Connection } from './Connection';
 import { RequestHeader } from './constants';
 
