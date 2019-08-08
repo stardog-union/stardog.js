@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
-const { Connection, query: { stored } } = require('../lib');
+const { Connection, query: { stored }, server } = require('../lib');
+const semver = require('semver');
 const {
   seedDatabase,
   dropDatabase,
@@ -43,29 +44,48 @@ describe('stored', () => {
   describe('list()', () => {
     it('returns a list of stored queries', () => {
       const name = generateRandomString();
-      return stored
-        .create(conn, {
+      return Promise.all([
+        server.status(conn, { databases: false }),
+        stored.create(conn, {
           name,
           database,
           query: 'select distinct ?type {?s a ?type}',
           shared: true,
-        })
-        .then(res => {
+        }),
+      ])
+        .then(([statusRes, res]) => {
           expect(res.status).toBe(204);
-          return stored.list(conn);
+          return Promise.all([statusRes, stored.list(conn)]);
         })
-        .then(res => {
+        .then(([statusRes, res]) => {
+          const stardogVersion = statusRes.body['dbms.version'].value;
           expect(res.status).toBe(200);
           const q = res.body.queries.find(v => v.name === name);
-          expect(q).toEqual({
-            name,
-            database,
-            query: 'select distinct ?type {?s a ?type}',
-            shared: true,
-            creator: 'admin',
-            description: null,
-            reasoning: false,
-          });
+          const earliestVersionWithReasoningAndDescription = '6.2.2';
+          if (
+            semver.gte(
+              semver.coerce(stardogVersion),
+              semver.coerce(earliestVersionWithReasoningAndDescription)
+            )
+          ) {
+            expect(q).toEqual({
+              name,
+              database,
+              query: 'select distinct ?type {?s a ?type}',
+              shared: true,
+              creator: 'admin',
+              description: null,
+              reasoning: false,
+            });
+          } else {
+            expect(q).toEqual({
+              name,
+              database,
+              query: 'select distinct ?type {?s a ?type}',
+              shared: true,
+              creator: 'admin',
+            });
+          }
         });
     });
   });
