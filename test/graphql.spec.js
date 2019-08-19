@@ -136,7 +136,7 @@ type Episode {
       const [statusRes, res] = results;
       const stardogVersion = statusRes.body['dbms.version'].value;
       // > 6.1.3 captures snapshot versions of 6.1.4
-      if (semver.gt(stardogVersion, '6.1.3')) {
+      if (semver.gt(semver.coerce(stardogVersion), semver.coerce('6.1.3'))) {
         expect(res.status).toBe(200);
         expect(res.body).toHaveProperty('data');
         expect(res.body.data).toEqual({
@@ -167,7 +167,7 @@ type Episode {
           'SELECT *\nFROM <tag:stardog:api:context:all>\n{\n?0 rdf:type :Character .\n?0 :name ?1 .\n}\n',
         fields: { '0': { '1': 'name' } },
         // > 6.1.3 captures snapshot versions of 6.1.4
-        plan: semver.gt(stardogVersion, '6.1.3')
+        plan: semver.gt(semver.coerce(stardogVersion), semver.coerce('6.1.3'))
           ? {
               dataset: { from: 'all' },
               plan: jsonPlan,
