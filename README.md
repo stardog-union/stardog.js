@@ -117,19 +117,17 @@ One of the following values:
 One of the following values:
 
 `RdfMimeType
-          | SparqlMimeType
-          | 'text/plain'
-          | 'text/boolean'
-          | 'application/json'
-          | '*/*'`
-
+            | SparqlMimeType
+            | 'text/plain'
+            | 'text/boolean'
+            | 'application/json'
+            | '*/*'`
 #### <a name="explainacceptmimetype">ExplainAcceptMimeType</a>
 
 One of the following values:
 
-`'text/plain' (default)
-          | 'application/json'`
-
+`'text/plain'
+            | 'application/json'`
 #### <a name="body">Body</a>
 
 Object with the following values:
@@ -268,7 +266,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="offline">`db.offline(conn, database, params)`</a>
 
-Sets a database offline. 
+Sets a database offline.
 
 Expects the following parameters:
 
@@ -282,7 +280,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="online">`db.online(conn, database, params)`</a>
 
-Sets a database online. 
+Sets a database online.
 
 Expects the following parameters:
 
@@ -310,7 +308,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="copy">`db.copy(conn, database, destination, params)`</a>
 
-Makes a copy of a database. 
+Makes a copy of a database.
 
 Expects the following parameters:
 
@@ -326,7 +324,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="list">`db.list(conn, params)`</a>
 
-Gets a list of all databases on a Stardog server. 
+Gets a list of all databases on a Stardog server.
 
 Expects the following parameters:
 
@@ -338,7 +336,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="size">`db.size(conn, database, params)`</a>
 
-Gets number of triples in a database. 
+Gets number of triples in a database.
 
 Expects the following parameters:
 
@@ -352,7 +350,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="clear">`db.clear(conn, database, transactionId, params)`</a>
 
-Clears the contents of a database. 
+Clears the contents of a database.
 
 Expects the following parameters:
 
@@ -368,7 +366,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="add">`db.add(conn, database, transactionId, content, options, params)`</a>
 
-Adds data within a transaction. 
+Adds data within a transaction.
 
 Expects the following parameters:
 
@@ -408,7 +406,7 @@ Returns [`Promise<transaction.TransactionResponse>`](#transactionresponse)
 
 #### <a name="namespaces">`db.namespaces(conn, database, params)`</a>
 
-Gets a mapping of the namespaces used in a database. 
+Gets a mapping of the namespaces used in a database.
 
 Expects the following parameters:
 
@@ -422,7 +420,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="exportdata">`db.exportData(conn, database, options, params)`</a>
 
-Exports the contents of a database. 
+Exports the contents of a database.
 
 Expects the following parameters:
 
@@ -568,7 +566,7 @@ Object with the following values:
 
 #### <a name="begin">`db.transaction.begin(conn, database, params)`</a>
 
-Begins a new transaction. 
+Begins a new transaction.
 
 Expects the following parameters:
 
@@ -598,7 +596,7 @@ Returns [`Promise<TransactionResponse>`](#transactionresponse)
 
 #### <a name="commit">`db.transaction.commit(conn, database, transactionId, params)`</a>
 
-Commits a transaction to the database, removing the transaction and making its changes permanent. 
+Commits a transaction to the database, removing the transaction and making its changes permanent.
 
 Expects the following parameters:
 
@@ -616,7 +614,7 @@ Returns [`Promise<TransactionResponse>`](#transactionresponse)
 
 #### <a name="get">`db.icv.get(conn, database, params)`</a>
 
-Gets the set of integrity constraints on a given database. 
+Gets the set of integrity constraints on a given database.
 
 Expects the following parameters:
 
@@ -630,7 +628,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="add">`db.icv.add(conn, database, icvAxioms, options, params)`</a>
 
-Adds integrity constraints to a given database. 
+Adds integrity constraints to a given database.
 
 Expects the following parameters:
 
@@ -648,7 +646,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="remove">`db.icv.remove(conn, database, icvAxioms, options, params)`</a>
 
-Removes integrity constraints from a given database. 
+Removes integrity constraints from a given database.
 
 Expects the following parameters:
 
@@ -666,7 +664,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="clear">`db.icv.clear(conn, database, params)`</a>
 
-Removes all integrity constraints from a given database. 
+Removes all integrity constraints from a given database.
 
 Expects the following parameters:
 
@@ -714,7 +712,7 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="validateintx">`db.icv.validateInTx(conn, database, constraints, transactionId, options, params)`</a>
+#### <a name="validateintx">`db.icv.validateInTx(conn, database, transactionId, constraints, options, params)`</a>
 
 Checks constraints to see if they are valid within a transaction
 
@@ -724,9 +722,9 @@ Expects the following parameters:
 
 - database (`string`)
 
-- constraints (`string`)
-
 - transactionId (`string`)
+
+- constraints (`string`)
 
 - options ({ contentType: [`RdfMimeType`](#rdfmimetype) })
 
@@ -752,7 +750,7 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="violationsintx">`db.icv.violationsInTx(conn, database, constraints, options, params)`</a>
+#### <a name="violationsintx">`db.icv.violationsInTx(conn, database, transactionId, constraints, options, params)`</a>
 
 Accepts integrity constraints as RDF and returns the violation explanations, if any, as RDF.
 
@@ -762,9 +760,49 @@ Expects the following parameters:
 
 - database (`string`)
 
+- transactionId (`string`)
+
 - constraints (`string`)
 
 - options ({ contentType: [`RdfMimeType`](#rdfmimetype) })
+
+- params (`{ graphUri: string }`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="report">`db.icv.report(conn, database, constraints, options, params)`</a>
+
+Accepts integrity constraints as RDF and returns a validation report.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- constraints (`string`)
+
+- options ({ contentType?: HTTP.RdfMimeType, accept?: [`AcceptMimeType`](#acceptmimetype) })
+
+- params (`{ graphUri: string }`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="reportintx">`db.icv.reportInTx(conn, database, transactionId, constraints, options, params)`</a>
+
+Accepts integrity constraints as RDF and returns a validation report.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- transactionId (`string`)
+
+- constraints (`string`)
+
+- options ({ contentType?: HTTP.RdfMimeType, accept?: [`AcceptMimeType`](#acceptmimetype) })
 
 - params (`{ graphUri: string }`)
 
@@ -1060,9 +1098,15 @@ Object with the following values:
 - uri (`string`)
 - property (`string`)
 
+#### <a name="additionalhandlers">AdditionalHandlers</a>
+
+Object with the following values:
+
+- onResponseStart (`void`)
+
 #### <a name="property">`query.property(conn, database, config, params)`</a>
 
-Gets the values for a specific property of a URI individual. 
+Gets the values for a specific property of a URI individual.
 
 Expects the following parameters:
 
@@ -1078,7 +1122,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="explain">`query.explain(conn, database, query, accept, params)`</a>
 
-Gets the query plan generated by Stardog for a given SPARQL query. 
+Gets the query plan generated by Stardog for a given SPARQL query.
 
 Expects the following parameters:
 
@@ -1094,9 +1138,9 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="execute">`query.execute(conn, database, query, accept, params)`</a>
+#### <a name="execute">`query.execute(conn, database, query, accept, params, additionalHandlers)`</a>
 
-Executes a query against a database. 
+Executes a query against a database.
 
 Expects the following parameters:
 
@@ -1110,11 +1154,13 @@ Expects the following parameters:
 
 - params (`object`)
 
+- additionalHandlers ([`AdditionalHandlers`](#additionalhandlers))
+
 Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="executeintransaction">`query.executeInTransaction(conn, database, transactionId, query, options, params)`</a>
 
-Executes a query against a database within a transaction. 
+Executes a query against a database within a transaction.
 
 Expects the following parameters:
 
@@ -1134,7 +1180,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="list">`query.list(conn)`</a>
 
-Gets a list of actively running queries. 
+Gets a list of actively running queries.
 
 Expects the following parameters:
 
@@ -1144,7 +1190,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="kill">`query.kill(conn, queryId)`</a>
 
-Kills an actively running query. 
+Kills an actively running query.
 
 Expects the following parameters:
 
@@ -1156,7 +1202,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="get">`query.get(conn, queryId)`</a>
 
-Gets information about an actively running query. 
+Gets information about an actively running query.
 
 Expects the following parameters:
 
@@ -1174,12 +1220,14 @@ Object with the following values:
 - database (`string`)
 - query (`string`)
 - shared (`boolean`)
+- reasoning (`boolean`)
+- description (`boolean`)
 
 ## <a name="stored">stored</a>
 
 #### <a name="create">`query.stored.create(conn, config, params)`</a>
 
-Stores a query in Stardog, either on the system level or for a given database. 
+Stores a query in Stardog, either on the system level or for a given database.
 
 Expects the following parameters:
 
@@ -1193,13 +1241,29 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="list">`query.stored.list(conn, params)`</a>
 
-Lists all stored queries. 
+Lists all stored queries.
 
 Expects the following parameters:
 
 - conn ([`Connection`](#connection))
 
 - params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="update">`query.stored.update(conn, config, params, useUpdateMethod)`</a>
+
+Updates a given stored query and creates it if the name does not refer to an existing stored query.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- config ([`StoredQueryOptions`](#storedqueryoptions))
+
+- params (`object`)
+
+- useUpdateMethod (`boolean`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -1214,22 +1278,6 @@ Expects the following parameters:
 - storedQuery (`string`)
 
 - params (`object`)
-
-Returns [`Promise<HTTP.Body>`](#body)
-
-#### <a name="update">`query.update(conn, storedQuery, params, useUpdateMethod)`</a>
-
-Updates a given stored query and creates it if the name does not refer to an existing stored query.
-
-Expects the following parameters:
-
-- conn ([`Connection`](#connection))
-
-- storedQuery (`string`)
-
-- params (`object`)
-
-- useUpdateMethod (`boolean`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -1387,7 +1435,7 @@ One of the following values:
             'icv-constraints'`
 #### <a name="list">`user.list(conn, params)`</a>
 
-Gets a list of users. 
+Gets a list of users.
 
 Expects the following parameters:
 
@@ -1413,7 +1461,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="create">`user.create(conn, user, params)`</a>
 
-Creates a new user. 
+Creates a new user.
 
 Expects the following parameters:
 
@@ -1427,7 +1475,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="changepassword">`user.changePassword(conn, username, password, params)`</a>
 
-Changes a user's password. 
+Changes a user's password.
 
 Expects the following parameters:
 
@@ -1485,7 +1533,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="setroles">`user.setRoles(conn, username, roles, params)`</a>
 
-Sets roles for a user. 
+Sets roles for a user.
 
 Expects the following parameters:
 
@@ -1501,7 +1549,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="listroles">`user.listRoles(conn, username, params)`</a>
 
-Gets a list of roles assigned to a user. 
+Gets a list of roles assigned to a user.
 
 Expects the following parameters:
 
@@ -1515,7 +1563,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="assignpermission">`user.assignPermission(conn, username, permission, params)`</a>
 
-Creates a new permission for a user over a given resource. 
+Creates a new permission for a user over a given resource.
 
 Expects the following parameters:
 
@@ -1531,7 +1579,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="deletepermission">`user.deletePermission(conn, username, permission, params)`</a>
 
-Removes a permission for a user over a given resource. 
+Removes a permission for a user over a given resource.
 
 Expects the following parameters:
 
@@ -1547,7 +1595,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="permissions">`user.permissions(conn, username, params)`</a>
 
-Gets a list of permissions assigned to user. 
+Gets a list of permissions assigned to user.
 
 Expects the following parameters:
 
@@ -1561,7 +1609,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="effectivepermissions">`user.effectivePermissions(conn, username, params)`</a>
 
-Gets a list of a user's effective permissions. 
+Gets a list of a user's effective permissions.
 
 Expects the following parameters:
 
@@ -1575,7 +1623,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="superuser">`user.superUser(conn, username, params)`</a>
 
-Specifies whether a user is a superuser. 
+Specifies whether a user is a superuser.
 
 Expects the following parameters:
 
@@ -1589,7 +1637,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="remove">`user.remove(conn, username, params)`</a>
 
-Deletes a user. 
+Deletes a user.
 
 Expects the following parameters:
 
@@ -1613,7 +1661,7 @@ Object with the following values:
 
 #### <a name="create">`user.role.create(conn, role, params)`</a>
 
-Creates a new role. 
+Creates a new role.
 
 Expects the following parameters:
 
@@ -1627,7 +1675,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="list">`user.role.list(conn, params)`</a>
 
-Lists all existing roles. 
+Lists all existing roles.
 
 Expects the following parameters:
 
@@ -1639,7 +1687,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="remove">`user.role.remove(conn, role, params)`</a>
 
-Deletes an existing role from the system. 
+Deletes an existing role from the system.
 
 Expects the following parameters:
 
@@ -1653,7 +1701,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="userswithrole">`user.role.usersWithRole(conn, role, params)`</a>
 
-Lists all users that have been assigned a given role. 
+Lists all users that have been assigned a given role.
 
 Expects the following parameters:
 
@@ -1667,7 +1715,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="assignpermission">`user.role.assignPermission(conn, role, permission, params)`</a>
 
-Adds a permission over a given resource to a given role. 
+Adds a permission over a given resource to a given role.
 
 Expects the following parameters:
 
@@ -1683,7 +1731,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="deletepermission">`user.role.deletePermission(conn, role, permission, params)`</a>
 
-Removes a permission over a given resource from a given role. 
+Removes a permission over a given resource from a given role.
 
 Expects the following parameters:
 
@@ -1699,7 +1747,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="permissions">`user.role.permissions(conn, role, params)`</a>
 
-Lists all permissions assigned to a given role. 
+Lists all permissions assigned to a given role.
 
 Expects the following parameters:
 
