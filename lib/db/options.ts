@@ -1,14 +1,18 @@
 /**
  * @module stardogjs.db.options
  */
-import { BaseDatabaseOptions, DeepPartial } from '../types';
+import { BaseDatabaseOptions, DeepPartial, BaseOptions } from '../types';
 import { getFetchDispatcher } from '../request-utils';
 import { RequestHeader, ContentType, RequestMethod } from '../constants';
 import flat from 'flat';
 import dbopts from '../db/dbopts';
 
 const dispatchAdminDbFetch = getFetchDispatcher({
-  basePath: `admin/databases`,
+  basePath: 'admin/databases',
+  allowedQueryParams: [],
+});
+const dispatchConfigPropertiesFetch = getFetchDispatcher({
+  basePath: 'admin/config_properties',
   allowedQueryParams: [],
 });
 
@@ -16,25 +20,35 @@ export const get = ({
   connection,
   database,
   optionsToGet = dbopts,
-}: BaseDatabaseOptions & { optionsToGet?: DeepPartial<typeof dbopts> }) =>
-  dispatchAdminDbFetch({
+  method = RequestMethod.PUT,
+}: BaseDatabaseOptions & {
+  optionsToGet?: DeepPartial<typeof dbopts>;
+  method?: RequestMethod;
+}) => {
+  const fetchOptions: Parameters<typeof dispatchAdminDbFetch>[0] = {
     connection,
-    method: RequestMethod.PUT,
+    method,
     requestHeaders: {
       [RequestHeader.CONTENT_TYPE]: ContentType.JSON,
     },
     pathSuffix: `${database}/options`,
-    body: JSON.stringify(flat(optionsToGet, { safe: true })),
-  });
-// }).then((res) => {
-//   if (res.status === ResponseStatus.OK) {
-//     return {
-//       ...res,
-//       body: flat.unflatten(res.body),
-//     };
-//   }
-//   return res;
-// });
+  };
+
+  if (optionsToGet) {
+    fetchOptions.body = JSON.stringify(flat(optionsToGet, { safe: true }));
+  }
+
+  return dispatchAdminDbFetch(fetchOptions);
+  // .then((res) => {
+  //   if (res.status === ResponseStatus.OK) {
+  //     return {
+  //       ...res,
+  //       body: flat.unflatten(res.body),
+  //     };
+  //   }
+  //   return res;
+  // });
+};
 
 export const set = ({
   connection,
@@ -49,4 +63,21 @@ export const set = ({
     },
     pathSuffix: `${database}/options`,
     body: JSON.stringify(flat(databaseOptions, { safe: true })),
+  });
+
+export const getAll = ({ connection, database }: Parameters<typeof get>[0]) =>
+  get({
+    connection,
+    database,
+    optionsToGet: null,
+    method: RequestMethod.GET,
+  });
+
+export const getAvailable = ({ connection }: BaseOptions) =>
+  dispatchConfigPropertiesFetch({
+    connection,
+    method: RequestMethod.GET,
+    requestHeaders: {
+      [RequestHeader.CONTENT_TYPE]: ContentType.JSON,
+    },
   });

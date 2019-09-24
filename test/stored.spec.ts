@@ -1,4 +1,5 @@
-import { query } from '../lib';
+import * as semver from 'semver';
+import { query, server, Connection } from '../lib';
 import {
   seedDatabase,
   dropDatabase,
@@ -52,8 +53,9 @@ describe('stored', () => {
   describe('list()', () => {
     it('returns a list of stored queries', () => {
       const name = generateRandomString();
-      return stored
-        .create({
+      return Promise.all([
+        server.status({ connection, params: { databases: false } }),
+        stored.create({
           connection,
           storedQueryData: {
             name,
@@ -61,26 +63,44 @@ describe('stored', () => {
             query: 'select distinct ?type {?s a ?type}',
             shared: true,
           },
-        })
-        .then((res) => {
+        }),
+      ])
+        .then(([statusRes, res]) => {
           expect(res.status).toBe(204);
-          return stored.list({ connection });
+          return Promise.all([statusRes, stored.list({ connection })]);
         })
-        .then((res) => {
+        .then(([statusRes, res]) => {
           expect(res.status).toBe(200);
-          return res.json();
+          return Promise.all([statusRes.json(), res.json()]);
         })
-        .then((body) => {
-          const q = body.queries.find((v) => v.name === name);
-          expect(q).toEqual({
-            name,
-            database,
-            description: null,
-            query: 'select distinct ?type {?s a ?type}',
-            reasoning: false,
-            shared: true,
-            creator: 'admin',
-          });
+        .then(([statusResJson, resJson]) => {
+          const stardogVersion = statusResJson['dbms.version'].value;
+          const q = resJson.queries.find((v) => v.name === name);
+          const earliestVersionWithReasoningAndDescription = '6.2.2';
+          if (
+            semver.gte(
+              semver.coerce(stardogVersion),
+              semver.coerce(earliestVersionWithReasoningAndDescription)
+            )
+          ) {
+            expect(q).toEqual({
+              name,
+              database,
+              query: 'select distinct ?type {?s a ?type}',
+              shared: true,
+              creator: 'admin',
+              description: null,
+              reasoning: false,
+            });
+          } else {
+            expect(q).toEqual({
+              name,
+              database,
+              query: 'select distinct ?type {?s a ?type}',
+              shared: true,
+              creator: 'admin',
+            });
+          }
         });
     });
   });

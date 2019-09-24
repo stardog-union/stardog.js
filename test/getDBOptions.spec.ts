@@ -7,7 +7,7 @@ import {
 } from './setup-database';
 import { unflatten } from 'flat';
 
-describe('db.getOptions()', () => {
+describe('options.get()', () => {
   const database = generateDatabaseName();
   let connection;
 
@@ -23,7 +23,7 @@ describe('db.getOptions()', () => {
       expect(res.status).toEqual(404);
     }));
 
-  it('should get the options of an DB', () =>
+  it('should get the options of a DB', () =>
     options
       .get({ connection, database })
       .then((res) => {
@@ -37,4 +37,44 @@ describe('db.getOptions()', () => {
           },
         })
       ));
+});
+
+describe('options.getAll()', () => {
+  const database = generateDatabaseName();
+  let connection;
+
+  beforeAll(seedDatabase(database));
+  afterAll(dropDatabase(database));
+
+  beforeEach(() => {
+    connection = ConnectionFactory();
+  });
+
+  it('should get all db config properties', () =>
+    options
+      .getAll({ connection, database })
+      .then((res) => {
+        expect(res.status).toEqual(200);
+        return res.json();
+      })
+      // FIXME: We need a better test than this:
+      .then((resJson) => expect(typeof resJson).toEqual('object')));
+});
+
+describe('options.getAvailable', () => {
+  let connection;
+
+  beforeEach(() => {
+    connection = ConnectionFactory();
+  });
+
+  it('should get all available config properties', () =>
+    options
+      .getAvailable({ connection })
+      .then((res) => {
+        expect(res.status).toEqual(200);
+        return res.json();
+      })
+      // FIXME: We need a better test than this:
+      .then((resJson) => expect(typeof resJson).toEqual('object')));
 });

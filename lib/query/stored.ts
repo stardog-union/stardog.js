@@ -16,6 +16,9 @@ export interface StoredQueryData {
   database: '*' | string;
   query: string;
   shared?: boolean;
+  /** Attributes introduced in Stardog version 6.2.2, which are optional in versions >= 6.2.2 and ignored in earlier versions. */
+  reasoning?: boolean;
+  description?: boolean;
 
   [key: string]: JsonPrimitive | undefined;
 }
