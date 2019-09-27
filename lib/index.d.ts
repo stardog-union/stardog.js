@@ -243,15 +243,6 @@ declare namespace Stardog {
         function remove(conn: Connection, database: string, transactionId: string, content: string, options: transaction.TransactionOptions, params?: object): Promise<transaction.TransactionResponse>;
 
         /**
-         * Gets a mapping of the namespaces used in a database.
-         *
-         * @param {Connection} conn the Stardog server connection
-         * @param {string} database the name of the database
-         * @param {object} params additional parameters if needed
-         */
-        function namespaces(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
-
-        /**
          * Exports the contents of a database.
          *
          * @param {Connection} conn the Stardog server connection
@@ -668,6 +659,26 @@ declare namespace Stardog {
              * @param {object} params additional parameters if needed
              */
             function get(conn: Connection, database: string, fileName: string, params?: object): Promise<HTTP.Body>;
+        }
+
+        namespace namespaces {
+          /**
+           * Gets a mapping of the namespaces used in a database.
+           *
+           * @param {Connection} conn the Stardog server connection
+           * @param {string} database the name of the database
+           * @param {object} params additional parameters if needed
+           */
+          function get(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
+
+          /**
+           * Gets a mapping of the namespaces used in a database.
+           *
+           * @param {Connection} conn the Stardog server connection
+           * @param {string} database the name of the database
+           * @param {object} params additional parameters if needed
+           */
+          function set(conn: Connection, database: string, fileOrContents: object | string): Promise<HTTP.Body>;
         }
     }
 
