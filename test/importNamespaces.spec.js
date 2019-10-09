@@ -10,7 +10,7 @@ const {
   ConnectionFactory,
 } = require('./setup-database');
 
-describe('namespaces.set()', () => {
+describe('namespaces.add()', () => {
   const database = generateDatabaseName();
   let conn;
 
@@ -23,7 +23,7 @@ describe('namespaces.set()', () => {
 
   it('should import namespaces from string contents', () =>
     db.namespaces
-      .set(conn, database, '@prefix newNamespace: <http://newNamespace.com> .')
+      .add(conn, database, '@prefix newNamespace: <http://newNamespace.com> .')
       .then(res => {
         expect(res.status).toBe(200);
         expect(res.body).toEqual({
@@ -45,7 +45,7 @@ describe('namespaces.set()', () => {
 
   it('should import namespaces from a file', () =>
     db.namespaces
-      .set(
+      .add(
         conn,
         database,
         fs.createReadStream(

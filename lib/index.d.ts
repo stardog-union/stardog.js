@@ -672,13 +672,17 @@ declare namespace Stardog {
           function get(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
 
           /**
-           * Gets a mapping of the namespaces used in a database.
+           * Extracts namespaces from an RDF file or RDF string and adds any
+           * new namespaces to those that already exist in the database.
            *
            * @param {Connection} conn the Stardog server connection
            * @param {string} database the name of the database
-           * @param {object} params additional parameters if needed
+           * @param {object|string} fileOrContents an RDF file or RDF string
+           * @param {object} options an object specifying the contentType of
+           *  the RDF string; used only if `fileOrContents` is a string and
+           *  defaults to 'text/turtle'
            */
-          function set(conn: Connection, database: string, fileOrContents: object | string): Promise<HTTP.Body>;
+          function add(conn: Connection, database: string, fileOrContents: object | string, options?: { contentType?: HTTP.RdfMimeType }): Promise<HTTP.Body>;
         }
     }
 
