@@ -672,8 +672,8 @@ declare namespace Stardog {
           function get(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
 
           /**
-           * Extracts namespaces from an RDF file or RDF string and adds any
-           * new namespaces to those that already exist in the database.
+           * Extracts namespaces from an RDF file or RDF string and adds new
+           * and updates existing namespaces in the database.
            *
            * @param {Connection} conn the Stardog server connection
            * @param {string} database the name of the database
