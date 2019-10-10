@@ -404,20 +404,6 @@ Expects the following parameters:
 
 Returns [`Promise<transaction.TransactionResponse>`](#transactionresponse)
 
-#### <a name="namespaces">`db.namespaces(conn, database, params)`</a>
-
-Gets a mapping of the namespaces used in a database.
-
-Expects the following parameters:
-
-- conn ([`Connection`](#connection))
-
-- database (`string`)
-
-- params (`object`)
-
-Returns [`Promise<HTTP.Body>`](#body)
-
 #### <a name="exportdata">`db.exportData(conn, database, options, params)`</a>
 
 Exports the contents of a database.
@@ -1103,6 +1089,39 @@ Expects the following parameters:
 - fileName (`string`)
 
 - params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+## <a name="namespaces">namespaces</a>
+
+#### <a name="get">`db.namespaces.get(conn, database, params)`</a>
+
+Gets a mapping of the namespaces used in a database.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="add">`db.namespaces.add(conn, database, fileOrContents, options)`</a>
+
+Extracts namespaces from an RDF file or RDF string and adds new
+and updates existing namespaces in the database.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- fileOrContents (`object | string`)
+
+- options ({ contentType?: [`RdfMimeType`](#rdfmimetype) })
 
 Returns [`Promise<HTTP.Body>`](#body)
 
