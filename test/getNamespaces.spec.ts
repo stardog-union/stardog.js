@@ -18,8 +18,8 @@ describe('getNamespaces()', () => {
   });
 
   it('should retrieve the namespace prefix bindings for the database', () =>
-    db
-      .namespaces({ connection, database })
+    db.namespaces
+      .get({ connection, database })
       .then((res) => {
         expect(res.status).toEqual(200);
         return res.json();

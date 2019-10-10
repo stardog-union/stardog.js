@@ -8,6 +8,16 @@ import * as graph from './graph';
 import * as reasoning from './reasoning';
 import * as docs from './docs';
 import * as versioning from './versioning';
+import * as namespaces from './namespaces';
 
 export * from './main';
-export { icv, transaction, options, docs, versioning, graph, reasoning };
+export {
+  icv,
+  transaction,
+  options,
+  docs,
+  versioning,
+  graph,
+  reasoning,
+  namespaces,
+};

@@ -20,7 +20,6 @@ import {
 import dbopts from '../db/dbopts';
 import { getFetchDispatcher } from '../request-utils';
 
-const namespacesRequestOptionsToGet = { database: { namespaces: true } };
 const dispatchAdminDbFetch = getFetchDispatcher({
   basePath: `admin/databases`,
   allowedQueryParams: ['graph-uri', 'to'],
@@ -230,30 +229,6 @@ export const remove = ({
     return resClone;
   });
 };
-
-export const namespaces = ({ connection, database }: BaseDatabaseOptions) =>
-  getOptions({
-    connection,
-    database,
-    optionsToGet: namespacesRequestOptionsToGet,
-  }).then((res) => {
-    const resClone = res.clone(); // just being safe, since we're mutating
-    const originalJsonFn = resClone.json.bind(resClone);
-    resClone.json = () =>
-      originalJsonFn().then((json: { 'database.namespaces': string[] }) => {
-        const namespaces = json['database.namespaces'] || [];
-        return namespaces.reduce(
-          (namespacesMap: { [key: string]: string }, namespace: string) => {
-            const [key, value] = namespace.split('=');
-            namespacesMap[key] = value;
-            return namespacesMap;
-          },
-          {} as { [key: string]: string }
-        );
-      });
-
-    return resClone;
-  });
 
 export const exportData = ({
   connection,
