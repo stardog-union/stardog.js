@@ -697,6 +697,14 @@ declare namespace Stardog {
         }
 
         interface AdditionalHandlers {
+            /**
+             * Specify this method if you wish to act on the HTTP response
+             * immediately, before any further stardog.js processing.
+             * NOTE: The stardog.js processing will continue, unless
+             * `onResponseStart` explicitly returns `false`.
+             * 
+             * @param {Response} res HTTP response object.
+             */
             onResponseStart(res: Response): boolean | void;
         }
 
