@@ -348,6 +348,17 @@ describe('query.execute()', () => {
         expect(res.body.results.bindings).toHaveLength(33);
       });
     });
+
+    it('should prevent further processing when `onResponseStart` explicitly returns `false`', () => {
+      execute(`select distinct ?s where { ?s ?p ?o }`, undefined, undefined, {
+        onResponseStart() {
+          return false;
+        },
+      }).then(res => {
+        expect(res.status).toBe(200);
+        expect(res.body.results).not.toBeDefined();
+      });
+    });
   });
 
   describe('paths', () => {
