@@ -697,7 +697,7 @@ declare namespace Stardog {
         }
 
         interface AdditionalHandlers {
-            onResponseStart(res: Response): void;
+            onResponseStart(res: Response): boolean | void;
         }
 
         /**
