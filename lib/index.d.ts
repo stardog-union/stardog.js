@@ -247,10 +247,13 @@ declare namespace Stardog {
          *
          * @param {Connection} conn the Stardog server connection
          * @param {string} database the name of the database to clear
-         * @param {object} options an object specifying the desired HTTP MIME type. Default: application/ld+json
-         * @param {object} params an object specifying the URI of a named graph to export. Default: ALL
+         * @param {object} options an object specifying the desired HTTP MIME
+         * type (Default: application/ld+json) and whether to return the raw
+         * response object.
+         * @param {object} params an object specifying the URI of a named graph
+         * to export. Default: ALL
          */
-        function exportData(conn: Connection, database: string, options?: { mimeType: HTTP.RdfMimeType }, params?: { graphUri: string }): Promise<HTTP.Body>;
+        function exportData(conn: Connection, database: string, options?: { mimeType: HTTP.RdfMimeType, rawResponse: boolean }, params?: { graphUri: string }): Promise<HTTP.Body>;
 
         /** Database options. */
         namespace options {

@@ -35,4 +35,14 @@ describe('exportDB()', () => {
         expect(res.status).toBe(200);
         expect(res.body).toHaveLength(33);
       }));
+
+  it('stream response', () =>
+    db.exportData(conn, database, { rawResponse: true }).then(res => {
+      expect(res.status).toBe(200);
+      expect(res.body.readable).toBe(true);
+      expect(res.body.bytesWritten).toBe(0);
+      res.json().then(jsonResponse => {
+        expect(jsonResponse).toHaveLength(33);
+      });
+    }));
 });
