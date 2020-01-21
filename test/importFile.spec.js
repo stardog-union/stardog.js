@@ -62,7 +62,7 @@ describe('namespaces.add()', () => {
           mappings: fs.readFileSync(
             path.join(__dirname, 'fixtures', 'csv_import_mappings.ttl')
           ),
-          properties,
+          properties: 'mappings.syntax=STARDOG',
         }
       )
       .then(res => {
@@ -75,8 +75,7 @@ describe('namespaces.add()', () => {
       })
       .then(res => {
         expect(res.status).toBe(200);
-        console.log(res.body.results);
-        // expect(res.body.results.bindings[0].o.value).toBe('Product Manager');
+        expect(res.body.results.bindings[0].o.value).toBe('E350');
       }));
 
   it('should import JSON files (mappings required)', () =>
