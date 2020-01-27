@@ -35,4 +35,47 @@ describe('exportDB()', () => {
         expect(res.status).toBe(200);
         expect(res.body).toHaveLength(33);
       }));
+
+  describe('additionalHandlers', () => {
+    it('onResponseStart should be called when execute response begins', () => {
+      let responseCompleted = false;
+
+      db
+        .exportData(conn, database, undefined, undefined, {
+          onResponseStart(res) {
+            expect(res.status).toBe(200);
+            expect(responseCompleted).toBe(false);
+          },
+        })
+        .then(() => {
+          responseCompleted = true;
+        });
+    });
+
+    it('should not interfere with the full response being passed back', () => {
+      db
+        .exportData(conn, database, undefined, undefined, {
+          onResponseStart(res) {
+            return res;
+          },
+        })
+        .then(res => {
+          expect(res.status).toBe(200);
+          expect(res.body).toHaveLength(33);
+        });
+    });
+
+    it('should prevent further processing when `onResponseStart` explicitly returns `false`', () => {
+      db
+        .exportData(conn, database, undefined, undefined, {
+          onResponseStart() {
+            return false;
+          },
+        })
+        .then(res => {
+          expect(res.status).toBe(200);
+          expect(res.body.length).toBeUndefined();
+        });
+    });
+  });
 });
