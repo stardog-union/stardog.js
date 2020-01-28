@@ -1141,7 +1141,7 @@ Object with the following values:
 
 Object with the following values:
 
-- onResponseStart (`boolean | void`)
+- onResponseStart (`(res: Response) => boolean | void`)
 
 #### <a name="property">`query.property(conn, database, config, params)`</a>
 

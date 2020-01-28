@@ -704,7 +704,7 @@ declare namespace Stardog {
              * 
              * @param {Response} res HTTP response object.
              */
-            onResponseStart(res: Response): boolean | void;
+            onResponseStart: (res: Response) => boolean | void;
         }
 
         /**
