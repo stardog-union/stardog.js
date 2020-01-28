@@ -16,7 +16,7 @@ csv.header=true
 unique.key.sets=(Model)
 `;
 
-describe('namespaces.add()', () => {
+describe('virtualGraphs.importFile()', () => {
   const database = generateDatabaseName();
   let conn;
 
