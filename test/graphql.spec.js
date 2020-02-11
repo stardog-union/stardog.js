@@ -125,6 +125,23 @@ type Episode {
       expect(res.body.data).toBeInstanceOf(Array);
     }));
 
+  it('updateSchema', () => {
+    const simplerSchema = `type Episode {
+  index: Int!
+  name: String!
+}`;
+
+    graphql
+      .updateSchema(conn, database, schemaName, simplerSchema)
+      .then(res => {
+        expect(res.status).toBe(200);
+        graphql.getSchema(conn, database, schemaName).then(response => {
+          expect(response.status).toBe(200);
+          expect(response.body.length).toBe(simplerSchema.length);
+        });
+      });
+  });
+
   it('explainAsJson=false', () =>
     Promise.all([
       server.status(conn, { databases: false }),

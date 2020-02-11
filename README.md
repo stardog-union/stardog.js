@@ -1372,6 +1372,24 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="updateschema">`query.graphql.updateSchema(conn, database, name, schema, params)`</a>
+
+Updates (or adds if non-existent) a GraphQL schema to the database
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- name (`string`)
+
+- schema (`object`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 #### <a name="getschema">`query.graphql.getSchema(conn, database, name, params)`</a>
 
 Retrieves a GraphQL schema from the database
