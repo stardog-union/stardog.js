@@ -85,6 +85,7 @@ const conn = new Connection({
 
 query.execute(conn, 'myDatabaseName', 'select distinct ?s where { ?s ?p ?o }', 'application/sparql-results+json', {
   limit: 10,
+  reasoning: true,
   offset: 0,
 }).then(({ body }) => {
   console.log(body.results.bindings);
