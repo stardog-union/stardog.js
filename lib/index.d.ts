@@ -1204,6 +1204,13 @@ declare namespace Stardog {
         function list(conn: Connection): Promise<HTTP.Body>;
 
         /**
+         * Retrieve a list of virtual graphs info
+         *
+         * @param {Connection} conn the Stardog server connection
+         */
+        function listInfo(conn: Connection): Promise<HTTP.Body>;
+
+        /**
          * Add a virtual graph to the system
          *
          * @param {Connection} conn the Stardog server connection
