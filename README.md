@@ -349,6 +349,20 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="model">`db.model(conn, database, params)`</a>
+
+Gets the model for a database.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 #### <a name="clear">`db.clear(conn, database, transactionId, params)`</a>
 
 Clears the contents of a database.
