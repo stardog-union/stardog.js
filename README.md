@@ -349,7 +349,7 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="model">`db.model(conn, database, params)`</a>
+#### <a name="model">`db.model(conn, database, options, params)`</a>
 
 Gets the model for a database.
 
@@ -358,6 +358,8 @@ Expects the following parameters:
 - conn ([`Connection`](#connection))
 
 - database (`string`)
+
+- options (`object`)
 
 - params (`object`)
 
