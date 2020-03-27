@@ -1897,6 +1897,16 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="listinfo">`virtualGraphs.listInfo(conn)`</a>
+
+Retrieve a list of virtual graphs info
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 #### <a name="add">`virtualGraphs.add(conn, name, mappings, options)`</a>
 
 Add a virtual graph to the system
