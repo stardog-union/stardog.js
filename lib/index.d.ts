@@ -1110,13 +1110,13 @@ declare namespace Stardog {
         type AllVgOptions = SharedOptions & RdbmsOptions & MongoOptions & CsvOptions;
         
         interface MappingsRequestOptions {
-            preferUntransformed?: boolean;
-            syntax?: string;
+          preferUntransformed?: boolean;
+          syntax?: string;
         }
         
         interface VgMeta { 
-            db?: string; 
-        };
+          db?: string; 
+        }
 
         /**
          * Retrieve a list of virtual graphs
