@@ -1108,12 +1108,15 @@ declare namespace Stardog {
         }
 
         type AllVgOptions = SharedOptions & RdbmsOptions & MongoOptions & CsvOptions;
-        type Meta = { db?: string; };
-
+        
         interface MappingsRequestOptions {
-          preferUntransformed?: boolean;
-          syntax?: string;
+            preferUntransformed?: boolean;
+            syntax?: string;
         }
+        
+        interface VgMeta { 
+            db?: string; 
+        };
 
         /**
          * Retrieve a list of virtual graphs
@@ -1129,7 +1132,7 @@ declare namespace Stardog {
          * @param {string} name the graph name
          * @param {string} mappings an RDF block specifying the mappings
          * @param {Options} options the JDBC (and other) options for the graph
-         * @param {Meta} meta database name and other graph specifications
+         * @param {VgMeta} meta database name and other graph specifications
          */
         function add<T extends AllVgOptions>(conn: Connection, name: string, mappings: string, options: T, meta?: Meta): Promise<HTTP.Body>;
 
@@ -1140,7 +1143,7 @@ declare namespace Stardog {
          * @param {string} name the graph name
          * @param {string} mappings an RDF block specifying the mappings
          * @param {Options} options the JDBC (and other) options for the graph
-         * @param {Meta} meta database name and other graph specifications
+         * @param {VgMeta} meta database name and other graph specifications
          */
         function update<T extends AllVgOptions>(conn: Connection, name: string, mappings: string, options: T, meta?: Meta): Promise<HTTP.Body>;
 
