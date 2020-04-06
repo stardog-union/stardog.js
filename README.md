@@ -1750,7 +1750,7 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="add">`virtualGraphs.add(conn, name, mappings, options)`</a>
+#### <a name="add">`virtualGraphs.add(conn, name, mappings, options, meta)`</a>
 
 Add a virtual graph to the system
 
@@ -1763,6 +1763,8 @@ Expects the following parameters:
 - mappings (`string`)
 
 - options ([`T`](#t))
+
+- meta (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -1779,6 +1781,8 @@ Expects the following parameters:
 - mappings (`string`)
 
 - options ([`T`](#t))
+
+- meta (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
