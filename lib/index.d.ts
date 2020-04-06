@@ -1134,7 +1134,7 @@ declare namespace Stardog {
          * @param {Options} options the JDBC (and other) options for the graph
          * @param {VgMeta} meta database name and other graph specifications
          */
-        function add<T extends AllVgOptions>(conn: Connection, name: string, mappings: string, options: T, meta?: Meta): Promise<HTTP.Body>;
+        function add<T extends AllVgOptions>(conn: Connection, name: string, mappings: string, options: T, meta?: VgMeta): Promise<HTTP.Body>;
 
         /**
          * Update a virtual graph in the system
@@ -1145,7 +1145,7 @@ declare namespace Stardog {
          * @param {Options} options the JDBC (and other) options for the graph
          * @param {VgMeta} meta database name and other graph specifications
          */
-        function update<T extends AllVgOptions>(conn: Connection, name: string, mappings: string, options: T, meta?: Meta): Promise<HTTP.Body>;
+        function update<T extends AllVgOptions>(conn: Connection, name: string, mappings: string, options: T, meta?: VgMeta): Promise<HTTP.Body>;
 
         /**
          * Remove a virtual graph from the system
