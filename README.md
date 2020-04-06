@@ -1740,7 +1740,7 @@ Object with the following values:
 - preferUntransformed (`boolean`)
 - syntax (`string`)
 
-#### <a name="virtualgraphmeta">VirtualGraphMeta</a>
+#### <a name="vgmeta">VgMeta</a>
 
 Object with the following values:
 
