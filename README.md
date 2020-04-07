@@ -1887,6 +1887,12 @@ Object with the following values:
 - preferUntransformed (`boolean`)
 - syntax (`string`)
 
+#### <a name="vgmeta">VgMeta</a>
+
+Object with the following values:
+
+- db (`string`)
+
 #### <a name="list">`virtualGraphs.list(conn)`</a>
 
 Retrieve a list of virtual graphs
@@ -1907,7 +1913,7 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="add">`virtualGraphs.add(conn, name, mappings, options)`</a>
+#### <a name="add">`virtualGraphs.add(conn, name, mappings, options, meta)`</a>
 
 Add a virtual graph to the system
 
@@ -1920,6 +1926,8 @@ Expects the following parameters:
 - mappings (`string`)
 
 - options ([`T`](#t))
+
+- meta ([`VgMeta`](#vgmeta))
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -1936,6 +1944,8 @@ Expects the following parameters:
 - mappings (`string`)
 
 - options ([`T`](#t))
+
+- meta ([`VgMeta`](#vgmeta))
 
 Returns [`Promise<HTTP.Body>`](#body)
 
