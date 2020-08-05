@@ -1339,7 +1339,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 ## <a name="graphql">graphql</a>
 
-#### <a name="execute">`query.graphql.execute(conn, database, query, variables, params)`</a>
+#### <a name="execute">`query.graphql.execute(conn, database, query, variables, params, additionalHandlers)`</a>
 
 Executes a GraphQL query
 
@@ -1354,6 +1354,8 @@ Expects the following parameters:
 - variables (`object`)
 
 - params (`object`)
+
+- additionalHandlers ([`AdditionalHandlers`](#additionalhandlers))
 
 Returns [`Promise<HTTP.Body>`](#body)
 
