@@ -30,15 +30,11 @@ describe('graph store protocol', () => {
       graph
         .doGet(conn, database)
         .then(res => {
-          expect(res.body).toContain(
-            'http://purl.org/dc/elements/1.1/publisher'
-          );
+          expect(res.body).toContain('http://purl.org/dc/elements/1.1/');
           return graph.doGet(conn, database, null);
         })
         .then(res => {
-          expect(res.body).toContain(
-            'http://purl.org/dc/elements/1.1/publisher'
-          );
+          expect(res.body).toContain('http://purl.org/dc/elements/1.1/');
         }));
 
     it('should retrieve other RDF serializations when specified', () =>
@@ -120,7 +116,8 @@ describe('graph store protocol', () => {
           return graph.doGet(conn, database, makeGraph('alice'));
         })
         .then(res => {
-          expect(res.body).toBe('[ ]');
+          const jsonBody = JSON.parse(res.body);
+          expect(jsonBody['@graph']).toHaveLength(0);
         }));
   });
 });
