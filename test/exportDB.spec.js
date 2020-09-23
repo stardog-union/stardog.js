@@ -23,7 +23,10 @@ describe('exportDB()', () => {
   it('should return a response with content-disposition header and the attachment export file', () =>
     db.exportData(conn, database).then(res => {
       expect(res.status).toBe(200);
-      expect(res.body).toHaveLength(33);
+      expect(
+        res.headers.get('content-disposition').startsWith('attachment')
+      ).toBe(true);
+      expect(res.body['@graph'].length).toBeGreaterThan(0);
     }));
 
   it('should return a response with content-disposition header and the attachment export file when using graph-uri param', () =>
@@ -33,7 +36,10 @@ describe('exportDB()', () => {
       })
       .then(res => {
         expect(res.status).toBe(200);
-        expect(res.body).toHaveLength(33);
+        expect(
+          res.headers.get('content-disposition').startsWith('attachment')
+        ).toBe(true);
+        expect(res.body['@graph'].length).toBeGreaterThan(0);
       }));
 
   describe('additionalHandlers', () => {
@@ -61,7 +67,10 @@ describe('exportDB()', () => {
         })
         .then(res => {
           expect(res.status).toBe(200);
-          expect(res.body).toHaveLength(33);
+          expect(
+            res.headers.get('content-disposition').startsWith('attachment')
+          ).toBe(true);
+          expect(res.body['@graph'].length).toBeGreaterThan(0);
         });
     });
 
@@ -74,7 +83,7 @@ describe('exportDB()', () => {
         })
         .then(res => {
           expect(res.status).toBe(200);
-          expect(res.body.length).toBeUndefined();
+          expect(res.body['@graph']).toBeUndefined();
         });
     });
   });
