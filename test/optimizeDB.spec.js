@@ -24,7 +24,10 @@ describe('optimizeDB()', () => {
       expect(res.status).toEqual(404);
     }));
 
-  it('should optimize an online DB', () =>
+  // TODO: This case is currently skipped because there is no way in Stardog
+  // 7.3.x to ensure that the DB is ready for optimization (so, this often
+  // errors out). The erroring out should be fixed in Stardog 7.4.1.
+  it.skip('should optimize an online DB', () =>
     db.optimize(conn, database).then(res => {
       expect(res.status).toEqual(200);
     }));

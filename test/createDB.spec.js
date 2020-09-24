@@ -30,6 +30,7 @@ describe('createDB()', () => {
         return db.create(conn, database);
       })
       .then(res => {
-        expect(res.status).toBe(409);
+        // Database already exists
+        expect(res.headers.get('sd-error-code')).toBe('0D0DE2');
       }));
 });
