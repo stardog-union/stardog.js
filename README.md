@@ -4,7 +4,7 @@ Universal Javascript fetch wrapper for communicating with the Stardog HTTP serve
 
 [![npm](https://img.shields.io/npm/v/stardog.svg?style=flat-square)](https://www.npmjs.com/package/stardog)
 
-<a href="http://stardog.com"><img src="http://stardog.com/img/stardog.png" style="margin: 0 auto; display: block; width: 250px"/></a>
+<a href="http://stardog.com"><img src="https://d33wubrfki0l68.cloudfront.net/66e9dcff51317cfc11b9f3d4ce2917a11ba81681/543c1/img/stardog-logo-optimized.svg" style="margin: 0 auto; display: block; width: 250px"/></a>
 
 ## What is it?
 
@@ -63,15 +63,19 @@ If you have publishing rights, BE SURE TO RUN `npm version (major|minor|patch)` 
 
 After releasing, be sure to push to master, including the tags (so that the release is reflected on GitHub).
 
-## Version details
+## Version/Support Details
 
-The current version of stardog.js has been tested against version 6.2.0 of Stardog. You are encouraged to use this library if you are using version 5 or greater of Stardog. However, there is very little code that is version specific in stardog.js. It is essentially just a convenience wrapper around `fetch`. It is very likely that many of the exposed methods will work on older versions of Stardog, but this has not been tested.
+Each release of stardog.js is tested against the most recent version of Stardog available at the time of the release. The relationship between versions of stardog.js and versions of Stardog is detailed in the following table:
 
-If you are using a really old version of Stardog (<= 3.0.0) you should stick with the legacy version of the library which is version 0.3.1.
+| stardog.js Version  | Supported Stardog Version(s) |
+| ------------------  | ---------------------------- |
+| 2.x.x               | 7.x.x                        |
+| 1.x.x               | 5.x.x, 6.x.x                 |
+| 0.x.x*              | any version < 5              |
 
-### Discontinued Versions
+_* = No longer supported_
 
-All versions of stardog.js prior to v1.0.0 have been discontinued and will not receive updates of any kind. If you are using a legacy version of stardog.js you can find the original documentation [here](http://stardog-union.github.io/stardog.js/docs/stardog.html). The most recent legacy version is 0.3.1.
+We support and maintain a particular version of stardog.js only if the corresponding Stardog version(s) is (are) officially supported and maintained. For example, we no longer support v0.x.x of stardog.js, as the corresponding Stardog versions are no longer supported. (That said, later versions of stardog.js will often _mostly_ work with earlier Stardog versions. We just don't test this or make any guarantees to that effect.)
 
 ## Quick Example
 ```js
