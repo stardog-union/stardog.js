@@ -17,7 +17,7 @@ describe('cluster.info()', () => {
     mockHeaders.set('content-type', 'application/json');
   });
 
-  it('should retrieve a JS object containing cluster information', done => {
+  it('should retrieve a JS object containing cluster information', () => {
     const mockSuccessResponse = {
       nodes: ['127.0.0.1:6000', '127.0.0.1:6001'],
       coordinator: '127.0.0.1:6000',
@@ -30,17 +30,7 @@ describe('cluster.info()', () => {
 
     jest.spyOn(Fetch, 'fetch').mockImplementation(() => mockFetchPromise);
 
-    cluster
-      .info(conn)
-      .then(res => {
-        expect(res.body.nodes.length).toEqual(2);
-        expect(res.body.nodes).toEqual(['127.0.0.1:6000', '127.0.0.1:6001']);
-        expect(res.body.coordinator).toEqual('127.0.0.1:6000');
-      })
-      .catch(err => {
-        console.log(err);
-        done.fail('There should not have been an error');
-      });
+    const clusterInfoPromise = cluster.info(conn);
 
     expect(Fetch.fetch).toHaveBeenCalledTimes(1);
     expect(Fetch.fetch).toHaveBeenCalledWith(
@@ -50,6 +40,10 @@ describe('cluster.info()', () => {
       }
     );
 
-    done();
+    return clusterInfoPromise.then(res => {
+      expect(res.body.nodes.length).toEqual(2);
+      expect(res.body.nodes).toEqual(['127.0.0.1:6000', '127.0.0.1:6001']);
+      expect(res.body.coordinator).toEqual('127.0.0.1:6000');
+    });
   });
 });
