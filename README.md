@@ -2095,3 +2095,24 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+## <a name="cluster">cluster</a>
+
+#### <a name="shutdown">`cluster.info(conn)`</a>
+
+Retrieves basic information about a Stardog cluster. 
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="status">`cluster.status(conn)`</a>
+
+Retrieves detailed status information about a Stardog cluster.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+Returns [`Promise<HTTP.Body>`](#body)

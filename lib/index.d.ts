@@ -1340,6 +1340,23 @@ declare namespace Stardog {
          */
         function getAll(conn: Connection, params?: object): Promise<HTTP.Body>
     }
+
+    /** Stardog HTTP cluster actions. */
+    export namespace cluster {
+        /** 
+         * Retrieves basic information about a Stardog cluster.
+         * 
+         * @param {Connection} conn the Stardog server connection
+         */
+        function info(conn: Connection): Promise<HTTP.Body>;
+
+        /** 
+         * Retrieves detailed status information about a Stardog cluster. 
+         * 
+         * @param {Connection} conn the Stardog server connection
+         */
+        function status(conn: Connection): Promise<HTTP.Body>;
+    }
 }
 
 // No idea why I need this, but this is what removes the extra level of nesting
