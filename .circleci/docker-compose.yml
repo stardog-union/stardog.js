@@ -1,0 +1,60 @@
+version: '2'
+services:
+  stardog1:
+    command: ["--port", "5821", "--home", "/var/opt/stardog"]
+    depends_on:
+    - zoo1
+    environment:
+      STARDOG_SERVER_JAVA_ARGS: -Xms2g -Xmx2g -XX:MaxDirectMemorySize=1g
+      THIS_HOST: stardog1
+      THIS_PORT: 5821
+      ZK_HOST_PORT: zoo1:2181
+    image: stardog/stardog:latest
+    ports:
+    - 5821:5821
+    restart: always
+    privileged: true
+    volumes:
+    - ../stardog-license-key.bin:/var/opt/stardog/stardog-license-key.bin
+    - ./cluster.properties:/var/opt/stardog/stardog.properties
+  stardog2:
+    command: ["--port", "5822", "--home", "/var/opt/stardog"]
+    depends_on:
+    - zoo1
+    environment:
+      STARDOG_SERVER_JAVA_ARGS: -Xms2g -Xmx2g -XX:MaxDirectMemorySize=1g
+      THIS_HOST: stardog2
+      THIS_PORT: 5822
+      ZK_HOST_PORT: zoo1:2181
+    image: stardog/stardog:latest
+    ports:
+    - 5822:5822
+    restart: always
+    privileged: true
+    volumes:
+    - ../stardog-license-key.bin:/var/opt/stardog/stardog-license-key.bin
+    - ./cluster.properties:/var/opt/stardog/stardog.properties
+  zoo1:
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=zoo1:2888:3888
+    image: zookeeper:3.4.14
+    ports:
+    - 2181
+    restart: always
+  # zoo2:
+  #   environment:
+  #     ZOO_MY_ID: 2
+  #     ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+  #   image: zookeeper:3.4.14
+  #   ports:
+  #   - 2181
+  #   restart: always
+  # zoo3:
+  #   environment:
+  #     ZOO_MY_ID: 3
+  #     ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+  #   image: zookeeper:3.4.14
+  #   ports:
+  #   - 2181
+  #   restart: always
