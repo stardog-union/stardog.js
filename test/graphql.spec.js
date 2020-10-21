@@ -177,16 +177,6 @@ type Episode {
     ]).then(results => {
       const [statusRes, res] = results;
       const stardogVersion = statusRes.body['dbms.version'].value;
-      const dataset = semver.gt(
-        semver.coerce(stardogVersion),
-        semver.coerce('7.4.1')
-      )
-        ? {
-            from: ['local named', 'default'],
-          }
-        : {
-            from: ['named', 'default'],
-          };
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('data');
       expect(res.body.data).toEqual({
