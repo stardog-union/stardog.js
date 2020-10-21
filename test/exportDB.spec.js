@@ -46,7 +46,7 @@ describe('exportDB()', () => {
     it('onResponseStart should be called when execute response begins', () => {
       let responseCompleted = false;
 
-      db
+      return db
         .exportData(conn, database, undefined, undefined, {
           onResponseStart(res) {
             expect(res.status).toBe(200);
@@ -58,7 +58,7 @@ describe('exportDB()', () => {
         });
     });
 
-    it('should not interfere with the full response being passed back', () => {
+    it('should not interfere with the full response being passed back', () =>
       db
         .exportData(conn, database, undefined, undefined, {
           onResponseStart(res) {
@@ -71,10 +71,9 @@ describe('exportDB()', () => {
             res.headers.get('content-disposition').startsWith('attachment')
           ).toBe(true);
           expect(res.body['@graph'].length).toBeGreaterThan(0);
-        });
-    });
+        }));
 
-    it('should prevent further processing when `onResponseStart` explicitly returns `false`', () => {
+    it('should prevent further processing when `onResponseStart` explicitly returns `false`', () =>
       db
         .exportData(conn, database, undefined, undefined, {
           onResponseStart() {
@@ -84,7 +83,6 @@ describe('exportDB()', () => {
         .then(res => {
           expect(res.status).toBe(200);
           expect(res.body['@graph']).toBeUndefined();
-        });
-    });
+        }));
   });
 });

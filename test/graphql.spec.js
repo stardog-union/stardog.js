@@ -10,7 +10,7 @@ const {
 } = require('./setup-database');
 
 const textPlan =
-  'prefix : <http://api.stardog.com/>\n\nFrom named\nFrom default\nProjection(?0, ?1) [#1]\n`─ MergeJoin(?0) [#1]\n   +─ Scan[POSC](?0, <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>, :Character) [#1]\n   `─ Scan[PSOC](?0, :name, ?1) [#1]\n';
+  'prefix : <http://api.stardog.com/>\n\nFrom local named\nFrom default\nProjection(?0, ?1) [#1]\n`─ MergeJoin(?0) [#1]\n   +─ Scan[POSC](?0, <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>, :Character) [#1]\n   `─ Scan[PSOC](?0, :name, ?1) [#1]\n';
 
 const jsonPlan = {
   cardinality: 1,
@@ -194,7 +194,7 @@ type Episode {
         // > 6.1.3 captures snapshot versions of 6.1.4
         plan: semver.gt(semver.coerce(stardogVersion), semver.coerce('6.1.3'))
           ? {
-              dataset: { from: ['named', 'default'] },
+              dataset: { from: ['local named', 'default'] },
               plan: jsonPlan,
               prefixes: { '': 'http://api.stardog.com/' },
             }
