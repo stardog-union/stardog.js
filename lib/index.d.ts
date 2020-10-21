@@ -210,16 +210,6 @@ declare namespace Stardog {
         function size(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
 
         /**
-         * Gets the model for a database.
-         *
-         * @param {Connection} conn the Stardog server connection
-         * @param {string} database the name of the database
-         * @param {object} options additional options if needed
-         * @param {object} params additional parameters if needed
-         */
-        function model(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
-
-        /**
          * Clears the contents of a database.
          *
          * @param {Connection} conn the Stardog server connection
