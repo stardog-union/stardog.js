@@ -217,7 +217,7 @@ declare namespace Stardog {
          * @param {object} options additional options if needed
          * @param {object} params additional parameters if needed
          */
-        function model(conn: Connection, database: string, options?: object, params?: object): Promise<HTTP.Body>;
+        function model(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
 
         /**
          * Clears the contents of a database.
