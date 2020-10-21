@@ -1099,7 +1099,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 ## <a name="namespaces">namespaces</a>
 
-#### <a name="get">`db.namespaces.get(conn, database)`</a>
+#### <a name="get">`db.namespaces.get(conn, database, params)`</a>
 
 Gets a mapping of the namespaces used in a database.
 
@@ -1108,6 +1108,8 @@ Expects the following parameters:
 - conn ([`Connection`](#connection))
 
 - database (`string`)
+
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -1146,7 +1148,7 @@ Object with the following values:
 
 Object with the following values:
 
-- onResponseStart (`(res: Response) => boolean | void`)
+- onResponseStart (`void`)
 
 #### <a name="property">`query.property(conn, database, config, params)`</a>
 
@@ -1986,28 +1988,6 @@ Expects the following parameters:
 - name (`string`)
 
 - requestOptions ([`MappingsRequestOptions`](#mappingsrequestoptions))
-
-Returns [`Promise<HTTP.Body>`](#body)
-
-#### <a name="importfile">`virtualGraphs.importFile(conn, file, fileType, database, importOptions)`</a>
-
-Import a JSON or CSV file into a database via `virtual import`.
-
-Expects the following parameters:
-
-- conn ([`Connection`](#connection))
-
-- file (`object`)
-
-- fileType (`string`)
-
-- database (`string`)
-
-- importOptions (`{
-          mappings?: string,
-          properties?: string,
-          namedGraph?: string,
-        }`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 

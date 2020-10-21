@@ -704,7 +704,7 @@ declare namespace Stardog {
              * 
              * @param {Response} res HTTP response object.
              */
-            onResponseStart: (res: Response) => boolean | void;
+            onResponseStart(res: Response): boolean | void;
         }
 
         /**
@@ -1268,21 +1268,6 @@ declare namespace Stardog {
          * @param {string} name the graph name
          */
         function mappings(conn: Connection, name: string, requestOptions?: MappingsRequestOptions): Promise<HTTP.Body>;
-
-        /**
-         * Import a JSON or CSV file into a database via `virtual import`.
-         *
-         * @param {Connection} conn the Stardog server connection
-         * @param {object} file the file or its contents
-         * @param {string} fileType the file type ('DELIMITED' or 'JSON')
-         * @param {string} database the name of the database target
-         * @param {object} importOptions additional import data (mappings, properties, namedGraph)
-         */
-        function importFile(conn: Connection, file: object, fileType: string, database: string, importOptions?: {
-          mappings?: string,
-          properties?: string,
-          namedGraph?: string,
-        }): Promise<HTTP.Body>;
     }
 
     /** Actions to work with server-wide stored functions */
