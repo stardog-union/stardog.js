@@ -88,9 +88,10 @@ exports.generateRandomString = () =>
     charset: 'alphabetic',
   });
 
-exports.ConnectionFactory = (port = 5820) =>
+exports.ConnectionFactory = () =>
   new Connection({
     username: 'admin',
     password: 'admin',
-    endpoint: `http://localhost:${port}`,
+    endpoint: 'http://localhost:5820',
+    // endpoint: 'http://localhost:61941',
   });
