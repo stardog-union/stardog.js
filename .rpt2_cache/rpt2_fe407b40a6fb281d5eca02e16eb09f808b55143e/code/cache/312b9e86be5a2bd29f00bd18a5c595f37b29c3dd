@@ -1,0 +1,1 @@
+{"map":"{\"version\":3,\"file\":\"index.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../lib/user/index.ts\"],\"names\":[],\"mappings\":\"AAAA,cAAc,QAAQ,CAAC\"}","code":"export * from './main';\r\n//# sourceMappingURL=index.js.map","dts":{"name":"/Users/jason/Projects/stardog.js/dist/weee/user/index.d.ts","writeByteOrderMark":false,"text":"export * from './main';\r\n"}}

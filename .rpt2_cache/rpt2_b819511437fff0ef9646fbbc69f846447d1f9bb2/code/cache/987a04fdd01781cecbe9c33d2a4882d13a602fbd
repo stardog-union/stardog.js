@@ -1,0 +1,1 @@
+{"map":"{\"version\":3,\"file\":\"index.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../lib/user/index.ts\"],\"names\":[],\"mappings\":\"AAAA;;GAEG;AACH,cAAc,QAAQ,CAAC\"}","code":"/**\r\n * @module stardogjs.user\r\n */\r\nexport * from './main';\r\n//# sourceMappingURL=index.js.map"}
