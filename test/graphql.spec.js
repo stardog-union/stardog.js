@@ -10,7 +10,7 @@ const {
 } = require('./setup-database');
 
 const textPlan =
-  'prefix : <http://api.stardog.com/>\n\nFrom local named\nFrom default\nProjection(?0, ?1) [#1]\n`─ MergeJoin(?0) [#1]\n   +─ Scan[POSC](?0, <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>, :Character) [#1]\n   `─ Scan[PSOC](?0, :name, ?1) [#1]\n';
+  'prefix : <http://api.stardog.com/>\n\nFrom all\nProjection(?0, ?1) [#1]\n`─ MergeJoin(?0) [#1]\n   +─ Scan[POSC](?0, <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>, :Character) [#1]\n   `─ Scan[PSOC](?0, :name, ?1) [#1]\n';
 
 const jsonPlan = {
   cardinality: 1,
@@ -126,15 +126,7 @@ type Episode {
     }));
 
   it('updateSchema', () => {
-    const simplerSchema = `schema {
-  query: QueryType
-}
-
-type QueryType {
-  Episode: Episode
-}
-
-type Episode {
+    const simplerSchema = `type Episode {
   index: Int!
   name: String!
 }`;
@@ -168,7 +160,7 @@ type Episode {
           fields: { '0': { '1': 'name' } },
           plan: textPlan,
           sparql:
-            'SELECT *\nFROM <tag:stardog:api:context:local>\n{\n?0 rdf:type :Character .\n?0 :name ?1 .\n}\n',
+            'SELECT *\nFROM <tag:stardog:api:context:all>\n{\n?0 rdf:type :Character .\n?0 :name ?1 .\n}\n',
         });
       } else {
         // Argument is not supported before 6.1.4
@@ -199,12 +191,12 @@ type Episode {
       expect(res.body).toHaveProperty('data');
       expect(res.body.data).toEqual({
         sparql:
-          'SELECT *\nFROM <tag:stardog:api:context:local>\n{\n?0 rdf:type :Character .\n?0 :name ?1 .\n}\n',
+          'SELECT *\nFROM <tag:stardog:api:context:all>\n{\n?0 rdf:type :Character .\n?0 :name ?1 .\n}\n',
         fields: { '0': { '1': 'name' } },
         // > 6.1.3 captures snapshot versions of 6.1.4
         plan: semver.gt(semver.coerce(stardogVersion), semver.coerce('6.1.3'))
           ? {
-              dataset,
+              dataset: { from: 'all' },
               plan: jsonPlan,
               prefixes: { '': 'http://api.stardog.com/' },
             }

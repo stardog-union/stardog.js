@@ -11,9 +11,7 @@ const {
   ConnectionFactory,
 } = require('./setup-database');
 
-// TODO: Skipped for now due to versioning not working in Stardog 7+.
-// Unskip these when Stardog 7+ supports versioning.
-describe.skip('versioning', () => {
+describe('versioning', () => {
   const database = generateDatabaseName();
   let conn;
 
