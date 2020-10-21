@@ -185,6 +185,16 @@ type Episode {
     ]).then(results => {
       const [statusRes, res] = results;
       const stardogVersion = statusRes.body['dbms.version'].value;
+      const dataset = semver.gt(
+        semver.coerce(stardogVersion),
+        semver.coerce('7.4.1')
+      )
+        ? {
+            from: ['local named', 'default'],
+          }
+        : {
+            from: ['named', 'default'],
+          };
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('data');
       expect(res.body.data).toEqual({
@@ -194,7 +204,7 @@ type Episode {
         // > 6.1.3 captures snapshot versions of 6.1.4
         plan: semver.gt(semver.coerce(stardogVersion), semver.coerce('6.1.3'))
           ? {
-              dataset: { from: ['local named', 'default'] },
+              dataset,
               plan: jsonPlan,
               prefixes: { '': 'http://api.stardog.com/' },
             }
