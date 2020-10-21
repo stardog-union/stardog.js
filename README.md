@@ -53,6 +53,18 @@ In order to contribute changes, all test cases must pass. With the Stardog serve
 npm test
 ```
 
+To test the cluster commands you will need to first start a Stardog cluster then run the cluster suite. The easiest way to do this is to run docker-compose to start a cluster:
+
+```bash
+docker-compose -f .circleci/docker-compose.yml up
+```
+
+Then run the cluster test suite in `test/cluster`:
+
+```bash
+npm run test:cluster
+```
+
 ### Contributing
 
 Fork, clone and develop, write or amend tests, and then open a PR. All PRs go against "master". This project uses [prettier](https://github.com/prettier/prettier) on file commit, so don't worry about style as it'll just get rewritten when you commit your changes.
@@ -2095,3 +2107,24 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+## <a name="cluster">cluster</a>
+
+#### <a name="shutdown">`cluster.info(conn)`</a>
+
+Retrieves basic information about a Stardog cluster. 
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="status">`cluster.status(conn)`</a>
+
+Retrieves detailed status information about a Stardog cluster.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+Returns [`Promise<HTTP.Body>`](#body)

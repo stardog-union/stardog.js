@@ -5,4 +5,4 @@ node_modules/
 dist/**
 .vscode/
 .rpt2_cache/
-
+stardog-license-key.bin
