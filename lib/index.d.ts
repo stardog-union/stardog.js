@@ -847,17 +847,6 @@ declare namespace Stardog {
             function addSchema(conn: Connection, database: string, name: string, schema: object, params?: object): Promise<HTTP.Body>
 
             /**
-             * Updates (or adds if non-existent) a GraphQL schema to the database
-             *
-             * @param {Connection} conn the Stardog server connection
-             * @param {string} database the database name
-             * @param {string} name the name of the schema
-             * @param {object} schema an object representing the schema
-             * @param {object} params additional parameters if needed
-             */
-            function updateSchema(conn: Connection, database: string, name: string, schema: object, params?: object): Promise<HTTP.Body>
-
-            /**
              * Retrieves a GraphQL schema from the database
              *
              * @param {Connection} conn the Stardog server connection
