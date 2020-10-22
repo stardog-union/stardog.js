@@ -3,6 +3,3 @@ bower_components/
 node_modules/
 .*~
 dist/**
-.vscode/
-.rpt2_cache/
-

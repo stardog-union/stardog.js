@@ -243,6 +243,15 @@ declare namespace Stardog {
         function remove(conn: Connection, database: string, transactionId: string, content: string, options: transaction.TransactionOptions, params?: object): Promise<transaction.TransactionResponse>;
 
         /**
+         * Gets a mapping of the namespaces used in a database.
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} database the name of the database
+         * @param {object} params additional parameters if needed
+         */
+        function namespaces(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
+
+        /**
          * Exports the contents of a database.
          *
          * @param {Connection} conn the Stardog server connection
@@ -659,29 +668,6 @@ declare namespace Stardog {
              * @param {object} params additional parameters if needed
              */
             function get(conn: Connection, database: string, fileName: string, params?: object): Promise<HTTP.Body>;
-        }
-
-        namespace namespaces {
-          /**
-           * Gets a mapping of the namespaces used in a database.
-           *
-           * @param {Connection} conn the Stardog server connection
-           * @param {string} database the name of the database
-           */
-          function get(conn: Connection, database: string): Promise<HTTP.Body>;
-
-          /**
-           * Extracts namespaces from an RDF file or RDF string and adds new
-           * and updates existing namespaces in the database.
-           *
-           * @param {Connection} conn the Stardog server connection
-           * @param {string} database the name of the database
-           * @param {object|string} fileOrContents an RDF file or RDF string
-           * @param {object} options an object specifying the contentType of
-           *  the RDF string; used only if `fileOrContents` is a string and
-           *  defaults to 'text/turtle'
-           */
-          function add(conn: Connection, database: string, fileOrContents: object | string, options?: { contentType?: HTTP.RdfMimeType }): Promise<HTTP.Body>;
         }
     }
 
