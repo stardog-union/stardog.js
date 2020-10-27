@@ -405,6 +405,20 @@ Expects the following parameters:
 
 Returns [`Promise<transaction.TransactionResponse>`](#transactionresponse)
 
+#### <a name="namespaces">`db.namespaces(conn, database, params)`</a>
+
+Gets a mapping of the namespaces used in a database.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 #### <a name="exportdata">`db.exportData(conn, database, options, params)`</a>
 
 Exports the contents of a database.
@@ -1093,39 +1107,6 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-## <a name="namespaces">namespaces</a>
-
-#### <a name="get">`db.namespaces.get(conn, database, params)`</a>
-
-Gets a mapping of the namespaces used in a database.
-
-Expects the following parameters:
-
-- conn ([`Connection`](#connection))
-
-- database (`string`)
-
-- params (`object`)
-
-Returns [`Promise<HTTP.Body>`](#body)
-
-#### <a name="add">`db.namespaces.add(conn, database, fileOrContents, options)`</a>
-
-Extracts namespaces from an RDF file or RDF string and adds new
-and updates existing namespaces in the database.
-
-Expects the following parameters:
-
-- conn ([`Connection`](#connection))
-
-- database (`string`)
-
-- fileOrContents (`object | string`)
-
-- options ({ contentType?: [`RdfMimeType`](#rdfmimetype) })
-
-Returns [`Promise<HTTP.Body>`](#body)
-
 ## <a name="query">query</a>
 
 #### <a name="querytype">QueryType</a>
@@ -1144,7 +1125,7 @@ Object with the following values:
 
 Object with the following values:
 
-- onResponseStart (`void`)
+- onResponseStart (`boolean | void`)
 
 #### <a name="property">`query.property(conn, database, config, params)`</a>
 
@@ -1362,24 +1343,6 @@ Returns [`Promise<HTTP.Body>`](#body)
 #### <a name="addschema">`query.graphql.addSchema(conn, database, name, schema, params)`</a>
 
 Adds a GraphQL schema to the database
-
-Expects the following parameters:
-
-- conn ([`Connection`](#connection))
-
-- database (`string`)
-
-- name (`string`)
-
-- schema (`object`)
-
-- params (`object`)
-
-Returns [`Promise<HTTP.Body>`](#body)
-
-#### <a name="updateschema">`query.graphql.updateSchema(conn, database, name, schema, params)`</a>
-
-Updates (or adds if non-existent) a GraphQL schema to the database
 
 Expects the following parameters:
 
@@ -1919,7 +1882,7 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="update">`virtualGraphs.update(conn, name, mappings, options)`</a>
+#### <a name="update">`virtualGraphs.update(conn, name, mappings, options, meta)`</a>
 
 Update a virtual graph in the system
 
