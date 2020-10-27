@@ -10,7 +10,7 @@ describe('queryList()', () => {
     conn = ConnectionFactory();
   });
 
-  it.skip('should return the number of global running queries', () =>
+  it('should return the number of global running queries', () =>
     query.list(conn).then(res => {
       expect(res.status).toEqual(200);
       expect(res.body.queries).toHaveLength(0);
