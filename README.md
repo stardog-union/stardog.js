@@ -81,8 +81,9 @@ Each release of stardog.js is tested against the most recent version of Stardog 
 
 | stardog.js Version  | Supported Stardog Version(s) |
 | ------------------  | ---------------------------- |
-| 2.x.x               | 7.x.x                        |
-| 1.x.x               | 5.x.x, 6.x.x                 |
+| 3.x.x               | 7.x.x                        |
+| 2.x.x               | 6.x.x                        |
+| 1.x.x*              | 5.x.x                        |
 | 0.x.x*              | any version < 5              |
 
 _* = No longer supported_
