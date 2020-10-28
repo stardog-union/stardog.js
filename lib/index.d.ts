@@ -1282,11 +1282,104 @@ declare namespace Stardog {
         function info(conn: Connection): Promise<HTTP.Body>;
 
         /** 
-         * Retrieves detailed status information about a Stardog cluster. 
+         * Retrieves detailed status information about a Stardog cluster.
          * 
          * @param {Connection} conn the Stardog server connection
          */
         function status(conn: Connection): Promise<HTTP.Body>;
+    }
+
+    export namespace dataSources {
+        /**
+         * Retrieve a list of data sources
+         *
+         * @param {Connection} conn the Stardog server connection
+         */
+        function list(conn: Connection): Promise<HTTP.Body>;
+
+        /**
+         * Retrieve a list of data sources info
+         *
+         * @param {Connection} conn the Stardog server connection
+         */
+        function listInfo(conn: Connection): Promise<HTTP.Body>;
+
+        /**
+         * Retrieve the named data source info
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         */
+        function info(conn: Connection, name: string): Promise<HTTP.Body>;
+
+        /**
+         * Add a data source to the system
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         * @param {Options} options the JDBC (and other) options for the data source
+         */
+        function add<T>(conn: Connection, name: string, options: T): Promise<HTTP.Body>;
+
+        /**
+         * Update the named data source in the system
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         * @param {Options} options the JDBC (and other) options for the data source
+         */
+        function update<T>(conn: Connection, name: string, options: T): Promise<HTTP.Body>;
+
+        /**
+         * Remove the named data source from the system
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         */
+        function remove(conn: Connection, name: string): Promise<HTTP.Body>;
+
+        /**
+         * Bring the named data source online
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         */
+        function online(conn: Connection, name: string): Promise<HTTP.Body>;
+
+        /**
+         * Determine if the named data source is available
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         */
+        function available(conn: Connection, name: string): Promise<HTTP.Body>;
+
+        /**
+         * Retrieve the named data source options
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         */
+        function options(conn: Connection, name: string): Promise<HTTP.Body>;
+
+        /**
+         * Retrieve the named data source metadata
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         * @param {object} options additional options if needed
+         */
+        function getMetadata(conn: Connection, name: string, options: object): Promise<HTTP.Body>;
+
+        /**
+         * Update the named data source metadata
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         * @param {Metadata} metadata the data source metadata
+         * @param {object} options additional options if needed
+         */
+        function updateMetadata<T>(conn: Connection, name: string, metadata: T, options: object): Promise<HTTP.Body>;
     }
 }
 
