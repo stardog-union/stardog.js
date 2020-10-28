@@ -324,22 +324,6 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="copy">`db.copy(conn, database, destination, params)`</a>
-
-Makes a copy of a database.
-
-Expects the following parameters:
-
-- conn ([`Connection`](#connection))
-
-- database (`string`)
-
-- destination (`string`)
-
-- params (`object`)
-
-Returns [`Promise<HTTP.Body>`](#body)
-
 #### <a name="list">`db.list(conn, params)`</a>
 
 Gets a list of all databases on a Stardog server.
@@ -949,98 +933,6 @@ Expects the following parameters:
 - conn ([`Connection`](#connection))
 
 - database (`string`)
-
-- params (`object`)
-
-Returns [`Promise<HTTP.Body>`](#body)
-
-## <a name="versioning">versioning</a>
-
-#### <a name="query">`db.versioning.query(conn, database, query, accept, params)`</a>
-
-Executes a SPARQL query over the versioning history
-
-Expects the following parameters:
-
-- conn ([`Connection`](#connection))
-
-- database (`string`)
-
-- query (`string`)
-
-- accept ([`SparqlMimeType`](#sparqlmimetype))
-
-- params (`object`)
-
-Returns [`Promise<HTTP.Body>`](#body)
-
-#### <a name="commit">`db.versioning.commit(conn, database, transactionId, commitMsg, params)`</a>
-
-Commits a transaction into versioning
-
-Expects the following parameters:
-
-- conn ([`Connection`](#connection))
-
-- database (`string`)
-
-- transactionId (`string`)
-
-- commitMsg (`string`)
-
-- params (`object`)
-
-Returns [`Promise<HTTP.Body>`](#body)
-
-#### <a name="createtag">`db.versioning.createTag(conn, database, revisionId, tagLogMsg, params)`</a>
-
-Creates a new tag
-
-Expects the following parameters:
-
-- conn ([`Connection`](#connection))
-
-- database (`string`)
-
-- revisionId (`string`)
-
-- tagLogMsg (`string`)
-
-- params (`object`)
-
-Returns [`Promise<HTTP.Body>`](#body)
-
-#### <a name="deletetag">`db.versioning.deleteTag(conn, database, revisionId, params)`</a>
-
-Deletes a tag
-
-Expects the following parameters:
-
-- conn ([`Connection`](#connection))
-
-- database (`string`)
-
-- revisionId (`string`)
-
-- params (`object`)
-
-Returns [`Promise<HTTP.Body>`](#body)
-
-#### <a name="revert">`db.versioning.revert(conn, database, fromRevisionId, toRevisionId, logMsg, params)`</a>
-
-Reverts to a previous commit
-
-Expects the following parameters:
-
-- conn ([`Connection`](#connection))
-
-- database (`string`)
-
-- fromRevisionId (`string`)
-
-- toRevisionId (`string`)
-
-- logMsg (`string`)
 
 - params (`object`)
 
@@ -1950,7 +1842,7 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="update">`virtualGraphs.update(conn, name, mappings, options)`</a>
+#### <a name="update">`virtualGraphs.update(conn, name, mappings, options, meta)`</a>
 
 Update a virtual graph in the system
 
@@ -2110,9 +2002,9 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 ## <a name="cluster">cluster</a>
 
-#### <a name="shutdown">`cluster.info(conn)`</a>
+#### <a name="info">`cluster.info(conn)`</a>
 
-Retrieves basic information about a Stardog cluster. 
+Retrieves basic information about a Stardog cluster.
 
 Expects the following parameters:
 
@@ -2122,10 +2014,11 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="status">`cluster.status(conn)`</a>
 
-Retrieves detailed status information about a Stardog cluster.
+Retrieves detailed status information about a Stardog cluster. 
 
 Expects the following parameters:
 
 - conn ([`Connection`](#connection))
 
 Returns [`Promise<HTTP.Body>`](#body)
+
