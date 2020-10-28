@@ -32,7 +32,7 @@ describe('data_sources', () => {
       if (!exists) {
         return dataSources.add(conn, aDSName, aOptions);
       }
-      return Promise.resolve({ status: 201 });
+      return res;
     });
 
   const assureNotExists = () =>
@@ -42,7 +42,7 @@ describe('data_sources', () => {
       if (exists) {
         return dataSources.remove(conn, aDSName);
       }
-      return Promise.resolve({ status: 204 });
+      return res;
     });
 
   describe('list', () => {
