@@ -2014,11 +2014,151 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="status">`cluster.status(conn)`</a>
 
-Retrieves detailed status information about a Stardog cluster. 
+Retrieves detailed status information about a Stardog cluster.
 
 Expects the following parameters:
 
 - conn ([`Connection`](#connection))
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+## <a name="datasources">dataSources</a>
+
+#### <a name="list">`dataSources.list(conn)`</a>
+
+Retrieve a list of data sources
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="listinfo">`dataSources.listInfo(conn)`</a>
+
+Retrieve a list of data sources info
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="info">`dataSources.info(conn, name)`</a>
+
+Retrieve the named data source info
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="add">`dataSources.add(conn, name, options)`</a>
+
+Add a data source to the system
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+- options ([`T`](#t))
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="update">`dataSources.update(conn, name, options)`</a>
+
+Update the named data source in the system
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+- options ([`T`](#t))
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="remove">`dataSources.remove(conn, name)`</a>
+
+Remove the named data source from the system
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="online">`dataSources.online(conn, name)`</a>
+
+Bring the named data source online
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="available">`dataSources.available(conn, name)`</a>
+
+Determine if the named data source is available
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="options">`dataSources.options(conn, name)`</a>
+
+Retrieve the named data source options
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="getmetadata">`dataSources.getMetadata(conn, name, options)`</a>
+
+Retrieve the named data source metadata
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+- options (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="updatemetadata">`dataSources.updateMetadata(conn, name, metadata, options)`</a>
+
+Update the named data source metadata
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+- metadata ([`T`](#t))
+
+- options (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 

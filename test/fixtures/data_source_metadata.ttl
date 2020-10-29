@@ -1,0 +1,27 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix tbl: <http://system.stardog.com/registry/jdbcDataSource/tableMetadata/table/> .
+@prefix swrlb: <http://www.w3.org/2003/11/swrlb#> .
+@prefix col: <http://system.stardog.com/registry/jdbcDataSource/tableMetadata/column/> .
+@prefix qtdef: <http://system.stardog.com/registry/jdbcDataSource/table/table#> .
+@prefix tblmd: <http://system.stardog.com/registry/jdbcDataSource/tableMetadata/> .
+@prefix : <http://api.stardog.com/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix tbldef: <http://system.stardog.com/registry/jdbcDataSource/tableMetadata/table#> .
+@prefix jdbcmd: <http://system.stardog.com/registry/jdbcDataSourceMetadata/> .
+@prefix tbltype: <http://system.stardog.com/registry/jdbcDataSource/table/tableType/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix coldef: <http://system.stardog.com/registry/jdbcDataSource/tableMetadata/column#> .
+@prefix swrl: <http://www.w3.org/2003/11/swrl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix qt: <http://system.stardog.com/registry/jdbcDataSource/table/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix jdbcds: <http://system.stardog.com/registry/jdbcDataSource/> .
+@prefix reg: <http://system.stardog.com/registry/> .
+@prefix stardog: <tag:stardog:api:> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+
+<data-source://MyDataSource> jdbcmd:name "MyDataSource" .
