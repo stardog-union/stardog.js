@@ -1343,6 +1343,7 @@ declare namespace Stardog {
          *
          * @param {Connection} conn the Stardog server connection
          * @param {string} name the data source name
+         * @param {object} params the query string parameters
          */
         function online(conn: Connection, name: string): Promise<HTTP.Body>;
 
