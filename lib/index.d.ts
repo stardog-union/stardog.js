@@ -1187,6 +1187,14 @@ declare namespace Stardog {
         function remove(conn: Connection, name: string): Promise<HTTP.Body>;
 
         /**
+         * Bring a virtual graph online
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         */
+        function online(conn: Connection, name: string): Promise<HTTP.Body>;
+
+        /**
          * Determine if the named virtual graph is available
          *
          * @param {Connection} conn the Stardog server connection

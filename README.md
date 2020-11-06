@@ -1872,6 +1872,18 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="online">`virtualGraphs.online(conn, name)`</a>
+
+Bring a virtual graph online
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 #### <a name="available">`virtualGraphs.available(conn, name)`</a>
 
 Determine if the named virtual graph is available
