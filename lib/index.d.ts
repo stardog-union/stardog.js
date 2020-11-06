@@ -1190,7 +1190,7 @@ declare namespace Stardog {
          * Bring a virtual graph online
          *
          * @param {Connection} conn the Stardog server connection
-         * @param {string} name the data source name
+         * @param {string} name the graph name
          */
         function online(conn: Connection, name: string): Promise<HTTP.Body>;
 
