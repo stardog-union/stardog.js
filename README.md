@@ -2084,7 +2084,7 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="remove">`dataSources.remove(conn, name)`</a>
+#### <a name="remove">`dataSources.remove(conn, name, params)`</a>
 
 Remove the named data source from the system
 
@@ -2093,6 +2093,8 @@ Expects the following parameters:
 - conn ([`Connection`](#connection))
 
 - name (`string`)
+
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
