@@ -1140,6 +1140,7 @@ declare namespace Stardog {
         
         interface VgMeta { 
           db?: string; 
+          dataSource?: string;
         }
 
         /**
@@ -1163,7 +1164,7 @@ declare namespace Stardog {
          * @param {string} name the graph name
          * @param {string} mappings an RDF block specifying the mappings
          * @param {Options} options the JDBC (and other) options for the graph
-         * @param {VgMeta} meta database name and other graph specifications
+         * @param {VgMeta} meta database name, data source, and other graph specifications
          */
         function add<T extends AllVgOptions>(conn: Connection, name: string, mappings: string, options: T, meta?: VgMeta): Promise<HTTP.Body>;
 
@@ -1174,7 +1175,7 @@ declare namespace Stardog {
          * @param {string} name the graph name
          * @param {string} mappings an RDF block specifying the mappings
          * @param {Options} options the JDBC (and other) options for the graph
-         * @param {VgMeta} meta database name and other graph specifications
+         * @param {VgMeta} meta database name, data source, and other graph specifications
          */
         function update<T extends AllVgOptions>(conn: Connection, name: string, mappings: string, options: T, meta?: VgMeta): Promise<HTTP.Body>;
 

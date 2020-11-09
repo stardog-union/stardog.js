@@ -1803,6 +1803,7 @@ Object with the following values:
 Object with the following values:
 
 - db (`string`)
+- dataSource (`string`)
 
 #### <a name="list">`virtualGraphs.list(conn)`</a>
 
