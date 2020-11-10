@@ -1803,6 +1803,7 @@ Object with the following values:
 Object with the following values:
 
 - db (`string`)
+- dataSource (`string`)
 
 #### <a name="list">`virtualGraphs.list(conn)`</a>
 
@@ -1863,6 +1864,18 @@ Returns [`Promise<HTTP.Body>`](#body)
 #### <a name="remove">`virtualGraphs.remove(conn, name)`</a>
 
 Remove a virtual graph from the system
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="online">`virtualGraphs.online(conn, name)`</a>
+
+Bring a virtual graph online
 
 Expects the following parameters:
 
