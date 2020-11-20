@@ -207,6 +207,18 @@ Takes the following params:
 Returns `string`
 ## <a name="server">server</a>
 
+#### <a name="properties">`server.properties(conn, params)`</a>
+
+Retrieves all server properties, or the property specified by name. 
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- params (`{ name?: boolean; }`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 #### <a name="shutdown">`server.shutdown(conn, params)`</a>
 
 Shuts down a Stardog server. 

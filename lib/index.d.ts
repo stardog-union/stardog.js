@@ -112,6 +112,14 @@ declare namespace Stardog {
 
     /** Stardog HTTP server actions. */
     export namespace server {
+        /**
+         * Retrieves all server properties, or the property specified by name.
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {object} params additional parameters if needed
+         */
+        function properties(conn: Connection, params?: { name: string }): Promise<HTTP.Body>;
+
         /** Shuts down a Stardog server. */
         function shutdown(conn: Connection, params?: object): Promise<HTTP.Body>;
 
