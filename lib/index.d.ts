@@ -1337,7 +1337,7 @@ declare namespace Stardog {
          * @param {string} name the data source name
          * @param {Options} options the JDBC (and other) options for the data source
          */
-        function update<T>(conn: Connection, name: string, options: T): Promise<HTTP.Body>;
+        function update<T>(conn: Connection, name: string, options: T, params?: { force: boolean }): Promise<HTTP.Body>;
 
         /**
          * Remove the named data source from the system
