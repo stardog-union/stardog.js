@@ -1216,6 +1216,7 @@ declare namespace Stardog {
          *
          * @param {Connection} conn the Stardog server connection
          * @param {string} name the graph name
+         * @param {MappingsRequestOptions} requestOptions options for the mapping 
          */
         function mappings(conn: Connection, name: string, requestOptions?: MappingsRequestOptions): Promise<HTTP.Body>;
 
