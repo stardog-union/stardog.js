@@ -2111,6 +2111,18 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="share">`dataSources.share(conn, name)`</a>
+
+Change a private data source to a shared one
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 #### <a name="online">`dataSources.online(conn, name)`</a>
 
 Bring the named data source online
