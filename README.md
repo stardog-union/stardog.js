@@ -2095,7 +2095,7 @@ Expects the following parameters:
 
 - options ([`T`](#t))
 
-- params (`{ force?: boolean; }`)
+- requestOptions (`{ force?: boolean; }`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
