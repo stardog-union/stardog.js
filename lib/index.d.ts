@@ -1349,6 +1349,14 @@ declare namespace Stardog {
         function remove(conn: Connection, name: string, params?: object): Promise<HTTP.Body>;
 
         /**
+         * Change a private data source to a shared one
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         */
+        function share(conn: Connection, name: string): Promise<HTTP.Body>;
+
+        /**
          * Bring the named data source online
          *
          * @param {Connection} conn the Stardog server connection
