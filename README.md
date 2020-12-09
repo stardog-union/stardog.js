@@ -2095,6 +2095,8 @@ Expects the following parameters:
 
 - options ([`T`](#t))
 
+- requestOptions (`{ force?: boolean; }`)
+
 Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="remove">`dataSources.remove(conn, name, params)`</a>

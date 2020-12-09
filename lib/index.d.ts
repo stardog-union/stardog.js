@@ -1216,6 +1216,7 @@ declare namespace Stardog {
          *
          * @param {Connection} conn the Stardog server connection
          * @param {string} name the graph name
+         * @param {MappingsRequestOptions} requestOptions options for the mapping 
          */
         function mappings(conn: Connection, name: string, requestOptions?: MappingsRequestOptions): Promise<HTTP.Body>;
 
@@ -1336,8 +1337,9 @@ declare namespace Stardog {
          * @param {Connection} conn the Stardog server connection
          * @param {string} name the data source name
          * @param {Options} options the JDBC (and other) options for the data source
+         * @param {object} requestOptions additional options for the request
          */
-        function update<T>(conn: Connection, name: string, options: T): Promise<HTTP.Body>;
+        function update<T>(conn: Connection, name: string, options: T, requestOptions?: { force: boolean }): Promise<HTTP.Body>;
 
         /**
          * Remove the named data source from the system
