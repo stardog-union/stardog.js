@@ -105,7 +105,7 @@
     "rollup-plugin-json": "^2.3.0",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^2.0.1",
-    "semver": "^5.5.0",
+    "semver": "^5.7.1",
     "typedocs": "^0.6.5"
   },
   "engines": {
@@ -118,7 +118,7 @@
     "test:cluster": "jest test/cluster/*.spec.js --verbose -i",
     "precommit": "lint-staged",
     "format": "prettier '{lib,test}/**/*.js' --single-quote --trailing-comma es5 --write",
-    "version": "mdchangelog --remote stardog-union/stardog.js --no-prologue --order-milestones semver --order-issues closed_at --overwrite --no-orphan-issues && npm run docs && git add README.md CHANGELOG.md",
+    "version": "node scripts/changelog.js && npm run docs && git add README.md CHANGELOG.md",
     "prepublishOnly": "node scripts/triggerAnnoyingAlert.js && npm run build"
   },
   "lint-staged": {
