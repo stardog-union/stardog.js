@@ -129,5 +129,5 @@
       ]
     }
   },
-  "stardog-version": ">=5.0.0"
+  "stardog-version": ">=7.0.0"
 }

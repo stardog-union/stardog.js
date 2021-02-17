@@ -10,7 +10,9 @@ const {
 
 const { reasoning, transaction } = db;
 
-describe('reasoning commands', () => {
+// NOTE: These are skipped right now due to a bug in Stardog 7.4.5+ (see
+// PLAT-2027). In the meantime, they have been confirmed against Stardog 7.4.4.
+describe.skip('reasoning commands', () => {
   const database = generateDatabaseName();
   const conn = ConnectionFactory();
 
@@ -42,7 +44,7 @@ describe('reasoning commands', () => {
       expect(res.body.proofs).toBeTruthy();
     }));
 
-  // Skipped due to Stardog bug PLAT-1375
+  // Skipped due to Stardog bug PLAT-1735
   it.skip('should explain inferences in a tx', () => {
     let transactionId;
 
@@ -69,7 +71,7 @@ describe('reasoning commands', () => {
       });
   });
 
-  // Skipped due to Stardog bug PLAT-1375
+  // Skipped due to Stardog bug PLAT-1735
   it.skip('should explain inconsistency in a tx', () => {
     let transactionId;
 
