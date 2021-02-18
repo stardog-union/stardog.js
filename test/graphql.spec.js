@@ -9,41 +9,6 @@ const {
   ConnectionFactory,
 } = require('./setup-database');
 
-const getNonDefaultDatasetName = stardogVersion =>
-  semver.gt(semver.coerce(stardogVersion), semver.coerce('7.4.1'))
-    ? 'local named'
-    : 'named';
-
-const getTextPlan = stardogVersion =>
-  /* eslint-disable prefer-template */
-  'prefix : <http://api.stardog.com/>\n\nFrom ' +
-  getNonDefaultDatasetName(stardogVersion) +
-  '\nFrom default\nProjection(?0, ?1) [#1]\n`─ MergeJoin(?0) [#1]\n   +─ Scan[POSC](?0, <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>, :Character) [#1]\n   `─ Scan[PSOC](?0, :name, ?1) [#1]\n';
-
-const jsonPlan = {
-  cardinality: 1,
-  children: [
-    {
-      cardinality: 1,
-      children: [
-        {
-          cardinality: 1,
-          children: [],
-          label:
-            'Scan[POSC](?0, <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>, :Character)',
-        },
-        {
-          cardinality: 1,
-          children: [],
-          label: 'Scan[PSOC](?0, :name, ?1)',
-        },
-      ],
-      label: 'MergeJoin(?0)',
-    },
-  ],
-  label: 'Projection(?0, ?1)',
-};
-
 describe('graphql', () => {
   const database = generateDatabaseName();
   const conn = ConnectionFactory();
@@ -172,12 +137,15 @@ type Episode {
       if (semver.gt(semver.coerce(stardogVersion), semver.coerce('6.1.3'))) {
         expect(res.status).toBe(200);
         expect(res.body).toHaveProperty('data');
-        expect(res.body.data).toEqual({
-          fields: { '0': { '1': 'name' } },
-          plan: getTextPlan(stardogVersion),
-          sparql:
-            'SELECT *\nFROM <tag:stardog:api:context:local>\n{\n?0 rdf:type :Character .\n?0 :name ?1 .\n}\n',
+        expect(res.body.data.fields).toEqual({
+          0: {
+            1: 'name',
+          },
         });
+        expect(res.body.data.plan.includes('Projection(?0, ?1)')).toBe(true);
+        expect(res.body.data.sparql).toBe(
+          'SELECT *\nFROM <tag:stardog:api:context:local>\n{\n?0 rdf:type :Character .\n?0 :name ?1 .\n}\n'
+        );
       } else {
         // Argument is not supported before 6.1.4
         expect(res.status).toBe(400);
@@ -195,20 +163,21 @@ type Episode {
       const stardogVersion = statusRes.body['dbms.version'].value;
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('data');
-      expect(res.body.data).toEqual({
-        sparql:
-          'SELECT *\nFROM <tag:stardog:api:context:local>\n{\n?0 rdf:type :Character .\n?0 :name ?1 .\n}\n',
-        fields: { '0': { '1': 'name' } },
-        // > 6.1.3 captures snapshot versions of 6.1.4
-        plan: semver.gt(semver.coerce(stardogVersion), semver.coerce('6.1.3'))
-          ? {
-              dataset: {
-                from: [getNonDefaultDatasetName(stardogVersion), 'default'],
-              },
-              plan: jsonPlan,
-              prefixes: { '': 'http://api.stardog.com/' },
-            }
-          : getTextPlan(stardogVersion),
+      expect(res.body.data.fields).toEqual({
+        0: {
+          1: 'name',
+        },
       });
+      if (semver.gt(semver.coerce(stardogVersion), semver.coerce('6.1.3'))) {
+        expect(res.body.data.plan).toHaveProperty('dataset');
+        expect(res.body.data.plan).toHaveProperty('prefixes');
+        expect(res.body.data.plan.plan).toHaveProperty('cardinality');
+        expect(() => JSON.stringify(res.body.data.plan.plan)).not.toThrow();
+      } else {
+        expect(res.body.data.plan.includes('Projection(?0, ?1)')).toBe(true);
+      }
+      expect(res.body.data.sparql).toBe(
+        'SELECT *\nFROM <tag:stardog:api:context:local>\n{\n?0 rdf:type :Character .\n?0 :name ?1 .\n}\n'
+      );
     }));
 });
