@@ -2083,7 +2083,7 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="update">`dataSources.update(conn, name, options)`</a>
+#### <a name="update">`dataSources.update(conn, name, options, requestOptions)`</a>
 
 Update the named data source in the system
 
@@ -2095,7 +2095,7 @@ Expects the following parameters:
 
 - options ([`T`](#t))
 
-- requestOptions (`{ force?: boolean; }`)
+- requestOptions (`{ force: boolean }`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
