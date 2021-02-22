@@ -8,7 +8,7 @@ const {
   ConnectionFactory,
 } = require('./setup-database');
 
-describe('getNamespaces()', () => {
+describe('namespaces.get()', () => {
   const database = generateDatabaseName();
   let conn;
 
@@ -20,7 +20,7 @@ describe('getNamespaces()', () => {
   });
 
   it('should retrieve the namespace prefix bindings for the database', () =>
-    db.namespaces(conn, database).then(res => {
+    db.namespaces.get(conn, database).then(res => {
       expect(res.status).toEqual(200);
       expect(res.body).toEqual({
         '': 'http://example.org/issues#',

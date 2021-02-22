@@ -20,8 +20,14 @@ describe('icv', () => {
   const conn = ConnectionFactory();
 
   const beginTx = transaction.begin.bind(null, conn, database);
+  const rollbackTx = txId => transaction.rollback(conn, database, txId);
 
-  beforeAll(seedDatabase(database, { icv: { enabled: true } }));
+  beforeAll(
+    seedDatabase(database, {
+      icv: { enabled: true },
+      transaction: { isolation: 'SERIALIZABLE' }, // needed for ICV in Stardog 7+
+    })
+  );
   afterAll(dropDatabase(database));
 
   it('should add integrity constraint axioms', () =>
@@ -33,11 +39,10 @@ describe('icv', () => {
       })
       .then(res => {
         expect(res.status).toBe(200);
-        expect(res.body.length).toBeGreaterThan(0);
+        return icv.clear(conn, database);
       }));
 
-  // Skipping for now, as the server isn't returning the correct results
-  it.skip('should remove integrity constraint axioms', () =>
+  it('should remove integrity constraint axioms', () =>
     icv
       .add(conn, database, icvAxioms, { contentType: 'text/turtle' })
       .then(() =>
@@ -49,7 +54,6 @@ describe('icv', () => {
       })
       .then(res => {
         expect(res.status).toBe(200);
-        expect(res.body.length).toBe(0);
       }));
 
   it('should clear integrity constraint axioms', () =>
@@ -62,7 +66,6 @@ describe('icv', () => {
       })
       .then(res => {
         expect(res.status).toBe(200);
-        expect(res.body.length).toBe(0);
       }));
 
   it('should convert constraint axioms to a SPARQL query', () =>
@@ -81,17 +84,18 @@ describe('icv', () => {
       }));
 
   it('should validate constraints in a transaction', () =>
-    beginTx()
-      .then(res => {
-        expect(res.status).toBe(200);
-        return icv.validateInTx(conn, database, res.transactionId, icvAxioms, {
+    beginTx().then(res => {
+      expect(res.status).toBe(200);
+      return icv
+        .validateInTx(conn, database, res.transactionId, icvAxioms, {
           contentType: 'text/turtle',
-        });
-      })
-      .then(res => {
-        expect(res.status).toBe(200);
-        expect(res.body).toBe(false);
-      }));
+        })
+        .then(validateRes => {
+          expect(validateRes.status).toBe(200);
+          expect(validateRes.body).toBe(false);
+        })
+        .then(() => rollbackTx(res.transactionId));
+    }));
 
   it('should report violations', () =>
     icv.violations(conn, database, '').then(res => {
@@ -100,13 +104,42 @@ describe('icv', () => {
     }));
 
   it('should report violations in a transaction', () =>
-    beginTx()
-      .then(res => {
-        expect(res.status).toBe(200);
-        return icv.violationsInTx(conn, database, res.transactionId, '');
-      })
-      .then(res => {
-        expect(res.status).toBe(200);
-        expect(res.body).toBeNull();
-      }));
+    beginTx().then(res => {
+      expect(res.status).toBe(200);
+      return icv
+        .violationsInTx(conn, database, res.transactionId, '')
+        .then(violationsRes => {
+          expect(violationsRes.status).toBe(200);
+          expect(violationsRes.body).toBeNull();
+        })
+        .then(() => rollbackTx(res.transactionId));
+    }));
+
+  it('should produce violation reports', () =>
+    icv.report(conn, database, '').then(res => {
+      expect(res.status).toBe(200);
+      const reportData = res.body['@graph'];
+      expect(reportData.length).not.toBe(0);
+      expect(reportData[0]).toHaveProperty('@id');
+      expect(reportData[0]).toHaveProperty('@type');
+      // Can't use `toHaveProperty` below because jest thinks it's a path for nested properties
+      expect(reportData[0]['sh:conforms']['@value']).toBe(true);
+    }));
+
+  it('should produce violation reports in a transaction', () =>
+    beginTx().then(res => {
+      expect(res.status).toBe(200);
+      return icv
+        .reportInTx(conn, database, res.transactionId, '')
+        .then(reportRes => {
+          expect(reportRes.status).toBe(200);
+          const reportData = reportRes.body['@graph'];
+          expect(reportData.length).not.toBe(0);
+          expect(reportData[0]).toHaveProperty('@id');
+          expect(reportData[0]).toHaveProperty('@type');
+          // Can't use `toHaveProperty` below because jest thinks it's a path for nested properties
+          expect(reportData[0]['sh:conforms']['@value']).toBe(true);
+        })
+        .then(() => rollbackTx(res.transactionId));
+    }));
 });

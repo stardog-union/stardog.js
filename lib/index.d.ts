@@ -21,11 +21,14 @@ declare namespace Stardog {
             | 'application/sparql-results+xml';
 
         export type AcceptMimeType = RdfMimeType
-          | SparqlMimeType
-          | 'text/plain'
-          | 'text/boolean'
-          | 'application/json'
-          | '*/*';
+            | SparqlMimeType
+            | 'text/plain'
+            | 'text/boolean'
+            | 'application/json'
+            | '*/*';
+
+        export type ExplainAcceptMimeType = 'text/plain'
+            | 'application/json';
 
         export interface Body {
             status: number;
@@ -125,7 +128,7 @@ declare namespace Stardog {
     export namespace db {
         /**
          * Creates a new database.
-         * 
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} database the name of the database to create
          * @param {object} databaseOptions an object specifying the various metadata options for this database. See: https://github.com/stardog-union/stardog.js/blob/master/lib/db/dbopts.js
@@ -136,88 +139,88 @@ declare namespace Stardog {
 
         /**
          * Deletes a database.
-         * 
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} database the name of the database to delete
          * @param {object} params additional parameters if needed
          */
         function drop(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
-        
-        /** 
+
+        /**
          * Gets an RDF representation of a database. See: https://www.w3.org/TR/sparql11-http-rdf-update/#http-get
-         * 
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} database the name of the database
          * @param {object} params additional parameters if needed
          */
         function get(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
 
-        /** 
-         * Sets a database offline. 
-         * 
+        /**
+         * Sets a database offline.
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} database the name of the database to offline
          * @param {object} params additional parameters if needed
          */
         function offline(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
 
-        /** 
-         * Sets a database online. 
-         * 
+        /**
+         * Sets a database online.
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} database the name of the database to online
          * @param {object} params additional parameters if needed
          */
         function online(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
 
-        /** 
+        /**
          * Optimizes a database.
-         * 
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} database the name of the database to optimize
          * @param {object} params additional parameters if needed
          */
         function optimize(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
 
-        /** 
-         * Makes a copy of a database. 
-         * 
-         * @param {Connection} conn the Stardog server connection
-         * @param {string} database the name of the database to copy
-         * @param {string} destination the name of the new copy of the database
-         * @param {object} params additional parameters if needed
-         */
-        function copy(conn: Connection, database: string, destination: string, params?: object): Promise<HTTP.Body>;
-
-        /** 
-         * Gets a list of all databases on a Stardog server. 
-         * 
+        /**
+         * Gets a list of all databases on a Stardog server.
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {object} params additional parameters if needed
          */
         function list(conn: Connection, params?: object): Promise<HTTP.Body>;
 
-        /** 
-         * Gets number of triples in a database. 
-         * 
+        /**
+         * Gets number of triples in a database.
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} database the name of the database
          * @param {object} params additional parameters if needed
          */
         function size(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
 
-        /** 
-         * Clears the contents of a database. 
-         * 
+        /**
+         * Gets the model for a database.
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} database the name of the database
+         * @param {object} options additional options if needed
+         * @param {object} params additional parameters if needed
+         */
+        function model(conn: Connection, database: string, options?: object, params?: object): Promise<HTTP.Body>;
+
+        /**
+         * Clears the contents of a database.
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} database the name of the database to clear
          * @param {object} params additional parameters if needed
          */
         function clear(conn: Connection, database: string, transactionId: string, params?: object): Promise<HTTP.Body>;
 
-        /** 
-         * Adds data within a transaction. 
-         * 
+        /**
+         * Adds data within a transaction.
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} database the name of the database to which to add data
          * @param {string} transactionId the UUID of the transaction as returned by db.transaction.begin
@@ -227,9 +230,9 @@ declare namespace Stardog {
          */
         function add(conn: Connection, database: string, transactionId: string, content: string, options: transaction.TransactionOptions, params?: object): Promise<transaction.TransactionResponse>;
 
-        /** 
+        /**
          * Removes data within a transaction.
-         * 
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} database the name of the database from which to remove data
          * @param {string} transactionId the UUID of the transaction as returned by db.transaction.begin
@@ -239,18 +242,9 @@ declare namespace Stardog {
          */
         function remove(conn: Connection, database: string, transactionId: string, content: string, options: transaction.TransactionOptions, params?: object): Promise<transaction.TransactionResponse>;
 
-        /** 
-         * Gets a mapping of the namespaces used in a database. 
-         * 
-         * @param {Connection} conn the Stardog server connection
-         * @param {string} database the name of the database
-         * @param {object} params additional parameters if needed
-         */
-        function namespaces(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
-
-        /** 
-         * Exports the contents of a database. 
-         * 
+        /**
+         * Exports the contents of a database.
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} database the name of the database to clear
          * @param {object} options an object specifying the desired HTTP MIME type. Default: application/ld+json
@@ -260,8 +254,12 @@ declare namespace Stardog {
 
         /** Database options. */
         namespace options {
+            /** Gets all available database options with their default values. */
+            function getAvailable(conn: Connection): Promise<HTTP.Body>;
             /** Gets set of options on a database. */
             function get(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
+            /** Gets all options on a database. */
+            function getAll(conn: Connection, database: string): Promise<HTTP.Body>;
             /** Sets options on a database. */
             function set(conn: Connection, database: string, databaseOptions: object, params?: object): Promise<HTTP.Body>;
         }
@@ -271,7 +269,7 @@ declare namespace Stardog {
 
             /**
              * Retrieves the specified named graph
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} graphUri the URI of the graph to retrieve, or null for the default graph
@@ -282,7 +280,7 @@ declare namespace Stardog {
 
             /**
              * Stores the given RDF data in the specified named graph
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} graphData the RDF data to be stored
@@ -294,7 +292,7 @@ declare namespace Stardog {
 
             /**
              * Deletes the specified named graph
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} graphUri the URI of the graph to retrieve, or null for the default graph
@@ -304,7 +302,7 @@ declare namespace Stardog {
 
             /**
              * Merges the given RDF data into the specified named graph
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} graphData the RDF data to be stored
@@ -334,18 +332,18 @@ declare namespace Stardog {
                 encoding: Encodings
             }
 
-            /** 
-             * Begins a new transaction. 
-             * 
+            /**
+             * Begins a new transaction.
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database on which to open the transaction
              * @param {object} params additional parameters if needed
              */
             function begin(conn: Connection, database: string, params?: object): Promise<TransactionResponse>;
 
-            /** 
+            /**
              * Rolls back a transaction, removing the transaction and undoing all changes
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} transactionId the UUID of the transaction to roll back as returned by db.transaction.begin
@@ -353,9 +351,9 @@ declare namespace Stardog {
              */
             function rollback(conn: Connection, database: string, transactionId: string, params?: object): Promise<TransactionResponse>;
 
-            /** 
-             * Commits a transaction to the database, removing the transaction and making its changes permanent. 
-             * 
+            /**
+             * Commits a transaction to the database, removing the transaction and making its changes permanent.
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} transactionId the UUID of the transaction to commit as returned by db.transaction.begin
@@ -366,18 +364,18 @@ declare namespace Stardog {
 
         /** Methods for managing integrity constraints in a database. */
         namespace icv {
-            /** 
-             * Gets the set of integrity constraints on a given database. 
-             * 
+            /**
+             * Gets the set of integrity constraints on a given database.
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {object} params additional parameters if needed
              */
             function get(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
 
-            /** 
-             * Adds integrity constraints to a given database. 
-             * 
+            /**
+             * Adds integrity constraints to a given database.
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} icvAxioms an RDF block containing the axioms to be added
@@ -386,9 +384,9 @@ declare namespace Stardog {
              */
             function add(conn: Connection, database: string, icvAxioms: string, options?: { contentType: HTTP.RdfMimeType }, params?: object): Promise<HTTP.Body>;
 
-            /** 
-             * Removes integrity constraints from a given database. 
-             * 
+            /**
+             * Removes integrity constraints from a given database.
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} icvAxioms an RDF block containing the axioms to be removed
@@ -397,18 +395,18 @@ declare namespace Stardog {
              */
             function remove(conn: Connection, database: string, icvAxioms: string, options?: { contentType: HTTP.RdfMimeType }, params?: object): Promise<HTTP.Body>;
 
-            /** 
-             * Removes all integrity constraints from a given database. 
-             * 
+            /**
+             * Removes all integrity constraints from a given database.
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {object} params additional parameters if needed
              */
             function clear(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
 
-            /** 
+            /**
              * Converts a set of integrity constraints into an equivalent SPARQL query for a given database.
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} icvAxioms an RDF block containing the axioms to be added
@@ -419,7 +417,7 @@ declare namespace Stardog {
 
             /**
              * Checks constraints to see if they are valid
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} constraints an RDF block containing the constraints to be validated
@@ -430,7 +428,7 @@ declare namespace Stardog {
 
             /**
              * Checks constraints to see if they are valid within a transaction
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} transactionId the UUID of the transaction as returned by db.transaction.begin
@@ -438,11 +436,11 @@ declare namespace Stardog {
              * @param {object} options an object specifying the contentType of the constraints parameter. Default: text/turtle
              * @param {object} params additional parameters if needed
              */
-            function validateInTx(conn: Connection, database: string, constraints: string, transactionId: string, options: { contentType: HTTP.RdfMimeType }, params?: { graphUri: string }): Promise<HTTP.Body>;
+            function validateInTx(conn: Connection, database: string, transactionId: string, constraints: string, options: { contentType: HTTP.RdfMimeType }, params?: { graphUri: string }): Promise<HTTP.Body>;
 
             /**
              * Accepts integrity constraints as RDF and returns the violation explanations, if any, as RDF.
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} constraints an RDF block containing the constraints to be validated
@@ -453,7 +451,7 @@ declare namespace Stardog {
 
             /**
              * Accepts integrity constraints as RDF and returns the violation explanations, if any, as RDF.
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} transactionId the UUID of the transaction as returned by db.transaction.begin
@@ -461,7 +459,30 @@ declare namespace Stardog {
              * @param {object} options an object specifying the contentType of the constraints parameter. Default: text/turtle
              * @param {object} params additional parameters if needed
              */
-            function violationsInTx(conn: Connection, database: string, constraints: string, options?: { contentType: HTTP.RdfMimeType }, params?: { graphUri: string }): Promise<HTTP.Body>;
+            function violationsInTx(conn: Connection, database: string, transactionId: string, constraints: string, options?: { contentType: HTTP.RdfMimeType }, params?: { graphUri: string }): Promise<HTTP.Body>;
+
+            /**
+             * Accepts integrity constraints as RDF and returns a validation report.
+             *
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the name of the database
+             * @param {string} constraints an RDF block containing the constraints to be validated
+             * @param {object} options an object specifying the contentType of the constraints parameter (default: text/turtle) and/or the accept type for the results (default: application/ld+json)
+             * @param {object} params additional parameters if needed
+             */
+            function report(conn: Connection, database: string, constraints: string, options?: { contentType?: HTTP.RdfMimeType, accept?: HTTP.AcceptMimeType }, params?: { graphUri: string }): Promise<HTTP.Body>;
+
+            /**
+             * Accepts integrity constraints as RDF and returns a validation report.
+             *
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the name of the database
+             * @param {string} transactionId the UUID of the transaction as returned by db.transaction.begin
+             * @param {string} constraints an RDF block containing the constraints to be validated
+             * @param {object} options an object specifying the contentType of the constraints parameter (default: text/turtle) and/or the accept type for the results (default: application/ld+json)
+             * @param {object} params additional parameters if needed
+             */
+            function reportInTx(conn: Connection, database: string, transactionId: string, constraints: string, options?: { contentType?: HTTP.RdfMimeType, accept?: HTTP.AcceptMimeType }, params?: { graphUri: string }): Promise<HTTP.Body>;
         }
 
         /** Commands that use the reasoning capabilities of a database */
@@ -471,120 +492,61 @@ declare namespace Stardog {
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {object} options an object optionally specifying the URI of a graph to evaluate
-             * @param {object} params additional parameters if needed  
+             * @param {object} params additional parameters if needed
              */
             function consistency(conn:Connection, database: string, options?: { namedGraph: string }, params?: object): Promise<HTTP.Body>;
             /**
              * Provides an explanation for an inference
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} inference RDF representing the inference to be explained
              * @param {config} options an object specifying the contentType of the RDF data (e.g., text/turtle)
-             * @param {object} params additional parameters if needed  
+             * @param {object} params additional parameters if needed
              */
             function explainInference(conn: Connection, database: string, inference: string, config: { contentType: string }, params?: object): Promise<HTTP.Body>;
 
             /**
              * Provides the reason why a database is inconsistent, as reported by db.reasoning.consistency
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {object} options an object optionally specifying the URI of a graph to evaluate
-             * @param {object} params additional parameters if needed  
+             * @param {object} params additional parameters if needed
              */
             function explainInconsistency(conn: Connection, database: string, options?: { namedGraph: string }, params?: object): Promise<HTTP.Body>;
 
             /**
              * Provides an explanation for an inference within a transaction
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} transactionId the UUID of the transaction as returned by db.transaction.begin
              * @param {string} inference RDF representing the inference to be explained
              * @param {transaction.TransactionOptions} config an object specifying the contentType of the RDF data (e.g., text/turtle)
-             * @param {object} params additional parameters if needed  
+             * @param {object} params additional parameters if needed
              */
             function explainInferenceInTransaction(conn: Connection, database: string, transactionId: string, inference: string, config: transaction.TransactionOptions, params?: object): Promise<HTTP.Body>;
 
             /**
              * Provides the reason why a database is inconsistent, as reported by db.reasoning.consistency
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} transactionId the UUID of the transaction as returned by db.transaction.begin
              * @param {object} options an object optionally specifying the URI of a graph to evaluate
-             * @param {object} params additional parameters if needed  
+             * @param {object} params additional parameters if needed
              */
             function explainInconsistencyInTransaction(conn: Connection, database: string, transactionId: string, options?: { namedGraph: string }, params?: object): Promise<HTTP.Body>;
 
             /**
              * Gets the reasoning schema of the database
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
-             * @param {object} params additional parameters if needed  
-             */
-            function schema(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
-        }
-
-        /** Commands that use the versioning capabilities of a database */
-        namespace versioning {
-
-            /**
-             * Executes a SPARQL query over the versioning history
-             * 
-             * @param {Connection} conn the Stardog server connection
-             * @param {string} database the name of the database
-             * @param {string} query the SPARQL query to be executed
-             * @param {HTTP.RdfMimeType|HTTP.SparqlMimeType} accept the desired HTTP MIME type of the response. Default: application/sparql-results+json | application/ld+json
              * @param {object} params additional parameters if needed
              */
-            function query(conn: Connection, database: string, query: string, accept?: HTTP.RdfMimeType|HTTP.SparqlMimeType, params?: object): Promise<HTTP.Body>;
-
-            /**
-             * Commits a transaction into versioning
-             * 
-             * @param {Connection} conn the Stardog server connection
-             * @param {string} database the name of the database
-             * @param {string} transactionId the UUID of the transaction as returned by db.transaction.begin
-             * @param {string} commitMsg the commit message to associate with this commit
-             * @param {object} params additional parameters if needed 
-             */
-            function commit(conn: Connection, database: string, transactionId: string, commitMsg: string, params?: object): Promise<HTTP.Body>;
-
-            /**
-             * Creates a new tag
-             * 
-             * @param {Connection} conn the Stardog server connection
-             * @param {string} database the name of the database
-             * @param {string} revisionId the ID of the revision to tag
-             * @param {string} tagLogMsg the message to associate with the tag
-             * @param {object} params additional parameters if needed 
-             */
-            function createTag(conn: Connection, database: string, revisionId: string, tagLogMsg: string, params?: object): Promise<HTTP.Body>;
-
-            /**
-             * Deletes a tag
-             * 
-             * @param {Connection} conn the Stardog server connection
-             * @param {string} database the name of the database
-             * @param {string} revisionId the revision ID of the tag
-             * @param {object} params additional parameters if needed 
-             */
-            function deleteTag(conn: Connection, database: string, revisionId: string, params?: object): Promise<HTTP.Body>;
-
-            /**
-             * Reverts to a previous commit
-             * 
-             * @param {Connection} conn the Stardog server connection
-             * @param {string} database the name of the database
-             * @param {string} fromRevisionId the ID of the revision to revert from
-             * @param {string} toRevisionId the ID of the revision to revert to
-             * @param {string} logMsg the log message for the revert
-             * @param {object} params additional parameters if needed 
-             */
-            function revert(conn: Connection, database: string, fromRevisionId: string, toRevisionId: string, logMsg: string, params?: object): Promise<HTTP.Body>;
+            function schema(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
         }
 
         /** Commands that interact with the BITES (document store) API */
@@ -592,52 +554,75 @@ declare namespace Stardog {
 
             /**
              * Retrieves the size of the document store
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
-             * @param {object} params additional parameters if needed 
+             * @param {object} params additional parameters if needed
              */
             function size(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
 
             /**
              * Clears the document store
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
-             * @param {object} params additional parameters if needed 
+             * @param {object} params additional parameters if needed
              */
             function clear(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
 
             /**
              * Adds a document to the document store
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} fileName the name of the file to add
              * @param {string} fileContents the contents of the file to add
-             * @param {object} params additional parameters if needed 
+             * @param {object} params additional parameters if needed
              */
             function add(conn: Connection, database: string, fileName: string, fileContents: string, params?: object): Promise<HTTP.Body>;
 
             /**
              * Removes a document from the document store
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} fileName the name of the file
-             * @param {object} params additional parameters if needed 
+             * @param {object} params additional parameters if needed
              */
             function remove(conn: Connection, database: string, fileName: string, params?: object): Promise<HTTP.Body>;
 
             /**
              * Retrieves a document from the document store
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} fileName the name of the file
-             * @param {object} params additional parameters if needed 
+             * @param {object} params additional parameters if needed
              */
             function get(conn: Connection, database: string, fileName: string, params?: object): Promise<HTTP.Body>;
+        }
+
+        namespace namespaces {
+          /**
+           * Gets a mapping of the namespaces used in a database.
+           *
+           * @param {Connection} conn the Stardog server connection
+           * @param {string} database the name of the database
+           */
+          function get(conn: Connection, database: string): Promise<HTTP.Body>;
+
+          /**
+           * Extracts namespaces from an RDF file or RDF string and adds new
+           * and updates existing namespaces in the database.
+           *
+           * @param {Connection} conn the Stardog server connection
+           * @param {string} database the name of the database
+           * @param {object|string} fileOrContents an RDF file or RDF string
+           * @param {object} options an object specifying the contentType of
+           *  the RDF string; used only if `fileOrContents` is a string and
+           *  defaults to 'text/turtle'
+           */
+          function add(conn: Connection, database: string, fileOrContents: object | string, options?: { contentType?: HTTP.RdfMimeType }): Promise<HTTP.Body>;
         }
     }
 
@@ -651,9 +636,21 @@ declare namespace Stardog {
             property: string
         }
 
-        /** 
-         * Gets the values for a specific property of a URI individual. 
-         * 
+        interface AdditionalHandlers {
+            /**
+             * Specify this method if you wish to act on the HTTP response
+             * immediately, before any further stardog.js processing.
+             * NOTE: The stardog.js processing will continue, unless
+             * `onResponseStart` explicitly returns `false`.
+             * 
+             * @param {Response} res HTTP response object.
+             */
+            onResponseStart: (res: Response) => boolean | void;
+        }
+
+        /**
+         * Gets the values for a specific property of a URI individual.
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} database the name of the database
          * @param {PropertyOptions} config an object specifying the URI and property to retrieve
@@ -661,30 +658,32 @@ declare namespace Stardog {
          */
         function property(conn: Connection, database: string, config: PropertyOptions, params?: object): Promise<HTTP.Body>;
 
-        /** 
-         * Gets the query plan generated by Stardog for a given SPARQL query. 
-         * 
+        /**
+         * Gets the query plan generated by Stardog for a given SPARQL query.
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} database the name of the database
          * @param {string} query the SPARQL query to be explained
+         * @param {HTTP.ExplainAcceptMimeType} accept The desired HTTP MIME type of the results
          * @param {object} params additional parameters if needed
          */
-        function explain(conn: Connection, database: string, query: string, params?: object): Promise<HTTP.Body>
+        function explain(conn: Connection, database: string, query: string, accept?: HTTP.ExplainAcceptMimeType, params?: object): Promise<HTTP.Body>
 
-        /** 
-         * Executes a query against a database. 
-         * 
+        /**
+         * Executes a query against a database.
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} database the name of the database
          * @param {string} query the SPARQL query to be executed
          * @param {HTTP.AcceptMimeType} accept The desired HTTP MIME type of the results
          * @param {object} params additional parameters if needed
+         * @param {object} additionalHandlers additional response handlers (currently only `onResponseStart`)
          */
-        function execute(conn: Connection, database: string, query: string, accept?: HTTP.AcceptMimeType, params?: object): Promise<HTTP.Body>;
+        function execute(conn: Connection, database: string, query: string, accept?: HTTP.AcceptMimeType, params?: object, additionalHandlers?: AdditionalHandlers): Promise<HTTP.Body>;
 
-        /** 
-         * Executes a query against a database within a transaction. 
-         * 
+        /**
+         * Executes a query against a database within a transaction.
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} database the name of the database
          * @param {string} transactionId the UUID of the transaction as returned by db.transaction.begin
@@ -694,24 +693,24 @@ declare namespace Stardog {
          */
         function executeInTransaction(conn: Connection, database: string, transactionId: string, query: string, options?: { accept: HTTP.RdfMimeType }, params?: object): Promise<HTTP.Body>;
 
-        /** 
-         * Gets a list of actively running queries. 
-         * 
+        /**
+         * Gets a list of actively running queries.
+         *
          * @param {Connection} conn the Stardog server connection
          */
         function list(conn: Connection): Promise<HTTP.Body>;
 
-        /** 
-         * Kills an actively running query. 
-         * 
+        /**
+         * Kills an actively running query.
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} queryId the ID of the query to be killed
          */
         function kill(conn: Connection, queryId: string): Promise<HTTP.Body>;
 
-        /** 
-         * Gets information about an actively running query. 
-         * 
+        /**
+         * Gets information about an actively running query.
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} queryId the ID of the query
          */
@@ -722,31 +721,44 @@ declare namespace Stardog {
             database: string,
             query: string,
             /** Defaults to false. */
-            shared: boolean
+            shared: boolean,
+            /** Attributes introduced in Stardog version 6.2.2, which are optional in versions >= 6.2.2 and ignored in earlier versions. */
+            reasoning?: boolean,
+            description?: boolean,
         }
 
         /** Manages stored queries. */
         namespace stored {
-            /** 
-             * Stores a query in Stardog, either on the system level or for a given database. 
-             * 
+            /**
+             * Stores a query in Stardog, either on the system level or for a given database.
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {StoredQueryOptions} config an object specifying the options to set on the new query
              * @param {object} params additional parameters if needed
              */
             function create(conn: Connection, config: StoredQueryOptions, params?: object): Promise<HTTP.Body>
 
-            /** 
-             * Lists all stored queries. 
-             * 
+            /**
+             * Lists all stored queries.
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {object} params additional parameters if needed
              */
             function list(conn: Connection, params?: object): Promise<HTTP.Body>
 
-            /** 
+            /**
+                * Updates a given stored query and creates it if the name does not refer to an existing stored query.
+                *
+                * @param {Connection} conn the Stardog server connection
+                * @param {StoredQueryOptions} config an object specifying the options to set on the updated query
+                * @param {object} params additional parameters if needed
+                * @param {boolean} useUpdateMethod whether to use Stardog's HTTP PUT method, added in version 6.2.0. Default: true
+                */
+            function update(conn: Connection, config: StoredQueryOptions, params?: object, useUpdateMethod?: boolean): Promise<HTTP.Body>
+
+            /**
              * Removes a given stored query.
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} storedQuery the name of the stored query to be removed
              * @param {object} params additional parameters if needed
@@ -759,18 +771,19 @@ declare namespace Stardog {
 
             /**
              * Executes a GraphQL query
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the database name
              * @param {string} query the query to run
              * @param {object} variables Variable definitions for the query
              * @param {object} params additional parameters if needed
+             * @param {object} additionalHandlers additional response handlers (currently only `onResponseStart`)
              */
-            function execute(conn: Connection, database: string, query: string, variables?: object, params?: object): Promise<HTTP.Body>
+            function execute(conn: Connection, database: string, query: string, variables?: object, params?: object, additionalHandlers?: AdditionalHandlers): Promise<HTTP.Body>
 
             /**
              * Retrieves a list of GraphQL schemas in the database
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the database name
              * @param {object} params additional parameters if needed
@@ -779,41 +792,52 @@ declare namespace Stardog {
 
             /**
              * Adds a GraphQL schema to the database
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the database name
              * @param {string} name the name of the schema
              * @param {object} schema an object representing the schema
-             * @param {object} params additional parameters if needed 
+             * @param {object} params additional parameters if needed
              */
             function addSchema(conn: Connection, database: string, name: string, schema: object, params?: object): Promise<HTTP.Body>
 
             /**
-             * Retrieves a GraphQL schema from the database
-             * 
+             * Updates (or adds if non-existent) a GraphQL schema to the database
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the database name
              * @param {string} name the name of the schema
-             * @param {object} params additional parameters if needed 
+             * @param {object} schema an object representing the schema
+             * @param {object} params additional parameters if needed
+             */
+            function updateSchema(conn: Connection, database: string, name: string, schema: object, params?: object): Promise<HTTP.Body>
+
+            /**
+             * Retrieves a GraphQL schema from the database
+             *
+             * @param {Connection} conn the Stardog server connection
+             * @param {string} database the database name
+             * @param {string} name the name of the schema
+             * @param {object} params additional parameters if needed
              */
             function getSchema(conn: Connection, database: string, name: string, params?: object): Promise<HTTP.Body>
 
             /**
              * Removes a GraphQL schemafrom  the database
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the database name
              * @param {string} name the name of the schema
-             * @param {object} params additional parameters if needed 
+             * @param {object} params additional parameters if needed
              */
             function removeSchema(conn: Connection, database: string, name: string, params?: object): Promise<HTTP.Body>
 
             /**
              * Clears all GraphQL schemas in the database
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the database name
-             * @param {object} params additional parameters if needed 
+             * @param {object} params additional parameters if needed
              */
             function clearSchemas(conn: Connection, database: string, params?: object): Promise<HTTP.Body>
         }
@@ -862,9 +886,9 @@ declare namespace Stardog {
             'named-graph' |
             'icv-constraints';
 
-        /** 
-         * Gets a list of users. 
-         * 
+        /**
+         * Gets a list of users.
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {object} params additional parameters if needed
          */
@@ -872,25 +896,25 @@ declare namespace Stardog {
 
         /**
          * Gets all information for a given user.
-         * 
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {username} string the username of the user
          * @param {object} params additional parameters if needed
          */
         function get(conn: Connection, username: string, params?: object): Promise<HTTP.Body>;
-        
-        /** 
-         * Creates a new user. 
-         * 
+
+        /**
+         * Creates a new user.
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {User} user an object specifying the details of the new user
          * @param {object} params additional parameters if needed
          */
         function create(conn: Connection, user: User, params?: object): Promise<HTTP.Body>;
 
-        /** 
-         * Changes a user's password. 
-         * 
+        /**
+         * Changes a user's password.
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} username the username of the user
          * @param {string} password the new password for the user
@@ -900,24 +924,24 @@ declare namespace Stardog {
 
         /**
          * Verifies that a Connection's credentials are valid.
-         * 
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {object} params additional parameters if needed
          */
         function valid(conn: Connection, params?: object): Promise<HTTP.Body>;
-        
-        /** 
+
+        /**
          * Verifies that a user is enabled.
-         * 
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} username the username of the user
          * @param {object} params additional parameters if needed
          */
         function enabled(conn: Connection, username: string, params?: object): Promise<HTTP.Body>;
 
-        /** 
+        /**
          * Enables/disables a user.
-         * 
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} username the username of the user
          * @param {boolean} enabled a boolean representing the desired status of the user
@@ -925,9 +949,9 @@ declare namespace Stardog {
          */
         function enable(conn: Connection, username: string, enabled: boolean, params?: object): Promise<HTTP.Body>;
 
-        /** 
-         * Sets roles for a user. 
-         * 
+        /**
+         * Sets roles for a user.
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} username the username of the user
          * @param {string[]} roles the new list of roles for the user
@@ -935,18 +959,18 @@ declare namespace Stardog {
          */
         function setRoles(conn: Connection, username: string, roles: string[], params?: object): Promise<HTTP.Body>;
 
-        /** 
-         * Gets a list of roles assigned to a user. 
-         * 
+        /**
+         * Gets a list of roles assigned to a user.
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} username the username of the user
          * @param {object} params additional parameters if needed
          */
         function listRoles(conn: Connection, username: string, params?: object): Promise<HTTP.Body>;
 
-        /** 
-         * Creates a new permission for a user over a given resource. 
-         * 
+        /**
+         * Creates a new permission for a user over a given resource.
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} username the username of the user
          * @param {Permission} permission the permission to be added
@@ -954,9 +978,9 @@ declare namespace Stardog {
          */
         function assignPermission(conn: Connection, username: string, permission: Permission, params?: object): Promise<HTTP.Body>;
 
-        /** 
-         * Removes a permission for a user over a given resource. 
-         * 
+        /**
+         * Removes a permission for a user over a given resource.
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} username the username of the user
          * @param {Permission} permission the permission to be removed
@@ -964,36 +988,36 @@ declare namespace Stardog {
          */
         function deletePermission(conn: Connection, username: string, permission: Permission, params?: object): Promise<HTTP.Body>;
 
-        /** 
-         * Gets a list of permissions assigned to user. 
-         * 
+        /**
+         * Gets a list of permissions assigned to user.
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} username the username of the user
          * @param {object} params additional parameters if needed
          */
         function permissions(conn: Connection, username: string, params?: object): Promise<HTTP.Body>;
 
-        /** 
-         * Gets a list of a user's effective permissions. 
-         * 
+        /**
+         * Gets a list of a user's effective permissions.
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} username the username of the user
          * @param {object} params additional parameters if needed
          */
         function effectivePermissions(conn: Connection, username: string, params?: object): Promise<HTTP.Body>;
 
-        /** 
-         * Specifies whether a user is a superuser. 
-         * 
+        /**
+         * Specifies whether a user is a superuser.
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} username the username of the user
          * @param {object} params additional parameters if needed
          */
         function superUser(conn: Connection, username: string, params?: object): Promise<HTTP.Body>;
 
-        /** 
-         * Deletes a user. 
-         * 
+        /**
+         * Deletes a user.
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} username the username of the user to be deleted
          * @param {object} params additional parameters if needed
@@ -1007,44 +1031,44 @@ declare namespace Stardog {
         }
 
         namespace role {
-            /** 
-             * Creates a new role. 
-             * 
+            /**
+             * Creates a new role.
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {object} role the role to be created
              * @param {object} params additional parameters if needed
              */
             function create(conn: Connection, role: { name: string }, params?: object): Promise<HTTP.Body>;
 
-            /** 
-             * Lists all existing roles. 
-             * 
+            /**
+             * Lists all existing roles.
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {object} params additional parameters if needed
              */
             function list(conn: Connection, params?: object): Promise<HTTP.Body>;
 
-            /** 
-             * Deletes an existing role from the system. 
-             * 
+            /**
+             * Deletes an existing role from the system.
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} role the role to be deleted
              * @param {object} params additional parameters if needed
              */
             function remove(conn: Connection, role: string, params?: object): Promise<HTTP.Body>;
 
-            /** 
-             * Lists all users that have been assigned a given role. 
-             * 
+            /**
+             * Lists all users that have been assigned a given role.
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} role the role to be queried
              * @param {object} params additional parameters if needed
              */
             function usersWithRole(conn: Connection, role: string, params?: object): Promise<HTTP.Body>;
 
-            /** 
-             * Adds a permission over a given resource to a given role. 
-             * 
+            /**
+             * Adds a permission over a given resource to a given role.
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} role the role to be given the permission
              * @param {Permission} permission the permission to be added
@@ -1052,9 +1076,9 @@ declare namespace Stardog {
              */
             function assignPermission(conn: Connection, role: string, permission: Permission, params?: object): Promise<HTTP.Body>;
 
-            /** 
-             * Removes a permission over a given resource from a given role. 
-             * 
+            /**
+             * Removes a permission over a given resource from a given role.
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} role the role from which to remove the permission
              * @param {Permission} permission the permission to be removed
@@ -1062,9 +1086,9 @@ declare namespace Stardog {
              */
             function deletePermission(conn: Connection, role: string, permission: Permission, params?: object): Promise<HTTP.Body>;
 
-            /** 
-             * Lists all permissions assigned to a given role. 
-             * 
+            /**
+             * Lists all permissions assigned to a given role.
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} role the role to be queried
              * @param {object} params additional parameters if needed
@@ -1108,50 +1132,72 @@ declare namespace Stardog {
         }
 
         type AllVgOptions = SharedOptions & RdbmsOptions & MongoOptions & CsvOptions;
-
+        
         interface MappingsRequestOptions {
           preferUntransformed?: boolean;
           syntax?: string;
         }
+        
+        interface VgMeta { 
+          db?: string; 
+          dataSource?: string;
+        }
 
         /**
          * Retrieve a list of virtual graphs
-         * 
+         *
          * @param {Connection} conn the Stardog server connection
          */
         function list(conn: Connection): Promise<HTTP.Body>;
 
         /**
+         * Retrieve a list of virtual graphs info
+         *
+         * @param {Connection} conn the Stardog server connection
+         */
+        function listInfo(conn: Connection): Promise<HTTP.Body>;
+
+        /**
          * Add a virtual graph to the system
-         * 
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} name the graph name
          * @param {string} mappings an RDF block specifying the mappings
          * @param {Options} options the JDBC (and other) options for the graph
+         * @param {VgMeta} meta database name, data source, and other graph specifications
          */
-        function add<T extends AllVgOptions>(conn: Connection, name: string, mappings: string, options: T): Promise<HTTP.Body>;
+        function add<T extends AllVgOptions>(conn: Connection, name: string, mappings: string, options: T, meta?: VgMeta): Promise<HTTP.Body>;
 
         /**
          * Update a virtual graph in the system
-         * 
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} name the graph name
          * @param {string} mappings an RDF block specifying the mappings
          * @param {Options} options the JDBC (and other) options for the graph
+         * @param {VgMeta} meta database name, data source, and other graph specifications
          */
-        function update<T extends AllVgOptions>(conn: Connection, name: string, mappings: string, options: T): Promise<HTTP.Body>;
+        function update<T extends AllVgOptions>(conn: Connection, name: string, mappings: string, options: T, meta?: VgMeta): Promise<HTTP.Body>;
 
         /**
          * Remove a virtual graph from the system
-         * 
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} name the graph name
          */
         function remove(conn: Connection, name: string): Promise<HTTP.Body>;
 
         /**
+         * Bring a virtual graph online
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the graph name
+         */
+        function online(conn: Connection, name: string): Promise<HTTP.Body>;
+
+        /**
          * Determine if the named virtual graph is available
-         * 
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} name the graph name
          */
@@ -1159,7 +1205,7 @@ declare namespace Stardog {
 
         /**
          * Retrieve a virtual graph's options
-         * 
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} name the graph name
          */
@@ -1167,18 +1213,34 @@ declare namespace Stardog {
 
         /**
          * Retrieve a virtual graph's mappings
-         * 
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {string} name the graph name
+         * @param {MappingsRequestOptions} requestOptions options for the mapping 
          */
         function mappings(conn: Connection, name: string, requestOptions?: MappingsRequestOptions): Promise<HTTP.Body>;
+
+        /**
+         * Import a JSON or CSV file into a database via `virtual import`.
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {object} file the file or its contents
+         * @param {string} fileType the file type ('DELIMITED' or 'JSON')
+         * @param {string} database the name of the database target
+         * @param {object} importOptions additional import data (mappings, properties, namedGraph)
+         */
+        function importFile(conn: Connection, file: object, fileType: string, database: string, importOptions?: {
+          mappings?: string,
+          properties?: string,
+          namedGraph?: string,
+        }): Promise<HTTP.Body>;
     }
 
     /** Actions to work with server-wide stored functions */
     export namespace storedFunctions {
         /**
          * Adds one or more stored functions to the server
-         * 
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {String} functions one or more stored function definitions
          * @param {object} params additional parameters if needed
@@ -1187,7 +1249,7 @@ declare namespace Stardog {
 
         /**
          * Retrieves the specified function definition
-         * 
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {String} name the name of the function
          * @param {object} params additional parameters if needed
@@ -1196,7 +1258,7 @@ declare namespace Stardog {
 
         /**
          * Removes a stored function from the server
-         * 
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {String} name the name of the function
          * @param {object} params additional parameters if needed
@@ -1205,7 +1267,7 @@ declare namespace Stardog {
 
         /**
          * Removes all stored functions from the server
-         * 
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {object} params additional parameters if needed
          */
@@ -1213,11 +1275,131 @@ declare namespace Stardog {
 
         /**
          * Retrieves an export of all stored functions on the server
-         * 
+         *
          * @param {Connection} conn the Stardog server connection
          * @param {object} params additional parameters if needed
          */
         function getAll(conn: Connection, params?: object): Promise<HTTP.Body>
+    }
+
+    /** Stardog HTTP cluster actions. */
+    export namespace cluster {
+        /** 
+         * Retrieves basic information about a Stardog cluster.
+         * 
+         * @param {Connection} conn the Stardog server connection
+         */
+        function info(conn: Connection): Promise<HTTP.Body>;
+
+        /** 
+         * Retrieves detailed status information about a Stardog cluster.
+         * 
+         * @param {Connection} conn the Stardog server connection
+         */
+        function status(conn: Connection): Promise<HTTP.Body>;
+    }
+
+    export namespace dataSources {
+        /**
+         * Retrieve a list of data sources
+         *
+         * @param {Connection} conn the Stardog server connection
+         */
+        function list(conn: Connection): Promise<HTTP.Body>;
+
+        /**
+         * Retrieve a list of data sources info
+         *
+         * @param {Connection} conn the Stardog server connection
+         */
+        function listInfo(conn: Connection): Promise<HTTP.Body>;
+
+        /**
+         * Retrieve the named data source info
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         */
+        function info(conn: Connection, name: string): Promise<HTTP.Body>;
+
+        /**
+         * Add a data source to the system
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         * @param {Options} options the JDBC (and other) options for the data source
+         */
+        function add<T>(conn: Connection, name: string, options: T): Promise<HTTP.Body>;
+
+        /**
+         * Update the named data source in the system
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         * @param {Options} options the JDBC (and other) options for the data source
+         * @param {object} requestOptions additional options for the request
+         */
+        function update<T>(conn: Connection, name: string, options: T, requestOptions?: { force: boolean }): Promise<HTTP.Body>;
+
+        /**
+         * Remove the named data source from the system
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         * @param {object} params the query string parameters
+         */
+        function remove(conn: Connection, name: string, params?: object): Promise<HTTP.Body>;
+
+        /**
+         * Change a private data source to a shared one
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         */
+        function share(conn: Connection, name: string): Promise<HTTP.Body>;
+
+        /**
+         * Bring the named data source online
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         */
+        function online(conn: Connection, name: string): Promise<HTTP.Body>;
+
+        /**
+         * Determine if the named data source is available
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         */
+        function available(conn: Connection, name: string): Promise<HTTP.Body>;
+
+        /**
+         * Retrieve the named data source options
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         */
+        function options(conn: Connection, name: string): Promise<HTTP.Body>;
+
+        /**
+         * Retrieve the named data source metadata
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         * @param {object} options additional options if needed
+         */
+        function getMetadata(conn: Connection, name: string, options: object): Promise<HTTP.Body>;
+
+        /**
+         * Update the named data source metadata
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         * @param {Metadata} metadata the data source metadata
+         * @param {object} options additional options if needed
+         */
+        function updateMetadata<T>(conn: Connection, name: string, metadata: T, options: object): Promise<HTTP.Body>;
     }
 }
 

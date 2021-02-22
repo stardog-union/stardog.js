@@ -22,9 +22,8 @@ describe('listDBs()', () => {
     conn = ConnectionFactory();
   });
 
-  it('should list available databases', () => {
+  it('should list available databases', () =>
     db.list(conn).then(res => {
       expect(res.body.databases).toEqual(expect.arrayContaining([one, two]));
-    });
-  });
+    }));
 });

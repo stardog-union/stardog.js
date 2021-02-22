@@ -4,7 +4,7 @@ Universal Javascript fetch wrapper for communicating with the Stardog HTTP serve
 
 [![npm](https://img.shields.io/npm/v/stardog.svg?style=flat-square)](https://www.npmjs.com/package/stardog)
 
-<a href="http://stardog.com"><img src="http://stardog.com/img/stardog.png" style="margin: 0 auto; display: block; width: 250px"/></a>
+<a href="http://stardog.com"><img src="https://d33wubrfki0l68.cloudfront.net/66e9dcff51317cfc11b9f3d4ce2917a11ba81681/543c1/img/stardog-logo-optimized.svg" style="margin: 0 auto; display: block; width: 250px"/></a>
 
 ## What is it?
 
@@ -53,25 +53,42 @@ In order to contribute changes, all test cases must pass. With the Stardog serve
 npm test
 ```
 
+To test the cluster commands you will need to first start a Stardog cluster then run the cluster suite. The easiest way to do this is to run docker-compose to start a cluster:
+
+```bash
+docker-compose -f .circleci/docker-compose.yml up
+```
+
+Then run the cluster test suite in `test/cluster`:
+
+```bash
+npm run test:cluster
+```
+
 ### Contributing
 
 Fork, clone and develop, write or amend tests, and then open a PR. All PRs go against "master". This project uses [prettier](https://github.com/prettier/prettier) on file commit, so don't worry about style as it'll just get rewritten when you commit your changes.
 
 ### Releasing
 
-If you have publishing rights, BE SURE TO RUN `npm version (major|minor|patch)` IMMEDIATELY BEFORE PUBLISHING. This will ensure that the build is up-to-date and will also (1) bump the version number in package.json accordingly, (2) create a git tag matching the version number, and (3) automatically update the README and the CHANGELOG using our type declarations and data from the stardog.js GitHub repo. For this process to work correctly, you will need to have generated a GitHub OAuth token and assigned it to the `MDCHANGELOG_TOKEN` environment variable (because this process uses [mdchangelog](https://www.npmjs.com/package/mdchangelog)). In order to ensure that this process is followed, there will be a very annoying alert triggered whenever you publish; if you're all set, just ignore the alert.
+If you have publishing rights, BE SURE TO RUN `npm version (major|minor|patch)` IMMEDIATELY BEFORE PUBLISHING. This will ensure that the build is up-to-date and will also (1) bump the version number in package.json accordingly, (2) create a git tag matching the version number, and (3) automatically update the README and the CHANGELOG using our type declarations and data from the stardog.js GitHub repo. For this process to work correctly, you will need to have generated a GitHub OAuth token and assigned it to the `MDCHANGELOG_TOKEN` environment variable (the name of the token is a relic of the fact that this repo once used [mdchangelog](https://www.npmjs.com/package/mdchangelog) to generate changelogs; it now uses a custom script). In order to ensure that this process is followed, there will be a very annoying alert triggered whenever you publish; if you're all set, just ignore the alert.
 
 After releasing, be sure to push to master, including the tags (so that the release is reflected on GitHub).
 
-## Version details
+## Version/Support Details
 
-The current version of stardog.js has been tested against version 6.1.2 of Stardog. You are encouraged to use this library if you are using version 5 or greater of Stardog. However, there is very little code that is version specific in stardog.js. It is essentially just a convenience wrapper around `fetch`. It is very likely that many of the exposed methods will work on older versions of Stardog, but this has not been tested.
+Each release of stardog.js is tested against the most recent version of Stardog available at the time of the release. The relationship between versions of stardog.js and versions of Stardog is detailed in the following table:
 
-If you are using a really old version of Stardog (<= 3.0.0) you should stick with the legacy version of the library which is version 0.3.1.
+| stardog.js Version  | Supported Stardog Version(s) |
+| ------------------  | ---------------------------- |
+| 3.x.x               | 7.x.x                        |
+| 2.x.x               | 6.x.x                        |
+| 1.x.x*              | 5.x.x                        |
+| 0.x.x*              | any version < 5              |
 
-### Discontinued Versions
+_* = No longer supported_
 
-All versions of stardog.js prior to v1.0.0 have been discontinued and will not receive updates of any kind. If you are using a legacy version of stardog.js you can find the original documentation [here](http://stardog-union.github.io/stardog.js/docs/stardog.html). The most recent legacy version is 0.3.1.
+We support and maintain a particular version of stardog.js only if the corresponding Stardog version(s) is (are) officially supported and maintained. For example, we no longer support v0.x.x of stardog.js, as the corresponding Stardog versions are no longer supported. (That said, later versions of stardog.js will often _mostly_ work with earlier Stardog versions. We just don't test this or make any guarantees to that effect.)
 
 ## Quick Example
 ```js
@@ -118,11 +135,17 @@ One of the following values:
 One of the following values:
 
 `RdfMimeType
-          | SparqlMimeType
-          | 'text/plain'
-          | 'text/boolean'
-          | 'application/json'
-          | '*/*'`
+            | SparqlMimeType
+            | 'text/plain'
+            | 'text/boolean'
+            | 'application/json'
+            | '*/*'`
+#### <a name="explainacceptmimetype">ExplainAcceptMimeType</a>
+
+One of the following values:
+
+`'text/plain'
+            | 'application/json'`
 #### <a name="body">Body</a>
 
 Object with the following values:
@@ -261,7 +284,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="offline">`db.offline(conn, database, params)`</a>
 
-Sets a database offline. 
+Sets a database offline.
 
 Expects the following parameters:
 
@@ -275,7 +298,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="online">`db.online(conn, database, params)`</a>
 
-Sets a database online. 
+Sets a database online.
 
 Expects the following parameters:
 
@@ -301,25 +324,9 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="copy">`db.copy(conn, database, destination, params)`</a>
-
-Makes a copy of a database. 
-
-Expects the following parameters:
-
-- conn ([`Connection`](#connection))
-
-- database (`string`)
-
-- destination (`string`)
-
-- params (`object`)
-
-Returns [`Promise<HTTP.Body>`](#body)
-
 #### <a name="list">`db.list(conn, params)`</a>
 
-Gets a list of all databases on a Stardog server. 
+Gets a list of all databases on a Stardog server.
 
 Expects the following parameters:
 
@@ -331,7 +338,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="size">`db.size(conn, database, params)`</a>
 
-Gets number of triples in a database. 
+Gets number of triples in a database.
 
 Expects the following parameters:
 
@@ -343,9 +350,25 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="model">`db.model(conn, database, options, params)`</a>
+
+Gets the model for a database.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- options (`object`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 #### <a name="clear">`db.clear(conn, database, transactionId, params)`</a>
 
-Clears the contents of a database. 
+Clears the contents of a database.
 
 Expects the following parameters:
 
@@ -361,7 +384,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="add">`db.add(conn, database, transactionId, content, options, params)`</a>
 
-Adds data within a transaction. 
+Adds data within a transaction.
 
 Expects the following parameters:
 
@@ -399,23 +422,9 @@ Expects the following parameters:
 
 Returns [`Promise<transaction.TransactionResponse>`](#transactionresponse)
 
-#### <a name="namespaces">`db.namespaces(conn, database, params)`</a>
-
-Gets a mapping of the namespaces used in a database. 
-
-Expects the following parameters:
-
-- conn ([`Connection`](#connection))
-
-- database (`string`)
-
-- params (`object`)
-
-Returns [`Promise<HTTP.Body>`](#body)
-
 #### <a name="exportdata">`db.exportData(conn, database, options, params)`</a>
 
-Exports the contents of a database. 
+Exports the contents of a database.
 
 Expects the following parameters:
 
@@ -431,6 +440,16 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 ## <a name="options">options</a>
 
+#### <a name="getavailable">`db.options.getAvailable(conn)`</a>
+
+Gets all available database options with their default values. 
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 #### <a name="get">`db.options.get(conn, database, params)`</a>
 
 Gets set of options on a database. 
@@ -442,6 +461,18 @@ Expects the following parameters:
 - database (`string`)
 
 - params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="getall">`db.options.getAll(conn, database)`</a>
+
+Gets all options on a database. 
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -561,7 +592,7 @@ Object with the following values:
 
 #### <a name="begin">`db.transaction.begin(conn, database, params)`</a>
 
-Begins a new transaction. 
+Begins a new transaction.
 
 Expects the following parameters:
 
@@ -591,7 +622,7 @@ Returns [`Promise<TransactionResponse>`](#transactionresponse)
 
 #### <a name="commit">`db.transaction.commit(conn, database, transactionId, params)`</a>
 
-Commits a transaction to the database, removing the transaction and making its changes permanent. 
+Commits a transaction to the database, removing the transaction and making its changes permanent.
 
 Expects the following parameters:
 
@@ -609,7 +640,7 @@ Returns [`Promise<TransactionResponse>`](#transactionresponse)
 
 #### <a name="get">`db.icv.get(conn, database, params)`</a>
 
-Gets the set of integrity constraints on a given database. 
+Gets the set of integrity constraints on a given database.
 
 Expects the following parameters:
 
@@ -623,7 +654,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="add">`db.icv.add(conn, database, icvAxioms, options, params)`</a>
 
-Adds integrity constraints to a given database. 
+Adds integrity constraints to a given database.
 
 Expects the following parameters:
 
@@ -641,7 +672,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="remove">`db.icv.remove(conn, database, icvAxioms, options, params)`</a>
 
-Removes integrity constraints from a given database. 
+Removes integrity constraints from a given database.
 
 Expects the following parameters:
 
@@ -659,7 +690,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="clear">`db.icv.clear(conn, database, params)`</a>
 
-Removes all integrity constraints from a given database. 
+Removes all integrity constraints from a given database.
 
 Expects the following parameters:
 
@@ -707,7 +738,7 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="validateintx">`db.icv.validateInTx(conn, database, constraints, transactionId, options, params)`</a>
+#### <a name="validateintx">`db.icv.validateInTx(conn, database, transactionId, constraints, options, params)`</a>
 
 Checks constraints to see if they are valid within a transaction
 
@@ -717,9 +748,9 @@ Expects the following parameters:
 
 - database (`string`)
 
-- constraints (`string`)
-
 - transactionId (`string`)
+
+- constraints (`string`)
 
 - options ({ contentType: [`RdfMimeType`](#rdfmimetype) })
 
@@ -745,7 +776,7 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="violationsintx">`db.icv.violationsInTx(conn, database, constraints, options, params)`</a>
+#### <a name="violationsintx">`db.icv.violationsInTx(conn, database, transactionId, constraints, options, params)`</a>
 
 Accepts integrity constraints as RDF and returns the violation explanations, if any, as RDF.
 
@@ -755,9 +786,49 @@ Expects the following parameters:
 
 - database (`string`)
 
+- transactionId (`string`)
+
 - constraints (`string`)
 
 - options ({ contentType: [`RdfMimeType`](#rdfmimetype) })
+
+- params (`{ graphUri: string }`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="report">`db.icv.report(conn, database, constraints, options, params)`</a>
+
+Accepts integrity constraints as RDF and returns a validation report.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- constraints (`string`)
+
+- options ({ contentType?: HTTP.RdfMimeType, accept?: [`AcceptMimeType`](#acceptmimetype) })
+
+- params (`{ graphUri: string }`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="reportintx">`db.icv.reportInTx(conn, database, transactionId, constraints, options, params)`</a>
+
+Accepts integrity constraints as RDF and returns a validation report.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- transactionId (`string`)
+
+- constraints (`string`)
+
+- options ({ contentType?: HTTP.RdfMimeType, accept?: [`AcceptMimeType`](#acceptmimetype) })
 
 - params (`{ graphUri: string }`)
 
@@ -867,98 +938,6 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-## <a name="versioning">versioning</a>
-
-#### <a name="query">`db.versioning.query(conn, database, query, accept, params)`</a>
-
-Executes a SPARQL query over the versioning history
-
-Expects the following parameters:
-
-- conn ([`Connection`](#connection))
-
-- database (`string`)
-
-- query (`string`)
-
-- accept ([`SparqlMimeType`](#sparqlmimetype))
-
-- params (`object`)
-
-Returns [`Promise<HTTP.Body>`](#body)
-
-#### <a name="commit">`db.versioning.commit(conn, database, transactionId, commitMsg, params)`</a>
-
-Commits a transaction into versioning
-
-Expects the following parameters:
-
-- conn ([`Connection`](#connection))
-
-- database (`string`)
-
-- transactionId (`string`)
-
-- commitMsg (`string`)
-
-- params (`object`)
-
-Returns [`Promise<HTTP.Body>`](#body)
-
-#### <a name="createtag">`db.versioning.createTag(conn, database, revisionId, tagLogMsg, params)`</a>
-
-Creates a new tag
-
-Expects the following parameters:
-
-- conn ([`Connection`](#connection))
-
-- database (`string`)
-
-- revisionId (`string`)
-
-- tagLogMsg (`string`)
-
-- params (`object`)
-
-Returns [`Promise<HTTP.Body>`](#body)
-
-#### <a name="deletetag">`db.versioning.deleteTag(conn, database, revisionId, params)`</a>
-
-Deletes a tag
-
-Expects the following parameters:
-
-- conn ([`Connection`](#connection))
-
-- database (`string`)
-
-- revisionId (`string`)
-
-- params (`object`)
-
-Returns [`Promise<HTTP.Body>`](#body)
-
-#### <a name="revert">`db.versioning.revert(conn, database, fromRevisionId, toRevisionId, logMsg, params)`</a>
-
-Reverts to a previous commit
-
-Expects the following parameters:
-
-- conn ([`Connection`](#connection))
-
-- database (`string`)
-
-- fromRevisionId (`string`)
-
-- toRevisionId (`string`)
-
-- logMsg (`string`)
-
-- params (`object`)
-
-Returns [`Promise<HTTP.Body>`](#body)
-
 ## <a name="docs">docs</a>
 
 #### <a name="size">`db.docs.size(conn, database, params)`</a>
@@ -1039,6 +1018,37 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+## <a name="namespaces">namespaces</a>
+
+#### <a name="get">`db.namespaces.get(conn, database)`</a>
+
+Gets a mapping of the namespaces used in a database.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="add">`db.namespaces.add(conn, database, fileOrContents, options)`</a>
+
+Extracts namespaces from an RDF file or RDF string and adds new
+and updates existing namespaces in the database.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- fileOrContents (`object | string`)
+
+- options ({ contentType?: [`RdfMimeType`](#rdfmimetype) })
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 ## <a name="query">query</a>
 
 #### <a name="querytype">QueryType</a>
@@ -1053,9 +1063,15 @@ Object with the following values:
 - uri (`string`)
 - property (`string`)
 
+#### <a name="additionalhandlers">AdditionalHandlers</a>
+
+Object with the following values:
+
+- onResponseStart (`(res: Response) => boolean | void`)
+
 #### <a name="property">`query.property(conn, database, config, params)`</a>
 
-Gets the values for a specific property of a URI individual. 
+Gets the values for a specific property of a URI individual.
 
 Expects the following parameters:
 
@@ -1069,9 +1085,9 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="explain">`query.explain(conn, database, query, params)`</a>
+#### <a name="explain">`query.explain(conn, database, query, accept, params)`</a>
 
-Gets the query plan generated by Stardog for a given SPARQL query. 
+Gets the query plan generated by Stardog for a given SPARQL query.
 
 Expects the following parameters:
 
@@ -1081,13 +1097,15 @@ Expects the following parameters:
 
 - query (`string`)
 
+- accept ([`ExplainAcceptMimeType`](#explainacceptmimetype))
+
 - params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="execute">`query.execute(conn, database, query, accept, params)`</a>
+#### <a name="execute">`query.execute(conn, database, query, accept, params, additionalHandlers)`</a>
 
-Executes a query against a database. 
+Executes a query against a database.
 
 Expects the following parameters:
 
@@ -1101,11 +1119,13 @@ Expects the following parameters:
 
 - params (`object`)
 
+- additionalHandlers ([`AdditionalHandlers`](#additionalhandlers))
+
 Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="executeintransaction">`query.executeInTransaction(conn, database, transactionId, query, options, params)`</a>
 
-Executes a query against a database within a transaction. 
+Executes a query against a database within a transaction.
 
 Expects the following parameters:
 
@@ -1125,7 +1145,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="list">`query.list(conn)`</a>
 
-Gets a list of actively running queries. 
+Gets a list of actively running queries.
 
 Expects the following parameters:
 
@@ -1135,7 +1155,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="kill">`query.kill(conn, queryId)`</a>
 
-Kills an actively running query. 
+Kills an actively running query.
 
 Expects the following parameters:
 
@@ -1147,7 +1167,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="get">`query.get(conn, queryId)`</a>
 
-Gets information about an actively running query. 
+Gets information about an actively running query.
 
 Expects the following parameters:
 
@@ -1165,12 +1185,14 @@ Object with the following values:
 - database (`string`)
 - query (`string`)
 - shared (`boolean`)
+- reasoning (`boolean`)
+- description (`boolean`)
 
 ## <a name="stored">stored</a>
 
 #### <a name="create">`query.stored.create(conn, config, params)`</a>
 
-Stores a query in Stardog, either on the system level or for a given database. 
+Stores a query in Stardog, either on the system level or for a given database.
 
 Expects the following parameters:
 
@@ -1184,13 +1206,29 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="list">`query.stored.list(conn, params)`</a>
 
-Lists all stored queries. 
+Lists all stored queries.
 
 Expects the following parameters:
 
 - conn ([`Connection`](#connection))
 
 - params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="update">`query.stored.update(conn, config, params, useUpdateMethod)`</a>
+
+Updates a given stored query and creates it if the name does not refer to an existing stored query.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- config ([`StoredQueryOptions`](#storedqueryoptions))
+
+- params (`object`)
+
+- useUpdateMethod (`boolean`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -1210,7 +1248,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 ## <a name="graphql">graphql</a>
 
-#### <a name="execute">`query.graphql.execute(conn, database, query, variables, params)`</a>
+#### <a name="execute">`query.graphql.execute(conn, database, query, variables, params, additionalHandlers)`</a>
 
 Executes a GraphQL query
 
@@ -1225,6 +1263,8 @@ Expects the following parameters:
 - variables (`object`)
 
 - params (`object`)
+
+- additionalHandlers ([`AdditionalHandlers`](#additionalhandlers))
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -1245,6 +1285,24 @@ Returns [`Promise<HTTP.Body>`](#body)
 #### <a name="addschema">`query.graphql.addSchema(conn, database, name, schema, params)`</a>
 
 Adds a GraphQL schema to the database
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- database (`string`)
+
+- name (`string`)
+
+- schema (`object`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="updateschema">`query.graphql.updateSchema(conn, database, name, schema, params)`</a>
+
+Updates (or adds if non-existent) a GraphQL schema to the database
 
 Expects the following parameters:
 
@@ -1362,7 +1420,7 @@ One of the following values:
             'icv-constraints'`
 #### <a name="list">`user.list(conn, params)`</a>
 
-Gets a list of users. 
+Gets a list of users.
 
 Expects the following parameters:
 
@@ -1388,7 +1446,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="create">`user.create(conn, user, params)`</a>
 
-Creates a new user. 
+Creates a new user.
 
 Expects the following parameters:
 
@@ -1402,7 +1460,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="changepassword">`user.changePassword(conn, username, password, params)`</a>
 
-Changes a user's password. 
+Changes a user's password.
 
 Expects the following parameters:
 
@@ -1460,7 +1518,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="setroles">`user.setRoles(conn, username, roles, params)`</a>
 
-Sets roles for a user. 
+Sets roles for a user.
 
 Expects the following parameters:
 
@@ -1476,7 +1534,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="listroles">`user.listRoles(conn, username, params)`</a>
 
-Gets a list of roles assigned to a user. 
+Gets a list of roles assigned to a user.
 
 Expects the following parameters:
 
@@ -1490,7 +1548,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="assignpermission">`user.assignPermission(conn, username, permission, params)`</a>
 
-Creates a new permission for a user over a given resource. 
+Creates a new permission for a user over a given resource.
 
 Expects the following parameters:
 
@@ -1506,7 +1564,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="deletepermission">`user.deletePermission(conn, username, permission, params)`</a>
 
-Removes a permission for a user over a given resource. 
+Removes a permission for a user over a given resource.
 
 Expects the following parameters:
 
@@ -1522,7 +1580,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="permissions">`user.permissions(conn, username, params)`</a>
 
-Gets a list of permissions assigned to user. 
+Gets a list of permissions assigned to user.
 
 Expects the following parameters:
 
@@ -1536,7 +1594,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="effectivepermissions">`user.effectivePermissions(conn, username, params)`</a>
 
-Gets a list of a user's effective permissions. 
+Gets a list of a user's effective permissions.
 
 Expects the following parameters:
 
@@ -1550,7 +1608,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="superuser">`user.superUser(conn, username, params)`</a>
 
-Specifies whether a user is a superuser. 
+Specifies whether a user is a superuser.
 
 Expects the following parameters:
 
@@ -1564,7 +1622,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="remove">`user.remove(conn, username, params)`</a>
 
-Deletes a user. 
+Deletes a user.
 
 Expects the following parameters:
 
@@ -1588,7 +1646,7 @@ Object with the following values:
 
 #### <a name="create">`user.role.create(conn, role, params)`</a>
 
-Creates a new role. 
+Creates a new role.
 
 Expects the following parameters:
 
@@ -1602,7 +1660,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="list">`user.role.list(conn, params)`</a>
 
-Lists all existing roles. 
+Lists all existing roles.
 
 Expects the following parameters:
 
@@ -1614,7 +1672,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="remove">`user.role.remove(conn, role, params)`</a>
 
-Deletes an existing role from the system. 
+Deletes an existing role from the system.
 
 Expects the following parameters:
 
@@ -1628,7 +1686,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="userswithrole">`user.role.usersWithRole(conn, role, params)`</a>
 
-Lists all users that have been assigned a given role. 
+Lists all users that have been assigned a given role.
 
 Expects the following parameters:
 
@@ -1642,7 +1700,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="assignpermission">`user.role.assignPermission(conn, role, permission, params)`</a>
 
-Adds a permission over a given resource to a given role. 
+Adds a permission over a given resource to a given role.
 
 Expects the following parameters:
 
@@ -1658,7 +1716,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="deletepermission">`user.role.deletePermission(conn, role, permission, params)`</a>
 
-Removes a permission over a given resource from a given role. 
+Removes a permission over a given resource from a given role.
 
 Expects the following parameters:
 
@@ -1674,7 +1732,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="permissions">`user.role.permissions(conn, role, params)`</a>
 
-Lists all permissions assigned to a given role. 
+Lists all permissions assigned to a given role.
 
 Expects the following parameters:
 
@@ -1740,6 +1798,13 @@ Object with the following values:
 - preferUntransformed (`boolean`)
 - syntax (`string`)
 
+#### <a name="vgmeta">VgMeta</a>
+
+Object with the following values:
+
+- db (`string`)
+- dataSource (`string`)
+
 #### <a name="list">`virtualGraphs.list(conn)`</a>
 
 Retrieve a list of virtual graphs
@@ -1750,7 +1815,17 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="add">`virtualGraphs.add(conn, name, mappings, options)`</a>
+#### <a name="listinfo">`virtualGraphs.listInfo(conn)`</a>
+
+Retrieve a list of virtual graphs info
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="add">`virtualGraphs.add(conn, name, mappings, options, meta)`</a>
 
 Add a virtual graph to the system
 
@@ -1764,9 +1839,11 @@ Expects the following parameters:
 
 - options ([`T`](#t))
 
+- meta ([`VgMeta`](#vgmeta))
+
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="update">`virtualGraphs.update(conn, name, mappings, options)`</a>
+#### <a name="update">`virtualGraphs.update(conn, name, mappings, options, meta)`</a>
 
 Update a virtual graph in the system
 
@@ -1780,11 +1857,25 @@ Expects the following parameters:
 
 - options ([`T`](#t))
 
+- meta ([`VgMeta`](#vgmeta))
+
 Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="remove">`virtualGraphs.remove(conn, name)`</a>
 
 Remove a virtual graph from the system
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="online">`virtualGraphs.online(conn, name)`</a>
+
+Bring a virtual graph online
 
 Expects the following parameters:
 
@@ -1829,6 +1920,28 @@ Expects the following parameters:
 - name (`string`)
 
 - requestOptions ([`MappingsRequestOptions`](#mappingsrequestoptions))
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="importfile">`virtualGraphs.importFile(conn, file, fileType, database, importOptions)`</a>
+
+Import a JSON or CSV file into a database via `virtual import`.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- file (`object`)
+
+- fileType (`string`)
+
+- database (`string`)
+
+- importOptions (`{
+          mappings?: string,
+          properties?: string,
+          namedGraph?: string,
+        }`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -1897,6 +2010,184 @@ Expects the following parameters:
 - conn ([`Connection`](#connection))
 
 - params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+## <a name="cluster">cluster</a>
+
+#### <a name="info">`cluster.info(conn)`</a>
+
+Retrieves basic information about a Stardog cluster.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="status">`cluster.status(conn)`</a>
+
+Retrieves detailed status information about a Stardog cluster.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+## <a name="datasources">dataSources</a>
+
+#### <a name="list">`dataSources.list(conn)`</a>
+
+Retrieve a list of data sources
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="listinfo">`dataSources.listInfo(conn)`</a>
+
+Retrieve a list of data sources info
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="info">`dataSources.info(conn, name)`</a>
+
+Retrieve the named data source info
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="add">`dataSources.add(conn, name, options)`</a>
+
+Add a data source to the system
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+- options ([`T`](#t))
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="update">`dataSources.update(conn, name, options)`</a>
+
+Update the named data source in the system
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+- options ([`T`](#t))
+
+- requestOptions (`{ force?: boolean; }`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="remove">`dataSources.remove(conn, name, params)`</a>
+
+Remove the named data source from the system
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="share">`dataSources.share(conn, name)`</a>
+
+Change a private data source to a shared one
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="online">`dataSources.online(conn, name)`</a>
+
+Bring the named data source online
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="available">`dataSources.available(conn, name)`</a>
+
+Determine if the named data source is available
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="options">`dataSources.options(conn, name)`</a>
+
+Retrieve the named data source options
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="getmetadata">`dataSources.getMetadata(conn, name, options)`</a>
+
+Retrieve the named data source metadata
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+- options (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="updatemetadata">`dataSources.updateMetadata(conn, name, metadata, options)`</a>
+
+Update the named data source metadata
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+- metadata ([`T`](#t))
+
+- options (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 

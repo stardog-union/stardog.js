@@ -10,11 +10,14 @@ const {
 
 const { reasoning, transaction } = db;
 
-describe('reasoning commands', () => {
+// NOTE: These are skipped right now due to a bug in Stardog 7.4.5+ (see
+// PLAT-2027). In the meantime, they have been confirmed against Stardog 7.4.4.
+describe.skip('reasoning commands', () => {
   const database = generateDatabaseName();
   const conn = ConnectionFactory();
 
   const beginTx = transaction.begin.bind(null, conn, database);
+  const rollbackTx = transaction.rollback.bind(null, conn, database);
 
   beforeAll(seedDatabase(database));
   afterAll(dropDatabase(database));
@@ -41,14 +44,18 @@ describe('reasoning commands', () => {
       expect(res.body.proofs).toBeTruthy();
     }));
 
-  it.skip('should explain inferences in a tx', () =>
-    beginTx()
+  // Skipped due to Stardog bug PLAT-1735
+  it.skip('should explain inferences in a tx', () => {
+    let transactionId;
+
+    return beginTx()
       .then(res => {
+        transactionId = res.transactionId;
         expect(res.status).toBe(200);
-        return reasoning.explainInferenceInTx(
+        return reasoning.explainInferenceInTransaction(
           conn,
           database,
-          res.transactionId,
+          transactionId,
           '<urn:A> a <urn:B> .',
           { contentType: 'text/turtle' }
         );
@@ -56,23 +63,39 @@ describe('reasoning commands', () => {
       .then(res => {
         expect(res.status).toBe(200);
         expect(res.body.proofs).toBeTruthy();
-      }));
+        return rollbackTx(transactionId);
+      })
+      .catch(err => {
+        rollbackTx(transactionId);
+        throw err;
+      });
+  });
 
-  it.skip('should explain inconsistency in a tx', () =>
-    beginTx()
+  // Skipped due to Stardog bug PLAT-1735
+  it.skip('should explain inconsistency in a tx', () => {
+    let transactionId;
+
+    return beginTx()
       .then(res => {
+        transactionId = res.transactionId;
         expect(res.status).toBe(200);
-        return reasoning.explainInconsistencyInTx(
+        return reasoning.explainInconsistencyInTransaction(
           conn,
           database,
-          res.transactionId,
+          transactionId,
           {}
         );
       })
       .then(res => {
         expect(res.status).toBe(200);
         expect(res.body.proofs).toBeTruthy();
-      }));
+        return rollbackTx(transactionId);
+      })
+      .catch(err => {
+        rollbackTx(transactionId);
+        throw err;
+      });
+  });
 
   it('should successfully get the schema', () =>
     reasoning.schema(conn, database).then(res => {

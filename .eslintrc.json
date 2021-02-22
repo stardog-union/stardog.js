@@ -1,14 +1,9 @@
 {
-  "extends": [
-    "airbnb-base",
-    "prettier"
-  ],
+  "extends": ["airbnb-base", "prettier"],
   "parserOptions": {
     "ecmaVersion": 6
   },
-  "plugins": [
-    "prettier"
-  ],
+  "plugins": ["prettier"],
   "rules": {
     "no-unused-vars": [
       "error",
@@ -16,9 +11,18 @@
         "argsIgnorePattern": "params"
       }
     ],
-    "prettier/prettier": ["warn", {
-      "singleQuote": true,
-      "trailingComma": "es5"
-    }]
+    "no-param-reassign": [
+      "error",
+      {
+        "props": false
+      }
+    ],
+    "prettier/prettier": [
+      "warn",
+      {
+        "singleQuote": true,
+        "trailingComma": "es5"
+      }
+    ]
   }
 }

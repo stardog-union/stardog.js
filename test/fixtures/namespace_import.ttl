@@ -1,0 +1,6 @@
+@prefix : <http://example.org/issues#> .
+@prefix newNamespace: <http://newNamespace.com> .
+@prefix newNamespace2: <http://newNamespace2.com> .
+@prefix newNamespace3: <http://newNamespace3.com> .
+
+:something a newNamespace:Thing .

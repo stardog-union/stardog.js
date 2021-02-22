@@ -74,7 +74,7 @@
     "url": "https://github.com/stardog-union/stardog.js/issues"
   },
   "dependencies": {
-    "fetch-ponyfill": "^4.1.0",
+    "fetch-ponyfill": "^6.0.0",
     "flat": "^2.0.1",
     "form-data": "^2.2.0",
     "isomorphic-base64": "^1.0.2",
@@ -105,6 +105,7 @@
     "rollup-plugin-json": "^2.3.0",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^2.0.1",
+    "semver": "^5.7.1",
     "typedocs": "^0.6.5"
   },
   "engines": {
@@ -114,9 +115,10 @@
     "build": "node scripts/build",
     "docs": "node scripts/docs",
     "test": "eslint '{lib,test}/**/*.js' --fix && jest test/*.spec.js --verbose -i",
+    "test:cluster": "jest test/cluster/*.spec.js --verbose -i",
     "precommit": "lint-staged",
     "format": "prettier '{lib,test}/**/*.js' --single-quote --trailing-comma es5 --write",
-    "version": "mdchangelog --remote stardog-union/stardog.js --no-prologue --order-milestones semver --order-issues closed_at --overwrite --no-orphan-issues && npm run docs && git add README.md CHANGELOG.md",
+    "version": "node scripts/changelog.js && npm run docs && git add README.md CHANGELOG.md",
     "prepublishOnly": "node scripts/triggerAnnoyingAlert.js && npm run build"
   },
   "lint-staged": {
@@ -127,5 +129,5 @@
       ]
     }
   },
-  "stardog-version": ">=5.0.0"
+  "stardog-version": ">=7.0.0"
 }

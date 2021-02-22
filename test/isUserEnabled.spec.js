@@ -10,9 +10,10 @@ describe('user.enabled()', () => {
     conn = ConnectionFactory();
   });
 
-  it('should get NOT_FOUND for a non-existent user', () =>
+  it('should indicate enabled flag as false for a non-existent user.', () =>
     user.enabled(conn, 'someuser').then(res => {
-      expect(res.status).toEqual(404);
+      expect(res.status).toBe(200);
+      expect(res.body.enabled).toBe(false);
     }));
 
   it("should return the value with the user's enabled flag", () =>

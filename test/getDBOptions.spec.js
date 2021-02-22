@@ -8,7 +8,7 @@ const {
   ConnectionFactory,
 } = require('./setup-database');
 
-describe('db.getOptions()', () => {
+describe('options.get()', () => {
   const database = generateDatabaseName();
   let conn;
 
@@ -24,7 +24,7 @@ describe('db.getOptions()', () => {
       expect(res.status).toEqual(404);
     }));
 
-  it('should get the options of an DB', () =>
+  it('should get the options of a DB', () =>
     options.get(conn, database).then(res => {
       expect(res.status).toEqual(200);
       expect(res.body).toMatchObject({
@@ -32,5 +32,34 @@ describe('db.getOptions()', () => {
           type: 'Disk',
         },
       });
+    }));
+});
+
+describe('options.getAll()', () => {
+  const database = generateDatabaseName();
+  let conn;
+
+  beforeAll(seedDatabase(database));
+  afterAll(dropDatabase(database));
+
+  beforeEach(() => {
+    conn = ConnectionFactory();
+  });
+  it('should get all db config properties', () =>
+    options.getAll(conn, database).then(res => {
+      expect(res.status).toEqual(200);
+      expect(typeof res.body).toEqual('object');
+    }));
+});
+
+describe('options.getAvailable', () => {
+  let conn;
+  beforeEach(() => {
+    conn = ConnectionFactory();
+  });
+  it('should get all available config properties', () =>
+    options.getAvailable(conn).then(res => {
+      expect(res.status).toEqual(200);
+      expect(typeof res.body).toEqual('object');
     }));
 });

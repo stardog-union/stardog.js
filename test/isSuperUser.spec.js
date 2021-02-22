@@ -10,9 +10,10 @@ describe('isSuperUser()', () => {
     conn = ConnectionFactory();
   });
 
-  it('should get NOT_FOUND for a non-existent user', () =>
+  it('should indicate superuser flag as false for a non-existent user', () =>
     user.superUser(conn, 'someuser').then(res => {
-      expect(res.status).toBe(404);
+      expect(res.status).toBe(200);
+      expect(res.body.superuser).toBe(false);
     }));
 
   it("should return the value with the user's superuser flag (true)", () =>
