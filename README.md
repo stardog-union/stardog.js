@@ -1,5 +1,7 @@
 # Stardog.js
 
+## [DEPRECATED: The version of stardog.js on this branch is not supported. Please use the `stardog@latest` npm module.]
+
 Universal Javascript fetch wrapper for communicating with the Stardog HTTP server.
 
 [![npm](https://img.shields.io/npm/v/stardog.svg?style=flat-square)](https://www.npmjs.com/package/stardog)
