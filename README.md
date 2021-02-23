@@ -1,6 +1,8 @@
-# Stardog.js
+# Warning: This branch of stardog.js is deprecated
 
-## [DEPRECATED: The version of stardog.js on this branch is not supported. Please use the `stardog@latest` npm module.]
+This branch of stardog.js is not supported or intended for public use. Please use the `stardog@latest` npm module instead.
+
+# Stardog.js
 
 Universal Javascript fetch wrapper for communicating with the Stardog HTTP server.
 
