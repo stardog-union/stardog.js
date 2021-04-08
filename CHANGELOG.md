@@ -1,3 +1,7 @@
+## [**v3.1.0**](https://github.com/stardog-union/stardog.js/milestone/47)
+- [**258**](https://github.com/stardog-union/stardog.js/issues/258) Expose native `fetch` in the browser
+- [**255**](https://github.com/stardog-union/stardog.js/issues/255) Update `new Buffer` to `Buffer.from`
+
 ## [**v3.0.0**](https://github.com/stardog-union/stardog.js/milestone/46)
 - [**254**](https://github.com/stardog-union/stardog.js/issues/254) Remove `db.versioning` API (not supported in Stardog 7)
 - [**253**](https://github.com/stardog-union/stardog.js/issues/253) Add support for importing namespaces from string or file
