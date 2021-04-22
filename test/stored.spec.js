@@ -2,6 +2,8 @@
 
 const { Connection, query: { stored }, server } = require('../lib');
 const semver = require('semver');
+
+const host = process.env.HOST || 'localhost';
 const {
   seedDatabase,
   dropDatabase,
@@ -119,7 +121,7 @@ describe('stored', () => {
           new Connection({
             username: 'foo',
             password: 'bar',
-            endpoint: 'http://localhost:5820',
+            endpoint: `http://${host}:5820`,
           }),
           {
             name,
@@ -129,7 +131,7 @@ describe('stored', () => {
           {}
         )
         .then(res => {
-          expect(res.url).toBe('http://localhost:5820/admin/queries/stored');
+          expect(res.url).toBe(`http://${host}:5820/admin/queries/stored`);
           expect(res.status).toBe(401);
         }));
     it('returns 401 when the stardog version cannot be retrieved', () =>
@@ -138,7 +140,7 @@ describe('stored', () => {
           new Connection({
             username: 'foo',
             password: 'bar',
-            endpoint: 'http://localhost:5820',
+            endpoint: `http://${host}:5820`,
           }),
           {
             name,
@@ -189,7 +191,7 @@ describe('stored', () => {
           new Connection({
             username: 'foo',
             password: 'bar',
-            endpoint: 'http://localhost:5820',
+            endpoint: `http://${host}:5820`,
           }),
           {
             name,
@@ -201,9 +203,7 @@ describe('stored', () => {
         )
         .then(res => {
           expect(res.url).toEqual(
-            expect.stringContaining(
-              'http://localhost:5820/admin/queries/stored'
-            )
+            expect.stringContaining(`http://${host}:5820/admin/queries/stored`)
           );
           expect(res.status).toBe(401);
         }));
@@ -213,7 +213,7 @@ describe('stored', () => {
           new Connection({
             username: 'foo',
             password: 'bar',
-            endpoint: 'http://localhost:5820',
+            endpoint: `http://${host}:5820`,
           }),
           {
             name,

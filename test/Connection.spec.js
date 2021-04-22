@@ -2,6 +2,8 @@
 
 const { Connection } = require('../lib');
 
+const host = process.env.HOST || 'localhost';
+
 describe('Stardog.Connection', () => {
   it('creates a new connection object', () => {
     const c = new Connection();
@@ -12,12 +14,12 @@ describe('Stardog.Connection', () => {
     const c = new Connection({
       username: 'admin',
       password: 'admin',
-      endpoint: 'http://localhost:5820/DB/',
+      endpoint: `http://${host}:5820/DB/`,
     });
     expect(c).toMatchObject({
       username: 'admin',
       password: 'admin',
-      endpoint: 'http://localhost:5820/DB',
+      endpoint: `http://${host}:5820/DB`,
     });
   });
 
@@ -35,12 +37,12 @@ describe('Stardog.Connection', () => {
       c.config({
         username: 'adam',
         password: 'admin',
-        endpoint: 'http://localhost:3000/DB',
+        endpoint: `http://${host}:3000/DB`,
       });
       expect(c).toMatchObject({
         username: 'adam',
         password: 'admin',
-        endpoint: 'http://localhost:3000/DB',
+        endpoint: `http://${host}:3000/DB`,
       });
     });
   });
@@ -50,10 +52,10 @@ describe('Stardog.Connection', () => {
       const c = new Connection({
         username: 'admin',
         password: 'admin',
-        endpoint: 'http://localhost:5820/DB/',
+        endpoint: `http://${host}:5820/DB/`,
       });
       expect(c.uri('admin', 'databases', 'foo', 'bar')).toBe(
-        'http://localhost:5820/DB/admin/databases/foo/bar'
+        `http://${host}:5820/DB/admin/databases/foo/bar`
       );
     });
   });
@@ -63,10 +65,23 @@ describe('Stardog.Connection', () => {
       const c = new Connection({
         username: 'admin',
         password: 'admin',
-        endpoint: 'http://localhost:5820/DB/',
+        endpoint: `http://${host}:5820/DB/`,
       });
       const headers = c.headers();
       expect(headers.get('Authorization')).toBe('Basic YWRtaW46YWRtaW4=');
+    });
+
+    it('uses the token for authorization if specified', () => {
+      const c = new Connection({
+        username: 'admin',
+        password: 'admin',
+        token: 'some-valid-token-goes-here',
+        endpoint: `http://${host}:5280/`,
+      });
+      const headers = c.headers();
+      expect(headers.get('Authorization')).toBe(
+        'bearer some-valid-token-goes-here'
+      );
     });
 
     it('returns the result of `createHeaders` when it is exists', () => {
@@ -74,7 +89,7 @@ describe('Stardog.Connection', () => {
         {
           username: 'admin',
           password: 'admin',
-          endpoint: 'http://localhost:5820/DB/',
+          endpoint: `http://${host}:5820/DB/`,
         },
         {
           createHeaders: () => 'lol',
@@ -88,7 +103,7 @@ describe('Stardog.Connection', () => {
         {
           username: 'admin',
           password: 'admin',
-          endpoint: 'http://localhost:5820/DB/',
+          endpoint: `http://${host}:5820/DB/`,
         },
         {
           createHeaders: ({ headers }) => {
@@ -110,7 +125,7 @@ describe('Stardog.Connection', () => {
       const c = new Connection({
         username: 'admin',
         password: 'admin',
-        endpoint: 'http://localhost:5820/DB/',
+        endpoint: `http://${host}:5820/DB/`,
       });
       expect(c.request('admin', 'databases', 'foo', 'bar')).toBe(
         c.uri('admin', 'databases', 'foo', 'bar')
@@ -122,7 +137,7 @@ describe('Stardog.Connection', () => {
         {
           username: 'admin',
           password: 'admin',
-          endpoint: 'http://localhost:5820/DB/',
+          endpoint: `http://${host}:5820/DB/`,
         },
         {
           createRequest: () => 'foo',
@@ -135,7 +150,7 @@ describe('Stardog.Connection', () => {
       const c = new Connection({
         username: 'admin',
         password: 'admin',
-        endpoint: 'http://localhost:5820/DB/',
+        endpoint: `http://${host}:5820/DB/`,
       });
       c.meta = {
         createRequest: ({ uri }) => `${uri}foo`,
@@ -159,13 +174,13 @@ describe('Stardog.Connection', () => {
       const c = new Connection({
         username: 'admin',
         password: 'admin',
-        endpoint: 'http://localhost:5820/DB/',
+        endpoint: `http://${host}:5820/DB/`,
       });
       const c2 = new Connection(
         {
           username: 'admin',
           password: 'admin',
-          endpoint: 'http://localhost:5820/DB/',
+          endpoint: `http://${host}:5820/DB/`,
         },
         {
           createRequest: () => 'foo',

@@ -6,6 +6,7 @@ const { Connection, db } = require('../lib');
 
 const dbs = new Set(); // used to keep track of DBs across runs
 const basePath = process.env.CIRCLECI ? '/var/opt/stardog/test/' : __dirname;
+const host = process.env.HOST || 'localhost';
 
 exports.seedDatabase = (database, options = {}, addlFiles = []) => () => {
   const conn = exports.ConnectionFactory();
@@ -92,5 +93,5 @@ exports.ConnectionFactory = (port = 5820) =>
   new Connection({
     username: 'admin',
     password: 'admin',
-    endpoint: `http://localhost:${port}`,
+    endpoint: `http://${host}:${port}`,
   });

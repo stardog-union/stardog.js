@@ -1,0 +1,13 @@
+---
+confVersion: "1.0"
+deploymentName: stardog-server
+issuers:
+  http://stardog.com:
+    algorithms:
+      HS256:
+        secret: "some-kind-of-secret-key-here"
+
+signer:
+  algorithm: HS256
+  secret: "some-kind-of-secret-key-here"
+  issuer: http://stardog.com
