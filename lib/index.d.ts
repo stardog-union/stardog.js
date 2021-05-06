@@ -43,7 +43,8 @@ declare namespace Stardog {
     interface ConnectionOptions {
         endpoint: string;
         username: string;
-        password: string;
+        password?: string;
+        token?: string;
         meta?: ConnectionMeta;
     }
 
@@ -642,7 +643,7 @@ declare namespace Stardog {
              * immediately, before any further stardog.js processing.
              * NOTE: The stardog.js processing will continue, unless
              * `onResponseStart` explicitly returns `false`.
-             * 
+             *
              * @param {Response} res HTTP response object.
              */
             onResponseStart: (res: Response) => boolean | void;
@@ -1024,6 +1025,13 @@ declare namespace Stardog {
          */
         function remove(conn: Connection, username: string, params?: object): Promise<HTTP.Body>;
 
+        /**
+         * Returns a token for the user if the connection is valid.
+         *
+         * @param {Connection} conn the Stardog server connection
+         */
+        function token(conn: Connection): Promise<HTTP.Body>;
+
         interface Permission {
             action: Action,
             resourceType: ResourceType,
@@ -1132,14 +1140,14 @@ declare namespace Stardog {
         }
 
         type AllVgOptions = SharedOptions & RdbmsOptions & MongoOptions & CsvOptions;
-        
+
         interface MappingsRequestOptions {
           preferUntransformed?: boolean;
           syntax?: string;
         }
-        
-        interface VgMeta { 
-          db?: string; 
+
+        interface VgMeta {
+          db?: string;
           dataSource?: string;
         }
 
@@ -1216,7 +1224,7 @@ declare namespace Stardog {
          *
          * @param {Connection} conn the Stardog server connection
          * @param {string} name the graph name
-         * @param {MappingsRequestOptions} requestOptions options for the mapping 
+         * @param {MappingsRequestOptions} requestOptions options for the mapping
          */
         function mappings(conn: Connection, name: string, requestOptions?: MappingsRequestOptions): Promise<HTTP.Body>;
 
@@ -1284,16 +1292,16 @@ declare namespace Stardog {
 
     /** Stardog HTTP cluster actions. */
     export namespace cluster {
-        /** 
+        /**
          * Retrieves basic information about a Stardog cluster.
-         * 
+         *
          * @param {Connection} conn the Stardog server connection
          */
         function info(conn: Connection): Promise<HTTP.Body>;
 
-        /** 
+        /**
          * Retrieves detailed status information about a Stardog cluster.
-         * 
+         *
          * @param {Connection} conn the Stardog server connection
          */
         function status(conn: Connection): Promise<HTTP.Body>;

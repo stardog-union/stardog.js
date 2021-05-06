@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   stardog1:
     command: ["--port", "5821", "--home", "/var/opt/stardog"]
@@ -34,6 +34,17 @@ services:
     volumes:
     - ../stardog-license-key.bin:/var/opt/stardog/stardog-license-key.bin
     - ./cluster.properties:/var/opt/stardog/stardog.properties
+  stardog3:
+    image: stardog/stardog:latest
+    ports:
+    - 5820:5820
+    restart: always
+    privileged: true
+    volumes:
+    - ../stardog-license-key.bin:/var/opt/stardog/stardog-license-key.bin
+    - ../test/fixtures/:/var/opt/stardog/test/fixtures/
+    - ./token.properties:/var/opt/stardog/stardog.properties
+    - ./jwt.yaml:/var/opt/stardog/jwt.yaml
   zoo1:
     environment:
       ZOO_MY_ID: 1
@@ -42,3 +53,28 @@ services:
     ports:
     - 2181
     restart: always
+
+  test-unit:
+    image: circleci/node:carbon-stretch
+    command: npm test
+    working_dir: /app
+    volumes:
+      - ../:/app/
+    environment:
+      - HOST=stardog3
+      - CIRCLECI=true
+    depends_on:
+      - stardog3
+
+  test-cluster:
+    image: circleci/node:carbon-stretch
+    command: npm test:cluster
+    working_dir: /app
+    environment:
+      - HOST=stardog1
+      - CIRCLECI=true
+    volumes:
+      - ../:/app/
+    depends_on:
+      - stardog1
+      - stardog2
