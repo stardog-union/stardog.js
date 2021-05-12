@@ -1,3 +1,6 @@
+## [**v3.2.0**](https://github.com/stardog-union/stardog.js/milestone/48)
+- [**261**](https://github.com/stardog-union/stardog.js/issues/261) Add token auth support
+
 ## [**v3.1.0**](https://github.com/stardog-union/stardog.js/milestone/47)
 - [**258**](https://github.com/stardog-union/stardog.js/issues/258) Expose native `fetch` in the browser
 - [**255**](https://github.com/stardog-union/stardog.js/issues/255) Update `new Buffer` to `Buffer.from`

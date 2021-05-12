@@ -164,6 +164,7 @@ Object with the following values:
 - endpoint (`string`)
 - username (`string`)
 - password (`string`)
+- token (`string`)
 - meta (`ConnectionMeta`)
 
 #### <a name="requestconstructor">RequestConstructor</a>
@@ -1631,6 +1632,16 @@ Expects the following parameters:
 - username (`string`)
 
 - params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="token">`user.token(conn)`</a>
+
+Returns a token for the user if the connection is valid.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
 
 Returns [`Promise<HTTP.Body>`](#body)
 
