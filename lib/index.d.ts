@@ -251,7 +251,7 @@ declare namespace Stardog {
          * @param {object} options an object specifying the desired HTTP MIME type. Default: application/ld+json
          * @param {object} params an object specifying the URI of a named graph to export. Default: ALL
          */
-        function exportData(conn: Connection, database: string, options?: { mimeType: HTTP.RdfMimeType }, params?: { graphUri: string }): Promise<HTTP.Body>;
+        function exportData(conn: Connection, database: string, options?: { mimetype: HTTP.RdfMimeType }, params?: { graphUri: string }): Promise<HTTP.Body>;
 
         /** Database options. */
         namespace options {

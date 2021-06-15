@@ -433,7 +433,7 @@ Expects the following parameters:
 
 - database (`string`)
 
-- options ({ mimeType: [`RdfMimeType`](#rdfmimetype) })
+- options ({ mimetype: [`RdfMimeType`](#rdfmimetype) })
 
 - params (`{ graphUri: string }`)
 
