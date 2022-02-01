@@ -2202,3 +2202,45 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="query">`dataSources.query(conn, name, dataSourceQuery)`</a>
+
+Query data source
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+- dataSourceQuery (`string`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="refreshcounts">`dataSources.refreshCounts(conn, name, tableName)`</a>
+
+Refresh table row-count estimates
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+- tableName (`string`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="refreshmetadata">`dataSources.refreshMetadata(conn, name, tableName)`</a>
+
+Refresh metadata
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+- tableName (`string`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
