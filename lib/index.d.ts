@@ -3,9 +3,9 @@
 /** stardog.js: The Stardog JS API*/
 
 import {
-  Headers,
-  Request,
-  RequestInit,
+    Headers,
+    Request,
+    RequestInit
 } from 'node-fetch';
 
 declare namespace Stardog {
@@ -1408,6 +1408,33 @@ declare namespace Stardog {
          * @param {object} options additional options if needed
          */
         function updateMetadata<T>(conn: Connection, name: string, metadata: T, options: object): Promise<HTTP.Body>;
+
+        /**
+         * Query data source
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         * @param {string} dataSourceQuery the data source query
+         */
+        function query(conn: Connection, name: string, dataSourceQuery: string): Promise<HTTP.Body>;
+
+        /**
+         * Refresh table row-count estimates
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         * @param {string} tableName optional data source table name
+         */
+        function refreshCounts(conn: Connection, name: string, tableName?: string): Promise<HTTP.Body>;
+
+        /**
+         * Refresh metadata
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         * @param {string} tableName optional data source table name
+         */
+        function refreshMetadata(conn: Connection, name: string, tableName?: string): Promise<HTTP.Body>;
     }
 }
 
