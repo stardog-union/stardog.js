@@ -20,23 +20,33 @@ const LEGACY_MILESTONE_PREFIX = 'stardog.js-';
 
 // Get closed issues and their milestones and labels, with support for paging
 // with a cursor.
-const query = `query closedIssuesAndMilestones($cursor: String) {
+const query = `query closedMilestones($milestoneCursor: String, $issueCursor: String, $prCursor: String) {
   repository(owner: "stardog-union", name: "stardog.js") {
-    issues(first: 50, after: $cursor, states: [CLOSED]) {
+    milestones(first: 50, after:$milestoneCursor, states:[CLOSED]) {
       nodes {
-        number
         title
-        url
-        # Note: we're not going to page through labels. If you have more than 20, what are you doing?
-        labels(first: 20) {
+    		url
+        issues(first: 50, after: $issueCursor, states: [CLOSED]) {
           nodes {
-            name
+            number
+            title
+            url
+          }
+          pageInfo {
+            endCursor
+            hasNextPage
           }
         }
-        milestone {
-          closed
-          title
-          url
+        pullRequests(first: 50, after: $prCursor, states: [MERGED]) {
+          nodes {
+            number
+            title
+            url
+          }
+          pageInfo {
+            endCursor
+            hasNextPage
+          }
         }
       }
       pageInfo {
@@ -52,8 +62,12 @@ const milestoneAndIssuesData = {};
 
 // Recursively fetches issues using GitHub's GraphQL API and the above query,
 // stopping when paging has been completed (`pageInfo.hasNextPage` is false).
-function getIssues(cursor = null) {
-  if (cursor === null) {
+function getMilestones(
+  milestoneCursor = null,
+  issueCursor = null,
+  prCursor = null
+) {
+  if (milestoneCursor === null && issueCursor === null && prCursor === null) {
     console.log(chalk.yellow('\nRequesting release data from GitHub...\n'));
   }
 
@@ -61,16 +75,13 @@ function getIssues(cursor = null) {
     ...baseFetchOptions,
     body: JSON.stringify({
       query,
-      variables: { cursor },
+      variables: { milestoneCursor, issueCursor, prCursor },
     }),
   })
     .then(res => res.json())
-    .then(({ data }) => {
-      const { issues } = data.repository;
-
-      issues.nodes.forEach(node => {
-        const { milestone } = node;
-        if (milestone && milestone.closed) {
+    .then(({ data: { repository: { milestones } } }) =>
+      Promise.all(
+        milestones.nodes.map(milestone => {
           if (!milestoneAndIssuesData[milestone.title]) {
             milestoneAndIssuesData[milestone.title] = {
               url: milestone.url,
@@ -78,20 +89,38 @@ function getIssues(cursor = null) {
             };
           }
 
-          milestoneAndIssuesData[milestone.title].issues.push({
-            number: node.number,
-            title: node.title,
-            url: node.url,
+          milestone.issues.nodes.forEach(issue => {
+            milestoneAndIssuesData[milestone.title].issues.push({
+              number: issue.number,
+              title: issue.title,
+              url: issue.url,
+            });
           });
+
+          milestone.pullRequests.nodes.forEach(issue => {
+            milestoneAndIssuesData[milestone.title].issues.push({
+              number: issue.number,
+              title: issue.title,
+              url: issue.url,
+            });
+          });
+
+          return milestone.issues.pageInfo.hasNextPage ||
+            milestone.pullRequests.pageInfo.hasNextPage
+            ? getMilestones(
+                milestoneCursor,
+                milestone.issues.pageInfo.endCursor,
+                milestone.pullRequests.pageInfo.endCursor
+              )
+            : Promise.resolve();
+        })
+      ).then(() => {
+        if (milestones.pageInfo.hasNextPage) {
+          return getMilestones(milestones.pageInfo.endCursor);
         }
-      });
-
-      if (issues.pageInfo.hasNextPage) {
-        return getIssues(issues.pageInfo.endCursor);
-      }
-
-      return data;
-    });
+        return milestoneAndIssuesData;
+      })
+    );
 }
 
 // Given a milestone name, pulls the data from `milestoneAndIssueData` and
@@ -149,7 +178,7 @@ function writeChangelogMd(changelogMarkdown) {
   );
 }
 
-getIssues()
+getMilestones()
   .then(generateChangelog)
   .then(writeChangelogMd)
   .then(() => console.log(chalk.green('Changelog generated successfully!\n')))
