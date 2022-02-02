@@ -1,3 +1,6 @@
+## [**v3.3.0**](https://github.com/stardog-union/stardog.js/milestone/49)
+- [**265**](https://github.com/stardog-union/stardog.js/pull/265) [VET-1472] Implement new data source query API
+
 ## [**v3.2.0**](https://github.com/stardog-union/stardog.js/milestone/48)
 - [**261**](https://github.com/stardog-union/stardog.js/issues/261) Add token auth support
 
@@ -66,6 +69,12 @@
 ## [**1.1.1**](https://github.com/stardog-union/stardog.js/milestone/13)
 - [**148**](https://github.com/stardog-union/stardog.js/issues/148) Typings for Connection are missing the (new) `meta` property
 
+## [**1.1.0**](https://github.com/stardog-union/stardog.js/milestone/12)
+- [**146**](https://github.com/stardog-union/stardog.js/pull/146) Support fetch from behind proxies and/or to endpoints with self-signed certs
+
+## [**1.0.3**](https://github.com/stardog-union/stardog.js/milestone/10)
+- [**144**](https://github.com/stardog-union/stardog.js/pull/144) Expose utils for use by consumers of Stardog.js
+
 ## [**1.0.2**](https://github.com/stardog-union/stardog.js/milestone/8)
 - [**142**](https://github.com/stardog-union/stardog.js/issues/142) Null pointer when query is unknown type
 
@@ -84,11 +93,14 @@
 ## [**1.0.0-rc3**](https://github.com/stardog-union/stardog.js/milestone/6)
 - [**117**](https://github.com/stardog-union/stardog.js/issues/117) Support for PATHS query
 - [**115**](https://github.com/stardog-union/stardog.js/issues/115) ReadMe out of sync with npm repository
+- [**112**](https://github.com/stardog-union/stardog.js/pull/112) Fix incorrect `Role` param for user.role functions
 - [**110**](https://github.com/stardog-union/stardog.js/issues/110) Query string parameters not sending upstream
 - [**109**](https://github.com/stardog-union/stardog.js/issues/109) Allow to customize accept header
 
 ## [**1.0.0-rc2**](https://github.com/stardog-union/stardog.js/milestone/5)
 - [**104**](https://github.com/stardog-union/stardog.js/issues/104) Check if user is valid
+- [**103**](https://github.com/stardog-union/stardog.js/pull/103) ✨ - Flesh out ICV endpoint and consolidate its tests
+- [**102**](https://github.com/stardog-union/stardog.js/pull/102) ✨ - Add reasoning endpoints and tests as part of #85
 - [**101**](https://github.com/stardog-union/stardog.js/issues/101) Get a single user
 - [**97**](https://github.com/stardog-union/stardog.js/issues/97) Function parameter documentation
 
