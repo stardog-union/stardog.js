@@ -655,6 +655,9 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="add">`db.icv.add(conn, database, icvAxioms, options, params)`</a>
 
+> Deprecated! Support for storing ICV constraints in the system database is deprecated in Stardog 7.5.0 
+> and removed in Stardog 8.0.0; instead, SHACL constraints can be managed using `db.add`.
+
 Adds integrity constraints to a given database.
 
 Expects the following parameters:
@@ -672,6 +675,9 @@ Expects the following parameters:
 Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="remove">`db.icv.remove(conn, database, icvAxioms, options, params)`</a>
+
+> Deprecated! Support for storing ICV constraints in the system database is deprecated in Stardog 7.5.0 
+> and removed in Stardog 8.0.0; instead, SHACL constraints can be managed using `db.remove`.
 
 Removes integrity constraints from a given database.
 
