@@ -375,34 +375,6 @@ declare namespace Stardog {
             function get(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
 
             /**
-             * Adds integrity constraints to a given database.
-             *
-             * @deprecated Support for storing ICV constraints in the system database is deprecated in Stardog 7.5.0
-             * and removed in Stardog 8.0.0; instead, SHACL constraints can be managed using {@link db.add}.
-             * 
-             * @param {Connection} conn the Stardog server connection
-             * @param {string} database the name of the database
-             * @param {string} icvAxioms an RDF block containing the axioms to be added
-             * @param {object} options an object specifying the contentType of the icvAxioms parameter. Default: text/turtle
-             * @param {object} params additional parameters if needed
-             */
-            function add(conn: Connection, database: string, icvAxioms: string, options?: { contentType: HTTP.RdfMimeType }, params?: object): Promise<HTTP.Body>;
-
-            /**
-             * Removes integrity constraints from a given database.
-             *
-             * @deprecated Support for storing ICV constraints in the system database is deprecated in Stardog 7.5.0
-             * and removed in Stardog 8.0.0; instead, SHACL constraints can be managed using {@link db.remove}.
-             * 
-             * @param {Connection} conn the Stardog server connection
-             * @param {string} database the name of the database
-             * @param {string} icvAxioms an RDF block containing the axioms to be removed
-             * @param {object} options an object specifying the contentType of the icvAxioms parameter. Default: text/turtle
-             * @param {object} params additional parameters if needed
-             */
-            function remove(conn: Connection, database: string, icvAxioms: string, options?: { contentType: HTTP.RdfMimeType }, params?: object): Promise<HTTP.Body>;
-
-            /**
              * Removes all integrity constraints from a given database.
              *
              * @param {Connection} conn the Stardog server connection
