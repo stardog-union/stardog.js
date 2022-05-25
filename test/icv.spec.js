@@ -30,44 +30,6 @@ describe('icv', () => {
   );
   afterAll(dropDatabase(database));
 
-  it('should add integrity constraint axioms', () =>
-    icv
-      .add(conn, database, icvAxioms, { contentType: 'text/turtle' })
-      .then(res => {
-        expect(res.status).toBe(204);
-        return icv.get(conn, database);
-      })
-      .then(res => {
-        expect(res.status).toBe(200);
-        return icv.clear(conn, database);
-      }));
-
-  it('should remove integrity constraint axioms', () =>
-    icv
-      .add(conn, database, icvAxioms, { contentType: 'text/turtle' })
-      .then(() =>
-        icv.remove(conn, database, icvAxioms, { contentType: 'text/turtle' })
-      )
-      .then(res => {
-        expect(res.status).toBe(204);
-        return icv.get(conn, database);
-      })
-      .then(res => {
-        expect(res.status).toBe(200);
-      }));
-
-  it('should clear integrity constraint axioms', () =>
-    icv
-      .add(conn, database, icvAxioms, { contentType: 'text/turtle' })
-      .then(() => icv.clear(conn, database))
-      .then(res => {
-        expect(res.status).toBe(204);
-        return icv.get(conn, database);
-      })
-      .then(res => {
-        expect(res.status).toBe(200);
-      }));
-
   it('should convert constraint axioms to a SPARQL query', () =>
     icv
       .convert(conn, database, icvAxioms, { contentType: 'text/turtle' })
