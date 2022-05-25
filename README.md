@@ -1211,6 +1211,20 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="rename">`query.stored.rename(conn, name, newName)`</a>
+
+Renames a given stored query.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+- newName (`string`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 ## <a name="graphql">graphql</a>
 
 #### <a name="execute">`query.graphql.execute(conn, database, query, variables, params, additionalHandlers)`</a>
