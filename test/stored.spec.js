@@ -227,7 +227,7 @@ describe('stored', () => {
           expect(res.status).toBe(401);
         }));
   });
-  describe('delete()', () => {
+  describe('remove()', () => {
     it('removes a stored query', () => {
       const name = generateRandomString();
       return stored
@@ -239,6 +239,25 @@ describe('stored', () => {
         .then(res => {
           expect(res.status).toBe(204);
           return stored.remove(conn, name);
+        })
+        .then(res => {
+          expect(res.status).toBe(204);
+        });
+    });
+  });
+  describe('rename()', () => {
+    it('renames a stored query', () => {
+      const name = generateRandomString();
+      const newName = generateRandomString();
+      return stored
+        .create(conn, {
+          name,
+          database,
+          query: 'select distinct ?type {?s a ?type}',
+        })
+        .then(res => {
+          expect(res.status).toBe(204);
+          return stored.rename(conn, name, newName);
         })
         .then(res => {
           expect(res.status).toBe(204);

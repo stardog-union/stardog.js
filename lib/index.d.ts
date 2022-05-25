@@ -771,6 +771,15 @@ declare namespace Stardog {
              * @param {object} params additional parameters if needed
              */
             function remove(conn: Connection, storedQuery: string, params?: object): Promise<HTTP.Body>
+
+            /**
+            * Renames a given stored query.
+            *
+            * @param {Connection} conn the Stardog server connection
+            * @param {string} name the current name of the existing stored query
+            * @param {string} newName the new name of the stored query
+            */
+            function rename(conn: Connection, name: string, newName: string): Promise<HTTP.Body>
         }
 
         /** GraphQL queries and schema management */
