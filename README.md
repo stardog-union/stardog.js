@@ -71,7 +71,7 @@ Fork, clone and develop, write or amend tests, and then open a PR. All PRs go ag
 
 ### Releasing
 
-If you have publishing rights, BE SURE TO RUN `npm version (major|minor|patch)` IMMEDIATELY BEFORE PUBLISHING. This will ensure that the build is up-to-date and will also (1) bump the version number in package.json accordingly, (2) create a git tag matching the version number, and (3) automatically update the README and the CHANGELOG using our type declarations and data from the stardog.js GitHub repo. For this process to work correctly, you will need to have generated a GitHub OAuth token and assigned it to the `MDCHANGELOG_TOKEN` environment variable (the name of the token is a relic of the fact that this repo once used [mdchangelog](https://www.npmjs.com/package/mdchangelog) to generate changelogs; it now uses a custom script). In order to ensure that this process is followed, there will be a very annoying alert triggered whenever you publish; if you're all set, just ignore the alert.
+If you have publishing rights, BE SURE TO RUN `npm version (major|minor|patch)` IMMEDIATELY BEFORE PUBLISHING. This will ensure that the build is up-to-date and will also (1) bump the version number in package.json accordingly, (2) create a git tag matching the version number, and (3) automatically update the README and the CHANGELOG using our type declarations and data from the stardog.js GitHub repo. For this process to work correctly, you will need to have generated a GitHub OAuth token and assigned it to the `MDCHANGELOG_TOKEN` environment variable (the name of the token is a relic of the fact that this repo once used [mdchangelog](https://www.npmjs.com/package/mdchangelog) to generate changelogs; it now uses a custom script). You can then publish by running `npm publish`. In order to ensure that this process is followed, there will be a very annoying alert triggered whenever you publish; if you're all set, just ignore the alert.
 
 After releasing, be sure to push to master, including the tags (so that the release is reflected on GitHub).
 
@@ -81,8 +81,9 @@ Each release of stardog.js is tested against the most recent version of Stardog 
 
 | stardog.js Version  | Supported Stardog Version(s) |
 | ------------------  | ---------------------------- |
+| 4.x.x               | 8.x.x                        |
 | 3.x.x               | 7.x.x                        |
-| 2.x.x               | 6.x.x                        |
+| 2.x.x*              | 6.x.x                        |
 | 1.x.x*              | 5.x.x                        |
 | 0.x.x*              | any version < 5              |
 
@@ -210,7 +211,7 @@ Returns `string`
 
 #### <a name="shutdown">`server.shutdown(conn, params)`</a>
 
-Shuts down a Stardog server. 
+Shuts down a Stardog server.
 
 Expects the following parameters:
 
@@ -443,7 +444,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="getavailable">`db.options.getAvailable(conn)`</a>
 
-Gets all available database options with their default values. 
+Gets all available database options with their default values.
 
 Expects the following parameters:
 
@@ -453,7 +454,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="get">`db.options.get(conn, database, params)`</a>
 
-Gets set of options on a database. 
+Gets set of options on a database.
 
 Expects the following parameters:
 
@@ -467,7 +468,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="getall">`db.options.getAll(conn, database)`</a>
 
-Gets all options on a database. 
+Gets all options on a database.
 
 Expects the following parameters:
 
@@ -479,7 +480,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="set">`db.options.set(conn, database, databaseOptions, params)`</a>
 
-Sets options on a database. 
+Sets options on a database.
 
 Expects the following parameters:
 
