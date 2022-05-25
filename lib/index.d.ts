@@ -377,9 +377,12 @@ declare namespace Stardog {
             /**
              * Adds integrity constraints to a given database.
              *
+             * DEPRECATED: Support for storing ICV constraints in the system database is deprecated in Stardog 7.5.0
+             * and removed in Stardog 8.0.0; instead, SHACL constraints can be managed using `db.add`.
+             *
              * @deprecated Support for storing ICV constraints in the system database is deprecated in Stardog 7.5.0
              * and removed in Stardog 8.0.0; instead, SHACL constraints can be managed using {@link db.add}.
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} icvAxioms an RDF block containing the axioms to be added
@@ -391,9 +394,12 @@ declare namespace Stardog {
             /**
              * Removes integrity constraints from a given database.
              *
+             * DEPRECATED: Support for storing ICV constraints in the system database is deprecated in Stardog 7.5.0
+             * and removed in Stardog 8.0.0; instead, SHACL constraints can be managed using `db.remove`.
+             *
              * @deprecated Support for storing ICV constraints in the system database is deprecated in Stardog 7.5.0
              * and removed in Stardog 8.0.0; instead, SHACL constraints can be managed using {@link db.remove}.
-             * 
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {string} icvAxioms an RDF block containing the axioms to be removed
