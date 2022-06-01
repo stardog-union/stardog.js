@@ -1019,6 +1019,13 @@ declare namespace Stardog {
          */
         function token(conn: Connection): Promise<HTTP.Body>;
 
+        /**
+         * Returns the username for the given connection.
+         *
+         * @param {Connection} conn the Stardog server connection
+         */
+        function whoami(conn: Connection): Promise<HTTP.Body>;
+
         interface Permission {
             action: Action,
             resourceType: ResourceType,
