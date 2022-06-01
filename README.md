@@ -699,6 +699,9 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 Removes all integrity constraints from a given database.
 
+DEPRECATED: Support for storing ICV constraints in the system database is deprecated in Stardog 7.5.0
+and removed in Stardog 8.0.0.
+
 Expects the following parameters:
 
 - conn ([`Connection`](#connection))
@@ -712,6 +715,9 @@ Returns [`Promise<HTTP.Body>`](#body)
 #### <a name="convert">`db.icv.convert(conn, database, icvAxioms, options, params)`</a>
 
 Converts a set of integrity constraints into an equivalent SPARQL query for a given database.
+
+DEPRECATED: Support for storing ICV constraints in the system database is deprecated in Stardog 7.5.0
+and removed in Stardog 8.0.0.
 
 Expects the following parameters:
 

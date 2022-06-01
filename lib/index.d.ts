@@ -411,6 +411,12 @@ declare namespace Stardog {
             /**
              * Removes all integrity constraints from a given database.
              *
+             * DEPRECATED: Support for storing ICV constraints in the system database is deprecated in Stardog 7.5.0
+             * and removed in Stardog 8.0.0.
+             *
+             * @deprecated Support for storing ICV constraints in the system database is deprecated in Stardog 7.5.0
+             * and removed in Stardog 8.0.0
+             *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
              * @param {object} params additional parameters if needed
@@ -419,6 +425,12 @@ declare namespace Stardog {
 
             /**
              * Converts a set of integrity constraints into an equivalent SPARQL query for a given database.
+             *
+             * DEPRECATED: Support for storing ICV constraints in the system database is deprecated in Stardog 7.5.0
+             * and removed in Stardog 8.0.0.
+             *
+             * @deprecated Support for storing ICV constraints in the system database is deprecated in Stardog 7.5.0
+             * and removed in Stardog 8.0.0
              *
              * @param {Connection} conn the Stardog server connection
              * @param {string} database the name of the database
