@@ -1024,7 +1024,7 @@ declare namespace Stardog {
          *
          * @param {Connection} conn the Stardog server connection
          */
-        function whoami(conn: Connection): Promise<HTTP.Body>;
+        function whoAmI(conn: Connection): Promise<HTTP.Body>;
 
         interface Permission {
             action: Action,
