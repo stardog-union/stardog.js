@@ -30,19 +30,12 @@ describe('icv', () => {
   );
   afterAll(dropDatabase(database));
 
-  it('should convert constraint axioms to a SPARQL query', () =>
-    icv
-      .convert(conn, database, icvAxioms, { contentType: 'text/turtle' })
-      .then(res => {
-        expect(res.body.startsWith('SELECT')).toBe(true);
-      }));
-
   it('should validate constraints', () =>
     icv
       .validate(conn, database, icvAxioms, { contentType: 'text/turtle' })
       .then(res => {
         expect(res.status).toBe(200);
-        expect(res.body).toBe(false);
+        expect(res.body).toBe(true);
       }));
 
   it('should validate constraints in a transaction', () =>
@@ -54,7 +47,7 @@ describe('icv', () => {
         })
         .then(validateRes => {
           expect(validateRes.status).toBe(200);
-          expect(validateRes.body).toBe(false);
+          expect(validateRes.body).toBe(true);
         })
         .then(() => rollbackTx(res.transactionId));
     }));

@@ -656,38 +656,6 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="clear">`db.icv.clear(conn, database, params)`</a>
-
-Removes all integrity constraints from a given database.
-
-Expects the following parameters:
-
-- conn ([`Connection`](#connection))
-
-- database (`string`)
-
-- params (`object`)
-
-Returns [`Promise<HTTP.Body>`](#body)
-
-#### <a name="convert">`db.icv.convert(conn, database, icvAxioms, options, params)`</a>
-
-Converts a set of integrity constraints into an equivalent SPARQL query for a given database.
-
-Expects the following parameters:
-
-- conn ([`Connection`](#connection))
-
-- database (`string`)
-
-- icvAxioms (`string`)
-
-- options ({ contentType: [`RdfMimeType`](#rdfmimetype) })
-
-- params (`{ graphUri: string }`)
-
-Returns [`Promise<HTTP.Body>`](#body)
-
 #### <a name="validate">`db.icv.validate(conn, database, constraints, options, params)`</a>
 
 Checks constraints to see if they are valid

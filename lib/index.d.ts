@@ -375,26 +375,6 @@ declare namespace Stardog {
             function get(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
 
             /**
-             * Removes all integrity constraints from a given database.
-             *
-             * @param {Connection} conn the Stardog server connection
-             * @param {string} database the name of the database
-             * @param {object} params additional parameters if needed
-             */
-            function clear(conn: Connection, database: string, params?: object): Promise<HTTP.Body>;
-
-            /**
-             * Converts a set of integrity constraints into an equivalent SPARQL query for a given database.
-             *
-             * @param {Connection} conn the Stardog server connection
-             * @param {string} database the name of the database
-             * @param {string} icvAxioms an RDF block containing the axioms to be added
-             * @param {object} options an object specifying the contentType of the icvAxioms parameter. Default: text/turtle
-             * @param {object} params additional parameters if needed
-             */
-            function convert(conn: Connection, database: string, icvAxioms: string, options: { contentType: HTTP.RdfMimeType }, params?: { graphUri: string }): Promise<HTTP.Body>;
-
-            /**
              * Checks constraints to see if they are valid
              *
              * @param {Connection} conn the Stardog server connection
