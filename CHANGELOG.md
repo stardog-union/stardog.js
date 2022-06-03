@@ -1,10 +1,3 @@
-## [**v4.1.0**](https://github.com/stardog-union/stardog.js/milestone/52)
-- [**273**](https://github.com/stardog-union/stardog.js/pull/273) [VET-1900] Remove icv.clear and icv.convert
-- [**271**](https://github.com/stardog-union/stardog.js/pull/271) [VET-1380] Add `admin/status/whoami`
-
-## [**v4.0.0**](https://github.com/stardog-union/stardog.js/milestone/51)
-- [**268**](https://github.com/stardog-union/stardog.js/pull/268) [VET-1900] Remove ICV add/remove
-
 ## [**v3.5.0**](https://github.com/stardog-union/stardog.js/milestone/53)
 - [**275**](https://github.com/stardog-union/stardog.js/issues/275) [VET-1380] Add `admin/status/whoami`
 
