@@ -129,5 +129,9 @@
       ]
     }
   },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
   "stardog-version": ">=7.0.0"
 }
