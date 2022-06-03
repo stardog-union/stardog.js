@@ -1594,6 +1594,16 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="whoami">`user.whoAmI(conn)`</a>
+
+Returns the username for the given connection.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 #### <a name="permission">Permission</a>
 
 Object with the following values:
