@@ -1,3 +1,17 @@
+## [**v4.1.0**](https://github.com/stardog-union/stardog.js/milestone/52)
+- [**273**](https://github.com/stardog-union/stardog.js/pull/273) [VET-1900] Remove icv.clear and icv.convert
+- [**271**](https://github.com/stardog-union/stardog.js/pull/271) [VET-1380] Add `admin/status/whoami`
+
+## [**v4.0.0**](https://github.com/stardog-union/stardog.js/milestone/51)
+- [**268**](https://github.com/stardog-union/stardog.js/pull/268) [VET-1900] Remove ICV add/remove
+
+## [**v3.5.0**](https://github.com/stardog-union/stardog.js/milestone/53)
+- [**275**](https://github.com/stardog-union/stardog.js/issues/275) [VET-1380] Add `admin/status/whoami`
+
+## [**v3.4.0**](https://github.com/stardog-union/stardog.js/milestone/50)
+- [**270**](https://github.com/stardog-union/stardog.js/pull/270) [VET-1921] Add rename stored query to stardog.js
+- [**267**](https://github.com/stardog-union/stardog.js/pull/267) [VET-1899] Deprecate ICV add/remove
+
 ## [**v3.3.0**](https://github.com/stardog-union/stardog.js/milestone/49)
 - [**265**](https://github.com/stardog-union/stardog.js/pull/265) [VET-1472] Implement new data source query API
 
