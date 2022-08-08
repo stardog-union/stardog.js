@@ -1414,12 +1414,12 @@ declare namespace Stardog {
          * Get suggestions for property matches on a model.
          *
          * @param {Connection} conn the Stardog server connection
-         * @param {string} trigBody trig configuration and optional model content
+         * @param {string} content trig configuration and optional model content
          * @param {object} options additional options if needed
          */
         function suggestions(
             conn: Connection,
-            trigBody: string,
+            content: string,
             options?: { accept?: string; contentType?: string }
         ): Promise<HTTP.Body>;
     }
