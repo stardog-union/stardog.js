@@ -2203,3 +2203,17 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="suggestions">`dataSources.suggestions(conn, trigBody, options)`</a>
+
+Get suggestions for property matches on a model.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- trigBody (`string`)
+
+- options (`{ accept?: string; contentType?: string }`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+

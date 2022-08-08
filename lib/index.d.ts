@@ -1381,7 +1381,7 @@ declare namespace Stardog {
          * @param {Metadata} metadata the data source metadata
          * @param {object} options additional options if needed
          */
-        function updateMetadata<T>(conn: Connection, name: string, metadata: T, options: object): Promise<HTTP.Body>;
+        function updateMetadata<T>(conn: Connection, name: string, metadata: T, options?: object): Promise<HTTP.Body>;
 
         /**
          * Query data source
@@ -1409,6 +1409,19 @@ declare namespace Stardog {
          * @param {string} tableName optional data source table name
          */
         function refreshMetadata(conn: Connection, name: string, tableName?: string): Promise<HTTP.Body>;
+
+        /**
+         * Get suggestions for property matches on a model.
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} trigBody trig configuration and optional model content
+         * @param {object} options additional options if needed
+         */
+        function suggestions(
+            conn: Connection,
+            trigBody: string,
+            options?: { accept?: string; contentType?: string }
+        ): Promise<HTTP.Body>;
     }
 }
 
