@@ -133,5 +133,5 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "stardog-version": ">=7.0.0"
+  "stardog-version": ">=8.0.0"
 }

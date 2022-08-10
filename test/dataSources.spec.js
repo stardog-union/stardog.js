@@ -53,6 +53,7 @@ describe('data_sources', () => {
       }));
   });
 
+  // TODO remove .only; test with a real datasource
   describe.only('listInfo', () => {
     it('retrieves a list of data source info', () =>
       dataSources.listInfo(conn).then(res => {
@@ -150,5 +151,31 @@ describe('data_sources', () => {
         .then(res => {
           expect(res.status).toBe(204);
         }));
+  });
+
+  describe('suggestions', () => {
+    const tableName = 'TODO';
+
+    it('returns successfully when given a valid configuration', () =>
+      assureExists().then(() =>
+        dataSources
+          .suggestions(
+            conn,
+            `
+<tag:stardog:api:match:configuration> {
+  [] <tag:stardog:api:match:source> <data-source://${aDSName}> ;
+    <tag:stardog:api:match:sourceTable> "${tableName}" ;
+    <tag:stardog:api:match:target> <tag:stardog:project:model> ;
+}
+
+<tag:stardog:project:model> {
+ 
+}
+`
+          )
+          .then(res => {
+            expect(res.status).toBe(200);
+          })
+      ));
   });
 });
