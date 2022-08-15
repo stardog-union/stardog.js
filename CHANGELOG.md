@@ -1,3 +1,6 @@
+## [**v4.2.0**](https://github.com/stardog-union/stardog.js/milestone/54)
+- [**276**](https://github.com/stardog-union/stardog.js/pull/276) [VET-2029] Stardog.js changes for automapping service
+
 ## [**v4.1.0**](https://github.com/stardog-union/stardog.js/milestone/52)
 - [**273**](https://github.com/stardog-union/stardog.js/pull/273) [VET-1900] Remove icv.clear and icv.convert
 - [**271**](https://github.com/stardog-union/stardog.js/pull/271) [VET-1380] Add `admin/status/whoami`
