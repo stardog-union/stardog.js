@@ -37,10 +37,13 @@ To get started, just clone the project. You'll need a local copy of Stardog to b
 Go to [http://stardog.com](http://stardog.com), download and install the database and load the data provided in `data/` using the script in the repository.
 
 1. Start the Stardog server
+
 ```bash
 stardog-admin server start
 ```
+
 2. Install `stardog.js` dependencies:
+
 ```bash
 npm install
 ```
@@ -81,19 +84,20 @@ After releasing, be sure to push to master, including the tags (so that the rele
 
 Each release of stardog.js is tested against the most recent version of Stardog available at the time of the release. The relationship between versions of stardog.js and versions of Stardog is detailed in the following table:
 
-| stardog.js Version  | Supported Stardog Version(s) |
-| ------------------  | ---------------------------- |
-| 4.x.x               | 8.x.x                        |
-| 3.x.x               | 7.x.x                        |
-| 2.x.x*              | 6.x.x                        |
-| 1.x.x*              | 5.x.x                        |
-| 0.x.x*              | any version < 5              |
+| stardog.js Version | Supported Stardog Version(s) |
+| ------------------ | ---------------------------- |
+| 4.x.x              | 8.x.x                        |
+| 3.x.x              | 7.x.x                        |
+| 2.x.x\*            | 6.x.x                        |
+| 1.x.x\*            | 5.x.x                        |
+| 0.x.x\*            | any version < 5              |
 
-_* = No longer supported_
+_\* = No longer supported_
 
 We support and maintain a particular version of stardog.js only if the corresponding Stardog version(s) is (are) officially supported and maintained. For example, we no longer support v0.x.x of stardog.js, as the corresponding Stardog versions are no longer supported. (That said, later versions of stardog.js will often _mostly_ work with earlier Stardog versions. We just don't test this or make any guarantees to that effect.)
 
 ## Quick Example
+
 ```js
 const { Connection, query } = require('stardog');
 
@@ -103,16 +107,25 @@ const conn = new Connection({
   endpoint: 'http://localhost:5820',
 });
 
-query.execute(conn, 'myDatabaseName', 'select distinct ?s where { ?s ?p ?o }', 'application/sparql-results+json', {
-  limit: 10,
-  reasoning: true,
-  offset: 0,
-}).then(({ body }) => {
-  console.log(body.results.bindings);
-});
+query
+  .execute(
+    conn,
+    'myDatabaseName',
+    'select distinct ?s where { ?s ?p ?o }',
+    'application/sparql-results+json',
+    {
+      limit: 10,
+      reasoning: true,
+      offset: 0,
+    }
+  )
+  .then(({ body }) => {
+    console.log(body.results.bindings);
+  });
 ```
 
 <!--- API Goes Here --->
+
 # API
 
 ## <a name="http">HTTP</a>
@@ -121,34 +134,26 @@ query.execute(conn, 'myDatabaseName', 'select distinct ?s where { ?s ?p ?o }', '
 
 One of the following values:
 
-`'application/ld+json'
-            | 'text/turtle'
-            | 'application/rdf+xml'
-            | 'application/n-triples'
-            | 'application/n-quads'
-            | 'application/trig'`
+`'application/ld+json' | 'text/turtle' | 'application/rdf+xml' | 'application/n-triples' | 'application/n-quads' | 'application/trig'`
+
 #### <a name="sparqlmimetype">SparqlMimeType</a>
 
 One of the following values:
 
-`'application/sparql-results+json'
-            | 'application/sparql-results+xml'`
+`'application/sparql-results+json' | 'application/sparql-results+xml'`
+
 #### <a name="acceptmimetype">AcceptMimeType</a>
 
 One of the following values:
 
-`RdfMimeType
-            | SparqlMimeType
-            | 'text/plain'
-            | 'text/boolean'
-            | 'application/json'
-            | '*/*'`
+`RdfMimeType | SparqlMimeType | 'text/plain' | 'text/boolean' | 'application/json' | '*/*'`
+
 #### <a name="explainacceptmimetype">ExplainAcceptMimeType</a>
 
 One of the following values:
 
-`'text/plain'
-            | 'application/json'`
+`'text/plain' | 'application/json'`
+
 #### <a name="body">Body</a>
 
 Object with the following values:
@@ -174,14 +179,14 @@ Object with the following values:
 
 One of the following values:
 
-`{
-      new (input: string | Request, init?: RequestInit): Request;
-    }`
+`{ new (input: string | Request, init?: RequestInit): Request; }`
+
 #### <a name="requestcreator">RequestCreator</a>
 
 One of the following values:
 
 `({ uri, Request }: { uri: string; Request: Constructor }) => ReturnType`
+
 #### <a name="connectionmeta">ConnectionMeta</a>
 
 Object with the following values:
@@ -192,28 +197,35 @@ Object with the following values:
 ## <a name="connection">Connection</a> (Class)
 
 Constructed with:
+
 - options ([`ConnectionOptions`](#connectionoptions))
+
 ### <a name="config">Connection.config(options, meta)</a>
 
 Takes the following params:
+
 - options ([`ConnectionOptions`](#connectionoptions))
 - meta ([`ConnectionMeta`](#connectionmeta))
 
 Returns [`void`](#void)
+
 ### <a name="headers">Connection.headers()</a>
 
 Returns [`Headers`](#headers)
+
 ### <a name="uri">Connection.uri(resource)</a>
 
 Takes the following params:
+
 - resource (`string[]`)
 
 Returns `string`
+
 ## <a name="server">server</a>
 
 #### <a name="shutdown">`server.shutdown(conn, params)`</a>
 
-Shuts down a Stardog server. 
+Shuts down a Stardog server.
 
 Expects the following parameters:
 
@@ -446,7 +458,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="getavailable">`db.options.getAvailable(conn)`</a>
 
-Gets all available database options with their default values. 
+Gets all available database options with their default values.
 
 Expects the following parameters:
 
@@ -456,7 +468,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="get">`db.options.get(conn, database, params)`</a>
 
-Gets set of options on a database. 
+Gets set of options on a database.
 
 Expects the following parameters:
 
@@ -470,7 +482,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="getall">`db.options.getAll(conn, database)`</a>
 
-Gets all options on a database. 
+Gets all options on a database.
 
 Expects the following parameters:
 
@@ -482,7 +494,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="set">`db.options.set(conn, database, databaseOptions, params)`</a>
 
-Sets options on a database. 
+Sets options on a database.
 
 Expects the following parameters:
 
@@ -576,11 +588,8 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 One of the following values:
 
-`'gzip' |
-                'compress' |
-                'deflate' |
-                'identity' |
-                'br'`
+`'gzip' | 'compress' | 'deflate' | 'identity' | 'br'`
+
 #### <a name="transactionresponse">TransactionResponse</a> extends [HTTP.Body](#body)
 
 Object with the following values:
@@ -992,6 +1001,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 One of the following values:
 
 `'select' | 'ask' | 'construct' | 'describe' | 'update' | 'paths' | null`
+
 #### <a name="propertyoptions">PropertyOptions</a>
 
 Object with the following values:
@@ -1286,7 +1296,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="removeschema">`query.graphql.removeSchema(conn, database, name, params)`</a>
 
-Removes a GraphQL schemafrom  the database
+Removes a GraphQL schemafrom the database
 
 Expects the following parameters:
 
@@ -1350,24 +1360,14 @@ Object with the following values:
 
 One of the following values:
 
-`'CREATE' |
-            'DELETE' |
-            'READ' |
-            'WRITE' |
-            'GRANT' |
-            'REVOKE' |
-            'EXECUTE'`
+`'CREATE' | 'DELETE' | 'READ' | 'WRITE' | 'GRANT' | 'REVOKE' | 'EXECUTE'`
+
 #### <a name="resourcetype">ResourceType</a>
 
 One of the following values:
 
-`'db' |
-            'user' |
-            'role' |
-            'admin' |
-            'metadata' |
-            'named-graph' |
-            'icv-constraints'`
+`'db' | 'user' | 'role' | 'admin' | 'metadata' | 'named-graph' | 'icv-constraints'`
+
 #### <a name="list">`user.list(conn, params)`</a>
 
 Gets a list of users.
@@ -1761,6 +1761,7 @@ Object with the following values:
 One of the following values:
 
 `SharedOptions & RdbmsOptions & MongoOptions & CsvOptions`
+
 #### <a name="mappingsrequestoptions">MappingsRequestOptions</a>
 
 Object with the following values:
@@ -1907,11 +1908,7 @@ Expects the following parameters:
 
 - database (`string`)
 
-- importOptions (`{
-          mappings?: string,
-          properties?: string,
-          namedGraph?: string,
-        }`)
+- importOptions (`{ mappings?: string, properties?: string, namedGraph?: string, }`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -2217,3 +2214,12 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="typeDescription">`dataSources.typeDescription(conn)`</a>
+
+Get information about the data source types supported by the stardog instance, and their options.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+Returns [`Promise<HTTP.Body>`](#body)
