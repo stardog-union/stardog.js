@@ -1422,6 +1422,15 @@ declare namespace Stardog {
             content: string,
             options?: { accept?: string; contentType?: string }
         ): Promise<HTTP.Body>;
+
+        /**
+         * Get information about the data source types supported by the stardog instance, and their options
+         * 
+         * @param {Connection} conn the Stardog server connection
+         */
+         function typeDescription(
+            conn: Connection,
+        ): Promise<HTTP.Body>;
     }
 }
 

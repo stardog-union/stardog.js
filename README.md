@@ -37,10 +37,13 @@ To get started, just clone the project. You'll need a local copy of Stardog to b
 Go to [http://stardog.com](http://stardog.com), download and install the database and load the data provided in `data/` using the script in the repository.
 
 1. Start the Stardog server
+
 ```bash
 stardog-admin server start
 ```
+
 2. Install `stardog.js` dependencies:
+
 ```bash
 npm install
 ```
@@ -81,19 +84,20 @@ After releasing, be sure to push to master, including the tags (so that the rele
 
 Each release of stardog.js is tested against the most recent version of Stardog available at the time of the release. The relationship between versions of stardog.js and versions of Stardog is detailed in the following table:
 
-| stardog.js Version  | Supported Stardog Version(s) |
-| ------------------  | ---------------------------- |
-| 4.x.x               | 8.x.x                        |
-| 3.x.x               | 7.x.x                        |
-| 2.x.x*              | 6.x.x                        |
-| 1.x.x*              | 5.x.x                        |
-| 0.x.x*              | any version < 5              |
+| stardog.js Version | Supported Stardog Version(s) |
+| ------------------ | ---------------------------- |
+| 4.x.x              | 8.x.x                        |
+| 3.x.x              | 7.x.x                        |
+| 2.x.x\*            | 6.x.x                        |
+| 1.x.x\*            | 5.x.x                        |
+| 0.x.x\*            | any version < 5              |
 
-_* = No longer supported_
+_\* = No longer supported_
 
 We support and maintain a particular version of stardog.js only if the corresponding Stardog version(s) is (are) officially supported and maintained. For example, we no longer support v0.x.x of stardog.js, as the corresponding Stardog versions are no longer supported. (That said, later versions of stardog.js will often _mostly_ work with earlier Stardog versions. We just don't test this or make any guarantees to that effect.)
 
 ## Quick Example
+
 ```js
 const { Connection, query } = require('stardog');
 
@@ -103,13 +107,21 @@ const conn = new Connection({
   endpoint: 'http://localhost:5820',
 });
 
-query.execute(conn, 'myDatabaseName', 'select distinct ?s where { ?s ?p ?o }', 'application/sparql-results+json', {
-  limit: 10,
-  reasoning: true,
-  offset: 0,
-}).then(({ body }) => {
-  console.log(body.results.bindings);
-});
+query
+  .execute(
+    conn,
+    'myDatabaseName',
+    'select distinct ?s where { ?s ?p ?o }',
+    'application/sparql-results+json',
+    {
+      limit: 10,
+      reasoning: true,
+      offset: 0,
+    }
+  )
+  .then(({ body }) => {
+    console.log(body.results.bindings);
+  });
 ```
 
 <!--- API Goes Here --->
@@ -2214,6 +2226,16 @@ Expects the following parameters:
 - content (`string`)
 
 - options (`{ accept?: string; contentType?: string }`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="typedescription">`dataSources.typeDescription(conn)`</a>
+
+Get information about the data source types supported by the stardog instance, and their options
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
 
 Returns [`Promise<HTTP.Body>`](#body)
 
