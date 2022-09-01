@@ -1,3 +1,6 @@
+## [**v4.3.0**](https://github.com/stardog-union/stardog.js/milestone/55)
+- [**278**](https://github.com/stardog-union/stardog.js/pull/278) [VET-1703] Data source description endpoint
+
 ## [**v4.2.0**](https://github.com/stardog-union/stardog.js/milestone/54)
 - [**276**](https://github.com/stardog-union/stardog.js/pull/276) [VET-2029] Stardog.js changes for automapping service
 
