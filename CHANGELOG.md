@@ -1,3 +1,6 @@
+## [**v4.3.1**](https://github.com/stardog-union/stardog.js/milestone/56)
+- [**279**](https://github.com/stardog-union/stardog.js/pull/279) [VET-2486] Update flat package
+
 ## [**v4.3.0**](https://github.com/stardog-union/stardog.js/milestone/55)
 - [**278**](https://github.com/stardog-union/stardog.js/pull/278) [VET-1703] Data source description endpoint
 
@@ -10,6 +13,9 @@
 
 ## [**v4.0.0**](https://github.com/stardog-union/stardog.js/milestone/51)
 - [**268**](https://github.com/stardog-union/stardog.js/pull/268) [VET-1900] Remove ICV add/remove
+
+## [**v3.5.1**](https://github.com/stardog-union/stardog.js/milestone/57)
+- [**280**](https://github.com/stardog-union/stardog.js/issues/280) [VET-2486] Update flat package
 
 ## [**v3.5.0**](https://github.com/stardog-union/stardog.js/milestone/53)
 - [**275**](https://github.com/stardog-union/stardog.js/issues/275) [VET-1380] Add `admin/status/whoami`
