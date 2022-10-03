@@ -147,8 +147,16 @@ function getMarkdownForMilestone(milestoneName) {
 
 function generateChangelog() {
   console.log(chalk.yellow('Generating changelog markdown...\n'));
-  const sortedMilestoneNames = Object.keys(milestoneAndIssuesData).sort(
-    (milestoneOne, milestoneTwo) => {
+  const sortedMilestoneNames = Object.keys(milestoneAndIssuesData)
+    .filter(milestone =>
+      semver.lt(
+        milestone.startsWith(LEGACY_MILESTONE_PREFIX)
+          ? milestone.substring(LEGACY_MILESTONE_PREFIX.length)
+          : milestone,
+        '4.0.0'
+      )
+    )
+    .sort((milestoneOne, milestoneTwo) => {
       // Normalize some old, legacy milestone names:
       const milestoneOneName = milestoneOne.startsWith(LEGACY_MILESTONE_PREFIX)
         ? milestoneOne.substring(LEGACY_MILESTONE_PREFIX.length)
