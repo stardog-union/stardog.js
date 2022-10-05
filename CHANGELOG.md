@@ -1,3 +1,6 @@
+## [**v3.5.2**](https://github.com/stardog-union/stardog.js/milestone/58)
+- [**282**](https://github.com/stardog-union/stardog.js/issues/282) [VET-2486] Update flat package
+
 ## [**v3.5.1**](https://github.com/stardog-union/stardog.js/milestone/57)
 - [**280**](https://github.com/stardog-union/stardog.js/issues/280) [VET-2486] Update flat package
 
