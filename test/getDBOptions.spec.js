@@ -64,7 +64,7 @@ describe('options.getAvailable', () => {
       expect(res.status).toEqual(200);
       expect(typeof res.body).toEqual('object');
       expect(res.body).toMatchObject({
-        index: {},
+        'docs.path': {},
       });
     }));
 });
