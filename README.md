@@ -502,7 +502,7 @@ Expects the following parameters:
 
 - database (`string`)
 
-- databaseOptions (`object`)
+- databaseOptions (`{ [propertyKey: string]: any }`)
 
 - params (`object`)
 
