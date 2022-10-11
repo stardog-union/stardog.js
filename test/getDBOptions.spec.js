@@ -27,10 +27,9 @@ describe('options.get()', () => {
   it('should get the options of a DB', () =>
     options.get(conn, database).then(res => {
       expect(res.status).toEqual(200);
+      expect(typeof res.body).toEqual('object');
       expect(res.body).toMatchObject({
-        index: {
-          type: 'Disk',
-        },
+        'index.type': 'Disk',
       });
     }));
 });
@@ -49,6 +48,9 @@ describe('options.getAll()', () => {
     options.getAll(conn, database).then(res => {
       expect(res.status).toEqual(200);
       expect(typeof res.body).toEqual('object');
+      expect(res.body).toMatchObject({
+        'index.type': 'Disk',
+      });
     }));
 });
 
@@ -61,5 +63,8 @@ describe('options.getAvailable', () => {
     options.getAvailable(conn).then(res => {
       expect(res.status).toEqual(200);
       expect(typeof res.body).toEqual('object');
+      expect(res.body).toMatchObject({
+        'docs.path': {},
+      });
     }));
 });
