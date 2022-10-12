@@ -1,3 +1,6 @@
+## [**v3.6.0**](https://github.com/stardog-union/stardog.js/milestone/61)
+- [**284**](https://github.com/stardog-union/stardog.js/issues/284) [VET-2546] **Breaking Change** Do not flatten request body nor unflatten response body for `db.options`
+
 ## [**v3.5.2**](https://github.com/stardog-union/stardog.js/milestone/58)
 - [**282**](https://github.com/stardog-union/stardog.js/issues/282) [VET-2486] Update flat package
 
