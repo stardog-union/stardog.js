@@ -1,3 +1,9 @@
+## [**v4.4.0**](https://github.com/stardog-union/stardog.js/milestone/62)
+- [**283**](https://github.com/stardog-union/stardog.js/pull/283) [VET-2546] **Breaking Change** Do not flatten request body nor unflatten response body for `db.options`
+
+## [**v4.3.2**](https://github.com/stardog-union/stardog.js/milestone/59)
+- [**281**](https://github.com/stardog-union/stardog.js/issues/281) [VET-2486] Update flat package
+
 ## [**v4.3.1**](https://github.com/stardog-union/stardog.js/milestone/56)
 - [**279**](https://github.com/stardog-union/stardog.js/pull/279) [VET-2486] Update flat package
 
@@ -13,6 +19,12 @@
 
 ## [**v4.0.0**](https://github.com/stardog-union/stardog.js/milestone/51)
 - [**268**](https://github.com/stardog-union/stardog.js/pull/268) [VET-1900] Remove ICV add/remove
+
+## [**v3.6.0**](https://github.com/stardog-union/stardog.js/milestone/61)
+- [**284**](https://github.com/stardog-union/stardog.js/issues/284) [VET-2546] **Breaking Change** Do not flatten request body nor unflatten response body for `db.options`
+
+## [**v3.5.2**](https://github.com/stardog-union/stardog.js/milestone/58)
+- [**282**](https://github.com/stardog-union/stardog.js/issues/282) [VET-2486] Update flat package
 
 ## [**v3.5.1**](https://github.com/stardog-union/stardog.js/milestone/57)
 - [**280**](https://github.com/stardog-union/stardog.js/issues/280) [VET-2486] Update flat package
