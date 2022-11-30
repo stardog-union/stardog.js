@@ -3,7 +3,7 @@
 const { user } = require('../lib');
 const { generateRandomString, ConnectionFactory } = require('./setup-database');
 
-describe('Add User Role Test Suite', () => {
+describe('Assign User Role Test Suite', () => {
   let conn;
 
   beforeEach(() => {
@@ -11,7 +11,7 @@ describe('Add User Role Test Suite', () => {
   });
 
   it('should return NOT_FOUND trying to add role to a non-existent user.', () =>
-    user.addRole(conn, generateRandomString(), 'reader').then(res => {
+    user.assignRole(conn, generateRandomString(), 'reader').then(res => {
       expect(res.status).toBe(404);
     }));
 
@@ -23,8 +23,8 @@ describe('Add User Role Test Suite', () => {
         name,
         password,
       })
-      .then(() => user.addRole(conn, name, 'reader'))
-      .then(() => user.addRole(conn, name, 'cloud'))
+      .then(() => user.assignRole(conn, name, 'reader'))
+      .then(() => user.assignRole(conn, name, 'cloud'))
       .then(res => {
         expect(res.status).toBe(200);
         return user.listRoles(conn, name);

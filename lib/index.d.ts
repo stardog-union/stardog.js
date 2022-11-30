@@ -831,7 +831,7 @@ declare namespace Stardog {
     export namespace user {
 
         interface User {
-            name: string;
+            username: string;
             password: string;
             superuser?: boolean;
         }
@@ -935,7 +935,7 @@ declare namespace Stardog {
          * @param {string} role the role to add to the user
          * @param {object} params additional parameters if needed
          */
-        function addRole(conn: Connection, username: string, role: string, params?: object): Promise<HTTP.Body>;
+        function assignRole(conn: Connection, username: string, role: string, params?: object): Promise<HTTP.Body>;
 
         /**
          * Gets a list of roles assigned to a user.
