@@ -17,21 +17,22 @@ describe('Assign User Role Test Suite', () => {
 
   it('should add role to a newly created user.', () => {
     const name = generateRandomString();
-    const password = generateRandomString();
+    const password = generateRandomString() + generateRandomString();
     return user
       .create(conn, {
         name,
         password,
       })
+      .then(() => user.role.create(conn, { name: 'other_role' }))
       .then(() => user.assignRole(conn, name, 'reader'))
-      .then(() => user.assignRole(conn, name, 'cloud'))
+      .then(() => user.assignRole(conn, name, 'other_role'))
       .then(res => {
-        expect(res.status).toBe(200);
+        expect(res.status).toBe(204);
         return user.listRoles(conn, name);
       })
       .then(res => {
         expect(res.body.roles).toContain('reader');
-        expect(res.body.roles).toContain('cloud');
+        expect(res.body.roles).toContain('other_role');
       });
   });
 });
