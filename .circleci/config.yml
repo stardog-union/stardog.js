@@ -24,9 +24,6 @@ jobs:
         command: echo $LICENSE | base64 --decode > ./stardog-license-key.bin
     - run:
         working_directory: *working_directory
-        command: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD stardog-eps-docker.jfrog.io
-    - run:
-        working_directory: *working_directory
         command: docker build -t this/here/starduck ./
     - run:
         working_directory: *working_directory
