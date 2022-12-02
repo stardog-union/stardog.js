@@ -918,7 +918,7 @@ declare namespace Stardog {
         function enable(conn: Connection, username: string, enabled: boolean, params?: object): Promise<HTTP.Body>;
 
         /**
-         * Sets roles for a user.
+         * Sets roles for a user. (Overwrites any existing roles)
          *
          * @param {Connection} conn the Stardog server connection
          * @param {string} username the username of the user
@@ -926,6 +926,16 @@ declare namespace Stardog {
          * @param {object} params additional parameters if needed
          */
         function setRoles(conn: Connection, username: string, roles: string[], params?: object): Promise<HTTP.Body>;
+
+        /**
+         * Adds a role to a user.
+         * 
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} username the username of the user
+         * @param {string} role the role to add to the user
+         * @param {object} params additional parameters if needed
+         */
+        function assignRole(conn: Connection, username: string, role: string, params?: object): Promise<HTTP.Body>;
 
         /**
          * Gets a list of roles assigned to a user.
