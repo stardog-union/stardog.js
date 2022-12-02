@@ -1,3 +1,6 @@
+## [**v4.5.0**](https://github.com/stardog-union/stardog.js/milestone/63)
+- [**285**](https://github.com/stardog-union/stardog.js/pull/285) Add `user.assignRole`
+
 ## [**v4.4.0**](https://github.com/stardog-union/stardog.js/milestone/62)
 - [**283**](https://github.com/stardog-union/stardog.js/pull/283) [VET-2546] **Breaking Change** Do not flatten request body nor unflatten response body for `db.options`
 
@@ -19,6 +22,9 @@
 
 ## [**v4.0.0**](https://github.com/stardog-union/stardog.js/milestone/51)
 - [**268**](https://github.com/stardog-union/stardog.js/pull/268) [VET-1900] Remove ICV add/remove
+
+## [**v3.7.0**](https://github.com/stardog-union/stardog.js/milestone/64)
+- [**286**](https://github.com/stardog-union/stardog.js/issues/286) Add `user.assignRole`
 
 ## [**v3.6.0**](https://github.com/stardog-union/stardog.js/milestone/61)
 - [**284**](https://github.com/stardog-union/stardog.js/issues/284) [VET-2546] **Breaking Change** Do not flatten request body nor unflatten response body for `db.options`
