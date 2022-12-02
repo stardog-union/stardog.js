@@ -1545,7 +1545,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="setroles">`user.setRoles(conn, username, roles, params)`</a>
 
-Sets roles for a user.
+Sets roles for a user. (Overwrites any existing roles)
 
 Expects the following parameters:
 
@@ -1554,6 +1554,22 @@ Expects the following parameters:
 - username (`string`)
 
 - roles (`string[]`)
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="assignrole">`user.assignRole(conn, username, role, params)`</a>
+
+Adds a role to a user.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- username (`string`)
+
+- role (`string`)
 
 - params (`object`)
 
