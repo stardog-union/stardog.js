@@ -863,6 +863,13 @@ declare namespace Stardog {
         function list(conn: Connection, params?: object): Promise<HTTP.Body>;
 
         /**
+         * Retrieve a list of user info
+         *
+         * @param {Connection} conn the Stardog server connection
+         */
+          function listInfo(conn: Connection): Promise<HTTP.Body>;
+
+        /**
          * Gets all information for a given user.
          *
          * @param {Connection} conn the Stardog server connection
@@ -1039,6 +1046,13 @@ declare namespace Stardog {
              * @param {object} params additional parameters if needed
              */
             function list(conn: Connection, params?: object): Promise<HTTP.Body>;
+
+            /**
+             * Retrieve a list of role info
+             *
+             * @param {Connection} conn the Stardog server connection
+             */
+            function listInfo(conn: Connection): Promise<HTTP.Body>;
 
             /**
              * Deletes an existing role from the system.

@@ -1392,6 +1392,16 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="listinfo">`user.listInfo(conn)`</a>
+
+Retrieve a list of user info
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 #### <a name="get">`user.get(conn, username, params)`</a>
 
 Gets all information for a given user.
@@ -1665,6 +1675,16 @@ Expects the following parameters:
 - conn ([`Connection`](#connection))
 
 - params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="listinfo">`user.role.listInfo(conn)`</a>
+
+Retrieve a list of role info
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
 
 Returns [`Promise<HTTP.Body>`](#body)
 
