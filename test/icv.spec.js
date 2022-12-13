@@ -30,6 +30,47 @@ describe('icv', () => {
   );
   afterAll(dropDatabase(database));
 
+  // skipped as this is no longer supported in Stardog 8.0.0+
+  it.skip('should add integrity constraint axioms', () =>
+    icv
+      .add(conn, database, icvAxioms, { contentType: 'text/turtle' })
+      .then(res => {
+        expect(res.status).toBe(204);
+        return icv.get(conn, database);
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+        return icv.clear(conn, database);
+      }));
+
+  // skipped as this is no longer supported in Stardog 8.0.0+
+  it.skip('should remove integrity constraint axioms', () =>
+    icv
+      .add(conn, database, icvAxioms, { contentType: 'text/turtle' })
+      .then(() =>
+        icv.remove(conn, database, icvAxioms, { contentType: 'text/turtle' })
+      )
+      .then(res => {
+        expect(res.status).toBe(204);
+        return icv.get(conn, database);
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+      }));
+
+  // skipped as this is no longer supported in Stardog 8.0.0+
+  it.skip('should clear integrity constraint axioms', () =>
+    icv
+      .add(conn, database, icvAxioms, { contentType: 'text/turtle' })
+      .then(() => icv.clear(conn, database))
+      .then(res => {
+        expect(res.status).toBe(204);
+        return icv.get(conn, database);
+      })
+      .then(res => {
+        expect(res.status).toBe(200);
+      }));
+
   it('should validate constraints', () =>
     icv
       .validate(conn, database, icvAxioms, { contentType: 'text/turtle' })
