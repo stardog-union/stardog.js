@@ -1,3 +1,7 @@
+## [**v4.6.0**](https://github.com/stardog-union/stardog.js/milestone/65)
+- [**288**](https://github.com/stardog-union/stardog.js/pull/288) Re-add deprecated icv methods
+- [**287**](https://github.com/stardog-union/stardog.js/pull/287) [VET-2765] Add `user.listInfo` and `user.role.listInfo`
+
 ## [**v4.5.0**](https://github.com/stardog-union/stardog.js/milestone/63)
 - [**285**](https://github.com/stardog-union/stardog.js/pull/285) Add `user.assignRole`
 
