@@ -2114,6 +2114,11 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 ## <a name="datasources">dataSources</a>
 
+#### <a name="datasourcequery">DataSourceQuery</a>
+
+One of the following values:
+
+`{ query: string, options: object }`
 #### <a name="list">`dataSources.list(conn)`</a>
 
 Retrieve a list of data sources
@@ -2278,7 +2283,7 @@ Expects the following parameters:
 
 - name (`string`)
 
-- dataSourceQuery (`string`)
+- dataSourceQuery (`string | DataSourceQuery`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 

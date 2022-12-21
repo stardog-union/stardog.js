@@ -1460,7 +1460,7 @@ declare namespace Stardog {
          *
          * @param {Connection} conn the Stardog server connection
          * @param {string} name the data source name
-         * @param {string | DataSourceQuery} dataSourceQuery the data source query
+         * @param {string | DataSourceQuery} dataSourceQuery the data source query; only string queries are supported before Stardog 8.2
          */
         function query(conn: Connection, name: string, dataSourceQuery: string | DataSourceQuery): Promise<HTTP.Body>;
 
