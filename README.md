@@ -2114,11 +2114,6 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 ## <a name="datasources">dataSources</a>
 
-#### <a name="datasourcequery">DataSourceQuery</a>
-
-One of the following values:
-
-`{ query: string, options: object }`
 #### <a name="list">`dataSources.list(conn)`</a>
 
 Retrieve a list of data sources
@@ -2273,6 +2268,11 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="datasourcequery">DataSourceQuery</a>
+
+One of the following values:
+
+`string | { query: string, options: object }`
 #### <a name="query">`dataSources.query(conn, name, dataSourceQuery)`</a>
 
 Query data source
@@ -2283,7 +2283,7 @@ Expects the following parameters:
 
 - name (`string`)
 
-- dataSourceQuery (`string | DataSourceQuery`)
+- dataSourceQuery ([`DataSourceQuery`](#datasourcequery))
 
 Returns [`Promise<HTTP.Body>`](#body)
 
