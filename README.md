@@ -2268,6 +2268,11 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="datasourcequery">DataSourceQuery</a>
+
+One of the following values:
+
+`string | { query: string, options: object }`
 #### <a name="query">`dataSources.query(conn, name, dataSourceQuery)`</a>
 
 Query data source
@@ -2278,7 +2283,7 @@ Expects the following parameters:
 
 - name (`string`)
 
-- dataSourceQuery (`string`)
+- dataSourceQuery ([`DataSourceQuery`](#datasourcequery))
 
 Returns [`Promise<HTTP.Body>`](#body)
 

@@ -1351,7 +1351,7 @@ declare namespace Stardog {
         function status(conn: Connection): Promise<HTTP.Body>;
     }
 
-    export namespace dataSources {
+    export namespace dataSources {    
         /**
          * Retrieve a list of data sources
          *
@@ -1453,14 +1453,16 @@ declare namespace Stardog {
          */
         function updateMetadata<T>(conn: Connection, name: string, metadata: T, options?: object): Promise<HTTP.Body>;
 
+        type DataSourceQuery = string | { query: string, options: object };
+
         /**
          * Query data source
          *
          * @param {Connection} conn the Stardog server connection
          * @param {string} name the data source name
-         * @param {string} dataSourceQuery the data source query
+         * @param {DataSourceQuery} dataSourceQuery the data source query; only string queries are supported before Stardog 8.2
          */
-        function query(conn: Connection, name: string, dataSourceQuery: string): Promise<HTTP.Body>;
+        function query(conn: Connection, name: string, dataSourceQuery: DataSourceQuery): Promise<HTTP.Body>;
 
         /**
          * Refresh table row-count estimates
