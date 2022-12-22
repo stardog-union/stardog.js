@@ -1,3 +1,6 @@
+## [**v4.6.1**](https://github.com/stardog-union/stardog.js/milestone/66)
+- [**289**](https://github.com/stardog-union/stardog.js/pull/289) [VET-2689] Add support for data source query options
+
 ## [**v4.6.0**](https://github.com/stardog-union/stardog.js/milestone/65)
 - [**288**](https://github.com/stardog-union/stardog.js/pull/288) Re-add deprecated icv methods
 - [**287**](https://github.com/stardog-union/stardog.js/pull/287) [VET-2765] Add `user.listInfo` and `user.role.listInfo`
