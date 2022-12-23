@@ -109,7 +109,7 @@
     "typedocs": "^0.6.5"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=16"
   },
   "scripts": {
     "build": "node scripts/build",
