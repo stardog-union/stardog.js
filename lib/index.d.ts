@@ -2,11 +2,11 @@
 
 /** stardog.js: The Stardog JS API*/
 
+// TODO
 import {
     Headers,
-    Request,
-    RequestInit
-} from 'node-fetch';
+    Request, RequestInit
+} from 'axios';
 
 declare namespace Stardog {
     namespace HTTP {

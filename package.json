@@ -74,16 +74,15 @@
     "url": "https://github.com/stardog-union/stardog.js/issues"
   },
   "dependencies": {
-    "fetch-ponyfill": "^6.0.0",
+    "axios": "^1.2.1",
     "flat": "^5.0.2",
-    "form-data": "^2.2.0",
+    "form-data": "^4.0.0",
     "isomorphic-base64": "^1.0.2",
     "lodash": "^4.17.4",
     "querystring": "^0.2.0"
   },
   "devDependencies": {
     "@types/jest": "^20.0.2",
-    "@types/node-fetch": "^1.6.7",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
     "babel-preset-es2015-rollup": "^3.0.0",
     "chalk": "^2.0.1",
