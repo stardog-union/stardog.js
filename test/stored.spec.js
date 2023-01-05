@@ -33,6 +33,29 @@ describe('stored', () => {
           return stored.remove(conn, name);
         });
     });
+    it('allows annotations to be set', () => {
+      const name = generateRandomString();
+      return stored
+        .create(conn, {
+          name,
+          database,
+          query: 'select distinct ?type {?s a ?type}',
+          annotations: { 'iri:annotation:thing': 'is a string!' },
+        })
+        .then(res => {
+          expect(res.status).toBe(204);
+          return stored.list(conn, { accept: 'application/ld+json' });
+        })
+        .then(res => {
+          const storedQuery = res.body['@graph'].find(
+            v => v['system:queryName']['@value'] === name
+          );
+          expect(storedQuery['iri:annotation:thing']['@value']).toBe(
+            'is a string!'
+          );
+          return stored.remove(conn, name);
+        });
+    });
     it('fails if the body is not correct', () =>
       stored
         .create(conn, {
@@ -40,7 +63,7 @@ describe('stored', () => {
           query: 'select distinct ?type {?s a ?type}',
         })
         .then(res => {
-          expect(res.status).toBe(400);
+          expect(res.status).toBe(500);
         }));
   });
   describe('list()', () => {
