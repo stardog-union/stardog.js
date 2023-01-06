@@ -1194,11 +1194,10 @@ Object with the following values:
 - shared (`boolean`)
 - reasoning (`boolean`)
 - description (`boolean`)
-- annotations (`Record<string, any>`)
 
 ## <a name="stored">stored</a>
 
-#### <a name="create">`query.stored.create(conn, config)`</a>
+#### <a name="create">`query.stored.create(conn, storedQuery, options)`</a>
 
 Stores a query in Stardog, either on the system level or for a given database.
 
@@ -1206,7 +1205,9 @@ Expects the following parameters:
 
 - conn ([`Connection`](#connection))
 
-- config ([`StoredQueryOptions`](#storedqueryoptions))
+- storedQuery ([`StoredQueryOptions | object`](#storedqueryoptions | object))
+
+- options (`{ accept?: string = 'application/json', contentType?: string = 'application/json' }`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -1222,7 +1223,7 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="update">`query.stored.update(conn, config, useUpdateMethod)`</a>
+#### <a name="update">`query.stored.update(conn, storedQuery, useUpdateMethod, options)`</a>
 
 Updates a given stored query and creates it if the name does not refer to an existing stored query.
 
@@ -1230,9 +1231,11 @@ Expects the following parameters:
 
 - conn ([`Connection`](#connection))
 
-- config ([`StoredQueryOptions`](#storedqueryoptions))
+- storedQuery ([`StoredQueryOptions`](#storedqueryoptions))
 
 - useUpdateMethod (`boolean`)
+
+- options (`{ accept?: string = 'application/json', contentType?: string = 'application/json' }`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
