@@ -12,6 +12,49 @@ const {
   ConnectionFactory,
 } = require('./setup-database');
 
+const convertToJsonLd = (conn, storedQuery) => {
+  const types = ['system:StoredQuery'];
+  if (storedQuery.shared) {
+    types.push('system:SharedQuery');
+  }
+  if (storedQuery.reasoning) {
+    types.push('system:ReasoningQuery');
+  }
+
+  const keyValuePairs = Object.entries(
+    Object.assign(
+      {
+        'system:queryName': storedQuery.name,
+        'system:queryDescription': storedQuery.description,
+        'system:queryString': storedQuery.query,
+        'system:queryCreator': conn.username,
+        'system:queryDatabase': storedQuery.database,
+      },
+      storedQuery.annotations
+    )
+  ).reduce((obj, [iri, value]) => {
+    if (typeof value !== 'undefined') {
+      obj[iri] = { '@value': value };
+    }
+    return obj;
+  }, {});
+
+  return {
+    '@context': {
+      system: 'http://system.stardog.com/',
+    },
+    '@graph': [
+      Object.assign(
+        {
+          '@id': 'system:Query',
+          '@type': types,
+        },
+        keyValuePairs
+      ),
+    ],
+  };
+};
+
 describe('stored', () => {
   const database = generateDatabaseName();
   const conn = ConnectionFactory();
@@ -33,26 +76,63 @@ describe('stored', () => {
           return stored.remove(conn, name);
         });
     });
-    it('allows annotations to be set', () => {
+    it.only('creates and updates a new stored query with annotations (using jsonld)', () => {
       const name = generateRandomString();
+      const query = 'select distinct ?type { ?s a ?type }';
+      const newQuery = 'select * { ?a ?b ?c }';
+
       return stored
-        .create(conn, {
-          name,
-          database,
-          query: 'select distinct ?type {?s a ?type}',
-          annotations: { 'iri:annotation:thing': 'is a string!' },
+        .create(
+          conn,
+          convertToJsonLd(conn, {
+            name,
+            database,
+            query,
+            annotations: { 'iri:annotation:thing': 'is a string!' },
+          }),
+          { contentType: 'application/ld+json' }
+        )
+        .then(res => {
+          expect(res.status).toBe(204);
+          return stored.list(conn, { accept: 'application/ld+json' });
+        })
+        .then(res => {
+          expect(res.status).toBe(200);
+          const storedQuery = res.body['@graph'].find(
+            v => v['system:queryName']['@value'] === name
+          );
+          expect(storedQuery).toBeTruthy();
+          expect(storedQuery['iri:annotation:thing']['@value']).toBe(
+            'is a string!'
+          );
+          expect(storedQuery['system:queryString']['@value']).toBe(query);
+
+          return stored.update(
+            conn,
+            convertToJsonLd(conn, {
+              name,
+              database,
+              query: newQuery,
+              annotations: { 'iri:annotation:thing': 'is a new string!' },
+            }),
+            true,
+            { contentType: 'application/ld+json' }
+          );
         })
         .then(res => {
           expect(res.status).toBe(204);
           return stored.list(conn, { accept: 'application/ld+json' });
         })
         .then(res => {
+          expect(res.status).toBe(200);
           const storedQuery = res.body['@graph'].find(
             v => v['system:queryName']['@value'] === name
           );
+          expect(storedQuery).toBeTruthy();
           expect(storedQuery['iri:annotation:thing']['@value']).toBe(
-            'is a string!'
+            'is a new string!'
           );
+          expect(storedQuery['system:queryString']['@value']).toBe(newQuery);
           return stored.remove(conn, name);
         });
     });
@@ -63,7 +143,7 @@ describe('stored', () => {
           query: 'select distinct ?type {?s a ?type}',
         })
         .then(res => {
-          expect(res.status).toBe(500);
+          expect(res.status).toBe(400);
         }));
   });
   describe('list()', () => {

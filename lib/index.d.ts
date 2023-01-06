@@ -730,12 +730,6 @@ declare namespace Stardog {
             /** Attributes introduced in Stardog version 6.2.2, which are optional in versions >= 6.2.2 and ignored in earlier versions. */
             reasoning?: boolean,
             description?: boolean,
-            /**
-             * [Extra arbitrary properties](https://docs.stardog.com/operating-stardog/database-administration/stored-queries#attaching-arbitrary-properties-to-stored-queries)
-             *
-             * Keys must be in the form of valid iris.
-             */
-            annotations?: Record<string, any>,
         }
 
         /** Manages stored queries. */
@@ -744,9 +738,14 @@ declare namespace Stardog {
              * Stores a query in Stardog, either on the system level or for a given database.
              *
              * @param {Connection} conn the Stardog server connection
-             * @param {StoredQueryOptions} config an object specifying the options to set on the new query
+             * @param {StoredQueryOptions} storedQuery an object specifying the options to set on the new query
+             * @param {object} options additional options to customize query
              */
-            function create(conn: Connection, config: StoredQueryOptions): Promise<HTTP.Body>
+            function create(
+                conn: Connection,
+                storedQuery: StoredQueryOptions | object,
+                options?: { accept?: string = 'application/json', contentType?: string = 'application/json' }
+            ): Promise<HTTP.Body>
 
             /**
              * Lists all stored queries.
@@ -756,13 +755,19 @@ declare namespace Stardog {
             function list(conn: Connection, options?: { accept?: string = 'application/json' }): Promise<HTTP.Body>
 
             /**
-                * Updates a given stored query and creates it if the name does not refer to an existing stored query.
-                *
-                * @param {Connection} conn the Stardog server connection
-                * @param {StoredQueryOptions} config an object specifying the options to set on the updated query
-                * @param {boolean} useUpdateMethod whether to use Stardog's HTTP PUT method, added in version 6.2.0. Default: true
-                */
-            function update(conn: Connection, config: StoredQueryOptions, useUpdateMethod?: boolean): Promise<HTTP.Body>
+             * Updates a given stored query and creates it if the name does not refer to an existing stored query.
+             *
+             * @param {Connection} conn the Stardog server connection
+             * @param {StoredQueryOptions} storedQuery an object specifying the options to set on the updated query
+             * @param {boolean} useUpdateMethod whether to use Stardog's HTTP PUT method, added in version 6.2.0. Default: true
+             * @param {object} options additional options to customize query
+             */
+            function update(
+                conn: Connection,
+                storedQuery: StoredQueryOptions,
+                useUpdateMethod?: boolean = true,
+                options?: { accept?: string = 'application/json', contentType?: string = 'application/json' }
+            ): Promise<HTTP.Body>
 
             /**
              * Removes a given stored query.
