@@ -744,15 +744,15 @@ declare namespace Stardog {
             function create(
                 conn: Connection,
                 storedQuery: StoredQueryOptions | object,
-                options?: { accept?: string = 'application/json', contentType?: string = 'application/json' }
-            ): Promise<HTTP.Body>
+                options?: { accept?: string, contentType?: string }
+            ): Promise<HTTP.Body>;
 
             /**
              * Lists all stored queries.
              *
              * @param {Connection} conn the Stardog server connection
              */
-            function list(conn: Connection, options?: { accept?: string = 'application/json' }): Promise<HTTP.Body>
+            function list(conn: Connection, options?: { accept?: string }): Promise<HTTP.Body>;
 
             /**
              * Updates a given stored query and creates it if the name does not refer to an existing stored query.
@@ -765,9 +765,9 @@ declare namespace Stardog {
             function update(
                 conn: Connection,
                 storedQuery: StoredQueryOptions,
-                options?: { accept?: string = 'application/json', contentType?: string = 'application/json' },
-                useUpdateMethod?: boolean = true
-            ): Promise<HTTP.Body>
+                options?: { accept?: string, contentType?: string },
+                useUpdateMethod?: boolean
+            ): Promise<HTTP.Body>;
 
             /**
              * Removes a given stored query.
@@ -775,7 +775,7 @@ declare namespace Stardog {
              * @param {Connection} conn the Stardog server connection
              * @param {string} storedQuery the name of the stored query to be removed
              */
-            function remove(conn: Connection, storedQuery: string): Promise<HTTP.Body>
+            function remove(conn: Connection, storedQuery: string): Promise<HTTP.Body>;
 
             /**
             * Renames a given stored query.
@@ -784,7 +784,7 @@ declare namespace Stardog {
             * @param {string} name the current name of the existing stored query
             * @param {string} newName the new name of the stored query
             */
-            function rename(conn: Connection, name: string, newName: string): Promise<HTTP.Body>
+            function rename(conn: Connection, name: string, newName: string): Promise<HTTP.Body>;
         }
 
         /** GraphQL queries and schema management */
