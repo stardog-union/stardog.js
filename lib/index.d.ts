@@ -739,7 +739,7 @@ declare namespace Stardog {
              *
              * @param {Connection} conn the Stardog server connection
              * @param {StoredQueryOptions} storedQuery an object specifying the options to set on the new query
-             * @param {object} options additional options to customize query
+             * @param {object} options additional request options
              */
             function create(
                 conn: Connection,
@@ -751,6 +751,7 @@ declare namespace Stardog {
              * Lists all stored queries.
              *
              * @param {Connection} conn the Stardog server connection
+             * @param {object} options additional request options
              */
             function list(conn: Connection, options?: { accept?: string }): Promise<HTTP.Body>;
 
@@ -759,7 +760,7 @@ declare namespace Stardog {
              *
              * @param {Connection} conn the Stardog server connection
              * @param {StoredQueryOptions} storedQuery an object specifying the options to set on the updated query
-             * @param {object} options additional options to customize query
+             * @param {object} options additional request options
              * @param {boolean} useUpdateMethod whether to use Stardog's HTTP PUT method, added in version 6.2.0. Default: true
              */
             function update(
