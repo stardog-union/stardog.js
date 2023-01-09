@@ -76,7 +76,7 @@ describe('stored', () => {
           return stored.remove(conn, name);
         });
     });
-    it.only('creates and updates a new stored query with annotations (using jsonld)', () => {
+    it('creates and updates a new stored query with annotations (using jsonld)', () => {
       const name = generateRandomString();
       const query = 'select distinct ?type { ?s a ?type }';
       const newQuery = 'select * { ?a ?b ?c }';
