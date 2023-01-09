@@ -759,14 +759,14 @@ declare namespace Stardog {
              *
              * @param {Connection} conn the Stardog server connection
              * @param {StoredQueryOptions} storedQuery an object specifying the options to set on the updated query
-             * @param {boolean} useUpdateMethod whether to use Stardog's HTTP PUT method, added in version 6.2.0. Default: true
              * @param {object} options additional options to customize query
+             * @param {boolean} useUpdateMethod whether to use Stardog's HTTP PUT method, added in version 6.2.0. Default: true
              */
             function update(
                 conn: Connection,
                 storedQuery: StoredQueryOptions,
-                useUpdateMethod?: boolean = true,
-                options?: { accept?: string = 'application/json', contentType?: string = 'application/json' }
+                options?: { accept?: string = 'application/json', contentType?: string = 'application/json' },
+                useUpdateMethod?: boolean = true
             ): Promise<HTTP.Body>
 
             /**

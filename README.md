@@ -1223,7 +1223,7 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="update">`query.stored.update(conn, storedQuery, useUpdateMethod, options)`</a>
+#### <a name="update">`query.stored.update(conn, storedQuery, options, useUpdateMethod)`</a>
 
 Updates a given stored query and creates it if the name does not refer to an existing stored query.
 
@@ -1233,9 +1233,9 @@ Expects the following parameters:
 
 - storedQuery ([`StoredQueryOptions`](#storedqueryoptions))
 
-- useUpdateMethod (`boolean`)
-
 - options (`{ accept?: string = 'application/json', contentType?: string = 'application/json' }`)
+
+- useUpdateMethod (`boolean`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
