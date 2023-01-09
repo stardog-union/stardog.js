@@ -115,8 +115,8 @@ describe('stored', () => {
               query: newQuery,
               annotations: { 'iri:annotation:thing': 'is a new string!' },
             }),
-            true,
-            { contentType: 'application/ld+json' }
+            { contentType: 'application/ld+json' },
+            true
           );
         })
         .then(res => {
