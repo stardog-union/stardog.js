@@ -1,3 +1,7 @@
+## [**v4.7.0**](https://github.com/stardog-union/stardog.js/milestone/67)
+- [**292**](https://github.com/stardog-union/stardog.js/pull/292) [VET-2901] Rename docker environment variables
+- [**290**](https://github.com/stardog-union/stardog.js/pull/290) [VET-2824] Add node 18 compatibility
+
 ## [**v4.6.1**](https://github.com/stardog-union/stardog.js/milestone/66)
 - [**289**](https://github.com/stardog-union/stardog.js/pull/289) [VET-2689] Add support for data source query options
 
