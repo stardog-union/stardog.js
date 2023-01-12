@@ -1,3 +1,6 @@
+## [**v4.7.1**](https://github.com/stardog-union/stardog.js/milestone/68)
+- [**291**](https://github.com/stardog-union/stardog.js/pull/291) [VET-2831] Allow arbitrary metadata for stored queries
+
 ## [**v4.7.0**](https://github.com/stardog-union/stardog.js/milestone/67)
 - [**292**](https://github.com/stardog-union/stardog.js/pull/292) [VET-2901] Rename docker environment variables
 - [**290**](https://github.com/stardog-union/stardog.js/pull/290) [VET-2824] Add node 18 compatibility

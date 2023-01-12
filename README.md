@@ -1207,7 +1207,7 @@ Expects the following parameters:
 
 - storedQuery ([`StoredQueryOptions | object`](#storedqueryoptions | object))
 
-- options (`{ accept?: string = 'application/json', contentType?: string = 'application/json' }`)
+- options (`{ accept?: string, contentType?: string }`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -1219,7 +1219,7 @@ Expects the following parameters:
 
 - conn ([`Connection`](#connection))
 
-- options (`{ accept?: string = 'application/json' }`)
+- options (`{ accept?: string }`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -1233,7 +1233,7 @@ Expects the following parameters:
 
 - storedQuery ([`StoredQueryOptions`](#storedqueryoptions))
 
-- options (`{ accept?: string = 'application/json', contentType?: string = 'application/json' }`)
+- options (`{ accept?: string, contentType?: string }`)
 
 - useUpdateMethod (`boolean`)
 
