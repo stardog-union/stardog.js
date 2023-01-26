@@ -1231,7 +1231,7 @@ Expects the following parameters:
 
 - conn ([`Connection`](#connection))
 
-- storedQuery ([`StoredQueryOptions`](#storedqueryoptions))
+- storedQuery ([`StoredQueryOptions | object`](#storedqueryoptions | object))
 
 - options (`{ accept?: string, contentType?: string }`)
 
