@@ -765,7 +765,7 @@ declare namespace Stardog {
              */
             function update(
                 conn: Connection,
-                storedQuery: StoredQueryOptions,
+                storedQuery: StoredQueryOptions | object,
                 options?: { accept?: string, contentType?: string },
                 useUpdateMethod?: boolean
             ): Promise<HTTP.Body>;
@@ -1359,7 +1359,7 @@ declare namespace Stardog {
         function status(conn: Connection): Promise<HTTP.Body>;
     }
 
-    export namespace dataSources {    
+    export namespace dataSources {
         /**
          * Retrieve a list of data sources
          *
