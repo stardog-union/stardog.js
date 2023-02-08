@@ -192,6 +192,15 @@ declare namespace Stardog {
         function list(conn: Connection, params?: object): Promise<HTTP.Body>;
 
         /**
+         * Gets a list of databases info on a Stardog server.
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {object} params additional parameters if needed
+         */
+        function listInfo(conn: Connection, params?: object): Promise<HTTP.Body>;
+
+
+        /**
          * Gets number of triples in a database.
          *
          * @param {Connection} conn the Stardog server connection
