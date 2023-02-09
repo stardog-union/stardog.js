@@ -1,3 +1,6 @@
+## [**v4.8.0**](https://github.com/stardog-union/stardog.js/milestone/69)
+- [**295**](https://github.com/stardog-union/stardog.js/pull/295) [VET-3070] add `db.listInfo`
+
 ## [**v4.7.1**](https://github.com/stardog-union/stardog.js/milestone/68)
 - [**291**](https://github.com/stardog-union/stardog.js/pull/291) [VET-2831] Allow arbitrary metadata for stored queries
 

@@ -1,6 +1,6 @@
 {
   "name": "stardog",
-  "version": "4.7.1",
+  "version": "4.8.0",
   "description": "Stardog JavaScript Framework for node.js and the browser - Develop apps using the Stardog RDF Database & JS.",
   "keywords": [
     "stardog",
