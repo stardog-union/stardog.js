@@ -352,6 +352,18 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="listinfo">`db.listInfo(conn, params)`</a>
+
+Gets a list of databases info on a Stardog server.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 #### <a name="size">`db.size(conn, database, params)`</a>
 
 Gets number of triples in a database.
