@@ -37,6 +37,7 @@ declare namespace Stardog {
             ok: boolean;
             headers: Headers;
             body: any;
+            url: string;
         }
     }
 
@@ -126,9 +127,9 @@ declare namespace Stardog {
 
         /** 
          * Retrieves server properties. By default, it will return all server
-         * properties, but you can specify `params.name` to return specific ones. 
+         * properties, but you can specify `names` to return specific ones. 
          */
-        function properties(conn: Connection, params?: { name?: string; }): Promise<HTTP.Body>;
+        function properties(conn: Connection, names?: string[]): Promise<HTTP.Body>;
     }
 
     /** Stardog database actions. */
