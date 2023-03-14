@@ -37,7 +37,6 @@ declare namespace Stardog {
             ok: boolean;
             headers: Headers;
             body: any;
-            url: string;
         }
     }
 
