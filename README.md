@@ -235,6 +235,19 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="properties">`server.properties(conn, names)`</a>
+
+Retrieves server properties. By default, it will return all server
+properties, but you can specify `names` to return specific ones. 
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- names (`string[]`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 ## <a name="db">db</a>
 
 #### <a name="create">`db.create(conn, database, databaseOptions, options, params)`</a>

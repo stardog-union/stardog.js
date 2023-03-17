@@ -1,3 +1,6 @@
+## [**v3.8.0**](https://github.com/stardog-union/stardog.js/milestone/71)
+- [**298**](https://github.com/stardog-union/stardog.js/issues/298) Add `server.properties`
+
 ## [**v3.7.0**](https://github.com/stardog-union/stardog.js/milestone/64)
 - [**286**](https://github.com/stardog-union/stardog.js/issues/286) Add `user.assignRole`
 
