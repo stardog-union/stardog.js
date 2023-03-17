@@ -1,3 +1,6 @@
+## [**v4.9.0**](https://github.com/stardog-union/stardog.js/milestone/70)
+- [**297**](https://github.com/stardog-union/stardog.js/pull/297) [Cloud-1157] Add `server.properties`
+
 ## [**v4.8.0**](https://github.com/stardog-union/stardog.js/milestone/69)
 - [**295**](https://github.com/stardog-union/stardog.js/pull/295) [VET-3070] add `db.listInfo`
 
@@ -39,6 +42,9 @@
 
 ## [**v4.0.0**](https://github.com/stardog-union/stardog.js/milestone/51)
 - [**268**](https://github.com/stardog-union/stardog.js/pull/268) [VET-1900] Remove ICV add/remove
+
+## [**v3.8.0**](https://github.com/stardog-union/stardog.js/milestone/71)
+- [**298**](https://github.com/stardog-union/stardog.js/issues/298) Add `server.properties`
 
 ## [**v3.7.0**](https://github.com/stardog-union/stardog.js/milestone/64)
 - [**286**](https://github.com/stardog-union/stardog.js/issues/286) Add `user.assignRole`
