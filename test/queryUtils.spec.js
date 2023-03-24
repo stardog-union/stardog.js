@@ -10,4 +10,27 @@ describe('queryType', () => {
 SELECT * { ?s ?p ?o }`;
     expect(queryType(query)).toBe('select');
   });
+
+  it('should correctly identify ask queries', () => {
+    const query = `# PREFIX : <http://www.example.com>
+ASK { ?s ?p ?o }`;
+    expect(queryType(query)).toBe('ask');
+  });
+  it('should correctly identify construct queries', () => {
+    const query = `# PREFIX : <http://www.example.com>
+CONSTRUCT { ?s ?p ?o }
+WHERE { ?s ?p ?o }`;
+    expect(queryType(query)).toBe('construct');
+  });
+  it('should correctly identify describe queries', () => {
+    const query = `# PREFIX : <http://www.example.com>
+DESCRIBE ?s`;
+    expect(queryType(query)).toBe('describe');
+  });
+  it('should correctly identify validate queries', () => {
+    const query = `# PREFIX : <http://www.example.com>
+VALIDATE { ?s ?p ?o }
+WHERE { ?s ?p ?o }`;
+    expect(queryType(query)).toBe('validate');
+  });
 });
