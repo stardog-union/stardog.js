@@ -1089,7 +1089,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 One of the following values:
 
-`'select' | 'ask' | 'construct' | 'describe' | 'update' | 'paths' | null`
+`'select' | 'ask' | 'construct' | 'describe' | 'validate' | 'update' | 'paths' | null`
 #### <a name="propertyoptions">PropertyOptions</a>
 
 Object with the following values:
