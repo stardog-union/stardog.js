@@ -28,7 +28,7 @@ DESCRIBE ?s`;
     expect(queryType(query)).toBe('describe');
   });
   it('should correctly identify validate queries', () => {
-    const query = `
+    const query = `# PREFIX : <http://www.example.com>
 VALIDATE USING SHAPES {
     :NameShape a sh:NodeShape ;
        sh:property [
