@@ -37,6 +37,7 @@ declare namespace Stardog {
             ok: boolean;
             headers: Headers;
             body: any;
+            url: string;
         }
     }
 
@@ -124,9 +125,9 @@ declare namespace Stardog {
          */
         function status(conn: Connection, params?: { databases?: boolean; }): Promise<HTTP.Body>;
 
-        /** 
+        /**
          * Retrieves server properties. By default, it will return all server
-         * properties, but you can specify `names` to return specific ones. 
+         * properties, but you can specify `names` to return specific ones.
          */
         function properties(conn: Connection, names?: string[]): Promise<HTTP.Body>;
     }
