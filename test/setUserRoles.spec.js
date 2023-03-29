@@ -16,17 +16,14 @@ describe('Set User Roles Test Suite', () => {
     }));
 
   it('should assign roles to a newly created user.', () => {
-    const name = generateRandomString();
+    const username = generateRandomString();
     const password = generateRandomString();
     return user
-      .create(conn, {
-        name,
-        password,
-      })
-      .then(() => user.setRoles(conn, name, ['reader']))
+      .create(conn, { username, password })
+      .then(() => user.setRoles(conn, username, ['reader']))
       .then(res => {
         expect(res.status).toBe(200);
-        return user.listRoles(conn, name);
+        return user.listRoles(conn, username);
       })
       .then(res => {
         expect(res.body.roles).toContain('reader');

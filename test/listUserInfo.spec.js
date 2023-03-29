@@ -25,8 +25,17 @@ describe('user.listInfo()', () => {
     };
 
     return user
-      .create(conn, { name: usernameA, password: 'password', superuser: true })
-      .then(() => user.create(conn, { name: usernameB, password: 'password' }))
+      .create(conn, {
+        username: usernameA,
+        password: 'password',
+        superuser: true,
+      })
+      .then(() =>
+        user.create(conn, {
+          username: usernameB,
+          password: 'password',
+        })
+      )
       .then(() => user.assignPermission(conn, usernameA, permission))
       .then(() => user.listInfo(conn))
       .then(res => {

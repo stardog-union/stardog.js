@@ -17,17 +17,17 @@ describe('userEnabled()', () => {
     }));
 
   it('should enable a user recently created.', () => {
-    const name = generateRandomString();
+    const username = generateRandomString();
     const password = generateRandomString();
     return user
-      .create(conn, { name, password })
+      .create(conn, { username, password })
       .then(res => {
         expect(res.status).toBe(201);
-        return user.enable(conn, name, true);
+        return user.enable(conn, username, true);
       })
       .then(res => {
         expect(res.status).toBe(200);
-        return user.enabled(conn, name);
+        return user.enabled(conn, username);
       })
       .then(res => {
         expect(res.status).toBe(200);

@@ -33,7 +33,7 @@ describe('deletePermissionFromUser()', () => {
   });
 
   it('should pass deleting a Permissions to a new user.', () => {
-    const name = generateRandomString();
+    const username = generateRandomString();
     const password = generateRandomString();
     const permission = {
       action: 'write',
@@ -42,17 +42,14 @@ describe('deletePermissionFromUser()', () => {
     };
 
     return user
-      .create(conn, {
-        name,
-        password,
+      .create(conn, { username, password })
+      .then(res => {
+        expect(res.status).toBe(201);
+        return user.assignPermission(conn, username, permission);
       })
       .then(res => {
         expect(res.status).toBe(201);
-        return user.assignPermission(conn, name, permission);
-      })
-      .then(res => {
-        expect(res.status).toBe(201);
-        return user.deletePermission(conn, name, permission);
+        return user.deletePermission(conn, username, permission);
       })
       .then(res => {
         expect(res.status).toBe(201);

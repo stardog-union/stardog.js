@@ -35,7 +35,7 @@ describe('assignPermissionToUser()', () => {
   });
 
   it('should pass assinging a Permissions to a new user.', () => {
-    const name = generateRandomString();
+    const username = generateRandomString();
     const password = generateRandomString();
     const permission = {
       action: 'write',
@@ -45,12 +45,12 @@ describe('assignPermissionToUser()', () => {
 
     return user
       .create(conn, {
-        name,
+        username,
         password,
       })
       .then(res => {
         expect(res.status).toBe(201);
-        return user.assignPermission(conn, name, permission);
+        return user.assignPermission(conn, username, permission);
       })
       .then(res => {
         expect(res.status).toBe(201);
