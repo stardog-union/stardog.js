@@ -649,7 +649,7 @@ declare namespace Stardog {
     /** Query actions to perform on a database. */
     export namespace query {
 
-        export type QueryType = 'select' | 'ask' | 'construct' | 'describe' | 'update' | 'paths' | null;
+        export type QueryType = 'select' | 'ask' | 'construct' | 'describe' | 'validate' | 'update' | 'paths' | null;
 
         interface PropertyOptions {
             uri: string,
