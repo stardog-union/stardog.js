@@ -28,9 +28,15 @@ DESCRIBE ?s`;
     expect(queryType(query)).toBe('describe');
   });
   it('should correctly identify validate queries', () => {
-    const query = `# PREFIX : <http://www.example.com>
-VALIDATE { ?s ?p ?o }
-WHERE { ?s ?p ?o }`;
+    const query = `
+VALIDATE USING SHAPES {
+    :NameShape a sh:NodeShape ;
+       sh:property [
+         sh:path :name ;
+         sh:minCount 1 ;
+         sh:datatype xsd:string
+       ] .
+}`;
     expect(queryType(query)).toBe('validate');
   });
 });
