@@ -27,24 +27,24 @@ describe('changePwd()', () => {
     }));
 
   it('should change the password and allow calls with new credentials', () => {
-    const name = generateRandomString();
+    const username = generateRandomString();
     const password = generateRandomString();
     const newPassword = generateRandomString();
     return user
       .create(conn, {
-        name,
+        username,
         password,
         superuser: true,
       })
       .then(res => {
         expect(res.status).toEqual(201);
-        return user.changePassword(conn, name, newPassword);
+        return user.changePassword(conn, username, newPassword);
       })
       .then(res => {
         expect(res.status).toEqual(200);
         // Switch to new user
         conn.config({
-          username: name,
+          username,
           password: newPassword,
         });
         return db.list(conn);

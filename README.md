@@ -86,6 +86,7 @@ Each release of stardog.js is tested against the most recent version of Stardog 
 
 | stardog.js Version | Supported Stardog Version(s) |
 | ------------------ | ---------------------------- |
+| 5.x.x              | 9.x.x                        |
 | 4.x.x              | 8.x.x                        |
 | 3.x.x              | 7.x.x                        |
 | 2.x.x\*            | 6.x.x                        |
@@ -171,6 +172,7 @@ Object with the following values:
 - ok (`boolean`)
 - headers (`Headers`)
 - body (`any`)
+- url (`string`)
 
 #### <a name="connectionoptions">ConnectionOptions</a>
 
@@ -225,7 +227,7 @@ Returns `string`
 
 #### <a name="shutdown">`server.shutdown(conn, params)`</a>
 
-Shuts down a Stardog server. 
+Shuts down a Stardog server.
 
 Expects the following parameters:
 
@@ -253,7 +255,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 #### <a name="properties">`server.properties(conn, names)`</a>
 
 Retrieves server properties. By default, it will return all server
-properties, but you can specify `names` to return specific ones. 
+properties, but you can specify `names` to return specific ones.
 
 Expects the following parameters:
 
@@ -483,7 +485,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="getavailable">`db.options.getAvailable(conn)`</a>
 
-Gets all available database options with their default values. 
+Gets all available database options with their default values.
 
 Expects the following parameters:
 
@@ -493,7 +495,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="get">`db.options.get(conn, database, params)`</a>
 
-Gets set of options on a database. 
+Gets set of options on a database.
 
 Expects the following parameters:
 
@@ -507,7 +509,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="getall">`db.options.getAll(conn, database)`</a>
 
-Gets all options on a database. 
+Gets all options on a database.
 
 Expects the following parameters:
 
@@ -519,7 +521,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="set">`db.options.set(conn, database, databaseOptions, params)`</a>
 
-Sets options on a database. 
+Sets options on a database.
 
 Expects the following parameters:
 
