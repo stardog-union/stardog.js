@@ -1,3 +1,7 @@
+## [**v5.0.0**](https://github.com/stardog-union/stardog.js/milestone/72)
+- [**300**](https://github.com/stardog-union/stardog.js/pull/300) Stardog 9 updates
+- [**299**](https://github.com/stardog-union/stardog.js/pull/299) [VET-3276] Add `Validate` to Stardog.js
+
 ## [**v4.9.0**](https://github.com/stardog-union/stardog.js/milestone/70)
 - [**297**](https://github.com/stardog-union/stardog.js/pull/297) [Cloud-1157] Add `server.properties`
 
