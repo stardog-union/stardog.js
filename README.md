@@ -171,6 +171,7 @@ Object with the following values:
 - ok (`boolean`)
 - headers (`Headers`)
 - body (`any`)
+- url (`string`)
 
 #### <a name="connectionoptions">ConnectionOptions</a>
 
@@ -253,7 +254,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 #### <a name="properties">`server.properties(conn, names)`</a>
 
 Retrieves server properties. By default, it will return all server
-properties, but you can specify `names` to return specific ones. 
+properties, but you can specify `names` to return specific ones.
 
 Expects the following parameters:
 
