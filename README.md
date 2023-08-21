@@ -2197,7 +2197,7 @@ Expects the following parameters:
 
 - options ([`T`](#t))
 
-- requestOptions (`{ force: boolean }`)
+- requestOptions (`{ delta_options?: boolean; force?: boolean }`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
