@@ -23,18 +23,18 @@ describe('graph store protocol', () => {
   describe('graph.doGet', () => {
     it('should retrieve named graphs', () =>
       graph.doGet(conn, database, makeGraph('bob')).then(res => {
-        expect(res.body).toContain('bob@oldcorp.example.org');
+        expect(res.body).toMatchSnapshot();
       }));
 
     it('should retrieve the default graph when no graph is specified', () =>
       graph
         .doGet(conn, database)
         .then(res => {
-          expect(res.body).toContain('http://purl.org/dc/elements/1.1/');
+          expect(res.body).toMatchSnapshot();
           return graph.doGet(conn, database, null);
         })
         .then(res => {
-          expect(res.body).toContain('http://purl.org/dc/elements/1.1/');
+          expect(res.body).toMatchSnapshot();
         }));
 
     it('should retrieve other RDF serializations when specified', () =>
@@ -70,8 +70,7 @@ describe('graph store protocol', () => {
           return graph.doGet(conn, database, makeGraph('alice'));
         })
         .then(res => {
-          expect(res.body).not.toContain('mailto:alice@work.example.org');
-          expect(res.body).toContain('mailto:alice@work.newexample.org');
+          expect(res.body).toMatchSnapshot();
         }));
   });
 
@@ -102,8 +101,7 @@ describe('graph store protocol', () => {
           return graph.doGet(conn, database, makeGraph('bob'));
         })
         .then(res => {
-          expect(res.body).toContain('bob@oldcorp.example.org');
-          expect(res.body).toContain('bob@newcorp.example.org');
+          expect(res.body).toMatchSnapshot();
         }));
   });
 
@@ -116,8 +114,7 @@ describe('graph store protocol', () => {
           return graph.doGet(conn, database, makeGraph('alice'));
         })
         .then(res => {
-          const jsonBody = JSON.parse(res.body);
-          expect(jsonBody['@graph']).toHaveLength(0);
+          expect(res.body['@graph']).toHaveLength(0);
         }));
   });
 });
