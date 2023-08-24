@@ -23,6 +23,9 @@ describe('listUserRoles()', () => {
       .create(conn, {
         name: r,
       })
+      .then(() =>
+        user.create(conn, { username: 'anonymous', password: 'anonymous' })
+      )
       .then(() => user.setRoles(conn, 'anonymous', [r]))
       .then(() => user.listRoles(conn, 'anonymous'))
       .then(res => {

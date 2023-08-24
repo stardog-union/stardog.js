@@ -24,8 +24,15 @@ describe('listRoleUsers()', () => {
 
   it("should return a list of users assigned to the 'rolename' role in the system.", () => {
     const rolename = generateRandomString();
+    user.create(conn, {
+      username: 'anonymous',
+      password: 'anonymous',
+    });
     return role
       .create(conn, { name: rolename })
+      .then(() =>
+        user.create(conn, { username: 'anonymous', password: 'anonymous' })
+      )
       .then(() => user.setRoles(conn, 'anonymous', [rolename]))
       .then(() => role.usersWithRole(conn, rolename))
       .then(res => {
