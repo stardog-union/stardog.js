@@ -1391,6 +1391,30 @@ declare namespace Stardog {
          * @param {string} provider the IRI of the provider to reload
          */
         function reload(conn: Connection, provider: string): Promise<HTTP.Body>;
+
+        /**
+         * Adds a provider credential
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {User} user the username and password to be stored
+         * @param {string} label a human-readable label to describe the credential
+         */
+        function addCredentials(conn: Connection, user: User, label: string): Promise<HTTP.Body>;
+
+        /**
+         * Lists stored provider credentials
+         *
+         * @param {Connection} conn the Stardog server connection
+         */
+        function listCredentials(conn: Connection): Promise<HTTP.Body>;
+
+        /**
+         * Removes a stored provider credential
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} accessKey the accessKey that was assigned to the credential when it was added
+         */
+        function removeCredential(conn: Connection, accessKey: string): Promise<HTTP.Body>;
     }
 
     export namespace dataSources {
