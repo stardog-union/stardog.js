@@ -1375,6 +1375,24 @@ declare namespace Stardog {
         function status(conn: Connection): Promise<HTTP.Body>;
     }
 
+    /** Methods for managing catalog providers */
+    export namespace catalog {
+        /**
+         * Lists the status of catalog providers
+         *
+         * @param {Connection} conn the Stardog server connection
+         */
+        function status(conn: Connection): Promise<HTTP.Body>;
+
+        /**
+         * Starts a reload of information about a specific provider
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} provider the IRI of the provider to reload
+         */
+        function reload(conn: Connection, provider: string): Promise<HTTP.Body>;
+    }
+
     export namespace dataSources {
         /**
          * Retrieve a list of data sources
