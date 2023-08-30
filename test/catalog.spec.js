@@ -30,7 +30,7 @@ describe('catalog', () => {
 
   it('adds, lists, and removes credentials', () => {
     catalog
-      .addCredentials(
+      .addCredential(
         conn,
         {
           username: TEST_USERNAME,
