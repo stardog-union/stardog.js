@@ -227,7 +227,7 @@ Returns `string`
 
 #### <a name="shutdown">`server.shutdown(conn, params)`</a>
 
-Shuts down a Stardog server. 
+Shuts down a Stardog server.
 
 Expects the following parameters:
 
@@ -485,7 +485,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="getavailable">`db.options.getAvailable(conn)`</a>
 
-Gets all available database options with their default values. 
+Gets all available database options with their default values.
 
 Expects the following parameters:
 
@@ -495,7 +495,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="get">`db.options.get(conn, database, params)`</a>
 
-Gets set of options on a database. 
+Gets set of options on a database.
 
 Expects the following parameters:
 
@@ -509,7 +509,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="getall">`db.options.getAll(conn, database)`</a>
 
-Gets all options on a database. 
+Gets all options on a database.
 
 Expects the following parameters:
 
@@ -521,7 +521,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="set">`db.options.set(conn, database, databaseOptions, params)`</a>
 
-Sets options on a database. 
+Sets options on a database.
 
 Expects the following parameters:
 
@@ -2134,6 +2134,66 @@ Retrieves detailed status information about a Stardog cluster.
 Expects the following parameters:
 
 - conn ([`Connection`](#connection))
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+## <a name="catalog">catalog</a>
+
+#### <a name="status">`catalog.status(conn)`</a>
+
+Lists the status of catalog providers
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="reload">`catalog.reload(conn, provider)`</a>
+
+Starts a reload of information about a specific provider
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- provider (`string`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="addcredential">`catalog.addCredential(conn, user, label)`</a>
+
+Adds a provider credential
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- user ([`User`](#user))
+
+- label (`string`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="listcredentials">`catalog.listCredentials(conn)`</a>
+
+Lists stored provider credentials
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="removecredential">`catalog.removeCredential(conn, accessKey)`</a>
+
+Removes a stored provider credential
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- accessKey (`string`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
