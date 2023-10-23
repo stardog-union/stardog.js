@@ -1415,6 +1415,14 @@ declare namespace Stardog {
          * @param {string} accessKey the accessKey that was assigned to the credential when it was added
          */
         function removeCredential(conn: Connection, accessKey: string): Promise<HTTP.Body>;
+
+        /**
+         * Removes a stored provider credential
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} jobname the name of the job to run, such as 'myProvider:iri import'
+         */
+        function runJob(conn: Connection, jobname: string): Promise<HTTP.Body>;
     }
 
     export namespace dataSources {

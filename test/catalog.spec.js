@@ -59,4 +59,6 @@ describe('catalog', () => {
         expect(res.status).toBe(204);
       });
   });
+
+  it.todo('runs jobs');
 });
