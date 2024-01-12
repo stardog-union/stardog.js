@@ -1417,7 +1417,7 @@ declare namespace Stardog {
         function removeCredential(conn: Connection, accessKey: string): Promise<HTTP.Body>;
 
         /**
-         * Tests a provider connection
+         * Tests a provider connection using existing/new credentials.
          *
          * @param {Connection} conn the Stardog server connection
          * @param {object} connectionOptions A JSON object made up of properties of metadata provider parameters and their values in Turtle syntax.
