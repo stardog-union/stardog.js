@@ -2199,7 +2199,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="runjob">`catalog.runJob(conn, jobname)`</a>
 
-Removes a stored provider credential
+Manually starts a provider job
 
 Expects the following parameters:
 
