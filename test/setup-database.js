@@ -83,6 +83,39 @@ exports.generateDatabaseName = () => {
   return database;
 };
 
+exports.generateProviderIri = () =>
+  `stardogjs:provider:${RandomString.generate({
+    length: 25,
+    charset: 'alphabetic',
+  })}`;
+
+exports.createAddProviderQuery = providerIri => `\
+insert data {
+  graph <tag:stardog:api:catalog:providers>
+  {
+    <${providerIri}> a <tag:stardog:api:catalog:JdbcProvider> ;
+      <tag:stardog:api:catalog:provider:accessKey> "FAKE-ACCESS-KEY" ;
+      rdfs:label "Stardog.js test provider" ;
+      <tag:stardog:api:catalog:provider:serverAddress> "jdbc:mysql://localhost:3306" ;
+      <tag:stardog:api:catalog:provider:schedule> "0 0 0 1 0 ?" .
+  }
+}`;
+exports.createValidateProviderQuery = providerIri => `\
+select * where {
+  graph <tag:stardog:api:catalog:providers>
+  {
+    <${providerIri}> ?p ?o .
+  }
+}`;
+exports.createClearProviderQuery = providerIri => `\
+delete where {
+  graph <tag:stardog:api:catalog:providers>
+  {
+    <${providerIri}> ?p ?o .
+  }
+}
+`;
+
 exports.generateRandomString = () =>
   RandomString.generate({
     length: 10,
