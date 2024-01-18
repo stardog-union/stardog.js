@@ -2209,6 +2209,18 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="testconnection">`catalog.testConnection(conn, connectionOptions)`</a>
+
+Tests a provider connection using existing/new credentials.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- connectionOptions (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 ## <a name="datasources">dataSources</a>
 
 #### <a name="list">`dataSources.list(conn)`</a>

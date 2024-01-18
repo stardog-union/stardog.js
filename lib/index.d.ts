@@ -1423,6 +1423,14 @@ declare namespace Stardog {
          * @param {string} jobname the name of the job to run, such as 'myProvider:iri import'
          */
         function runJob(conn: Connection, jobname: string): Promise<HTTP.Body>;
+
+        /**
+         * Tests a provider connection using existing/new credentials.
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {object} connectionOptions A JSON object made up of properties of metadata provider parameters and their values in Turtle syntax.
+         */
+        function testConnection(conn: Connection, connectionOptions: object): Promise<HTTP.Body>;
     }
 
     export namespace dataSources {
