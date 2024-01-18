@@ -1417,7 +1417,7 @@ declare namespace Stardog {
         function removeCredential(conn: Connection, accessKey: string): Promise<HTTP.Body>;
 
         /**
-         * Removes a stored provider credential
+         * Manually starts a provider job
          *
          * @param {Connection} conn the Stardog server connection
          * @param {string} jobname the name of the job to run, such as 'myProvider:iri import'
