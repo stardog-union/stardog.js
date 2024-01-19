@@ -2197,6 +2197,18 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="runjob">`catalog.runJob(conn, jobname)`</a>
+
+Manually starts a provider job
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- jobname (`string`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 #### <a name="testconnection">`catalog.testConnection(conn, connectionOptions)`</a>
 
 Tests a provider connection using existing/new credentials.
