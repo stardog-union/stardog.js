@@ -228,7 +228,7 @@ Returns `string`
 
 #### <a name="shutdown">`server.shutdown(conn, params)`</a>
 
-Shuts down a Stardog server.
+Shuts down a Stardog server. 
 
 Expects the following parameters:
 
@@ -486,7 +486,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="getavailable">`db.options.getAvailable(conn)`</a>
 
-Gets all available database options with their default values.
+Gets all available database options with their default values. 
 
 Expects the following parameters:
 
@@ -496,7 +496,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="get">`db.options.get(conn, database, params)`</a>
 
-Gets set of options on a database.
+Gets set of options on a database. 
 
 Expects the following parameters:
 
@@ -510,7 +510,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="getall">`db.options.getAll(conn, database)`</a>
 
-Gets all options on a database.
+Gets all options on a database. 
 
 Expects the following parameters:
 
@@ -522,7 +522,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="set">`db.options.set(conn, database, databaseOptions, params)`</a>
 
-Sets options on a database.
+Sets options on a database. 
 
 Expects the following parameters:
 
@@ -2170,7 +2170,7 @@ Expects the following parameters:
 
 - conn ([`Connection`](#connection))
 
-- user ([`Credentials`](#credentials))
+- credentials ([`Credentials`](#credentials))
 
 - label (`string`)
 
