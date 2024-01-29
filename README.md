@@ -2162,7 +2162,7 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="addcredential">`catalog.addCredential(conn, user, label)`</a>
+#### <a name="addcredential">`catalog.addCredential(conn, credentials, label)`</a>
 
 Adds a provider credential
 
@@ -2170,7 +2170,7 @@ Expects the following parameters:
 
 - conn ([`Connection`](#connection))
 
-- user ([`User`](#user))
+- user ([`Credentials`](#credentials))
 
 - label (`string`)
 
