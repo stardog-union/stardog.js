@@ -2162,6 +2162,11 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="credentials">Credentials</a>
+
+One of the following values:
+
+`{ username: string, password: string } | { token: string } | { clientId: string, clientSecret: string }`
 #### <a name="addcredential">`catalog.addCredential(conn, credentials, label)`</a>
 
 Adds a provider credential
