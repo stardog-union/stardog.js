@@ -1392,14 +1392,16 @@ declare namespace Stardog {
          */
         function reload(conn: Connection, provider: string): Promise<HTTP.Body>;
 
+        type Credentials = { username: string, password: string } | { token: string } | { clientId: string, clientSecret: string };
+
         /**
          * Adds a provider credential
          *
          * @param {Connection} conn the Stardog server connection
-         * @param {User} user the username and password to be stored
+         * @param {Credentials} credentials the credentials to be stored
          * @param {string} label a human-readable label to describe the credential
          */
-        function addCredential(conn: Connection, user: User, label: string): Promise<HTTP.Body>;
+        function addCredential(conn: Connection, credentials: Credentials, label: string): Promise<HTTP.Body>;
 
         /**
          * Lists stored provider credentials
