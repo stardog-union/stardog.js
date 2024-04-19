@@ -1537,6 +1537,24 @@ declare namespace Stardog {
          */
         function updateMetadata<T>(conn: Connection, name: string, metadata: T, options?: object): Promise<HTTP.Body>;
 
+        /**
+         * Retrieve tables
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the data source name
+         * @param {object} options additional options if needed
+         */
+        function getTables(conn: Connection, name: string, options: object): Promise<HTTP.Body>;
+
+        /**
+         * Retrieve the named table metadata
+         *
+         * @param {Connection} conn the Stardog server connection
+         * @param {string} name the table name
+         * @param {object} options additional options if needed
+         */
+        function getTableMetadata(conn: Connection, name: string, options: object): Promise<HTTP.Body>;
+
         type DataSourceQuery = string | { query: string, options: object };
 
         /**

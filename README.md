@@ -2383,6 +2383,34 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="gettables">`dataSources.getTables(conn, name, options)`</a>
+
+Retrieve tables
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+- options (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="gettablemetadata">`dataSources.getTableMetadata(conn, name, options)`</a>
+
+Retrieve the named table metadata
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+- options (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 #### <a name="datasourcequery">DataSourceQuery</a>
 
 One of the following values:
