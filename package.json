@@ -74,7 +74,7 @@
     "url": "https://github.com/stardog-union/stardog.js/issues"
   },
   "dependencies": {
-    "fetch-ponyfill": "^6.0.0",
+    "fetch-ponyfill": "^6.1.1",
     "flat": "^5.0.2",
     "form-data": "^2.2.0",
     "isomorphic-base64": "^1.0.2",
