@@ -19,6 +19,12 @@ exports.seedDatabase = (database, options = {}, addlFiles = []) => () => {
         index: {
           type: 'disk',
         },
+        // override new default value in v10.0.0+ since tests were mostly written before then
+        reasoning: {
+          schema: {
+            graphs: 'tag:stardog:api:context:local',
+          },
+        },
       }),
       {
         // Load everything into the DB
