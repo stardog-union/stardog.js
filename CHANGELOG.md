@@ -1,3 +1,19 @@
+## [**v6.0.0**](https://github.com/stardog-union/stardog.js/milestone/78)
+- [**307**](https://github.com/stardog-union/stardog.js/pull/307) [VET-4456] Add DS table endpoints
+- [**305**](https://github.com/stardog-union/stardog.js/pull/305) VET-3936 add jobs endpoint
+
+## [**v5.3.1**](https://github.com/stardog-union/stardog.js/milestone/77)
+- [**306**](https://github.com/stardog-union/stardog.js/pull/306) [VET-3766][VET-4297] Update addCredentials to support Atlan and Purview
+
+## [**v5.3.0**](https://github.com/stardog-union/stardog.js/milestone/76)
+- [**304**](https://github.com/stardog-union/stardog.js/pull/304) [VET-4197] Add testConnection method for Knowledge Catalog
+
+## [**v5.2.1**](https://github.com/stardog-union/stardog.js/milestone/74)
+- [**303**](https://github.com/stardog-union/stardog.js/pull/303) [VET-4121] Avoid internal errors for bad namespace responses
+
+## [**v5.2.0**](https://github.com/stardog-union/stardog.js/milestone/75)
+- [**302**](https://github.com/stardog-union/stardog.js/pull/302) [VET-3627] Add support for catalog endpoints
+
 ## [**v5.1.0**](https://github.com/stardog-union/stardog.js/milestone/73)
 - [**301**](https://github.com/stardog-union/stardog.js/pull/301) Allow `delta_options` request option for updating data sources
 
