@@ -10,6 +10,16 @@ const dataSourceMetadata = fs.readFileSync(
   'utf8'
 );
 
+const dataSourceTables = fs.readFileSync(
+  path.resolve(`${__dirname}/fixtures/data_source_tables.json`),
+  'utf8'
+);
+
+const dataSourceTableMetadata = fs.readFileSync(
+  path.resolve(`${__dirname}/fixtures/data_source_table_metadata.ttl`),
+  'utf8'
+);
+
 describe('data_sources', () => {
   let conn;
   const aDSName = 'MyDataSource';
@@ -139,6 +149,33 @@ describe('data_sources', () => {
         .then(res => {
           expect(res.status).toBe(200);
           expect(res.body).toEqual(dataSourceMetadata);
+        }));
+  });
+
+  describe('getTables', () => {
+    it('returns the tables for a data source', () =>
+      assureExists()
+        .then(() => dataSources.getTables(conn, aDSName))
+        .then(res => {
+          expect(res.status).toBe(200);
+          expect(res.body).toEqual(dataSourceTables);
+        }));
+  });
+
+  describe('getTableMetadata', () => {
+    it('returns the metadata of a table', () =>
+      assureExists()
+        .then(() =>
+          dataSources.getTableMetadata(conn, aDSName, {
+            table_name: 'table-name',
+            table_type: 'TABLE',
+            catalog: 'catalog',
+            schema: 'schema',
+          })
+        )
+        .then(res => {
+          expect(res.status).toBe(200);
+          expect(res.body).toEqual(dataSourceTableMetadata);
         }));
   });
 

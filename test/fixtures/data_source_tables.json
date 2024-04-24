@@ -1,0 +1,20 @@
+[
+    {
+        "catalog": "dvdrental",
+        "schema": "public",
+        "table_name": "actor",
+        "table_type": "TABLE"
+    },
+    {
+        "catalog": "dvdrental",
+        "schema": "public",
+        "table_name": "actor_actor_id_seq",
+        "table_type": "SEQUENCE"
+    },
+    {
+        "catalog": "dvdrental",
+        "schema": "public",
+        "table_name": "actor_info",
+        "table_type": "VIEW"
+    },
+]
