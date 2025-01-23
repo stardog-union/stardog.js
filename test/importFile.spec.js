@@ -32,8 +32,8 @@ describe('virtualGraphs.importFile()', () => {
       .importFile(
         conn,
         fs.createReadStream(path.join(__dirname, 'fixtures', 'csv_import.csv')),
-        'DELIMITED',
         'fileIri:',
+        'DELIMITED',
         database,
         {
           properties,
@@ -57,8 +57,8 @@ describe('virtualGraphs.importFile()', () => {
       .importFile(
         conn,
         fs.createReadStream(path.join(__dirname, 'fixtures', 'csv_import.csv')),
-        'DELIMITED',
         'fileIri:',
+        'DELIMITED',
         database,
         {
           mappings: fs.readFileSync(
@@ -87,8 +87,8 @@ describe('virtualGraphs.importFile()', () => {
         fs.createReadStream(
           path.join(__dirname, 'fixtures', 'json_import.json')
         ),
-        'JSON',
         'fileIri:',
+        'JSON',
         database,
         {
           mappings: fs
