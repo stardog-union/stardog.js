@@ -1305,7 +1305,7 @@ declare namespace Stardog {
          * @param {string} database the name of the database target
          * @param {object} importOptions additional import data (mappings, properties, namedGraph)
          */
-        function importFile(conn: Connection, file: object, fileType: string, database: string, importOptions?: {
+        function importFile(conn: Connection, file: object, fileType: string, fileIri: string, database: string, importOptions?: {
           mappings?: string,
           properties?: string,
           namedGraph?: string,
