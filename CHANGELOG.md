@@ -1,3 +1,6 @@
+## [**v7.0.0**](https://github.com/stardog-union/stardog.js/milestone/79)
+- [**309**](https://github.com/stardog-union/stardog.js/pull/309) [VET-5298] Add `input_file_iri` for virtual file import
+
 ## [**v6.0.0**](https://github.com/stardog-union/stardog.js/milestone/78)
 - [**307**](https://github.com/stardog-union/stardog.js/pull/307) [VET-4456] Add DS table endpoints
 - [**305**](https://github.com/stardog-union/stardog.js/pull/305) VET-3936 add jobs endpoint
