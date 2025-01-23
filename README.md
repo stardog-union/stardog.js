@@ -2026,7 +2026,7 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="importfile">`virtualGraphs.importFile(conn, file, fileType, database, importOptions)`</a>
+#### <a name="importfile">`virtualGraphs.importFile(conn, file, fileIri, fileType, database, importOptions)`</a>
 
 Import a JSON or CSV file into a database via `virtual import`.
 
@@ -2035,6 +2035,8 @@ Expects the following parameters:
 - conn ([`Connection`](#connection))
 
 - file (`object`)
+
+- fileIri (`string`)
 
 - fileType (`string`)
 
