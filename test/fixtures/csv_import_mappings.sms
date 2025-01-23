@@ -1,0 +1,48 @@
+prefix :    <http://example.org/cars#>
+prefix gr:  <http://purl.org/goodrelations/v1#>
+prefix vso: <http://purl.org/vso/ns#>
+
+MAPPING
+FROM CSV {
+}
+TO {
+    ?car_iri a vso:Automobile, gr:ActualProductOrServiceInstance ;
+        rdfs:label ?car_label ;
+        gr:hasManufacturer ?make_iri ;
+        gr:hasMakeAndModel ?model_iri ;
+        vso:modelDate ?model_date .
+
+    ?make_iri a gr:BusinessEntity ;
+        rdfs:label ?Make .
+
+    ?model_iri a gr:ProductOrServiceModel ;
+        rdfs:label ?model_string ;
+        gr:hasManufacturer ?make_iri .
+
+    ?offer_iri a gr:Offering ;
+        rdfs:comment ?Description ;
+        gr:includes ?car_iri ;
+        gr:hasBusinessFunction gr:Sell ;
+        gr:hasPriceSpecification ?price_bnode .
+
+    ?price_bnode a gr:UnitPriceSpecification ;
+        gr:hasCurrency "USD"^^xsd:string ;
+        :uuid ?uuidstr ;
+        gr:hasCurrencyValue ?price_float .
+}
+WHERE {
+    BIND(TEMPLATE("http://example.org/cars#Manufacturer-{Make}") AS ?make_iri)
+    BIND(TEMPLATE("http://example.org/cars#Model-{Model}") AS ?model_iri)
+
+    BIND(CONCAT(?Make, " ", ?Model) AS ?model_string)
+    BIND(CONCAT(?Make, " ", ?Model, " (", ?Year, ")") AS ?car_label)
+
+    BIND(TEMPLATE("http://example.org/cars#Car-{_ROW_NUMBER_}") AS ?car_iri)
+    BIND(TEMPLATE("http://example.org/cars#Offer-{_ROW_NUMBER_}") AS ?offer_iri)
+
+    BIND(xsd:float(?Price) AS ?price_float)
+
+    BIND(xsd:date(CONCAT(?Year, "-01-01")) AS ?model_date)
+
+    BIND(BNODE(CONCAT("price-", STRUUID())) AS ?price_bnode)
+}

@@ -46,9 +46,9 @@ describe('query.execute()', () => {
   it('A query result should work with property paths', () =>
     execute(
       `select * {
-          ?a a <http://localhost/vocabulary/bench/Article> ; 
-               <http://purl.org/dc/elements/1.1/title> ?title ; 
-               <http://purl.org/dc/elements/1.1/creator> ?c . 
+          ?a a <http://localhost/vocabulary/bench/Article> ;
+               <http://purl.org/dc/elements/1.1/title> ?title ;
+               <http://purl.org/dc/elements/1.1/creator> ?c .
           ?c (<http://xmlns.com/foaf/0.1/firstName> | <http://xmlns.com/foaf/0.1/lastName>)+ ?name
         }`,
       undefined,
@@ -189,7 +189,7 @@ describe('query.execute()', () => {
   it('returns results for a construct query as a string blob', () =>
     execute('construct where { ?s ?p ?o }').then(({ body }) =>
       expect(body).toContain(
-        '<http://localhost/persons/John_Erdoes> a <http://xmlns.com/foaf/0.1/Person> .'
+        '<http://localhost/persons/John_Erdoes> a <http://xmlns.com/foaf/0.1/Person>'
       )
     ));
 
@@ -220,10 +220,10 @@ describe('query.execute()', () => {
   describe('group_concat', () => {
     it('should return values', () =>
       execute(
-        `select ?s (Group_Concat(?o ; separator=",") as ?o_s) where { ?s <#name> ?o } group by ?s`
+        `select ?s (Group_Concat(?o ; separator=",") as ?o_s) where { ?s <http://xmlns.com/foaf/0.1/firstName> | <http://xmlns.com/foaf/0.1/lastName> ?o } group by ?s`
       ).then(res => {
         expect(res.status).toBe(200);
-        expect(res.body.results.bindings).toHaveLength(1);
+        expect(res.body.results.bindings).toHaveLength(3);
       }));
   });
 

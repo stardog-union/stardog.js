@@ -32,7 +32,7 @@ describe('virtualGraphs.importFile()', () => {
       .importFile(
         conn,
         fs.createReadStream(path.join(__dirname, 'fixtures', 'csv_import.csv')),
-        'fileIri:',
+        `file://test-${Date.now()}`,
         'DELIMITED',
         database,
         {
@@ -57,14 +57,14 @@ describe('virtualGraphs.importFile()', () => {
       .importFile(
         conn,
         fs.createReadStream(path.join(__dirname, 'fixtures', 'csv_import.csv')),
-        'fileIri:',
+        `file://test-${Date.now()}`,
         'DELIMITED',
         database,
         {
           mappings: fs.readFileSync(
-            path.join(__dirname, 'fixtures', 'csv_import_mappings.ttl')
+            path.join(__dirname, 'fixtures', 'csv_import_mappings.sms')
           ),
-          properties: 'mappings.syntax=STARDOG',
+          properties: 'mappings.syntax=sms2',
         }
       )
       .then(res => {
@@ -72,12 +72,14 @@ describe('virtualGraphs.importFile()', () => {
         return query.execute(
           conn,
           database,
-          'select ?o { <http://example.com/Model=E350> <http://example.com#Model> ?o }'
+          'select ?o { <http://example.org/cars#Model-E350> <http://purl.org/goodrelations/v1#hasManufacturer> ?o }'
         );
       })
       .then(res => {
         expect(res.status).toBe(200);
-        expect(res.body.results.bindings[0].o.value).toBe('E350');
+        expect(res.body.results.bindings[0].o.value).toBe(
+          'http://example.org/cars#Manufacturer-Ford'
+        );
       }));
 
   it('should import JSON files (mappings required)', () =>
@@ -87,7 +89,7 @@ describe('virtualGraphs.importFile()', () => {
         fs.createReadStream(
           path.join(__dirname, 'fixtures', 'json_import.json')
         ),
-        'fileIri:',
+        `file://test-${Date.now()}`,
         'JSON',
         database,
         {
