@@ -194,6 +194,54 @@ describe('stored', () => {
         });
     });
   });
+  describe('retrieve()', () => {
+    it('returns a single named stored query', () => {
+      const name = generateRandomString();
+      return Promise.all([
+        server.status(conn, { databases: false }),
+        stored.create(conn, {
+          name,
+          database,
+          query: 'select distinct ?type {?s a ?type}',
+          shared: true,
+        }),
+      ])
+        .then(([statusRes, res]) => {
+          expect(res.status).toBe(204);
+          return Promise.all([statusRes, stored.retrieve(conn, name)]);
+        })
+        .then(([statusRes, res]) => {
+          const stardogVersion = statusRes.body['dbms.version'].value;
+          expect(res.status).toBe(200);
+          const q = res.body.queries[0];
+          const earliestVersionWithReasoningAndDescription = '6.2.2';
+          if (
+            semver.gte(
+              semver.coerce(stardogVersion),
+              semver.coerce(earliestVersionWithReasoningAndDescription)
+            )
+          ) {
+            expect(q).toEqual({
+              name,
+              database,
+              query: 'select distinct ?type {?s a ?type}',
+              shared: true,
+              creator: 'admin',
+              description: null,
+              reasoning: false,
+            });
+          } else {
+            expect(q).toEqual({
+              name,
+              database,
+              query: 'select distinct ?type {?s a ?type}',
+              shared: true,
+              creator: 'admin',
+            });
+          }
+        });
+    });
+  });
   // Covered below by `update(useUpdateMethod = false)`
   // describe('replace()', () => {});
   describe('update(useUpdateMethod = true)', () => {
