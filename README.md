@@ -1280,6 +1280,18 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="get">`query.stored.get(conn, storedQuery)`</a>
+
+Gets a given stored query.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- storedQuery (`string`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
 #### <a name="rename">`query.stored.rename(conn, name, newName)`</a>
 
 Renames a given stored query.
