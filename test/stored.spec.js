@@ -194,7 +194,7 @@ describe('stored', () => {
         });
     });
   });
-  describe('retrieve()', () => {
+  describe('get()', () => {
     it('returns a single named stored query', () => {
       const name = generateRandomString();
       return Promise.all([

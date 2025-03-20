@@ -1280,9 +1280,9 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="retrieve">`query.stored.retrieve(conn, storedQuery)`</a>
+#### <a name="get">`query.stored.get(conn, storedQuery)`</a>
 
-Retrieves a given stored query.
+Gets a given stored query.
 
 Expects the following parameters:
 

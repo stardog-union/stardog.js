@@ -795,12 +795,12 @@ declare namespace Stardog {
             function remove(conn: Connection, storedQuery: string): Promise<HTTP.Body>;
 
             /**
-             * Retrieves a given stored query.
+             * Gets a given stored query.
              *
              * @param {Connection} conn the Stardog server connection
              * @param {string} storedQuery the name of the stored query to be fetched
              */
-            function retrieve(conn: Connection, storedQuery: string): Promise<HTTP.Body>;
+            function get(conn: Connection, storedQuery: string): Promise<HTTP.Body>;
 
             /**
             * Renames a given stored query.
