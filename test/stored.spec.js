@@ -208,7 +208,7 @@ describe('stored', () => {
       ])
         .then(([statusRes, res]) => {
           expect(res.status).toBe(204);
-          return Promise.all([statusRes, stored.retrieve(conn, name)]);
+          return Promise.all([statusRes, stored.get(conn, name)]);
         })
         .then(([statusRes, res]) => {
           const stardogVersion = statusRes.body['dbms.version'].value;
