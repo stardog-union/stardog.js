@@ -1,3 +1,6 @@
+## [**v7.1.0**](https://github.com/stardog-union/stardog.js/milestone/80)
+- [**310**](https://github.com/stardog-union/stardog.js/pull/310) Add get stored query endpoint
+
 ## [**v7.0.0**](https://github.com/stardog-union/stardog.js/milestone/79)
 - [**309**](https://github.com/stardog-union/stardog.js/pull/309) [VET-5298] Add `input_file_iri` for virtual file import
 
