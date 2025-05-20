@@ -1,57 +1,70 @@
 /* eslint-env jest */
 
-const { user, db } = require('../lib');
-const {
-  seedDatabase,
-  dropDatabase,
-  generateRandomString,
-  generateDatabaseName,
-  ConnectionFactory,
-} = require('./setup-database');
+const { user } = require('../lib');
+const { generateRandomString, ConnectionFactory } = require('./setup-database');
 
 describe('changePwd()', () => {
-  const database = generateDatabaseName();
   let conn;
 
   beforeEach(() => {
     conn = ConnectionFactory();
-    conn.config({ database });
+    conn.config({});
   });
 
-  beforeAll(seedDatabase(database));
-  afterAll(dropDatabase(database));
-
   it('should fail trying to change a password (char[]) from an non-existent user', () =>
-    user.changePassword(conn, 'someuser', 'passworddd').then(res => {
+    user.changePassword(conn, 'user', 'password', 'password').then(res => {
       expect(res.status).toEqual(404);
     }));
 
-  it('should change the password and allow calls with new credentials', () => {
+  it('should allow a user to change a password with the current password', () => {
     const username = generateRandomString();
     const password = generateRandomString();
     const newPassword = generateRandomString();
     return user
-      .create(conn, {
-        username,
-        password,
-        superuser: true,
+      .create(conn, { username, password })
+      .then(res => {
+        expect(res.status).toBe(201);
+        // Switch to new user
+        conn.config({ username, password });
+        return user.changePassword(conn, username, '', newPassword);
       })
       .then(res => {
-        expect(res.status).toEqual(201);
-        return user.changePassword(conn, username, newPassword);
+        expect(res.status).toEqual(400);
+        return user.changePassword(conn, username, newPassword, newPassword);
+      })
+      .then(res => {
+        expect(res.status).toEqual(403);
+        return user.changePassword(conn, username, password, newPassword);
       })
       .then(res => {
         expect(res.status).toEqual(200);
         // Switch to new user
-        conn.config({
-          username,
-          password: newPassword,
-        });
-        return db.list(conn);
+        conn.config({ username, password: newPassword });
+        return user.token(conn);
       })
       .then(res => {
         expect(res.status).toEqual(200);
-        expect(res.body.databases.length).toBeGreaterThan(0);
+      });
+  });
+
+  it('should allow a superuser to change the password without the current password', () => {
+    const username = generateRandomString();
+    const password = generateRandomString();
+    const newPassword = generateRandomString();
+    return user
+      .create(conn, { username, password })
+      .then(res => {
+        expect(res.status).toEqual(201);
+        return user.changePassword(conn, username, '', newPassword);
+      })
+      .then(res => {
+        expect(res.status).toEqual(200);
+        // Switch to new user
+        conn.config({ username, password: newPassword });
+        return user.token(conn);
+      })
+      .then(res => {
+        expect(res.status).toEqual(200);
       });
   });
 });

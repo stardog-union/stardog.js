@@ -86,7 +86,8 @@ Each release of stardog.js is tested against the most recent version of Stardog 
 
 | stardog.js Version | Supported Stardog Version(s) |
 | ------------------ | ---------------------------- |
-| 7.x.x              | 11.x.x                       |
+| 8.x.x              | 11.1.x                       |
+| 7.x.x              | 11.0.x                       |
 | 6.x.x              | 10.x.x                       |
 | 5.x.x              | 9.x.x                        |
 | 4.x.x              | 8.x.x                        |
@@ -1528,7 +1529,7 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="changepassword">`user.changePassword(conn, username, password, params)`</a>
+#### <a name="changepassword">`user.changePassword(conn, username, currentPassword, password, params)`</a>
 
 Changes a user's password.
 
@@ -1537,6 +1538,8 @@ Expects the following parameters:
 - conn ([`Connection`](#connection))
 
 - username (`string`)
+
+- currentPassword (`string`)
 
 - password (`string`)
 
