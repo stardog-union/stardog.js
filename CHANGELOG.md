@@ -1,3 +1,6 @@
+## [**v8.0.0**](https://github.com/stardog-union/stardog.js/milestone/81)
+- [**311**](https://github.com/stardog-union/stardog.js/pull/311) [VET-5579] require current password for changing passwords
+
 ## [**v7.1.0**](https://github.com/stardog-union/stardog.js/milestone/80)
 - [**310**](https://github.com/stardog-union/stardog.js/pull/310) Add get stored query endpoint
 
