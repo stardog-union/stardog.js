@@ -970,10 +970,11 @@ declare namespace Stardog {
          *
          * @param {Connection} conn the Stardog server connection
          * @param {string} username the username of the user
+         * @param {string} currentPassword the current password for the user
          * @param {string} password the new password for the user
          * @param {object} params additional parameters if needed
          */
-        function changePassword(conn: Connection, username: string, password: string, params?: object): Promise<HTTP.Body>;
+        function changePassword(conn: Connection, username: string, currentPassword: string, password: string, params?: object): Promise<HTTP.Body>;
 
         /**
          * Verifies that a Connection's credentials are valid.
