@@ -130,6 +130,8 @@ declare namespace Stardog {
          * properties, but you can specify `names` to return specific ones.
          */
         function properties(conn: Connection, names?: string[]): Promise<HTTP.Body>;
+
+        function logs(conn: Connection): Promise<Response>;
     }
 
     /** Stardog database actions. */
