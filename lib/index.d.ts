@@ -131,6 +131,9 @@ declare namespace Stardog {
          */
         function properties(conn: Connection, names?: string[]): Promise<HTTP.Body>;
 
+        /**
+         * Retrieves a zip file containing log information for an endpoint.
+         */
         function logs(conn: Connection): Promise<Response>;
     }
 
