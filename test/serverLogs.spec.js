@@ -15,8 +15,8 @@ describe('server.logs()', () => {
       expect(response.status).toBe(200);
 
       return response.arrayBuffer().then(buffer => {
-        expect(buffer.byteLength).toBeGreaterThan(0);
         expect(buffer).toBeTruthy();
+        expect(buffer.byteLength).toBeGreaterThan(0);
       });
     }));
 });
