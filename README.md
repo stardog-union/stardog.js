@@ -268,6 +268,16 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
+#### <a name="logs">`server.logs(conn)`</a>
+
+Retrieves a zip file containing log information for an endpoint.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+Returns [`Promise<Response>`](#response)
+
 ## <a name="db">db</a>
 
 #### <a name="create">`db.create(conn, database, databaseOptions, options, params)`</a>
