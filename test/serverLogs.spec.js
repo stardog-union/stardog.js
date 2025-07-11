@@ -1,3 +1,5 @@
+/* eslint-env jest */
+
 const { server } = require('../lib');
 const { ConnectionFactory } = require('./setup-database');
 
