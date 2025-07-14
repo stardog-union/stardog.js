@@ -1,3 +1,6 @@
+## [**v8.1.0**](https://github.com/stardog-union/stardog.js/milestone/82)
+- [**313**](https://github.com/stardog-union/stardog.js/pull/313) [VET-5756] feat: add support for fetching endpoint log archive
+
 ## [**v8.0.0**](https://github.com/stardog-union/stardog.js/milestone/81)
 - [**311**](https://github.com/stardog-union/stardog.js/pull/311) [VET-5579] require current password for changing passwords
 
