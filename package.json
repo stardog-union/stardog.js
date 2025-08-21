@@ -110,6 +110,7 @@
   },
   "engines": {
     "node": ">=22",
+    "yarn": ">=1.22"
   },
   "scripts": {
     "build": "node scripts/build",
