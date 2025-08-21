@@ -55,7 +55,7 @@ services:
     restart: always
 
   test-unit:
-    image: circleci/node:carbon-stretch
+    image: node:22
     command: npm test
     working_dir: /app
     volumes:
@@ -67,7 +67,7 @@ services:
       - stardog3
 
   test-cluster:
-    image: circleci/node:carbon-stretch
+    image: node:22
     command: npm test:cluster
     working_dir: /app
     environment:
