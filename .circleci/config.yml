@@ -15,51 +15,51 @@ jobs:
     machine:
       docker_layer_caching: true
     steps:
-    - checkout
-    # Prepare for artifact and test results  collection equivalent to how it was done on 1.0.
-    # These steps could be consolidated, but I left them separate since that was what was generated.
-    - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
-    - run:
-        working_directory: *working_directory
-        command: echo $LICENSE | base64 --decode > ./stardog-license-key.bin
-    - run:
-        working_directory: *working_directory
-        command: docker login -u $ARTIFACTORY_USERNAME -p $ARTIFACTORY_PASSWORD stardog-eps-docker.jfrog.io
-    - run:
-        working_directory: *working_directory
-        command: docker build -t this/here/starduck ./
-    - run:
-        working_directory: *working_directory
-        command: docker run --name stargoose -p 127.0.0.1:5820:5820 -d -it this/here/starduck
-    # Dependencies
-    # Restore the dependency cache
-    - restore_cache:
-        keys:
-        # This branch if available
-        - v1-dep-{{ .Branch }}-{{ checksum "package-lock.json" }}
-        # Default branch if not
-        - v1-dep-master-{{ checksum "package-lock.json" }}
-        # Any branch if there are none on the default branch - this should be unnecessary if you have your default branch configured correctly
-        - v1-dep-{{ checksum "package-lock.json" }}
-    - run: if [ -z "${NODE_ENV:-}" ]; then export NODE_ENV=test; fi
-    - run: npm install
-    # Save dependency cache
-    - save_cache:
-        key: v1-dep-{{ .Branch }}-{{ checksum "package-lock.json" }}
-        paths:
-        - ./node_modules
-    # Test
-    #   This would typically be a build job when using workflows, possibly combined with build
-    - run: docker ps -a
-    - run: docker logs stargoose
-    - run: npm test
-    # Teardown
-    #   If you break your build into multiple jobs with workflows, you will probably want to do the parts of this that are relevant in each
-    # Save test results
-    - store_test_results:
-        path: /tmp/circleci-test-results
-    # Save artifacts
-    - store_artifacts:
-        path: /tmp/circleci-artifacts
-    - store_artifacts:
-        path: /tmp/circleci-test-results
+      - checkout
+      # Prepare for artifact and test results  collection equivalent to how it was done on 1.0.
+      # These steps could be consolidated, but I left them separate since that was what was generated.
+      - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
+      - run:
+          working_directory: *working_directory
+          command: echo $LICENSE | base64 --decode > ./stardog-license-key.bin
+      - run:
+          working_directory: *working_directory
+          command: docker login -u $ARTIFACTORY_USERNAME -p $ARTIFACTORY_PASSWORD stardog-eps-docker.jfrog.io
+      - run:
+          working_directory: *working_directory
+          command: docker build -t this/here/starduck ./
+      - run:
+          working_directory: *working_directory
+          command: docker run --name stargoose -p 127.0.0.1:5820:5820 -d -it this/here/starduck
+      # Dependencies
+      # Restore the dependency cache
+      - restore_cache:
+          keys:
+            # This branch if available
+            - v1-dep-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            # Default branch if not
+            - v1-dep-master-{{ checksum "package-lock.json" }}
+            # Any branch if there are none on the default branch - this should be unnecessary if you have your default branch configured correctly
+            - v1-dep-{{ checksum "package-lock.json" }}
+      - run: if [ -z "${NODE_ENV:-}" ]; then export NODE_ENV=test; fi
+      - run: npm install
+      # Save dependency cache
+      - save_cache:
+          key: v1-dep-{{ .Branch }}-{{ checksum "package-lock.json" }}
+          paths:
+            - ./node_modules
+      # Test
+      #   This would typically be a build job when using workflows, possibly combined with build
+      - run: docker ps -a
+      - run: docker logs stargoose
+      - run: npm test
+      # Teardown
+      #   If you break your build into multiple jobs with workflows, you will probably want to do the parts of this that are relevant in each
+      # Save test results
+      - store_test_results:
+          path: /tmp/circleci-test-results
+      # Save artifacts
+      - store_artifacts:
+          path: /tmp/circleci-artifacts
+      - store_artifacts:
+          path: /tmp/circleci-test-results

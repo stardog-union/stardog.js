@@ -75,48 +75,53 @@ function getMilestones(
       variables: { milestoneCursor, issueCursor, prCursor },
     }),
   })
-    .then(res => res.json())
-    .then(({ data: { repository: { milestones } } }) =>
-      Promise.all(
-        milestones.nodes.map(milestone => {
-          if (!milestoneAndIssuesData[milestone.title]) {
-            milestoneAndIssuesData[milestone.title] = {
-              url: milestone.url,
-              issues: [],
-            };
+    .then((res) => res.json())
+    .then(
+      ({
+        data: {
+          repository: { milestones },
+        },
+      }) =>
+        Promise.all(
+          milestones.nodes.map((milestone) => {
+            if (!milestoneAndIssuesData[milestone.title]) {
+              milestoneAndIssuesData[milestone.title] = {
+                url: milestone.url,
+                issues: [],
+              };
+            }
+
+            milestone.issues.nodes.forEach((issue) => {
+              milestoneAndIssuesData[milestone.title].issues.push({
+                number: issue.number,
+                title: issue.title,
+                url: issue.url,
+              });
+            });
+
+            milestone.pullRequests.nodes.forEach((issue) => {
+              milestoneAndIssuesData[milestone.title].issues.push({
+                number: issue.number,
+                title: issue.title,
+                url: issue.url,
+              });
+            });
+
+            return milestone.issues.pageInfo.hasNextPage ||
+              milestone.pullRequests.pageInfo.hasNextPage
+              ? getMilestones(
+                  milestoneCursor,
+                  milestone.issues.pageInfo.endCursor,
+                  milestone.pullRequests.pageInfo.endCursor
+                )
+              : Promise.resolve();
+          })
+        ).then(() => {
+          if (milestones.pageInfo.hasNextPage) {
+            return getMilestones(milestones.pageInfo.endCursor);
           }
-
-          milestone.issues.nodes.forEach(issue => {
-            milestoneAndIssuesData[milestone.title].issues.push({
-              number: issue.number,
-              title: issue.title,
-              url: issue.url,
-            });
-          });
-
-          milestone.pullRequests.nodes.forEach(issue => {
-            milestoneAndIssuesData[milestone.title].issues.push({
-              number: issue.number,
-              title: issue.title,
-              url: issue.url,
-            });
-          });
-
-          return milestone.issues.pageInfo.hasNextPage ||
-            milestone.pullRequests.pageInfo.hasNextPage
-            ? getMilestones(
-                milestoneCursor,
-                milestone.issues.pageInfo.endCursor,
-                milestone.pullRequests.pageInfo.endCursor
-              )
-            : Promise.resolve();
+          return milestoneAndIssuesData;
         })
-      ).then(() => {
-        if (milestones.pageInfo.hasNextPage) {
-          return getMilestones(milestones.pageInfo.endCursor);
-        }
-        return milestoneAndIssuesData;
-      })
     );
 }
 
@@ -135,7 +140,7 @@ function getMarkdownForMilestone(milestoneName) {
       return issueTwoNumber - issueOneNumber;
     }
   );
-  sortedIssues.forEach(issue => {
+  sortedIssues.forEach((issue) => {
     milestoneString += `- [**${issue.number}**](${issue.url}) ${issue.title}\n`;
   });
 
@@ -179,7 +184,7 @@ getMilestones()
   .then(generateChangelog)
   .then(writeChangelogMd)
   .then(() => console.log(chalk.green('Changelog generated successfully!\n')))
-  .catch(err => {
+  .catch((err) => {
     console.error(chalk.red('Creating changelog FAILED!\n'));
     console.error(err);
     process.exit(1);

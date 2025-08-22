@@ -25,7 +25,7 @@ const entries = [
 deleteAsync('dist/*')
   .then(() =>
     Promise.all(
-      entries.map(config => {
+      entries.map((config) => {
         console.log(chalk.yellow(`Starting build for ${config.name}...`));
         const plugins = [
           resolve({
@@ -48,7 +48,7 @@ deleteAsync('dist/*')
             treeshake: true,
             plugins,
           })
-          .then(bundle => {
+          .then((bundle) => {
             console.log(chalk.green(`${config.name} successfully rolled.`));
             console.log(chalk.yellow(`Starting write for ${config.name}...`));
             return bundle.write({
@@ -75,6 +75,6 @@ deleteAsync('dist/*')
       chalk.bgBlack.greenBright('All Stardog.js builds completed successfully.')
     );
   })
-  .catch(e => {
+  .catch((e) => {
     console.error(chalk.bgBlack.red(e));
   });

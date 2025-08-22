@@ -5,7 +5,7 @@ const path = require('path');
 const pathToDeclaration = path.resolve(`${__dirname}/../lib/index.d.ts`);
 const pathToREADME = path.resolve(`${__dirname}/../README.md`);
 
-const getType = type => {
+const getType = (type) => {
   if (!type) {
     return `\`object\``;
   }
@@ -19,11 +19,7 @@ const getType = type => {
     return `\`${type}\``;
   }
   if (type.startsWith('{')) {
-    const customType = type
-      .split(': ')
-      .pop()
-      .split(' ')
-      .shift();
+    const customType = type.split(': ').pop().split(' ').shift();
     if (
       customType.startsWith('string') ||
       customType.startsWith('object') ||
@@ -40,7 +36,7 @@ const getType = type => {
   return `[\`${name}\`](#${name.toLowerCase()})`;
 };
 
-const getPath = obj => {
+const getPath = (obj) => {
   if (
     obj.parent === null ||
     obj.parent === undefined ||
@@ -60,7 +56,7 @@ const getMarkdown = (obj, parent = null) => {
     return ''.concat(
       `#### <a name="${obj.name.toLowerCase()}">\`${getPath(parent)}.${
         obj.name
-      }(${obj.parameters.map(param => param.name).join(', ')})\`</a>\n\n`,
+      }(${obj.parameters.map((param) => param.name).join(', ')})\`</a>\n\n`,
       `${obj.documentation}\n\n`,
       `Expects the following parameters:\n\n${obj.parameters.reduce(
         (acc, val) => acc.concat(`- ${val.name} (${getType(val.type)})\n\n`),
@@ -78,7 +74,7 @@ const getMarkdown = (obj, parent = null) => {
       `Constructed with:\n- ${param.name} (${getType(param.type)})\n`
     );
     if (obj.members) {
-      obj.members.forEach(child => {
+      obj.members.forEach((child) => {
         md = md.concat(getMarkdown(child, obj));
       });
     }
@@ -119,7 +115,7 @@ const getMarkdown = (obj, parent = null) => {
     return ''.concat(
       `### <a name="${obj.name ? obj.name.toLowerCase() : ''}">`,
       obj.name ? `${getPath(parent)}.${obj.name}` : '',
-      `(${obj.parameters.map(param => param.name).join(', ')})`,
+      `(${obj.parameters.map((param) => param.name).join(', ')})`,
       `</a>\n\n`,
       obj.parameters.length
         ? `Takes the following params:\n${obj.parameters.reduce(
@@ -134,7 +130,7 @@ const getMarkdown = (obj, parent = null) => {
   if (kind === 221) {
     let md = `## <a name="${obj.name.toLowerCase()}">${obj.name}</a>\n\n`;
     if (obj.members) {
-      obj.members.forEach(child => {
+      obj.members.forEach((child) => {
         md = md.concat(getMarkdown(child, obj));
       });
     }
@@ -145,20 +141,20 @@ const getMarkdown = (obj, parent = null) => {
 
 Promise.resolve(typedocs.generate([pathToDeclaration]))
   .then(
-    res =>
+    (res) =>
       res.filter(
-        value => value.name && value.name === `"${pathToDeclaration}"`
+        (value) => value.name && value.name === `"${pathToDeclaration}"`
       )[0].members
   )
-  .then(res => {
+  .then((res) => {
     let markdown = '';
-    res.forEach(obj => {
+    res.forEach((obj) => {
       markdown = markdown.concat(getMarkdown(obj));
     });
     return markdown;
   })
   .then(
-    markdown =>
+    (markdown) =>
       new Promise((resolve, reject) => {
         fs.readFile(pathToREADME, 'utf8', (err, data) => {
           if (err) return reject(err);
@@ -166,7 +162,7 @@ Promise.resolve(typedocs.generate([pathToDeclaration]))
           data = data.slice(0, data.indexOf('<!--- API Goes Here --->'));
           // eslint-disable-next-line no-param-reassign
           data = data.concat('<!--- API Goes Here --->\n# API\n\n', markdown);
-          return fs.writeFile(pathToREADME, data, error => {
+          return fs.writeFile(pathToREADME, data, (error) => {
             if (error) {
               return reject(error);
             }
