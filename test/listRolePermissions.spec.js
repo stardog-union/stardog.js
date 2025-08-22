@@ -23,7 +23,7 @@ describe('listRolePermissions()', () => {
   });
 
   it('should fail trying to get the list of permissions of a non-existent role.', () =>
-    role.permissions(conn, 'myrole').then((res) => {
+    role.permissions(conn, 'myrole').then(res => {
       expect(res.status).toBe(404);
     }));
 
@@ -37,15 +37,15 @@ describe('listRolePermissions()', () => {
 
     return role
       .create(conn, { name: rolename })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(201);
         return role.assignPermission(conn, rolename, permission);
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(201);
         return role.permissions(conn, rolename);
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
 
         expect(res.body.permissions).toEqual(expect.anything());

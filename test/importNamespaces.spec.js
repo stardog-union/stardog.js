@@ -24,7 +24,7 @@ describe('namespaces.add()', () => {
   it('should import namespaces from string contents', () =>
     db.namespaces
       .add(conn, database, '@prefix newNamespace: <http://newNamespace.com> .')
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         expect(res.body).toEqual({
           numImportedNamespaces: 1,
@@ -52,7 +52,7 @@ describe('namespaces.add()', () => {
           path.join(__dirname, 'fixtures', 'namespace_import.ttl')
         )
       )
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         expect(res.body).toEqual({
           numImportedNamespaces: 2,

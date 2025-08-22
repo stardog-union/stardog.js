@@ -11,7 +11,7 @@ describe('userEnabled()', () => {
   });
 
   it('should indicate enabled flag as false for a non-existent user.', () =>
-    user.enabled(conn, 'someuser').then((res) => {
+    user.enabled(conn, 'someuser').then(res => {
       expect(res.status).toBe(200);
       expect(res.body.enabled).toBe(false);
     }));
@@ -21,15 +21,15 @@ describe('userEnabled()', () => {
     const password = generateRandomString();
     return user
       .create(conn, { username, password })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(201);
         return user.enable(conn, username, true);
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         return user.enabled(conn, username);
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         expect(res.body.enabled).toBe(true);
       });

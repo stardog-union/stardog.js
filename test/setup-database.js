@@ -31,7 +31,7 @@ exports.seedDatabase =
         {
           // Load everything into the DB
           files: [
-            ...addlFiles.map((relPath) => ({
+            ...addlFiles.map(relPath => ({
               filename: Path.resolve(basePath, relPath),
             })),
             {
@@ -75,14 +75,14 @@ exports.seedDatabase =
           ],
         }
       )
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(201);
       });
   };
 
-exports.dropDatabase = (database) => () => {
+exports.dropDatabase = database => () => {
   const conn = exports.ConnectionFactory();
-  return db.drop(conn, database).then((res) => {
+  return db.drop(conn, database).then(res => {
     expect(res.status).toBe(200);
   });
 };
@@ -102,7 +102,7 @@ exports.generateProviderIri = () =>
     charset: 'alphabetic',
   })}`;
 
-exports.createAddProviderQuery = (providerIri) => `\
+exports.createAddProviderQuery = providerIri => `\
 insert data {
   graph <tag:stardog:api:catalog:providers>
   {
@@ -113,14 +113,14 @@ insert data {
       <tag:stardog:api:catalog:provider:schedule> "0 0 0 1 0 ?" .
   }
 }`;
-exports.createValidateProviderQuery = (providerIri) => `\
+exports.createValidateProviderQuery = providerIri => `\
 select * where {
   graph <tag:stardog:api:catalog:providers>
   {
     <${providerIri}> ?p ?o .
   }
 }`;
-exports.createClearProviderQuery = (providerIri) => `\
+exports.createClearProviderQuery = providerIri => `\
 delete where {
   graph <tag:stardog:api:catalog:providers>
   {

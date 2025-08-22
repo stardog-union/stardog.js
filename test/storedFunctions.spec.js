@@ -14,27 +14,27 @@ describe('storedFunctions', () => {
 
   // test add once and ensure functions are there for all tests
   beforeAll(() =>
-    storedFunctions.add(conn, functions).then((res) => {
+    storedFunctions.add(conn, functions).then(res => {
       expect(res.status).toBe(204);
     })
   );
 
   // test clear once
   afterAll(() =>
-    storedFunctions.clear(conn).then((res) => {
+    storedFunctions.clear(conn).then(res => {
       expect(res.status).toBe(204);
     })
   );
 
   it('getAll', () =>
-    storedFunctions.getAll(conn).then((res) => {
+    storedFunctions.getAll(conn).then(res => {
       expect(res.status).toBe(200);
       expect(res.body).toContain(func1);
       expect(res.body).toContain(func2);
     }));
 
   it('get', () =>
-    storedFunctions.get(conn, func1).then((res) => {
+    storedFunctions.get(conn, func1).then(res => {
       expect(res.status).toBe(200);
       expect(res.body).toContain(func1);
     }));
@@ -42,11 +42,11 @@ describe('storedFunctions', () => {
   it('remove', () =>
     storedFunctions
       .remove(conn, func1)
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(204);
         return storedFunctions.getAll(conn);
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         expect(res.body).not.toContain(func1);
         expect(res.body).toContain(func2);

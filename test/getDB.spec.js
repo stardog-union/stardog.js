@@ -20,7 +20,7 @@ describe('getDB()', () => {
   });
 
   it('A response of the DB info should not be empty', () =>
-    db.get(conn, database).then((res) => {
+    db.get(conn, database).then(res => {
       expect(res.body.length).toBeGreaterThan(0);
       expect(
         res.body.includes(

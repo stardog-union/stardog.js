@@ -75,7 +75,7 @@ describe('stored', () => {
           database,
           query: 'select distinct ?type {?s a ?type}',
         })
-        .then((res) => {
+        .then(res => {
           expect(res.status).toBe(204);
           return stored.remove(conn, name);
         });
@@ -96,14 +96,14 @@ describe('stored', () => {
           }),
           { contentType: 'application/ld+json' }
         )
-        .then((res) => {
+        .then(res => {
           expect(res.status).toBe(204);
           return stored.list(conn, { accept: 'application/ld+json' });
         })
-        .then((res) => {
+        .then(res => {
           expect(res.status).toBe(200);
           const storedQuery = res.body['@graph'].find(
-            (v) => v['system:queryName']['@value'] === name
+            v => v['system:queryName']['@value'] === name
           );
           expect(storedQuery).toBeTruthy();
           expect(storedQuery['iri:annotation:thing']['@value']).toBe(
@@ -123,14 +123,14 @@ describe('stored', () => {
             true
           );
         })
-        .then((res) => {
+        .then(res => {
           expect(res.status).toBe(204);
           return stored.list(conn, { accept: 'application/ld+json' });
         })
-        .then((res) => {
+        .then(res => {
           expect(res.status).toBe(200);
           const storedQuery = res.body['@graph'].find(
-            (v) => v['system:queryName']['@value'] === name
+            v => v['system:queryName']['@value'] === name
           );
           expect(storedQuery).toBeTruthy();
           expect(storedQuery['iri:annotation:thing']['@value']).toBe(
@@ -146,7 +146,7 @@ describe('stored', () => {
           database: '*',
           query: 'select distinct ?type {?s a ?type}',
         })
-        .then((res) => {
+        .then(res => {
           expect(res.status).toBe(400);
         }));
   });
@@ -169,7 +169,7 @@ describe('stored', () => {
         .then(([statusRes, res]) => {
           const stardogVersion = statusRes.body['dbms.version'].value;
           expect(res.status).toBe(200);
-          const q = res.body.queries.find((v) => v.name === name);
+          const q = res.body.queries.find(v => v.name === name);
           const earliestVersionWithReasoningAndDescription = '6.2.2';
           if (
             semver.gte(
@@ -257,7 +257,7 @@ describe('stored', () => {
           database,
           query: 'select ?type { ?s a ?type }',
         })
-        .then((res) => {
+        .then(res => {
           expect(res.status).toBe(204);
         }));
     it('updates an existing query', () =>
@@ -267,7 +267,7 @@ describe('stored', () => {
           database,
           query: 'select distinct ?type { ?s a ?type }',
         })
-        .then((res) => {
+        .then(res => {
           expect(res.status).toBe(204);
         }));
     it('returns the delete response when theres a non 404 error', () =>
@@ -285,7 +285,7 @@ describe('stored', () => {
           },
           {}
         )
-        .then((res) => {
+        .then(res => {
           expect(res.url).toBe(`http://${host}:5820/admin/queries/stored`);
           expect(res.status).toBe(401);
         }));
@@ -304,7 +304,7 @@ describe('stored', () => {
           },
           {}
         )
-        .then((res) => {
+        .then(res => {
           expect(res.status).toBe(401);
         }));
   });
@@ -322,7 +322,7 @@ describe('stored', () => {
           {},
           false
         )
-        .then((res) => {
+        .then(res => {
           expect(res.status).toBe(204);
         }));
     it('updates an existing query', () =>
@@ -337,7 +337,7 @@ describe('stored', () => {
           {},
           false
         )
-        .then((res) => {
+        .then(res => {
           expect(res.status).toBe(204);
         }));
     it('returns the delete response when theres a non 404 error', () =>
@@ -356,7 +356,7 @@ describe('stored', () => {
           {},
           false
         )
-        .then((res) => {
+        .then(res => {
           expect(res.url).toEqual(
             expect.stringContaining(`http://${host}:5820/admin/queries/stored`)
           );
@@ -378,7 +378,7 @@ describe('stored', () => {
           {},
           false
         )
-        .then((res) => {
+        .then(res => {
           expect(res.status).toBe(401);
         }));
   });
@@ -391,11 +391,11 @@ describe('stored', () => {
           database,
           query: 'select distinct ?type {?s a ?type}',
         })
-        .then((res) => {
+        .then(res => {
           expect(res.status).toBe(204);
           return stored.remove(conn, name);
         })
-        .then((res) => {
+        .then(res => {
           expect(res.status).toBe(204);
         });
     });
@@ -410,11 +410,11 @@ describe('stored', () => {
           database,
           query: 'select distinct ?type {?s a ?type}',
         })
-        .then((res) => {
+        .then(res => {
           expect(res.status).toBe(204);
           return stored.rename(conn, name, newName);
         })
-        .then((res) => {
+        .then(res => {
           expect(res.status).toBe(204);
         });
     });

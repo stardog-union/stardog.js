@@ -11,7 +11,7 @@ describe('deleteUser()', () => {
   });
 
   it('should return NOT_FOUND trying to delete a non-existent user.', () =>
-    user.remove(conn, generateRandomString()).then((res) => {
+    user.remove(conn, generateRandomString()).then(res => {
       expect(res.status).toBe(404);
     }));
 
@@ -21,11 +21,11 @@ describe('deleteUser()', () => {
 
     return user
       .create(conn, { username, password })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(201);
         return user.remove(conn, username);
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(204);
       });
   });

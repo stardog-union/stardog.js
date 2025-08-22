@@ -11,13 +11,13 @@ describe('user.enabled()', () => {
   });
 
   it('should indicate enabled flag as false for a non-existent user.', () =>
-    user.enabled(conn, 'someuser').then((res) => {
+    user.enabled(conn, 'someuser').then(res => {
       expect(res.status).toBe(200);
       expect(res.body.enabled).toBe(false);
     }));
 
   it("should return the value with the user's enabled flag", () =>
-    user.enabled(conn, 'admin').then((res) => {
+    user.enabled(conn, 'admin').then(res => {
       expect(res.body.enabled).toEqual(true);
     }));
 
@@ -27,12 +27,12 @@ describe('user.enabled()', () => {
 
     return user
       .create(conn, { username, password })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toEqual(201);
         return user.enable(conn, username, false);
       })
       .then(() => user.enabled(conn, username))
-      .then((res) => {
+      .then(res => {
         expect(res.body.enabled).toEqual(false);
       });
   });

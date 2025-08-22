@@ -23,7 +23,7 @@ describe('user.get', () => {
       .then(() => user.setRoles(conn, 'anonymous', [r]))
       .then(() => user.assignPermission(conn, r, permission))
       .then(() => user.get(conn, 'admin'))
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         expect(res.body).toEqual({
           enabled: true,

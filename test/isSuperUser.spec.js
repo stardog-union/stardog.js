@@ -11,13 +11,13 @@ describe('isSuperUser()', () => {
   });
 
   it('should indicate superuser flag as false for a non-existent user', () =>
-    user.superUser(conn, 'someuser').then((res) => {
+    user.superUser(conn, 'someuser').then(res => {
       expect(res.status).toBe(200);
       expect(res.body.superuser).toBe(false);
     }));
 
   it("should return the value with the user's superuser flag (true)", () =>
-    user.superUser(conn, 'admin').then((res) => {
+    user.superUser(conn, 'admin').then(res => {
       expect(res.body.superuser).toBe(true);
     }));
 
@@ -27,11 +27,11 @@ describe('isSuperUser()', () => {
 
     return user
       .create(conn, { username, password })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(201);
         return user.superUser(conn, username);
       })
-      .then((res) => {
+      .then(res => {
         expect(res.body.superuser).toBe(false);
       });
   });

@@ -17,7 +17,7 @@ describe('listRoles()', () => {
     return role
       .create(conn, { name: rolename })
       .then(() => role.list(conn))
-      .then((res) => {
+      .then(res => {
         expect(res.status).toEqual(200);
         expect(res.body.roles).toContain('reader', rolename);
       });

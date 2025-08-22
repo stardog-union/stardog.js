@@ -11,7 +11,7 @@ describe('whoAmI', () => {
   });
 
   it("should return the current user's username.", () =>
-    user.whoAmI(conn).then((res) => {
+    user.whoAmI(conn).then(res => {
       expect(res.status).toEqual(200);
       expect(conn.username).toBeTruthy();
       expect(res.body).toEqual(conn.username);

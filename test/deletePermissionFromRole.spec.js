@@ -29,7 +29,7 @@ describe('deletePermissionFromRole()', () => {
       resources: [database],
     };
 
-    return role.deletePermission(conn, 'myrole', permission).then((res) => {
+    return role.deletePermission(conn, 'myrole', permission).then(res => {
       expect(res.status).toBe(404);
     });
   });
@@ -44,15 +44,15 @@ describe('deletePermissionFromRole()', () => {
 
     return role
       .create(conn, { name: rolename })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(201);
         return role.assignPermission(conn, rolename, permission);
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(201);
         return role.deletePermission(conn, rolename, permission);
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(201);
       });
   });

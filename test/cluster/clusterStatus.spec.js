@@ -11,12 +11,12 @@ describe('cluster.status()', () => {
   it('should retrieve a JS object containing cluster status', () => {
     const coordinatorConnection = ConnectionFactory(coordinatorPort);
 
-    return cluster.status(coordinatorConnection).then((res) => {
+    return cluster.status(coordinatorConnection).then(res => {
       const { nodes } = res.body;
-      const coordinator = nodes.find((node) =>
+      const coordinator = nodes.find(node =>
         node.address.includes(coordinatorPort)
       );
-      const participant = nodes.find((node) =>
+      const participant = nodes.find(node =>
         node.address.includes(participantPort)
       );
 
@@ -33,12 +33,12 @@ describe('cluster.status()', () => {
   it('should respond correctly from both nodes', () => {
     const participantConnection = ConnectionFactory(participantPort);
 
-    return cluster.status(participantConnection).then((res) => {
+    return cluster.status(participantConnection).then(res => {
       const { nodes } = res.body;
-      const coordinator = nodes.find((node) =>
+      const coordinator = nodes.find(node =>
         node.address.includes(coordinatorPort)
       );
-      const participant = nodes.find((node) =>
+      const participant = nodes.find(node =>
         node.address.includes(participantPort)
       );
 

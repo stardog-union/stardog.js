@@ -11,10 +11,10 @@ describe('cluster.info()', () => {
   it('should retrieve a JS object containing cluster information', () => {
     const coordinatorConnection = ConnectionFactory(coordinatorPort);
 
-    return cluster.info(coordinatorConnection).then((res) => {
+    return cluster.info(coordinatorConnection).then(res => {
       const { nodes } = res.body;
-      const coordinator = nodes.find((node) => node.includes(coordinatorPort));
-      const participant = nodes.find((node) => node.includes(participantPort));
+      const coordinator = nodes.find(node => node.includes(coordinatorPort));
+      const participant = nodes.find(node => node.includes(participantPort));
 
       expect(nodes).toHaveLength(expectedNodeCount);
       expect(coordinator).not.toBeUndefined();
@@ -25,10 +25,10 @@ describe('cluster.info()', () => {
   it('should respond correctly from both nodes', () => {
     const participantConnection = ConnectionFactory(participantPort);
 
-    return cluster.info(participantConnection).then((res) => {
+    return cluster.info(participantConnection).then(res => {
       const { nodes } = res.body;
-      const coordinator = nodes.find((node) => node.includes(coordinatorPort));
-      const participant = nodes.find((node) => node.includes(participantPort));
+      const coordinator = nodes.find(node => node.includes(coordinatorPort));
+      const participant = nodes.find(node => node.includes(participantPort));
 
       expect(nodes).toHaveLength(expectedNodeCount);
       expect(coordinator).not.toBeUndefined();

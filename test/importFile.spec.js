@@ -39,7 +39,7 @@ describe('virtualGraphs.importFile()', () => {
           properties,
         }
       )
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         return query.execute(
           conn,
@@ -47,7 +47,7 @@ describe('virtualGraphs.importFile()', () => {
           'select ?o { <http://example.com/Model=E350> <http://example.com#Model> ?o }'
         );
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         expect(res.body.results.bindings[0].o.value).toBe('E350');
       }));
@@ -67,7 +67,7 @@ describe('virtualGraphs.importFile()', () => {
           properties: 'mappings.syntax=sms2',
         }
       )
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         return query.execute(
           conn,
@@ -75,7 +75,7 @@ describe('virtualGraphs.importFile()', () => {
           'select ?o { <http://example.org/cars#Model-E350> <http://purl.org/goodrelations/v1#hasManufacturer> ?o }'
         );
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         expect(res.body.results.bindings[0].o.value).toBe(
           'http://example.org/cars#Manufacturer-Ford'
@@ -101,7 +101,7 @@ describe('virtualGraphs.importFile()', () => {
           properties,
         }
       )
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         return query.execute(
           conn,
@@ -109,7 +109,7 @@ describe('virtualGraphs.importFile()', () => {
           'select ?o { ?s <http://example.com/hash> ?o }'
         );
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         expect(res.body.results.bindings[0].o.value).toBe(
           '00000000000000000028484e3ba77273ebd245f944e574e1d4038d9247a7ff8e'

@@ -21,7 +21,7 @@ describe('listUserPermissions()', () => {
   });
 
   it('should fail trying to get the list of permissions of a non-existent user.', () =>
-    user.permissions(conn, 'myuser').then((res) => {
+    user.permissions(conn, 'myuser').then(res => {
       expect(res.status).toBe(404);
     }));
 
@@ -38,7 +38,7 @@ describe('listUserPermissions()', () => {
       .create(conn, { username, password })
       .then(() => user.assignPermission(conn, username, permission))
       .then(() => user.permissions(conn, username))
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         const resources = res.body.permissions.reduce(
           (memo, perm) => memo.concat(perm.resource),

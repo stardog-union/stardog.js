@@ -22,7 +22,7 @@ describe('doc store', () => {
 
   describe('size', () => {
     it('retrieves the size of the doc store', () =>
-      docs.size(conn, database).then((res) => {
+      docs.size(conn, database).then(res => {
         expect(res.status).toBe(200);
         expect(res.body).toBe('0');
       }));
@@ -30,14 +30,14 @@ describe('doc store', () => {
 
   describe('add', () => {
     it('adds a document to the store', () =>
-      docs.add(conn, database, aFileName, 'contents').then((res) => {
+      docs.add(conn, database, aFileName, 'contents').then(res => {
         expect(res.status).toBe(201);
       }));
   });
 
   describe('clear', () => {
     it('clears the document store', () =>
-      docs.clear(conn, database).then((res) => {
+      docs.clear(conn, database).then(res => {
         expect(res.status).toBe(204);
       }));
   });
@@ -46,11 +46,11 @@ describe('doc store', () => {
     it('removes a document from the store', () =>
       docs
         .add(conn, database, aFileName, 'contents')
-        .then((res) => {
+        .then(res => {
           expect(res.status).toBe(201);
           return docs.remove(conn, database, aFileName);
         })
-        .then((res) => {
+        .then(res => {
           expect(res.status).toBe(204);
         }));
   });
@@ -59,11 +59,11 @@ describe('doc store', () => {
     it('retrieves a document from the store', () =>
       docs
         .add(conn, database, aFileName, 'contents')
-        .then((res) => {
+        .then(res => {
           expect(res.status).toBe(201);
           return docs.get(conn, database, aFileName);
         })
-        .then((res) => {
+        .then(res => {
           expect(res.status).toBe(200);
           expect(res.body.length).toBeGreaterThan(0);
         }));

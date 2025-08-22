@@ -38,11 +38,11 @@ describe('user.listInfo()', () => {
       )
       .then(() => user.assignPermission(conn, usernameA, permission))
       .then(() => user.listInfo(conn))
-      .then((res) => {
+      .then(res => {
         expect(res.status).toEqual(200);
         expect(
           res.body.users.some(
-            (u) =>
+            u =>
               u.username === usernameA &&
               u.superuser &&
               u.permissions.length === 4
@@ -50,7 +50,7 @@ describe('user.listInfo()', () => {
         ).toBeTruthy();
         expect(
           res.body.users.some(
-            (u) =>
+            u =>
               u.username === usernameB &&
               !u.superuser &&
               u.permissions.length === 2

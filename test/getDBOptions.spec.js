@@ -22,12 +22,12 @@ describe('options.get()', () => {
   });
 
   it('should get NOT_FOUND status code trying to get the options of a non-existent DB.', () =>
-    options.get(conn, 'nodeDB_test').then((res) => {
+    options.get(conn, 'nodeDB_test').then(res => {
       expect(res.status).toEqual(404);
     }));
 
   it('should get the options of a DB', () =>
-    options.get(conn, database).then((res) => {
+    options.get(conn, database).then(res => {
       expect(res.status).toEqual(200);
       expect(typeof res.body).toEqual('object');
       expect(res.body).toMatchObject({
@@ -47,7 +47,7 @@ describe('options.getAll()', () => {
     conn = ConnectionFactory();
   });
   it('should get all db config properties', () =>
-    options.getAll(conn, database).then((res) => {
+    options.getAll(conn, database).then(res => {
       expect(res.status).toEqual(200);
       expect(typeof res.body).toEqual('object');
       expect(res.body).toMatchObject({
@@ -62,7 +62,7 @@ describe('options.getAvailable', () => {
     conn = ConnectionFactory();
   });
   it('should get all available config properties', () =>
-    options.getAvailable(conn).then((res) => {
+    options.getAvailable(conn).then(res => {
       expect(res.status).toEqual(200);
       expect(typeof res.body).toEqual('object');
       expect(res.body).toMatchObject({

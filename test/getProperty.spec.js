@@ -26,7 +26,7 @@ describe('query.property()', () => {
         uri: '<http://localhost/publications/articles/Journal1/1940/Article1>',
         property: '<http://localhost/vocabulary/bench/cdrom>',
       })
-      .then((res) => {
+      .then(res => {
         expect(res.body).toEqual(
           'http://www.hogfishes.tld/richer/succories.html'
         );

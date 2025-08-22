@@ -35,7 +35,7 @@ describe('listRoleUsers()', () => {
       )
       .then(() => user.setRoles(conn, 'anonymous', [rolename]))
       .then(() => role.usersWithRole(conn, rolename))
-      .then((res) => {
+      .then(res => {
         expect(res.status).toEqual(200);
         expect(res.body.users).toContain('anonymous');
       });

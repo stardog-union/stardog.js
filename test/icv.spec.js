@@ -22,7 +22,7 @@ describe('icv', () => {
   const conn = ConnectionFactory();
 
   const beginTx = transaction.begin.bind(null, conn, database);
-  const rollbackTx = (txId) => transaction.rollback(conn, database, txId);
+  const rollbackTx = txId => transaction.rollback(conn, database, txId);
 
   beforeAll(
     seedDatabase(database, {
@@ -36,11 +36,11 @@ describe('icv', () => {
   it.skip('should add integrity constraint axioms', () =>
     icv
       .add(conn, database, icvAxioms, { contentType: 'text/turtle' })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(204);
         return icv.get(conn, database);
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         return icv.clear(conn, database);
       }));
@@ -52,11 +52,11 @@ describe('icv', () => {
       .then(() =>
         icv.remove(conn, database, icvAxioms, { contentType: 'text/turtle' })
       )
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(204);
         return icv.get(conn, database);
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
       }));
 
@@ -65,30 +65,30 @@ describe('icv', () => {
     icv
       .add(conn, database, icvAxioms, { contentType: 'text/turtle' })
       .then(() => icv.clear(conn, database))
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(204);
         return icv.get(conn, database);
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
       }));
 
   it('should validate constraints', () =>
     icv
       .validate(conn, database, icvAxioms, { contentType: 'text/turtle' })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         expect(res.body).toBe(true);
       }));
 
   it('should validate constraints in a transaction', () =>
-    beginTx().then((res) => {
+    beginTx().then(res => {
       expect(res.status).toBe(200);
       return icv
         .validateInTx(conn, database, res.transactionId, icvAxioms, {
           contentType: 'text/turtle',
         })
-        .then((validateRes) => {
+        .then(validateRes => {
           expect(validateRes.status).toBe(200);
           expect(validateRes.body).toBe(true);
         })
@@ -98,7 +98,7 @@ describe('icv', () => {
   // covered by Validate SPARQL queries in 9.0.0+, but not deprecated
   // but the test is currently broken (doesn't like accept type!)
   it.skip('should report violations', () =>
-    icv.violations(conn, database, '').then((res) => {
+    icv.violations(conn, database, '').then(res => {
       expect(res.status).toBe(200);
       expect(res.body).toBeNull();
     }));
@@ -106,11 +106,11 @@ describe('icv', () => {
   // covered by Validate SPARQL queries in 9.0.0+, but not deprecated
   // but the test is currently broken (doesn't like accept type!)
   it.skip('should report violations in a transaction', () =>
-    beginTx().then((res) => {
+    beginTx().then(res => {
       expect(res.status).toBe(200);
       return icv
         .violationsInTx(conn, database, res.transactionId, '')
-        .then((violationsRes) => {
+        .then(violationsRes => {
           expect(violationsRes.status).toBe(200);
           expect(violationsRes.body).toBeNull();
         })
@@ -118,7 +118,7 @@ describe('icv', () => {
     }));
 
   it('should produce violation reports', () =>
-    icv.report(conn, database, '').then((res) => {
+    icv.report(conn, database, '').then(res => {
       expect(res.status).toBe(200);
       const reportData = res.body['@graph'];
       expect(reportData.length).not.toBe(0);
@@ -129,11 +129,11 @@ describe('icv', () => {
     }));
 
   it('should produce violation reports in a transaction', () =>
-    beginTx().then((res) => {
+    beginTx().then(res => {
       expect(res.status).toBe(200);
       return icv
         .reportInTx(conn, database, res.transactionId, '')
-        .then((reportRes) => {
+        .then(reportRes => {
           expect(reportRes.status).toBe(200);
           const reportData = reportRes.body['@graph'];
           expect(reportData.length).not.toBe(0);

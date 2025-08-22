@@ -25,11 +25,11 @@ describe('createDB()', () => {
           type: 'disk',
         },
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(201);
         return db.create(conn, database);
       })
-      .then((res) => {
+      .then(res => {
         // Database already exists
         expect(res.headers.get('sd-error-code')).toBe('0D0DE2');
       }));

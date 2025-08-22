@@ -23,7 +23,7 @@ describe('deleteRole()', () => {
   });
 
   it('should return NOT_FOUND trying to delete a non-existent role.', () =>
-    role.remove(conn, 'no-writer').then((res) => {
+    role.remove(conn, 'no-writer').then(res => {
       expect(res.status).toEqual(404);
     }));
 
@@ -31,11 +31,11 @@ describe('deleteRole()', () => {
     const rolename = generateRandomString();
     return role
       .create(conn, { name: rolename })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(201);
         return role.remove(conn, rolename);
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toEqual(204);
       });
   });

@@ -49,7 +49,7 @@ describe('transactions', () => {
       '"A very interesting subject"^^<http://www.w3.org/2001/XMLSchema#string> .';
 
     return begin()
-      .then((res) => {
+      .then(res => {
         const txId = res.transactionId;
         expect(res.status).toBe(200);
         expect(txId).toBeGUID();
@@ -57,11 +57,11 @@ describe('transactions', () => {
           contentType: 'text/turtle',
         });
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         return transaction.rollback(conn, database, res.transactionId);
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
       });
   });
@@ -75,19 +75,19 @@ describe('transactions', () => {
       '"A very interesting subject"^^<http://www.w3.org/2001/XMLSchema#string> .';
 
     return begin()
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         expect(res.body).toBeGUID();
         return add(res.transactionId, triple, {
           contentType: 'text/turtle',
         });
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         expect(res.transactionId).toBeGUID();
         return commit(res.transactionId);
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         const q = `
           prefix foo: <http://localhost/publications/articles/Journal1/1940/>
@@ -98,23 +98,23 @@ describe('transactions', () => {
           "A very interesting subject"^^<http://www.w3.org/2001/XMLSchema#string> .}`;
         return query.execute(conn, database, q);
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         expect(res.body).toBe(true);
         return begin();
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         expect(res.transactionId).toBeGUID();
         return db.remove(conn, database, res.transactionId, triple, {
           contentType: 'text/turtle',
         });
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         return commit(res.transactionId);
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
       });
   });
@@ -126,18 +126,18 @@ describe('transactions', () => {
       '"A very interesting subject"^^<http://www.w3.org/2001/XMLSchema#string> .';
 
     return begin()
-      .then((res) => {
+      .then(res => {
         expect(res.status).toEqual(200);
         expect(res.body).toBeGUID();
         return add(res.transactionId, triple, {
           contentType: 'text/turtle',
         });
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         return commit(res.transactionId);
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         const q =
           'ask where { ' +
@@ -146,7 +146,7 @@ describe('transactions', () => {
           '"A very interesting subject"^^<http://www.w3.org/2001/XMLSchema#string> .}';
         return query.execute(conn, database, q);
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         expect(res.body).toBe(true);
         return begin();
@@ -156,11 +156,11 @@ describe('transactions', () => {
           contentType: 'text/turtle',
         })
       )
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         return commit(res.transactionId);
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
       });
   });
@@ -171,27 +171,27 @@ describe('transactions', () => {
       'utf-8'
     );
     return begin()
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         expect(res.body).toBeGUID();
         return db.clear(conn, database, res.transactionId);
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         expect(res.transactionId).toBeGUID();
         return commit(res.transactionId);
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         return db.size(conn, database);
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         const sizeNum = parseInt(res.body, 10);
         expect(sizeNum).toBe(0);
         return begin();
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         expect(res.body).toBe(res.transactionId);
         expect(res.body).toBeGUID();
@@ -199,12 +199,12 @@ describe('transactions', () => {
           contentType: 'text/turtle',
         });
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         return commit(res.transactionId);
       })
       .then(() => db.size(conn, database))
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(200);
         const sizeNum = parseInt(res.body, 10);
         expect(sizeNum).toBe(42);

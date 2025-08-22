@@ -30,7 +30,7 @@ describe('assignPermissionToRole()', () => {
       resources: [database],
     };
 
-    return role.assignPermission(conn, 'myrole', permission).then((res) => {
+    return role.assignPermission(conn, 'myrole', permission).then(res => {
       expect(res.status).toBe(404);
     });
   });
@@ -45,11 +45,11 @@ describe('assignPermissionToRole()', () => {
 
     return role
       .create(conn, { name: rolename })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(201);
         return role.assignPermission(conn, rolename, permission);
       })
-      .then((res) => {
+      .then(res => {
         expect(res.status).toBe(201);
       });
   });
