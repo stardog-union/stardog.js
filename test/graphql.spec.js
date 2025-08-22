@@ -98,7 +98,7 @@ type Episode {
     graphql.execute(conn, database, `{ Character { name }}`).then(res => {
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('data');
-      expect(res.body.data).toBeInstanceOf(Array);
+      expect(Array.isArray(res.body.data)).toBe(true);
     }));
 
   it('updateSchema', () => {

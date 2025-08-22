@@ -28,91 +28,101 @@ describe('virtualGraphs.importFile()', () => {
   });
 
   it('should import CSV files without mappings', () =>
-    virtualGraphs
-      .importFile(
-        conn,
-        fs.createReadStream(path.join(__dirname, 'fixtures', 'csv_import.csv')),
-        `file://test-${Date.now()}`,
-        'DELIMITED',
-        database,
-        {
-          properties,
-        }
-      )
-      .then(res => {
-        expect(res.status).toBe(200);
-        return query.execute(
-          conn,
-          database,
-          'select ?o { <http://example.com/Model=E350> <http://example.com#Model> ?o }'
-        );
-      })
-      .then(res => {
-        expect(res.status).toBe(200);
-        expect(res.body.results.bindings[0].o.value).toBe('E350');
-      }));
+    fs
+      .openAsBlob(path.join(__dirname, 'fixtures', 'csv_import.csv'))
+      .then(file =>
+        virtualGraphs
+          .importFile(
+            conn,
+            file,
+            `file://test-${Date.now()}`,
+            'DELIMITED',
+            database,
+            {
+              properties,
+            }
+          )
+          .then(res => {
+            expect(res.status).toBe(200);
+            return query.execute(
+              conn,
+              database,
+              'select ?o { <http://example.com/Model=E350> <http://example.com#Model> ?o }'
+            );
+          })
+          .then(res => {
+            expect(res.status).toBe(200);
+            expect(res.body.results.bindings[0].o.value).toBe('E350');
+          })
+      ));
 
   it('should import CSV files with mappings', () =>
-    virtualGraphs
-      .importFile(
-        conn,
-        fs.createReadStream(path.join(__dirname, 'fixtures', 'csv_import.csv')),
-        `file://test-${Date.now()}`,
-        'DELIMITED',
-        database,
-        {
-          mappings: fs.readFileSync(
-            path.join(__dirname, 'fixtures', 'csv_import_mappings.sms')
-          ),
-          properties: 'mappings.syntax=sms2',
-        }
-      )
-      .then(res => {
-        expect(res.status).toBe(200);
-        return query.execute(
-          conn,
-          database,
-          'select ?o { <http://example.org/cars#Model-E350> <http://purl.org/goodrelations/v1#hasManufacturer> ?o }'
-        );
-      })
-      .then(res => {
-        expect(res.status).toBe(200);
-        expect(res.body.results.bindings[0].o.value).toBe(
-          'http://example.org/cars#Manufacturer-Ford'
-        );
-      }));
+    fs
+      .openAsBlob(path.join(__dirname, 'fixtures', 'csv_import.csv'))
+      .then(file =>
+        virtualGraphs
+          .importFile(
+            conn,
+            file,
+            `file://test-${Date.now()}`,
+            'DELIMITED',
+            database,
+            {
+              mappings: fs.readFileSync(
+                path.join(__dirname, 'fixtures', 'csv_import_mappings.sms')
+              ),
+              properties: 'mappings.syntax=sms2',
+            }
+          )
+          .then(res => {
+            expect(res.status).toBe(200);
+            return query.execute(
+              conn,
+              database,
+              'select ?o { <http://example.org/cars#Model-E350> <http://purl.org/goodrelations/v1#hasManufacturer> ?o }'
+            );
+          })
+          .then(res => {
+            expect(res.status).toBe(200);
+            expect(res.body.results.bindings[0].o.value).toBe(
+              'http://example.org/cars#Manufacturer-Ford'
+            );
+          })
+      ));
 
   it('should import JSON files (mappings required)', () =>
-    virtualGraphs
-      .importFile(
-        conn,
-        fs.createReadStream(
-          path.join(__dirname, 'fixtures', 'json_import.json')
-        ),
-        `file://test-${Date.now()}`,
-        'JSON',
-        database,
-        {
-          mappings: fs
-            .readFileSync(
-              path.join(__dirname, 'fixtures', 'json_import_mappings.sms')
-            )
-            .toString(),
-          properties,
-        }
-      )
-      .then(res => {
-        expect(res.status).toBe(200);
-        return query.execute(
-          conn,
-          database,
-          'select ?o { ?s <http://example.com/hash> ?o }'
-        );
-      })
-      .then(res => {
-        expect(res.status).toBe(200);
-        expect(res.body.results.bindings[0].o.value).toBe(
-          '00000000000000000028484e3ba77273ebd245f944e574e1d4038d9247a7ff8e'
-        );
-      }));
+    fs
+      .openAsBlob(path.join(__dirname, 'fixtures', 'json_import.json'))
+      .then(file =>
+        virtualGraphs
+          .importFile(
+            conn,
+            file,
+            `file://test-${Date.now()}`,
+            'JSON',
+            database,
+            {
+              mappings: fs
+                .readFileSync(
+                  path.join(__dirname, 'fixtures', 'json_import_mappings.sms')
+                )
+                .toString(),
+              properties,
+            }
+          )
+          .then(res => {
+            expect(res.status).toBe(200);
+            return query.execute(
+              conn,
+              database,
+              'select ?o { ?s <http://example.com/hash> ?o }'
+            );
+          })
+          .then(res => {
+            expect(res.status).toBe(200);
+            expect(res.body.results.bindings[0].o.value).toBe(
+              '00000000000000000028484e3ba77273ebd245f944e574e1d4038d9247a7ff8e'
+            );
+          })
+      ));
 });

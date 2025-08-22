@@ -27,8 +27,8 @@ describe('user.get', () => {
         expect(res.status).toBe(200);
         expect(res.body).toEqual({
           enabled: true,
-          permissions: expect.any(Array),
-          roles: expect.any(Array),
+          permissions: expect.arrayContaining([]),
+          roles: expect.arrayContaining([]),
           superuser: true,
         });
       });

@@ -62,7 +62,6 @@ services:
       - ../:/app/
     environment:
       - HOST=stardog3
-      - CIRCLECI=true
     depends_on:
       - stardog3
 
@@ -72,7 +71,6 @@ services:
     working_dir: /app
     environment:
       - HOST=stardog1
-      - CIRCLECI=true
     volumes:
       - ../:/app/
     depends_on:

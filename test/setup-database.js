@@ -1,11 +1,11 @@
 /* eslint-env jest */
 
-const Path = require('path');
+const path = require('path');
+const fs = require('fs');
 const RandomString = require('randomstring');
 const { Connection, db } = require('../lib');
 
 const dbs = new Set(); // used to keep track of DBs across runs
-const basePath = process.env.CIRCLECI ? '/var/opt/stardog/test/' : __dirname;
 const host = process.env.HOST || 'localhost';
 
 exports.seedDatabase =
@@ -27,56 +27,52 @@ exports.seedDatabase =
               graphs: 'tag:stardog:api:context:local',
             },
           },
-        }),
-        {
-          // Load everything into the DB
-          files: [
-            ...addlFiles.map(relPath => ({
-              filename: Path.resolve(basePath, relPath),
-            })),
-            {
-              filename: Path.resolve(basePath, 'fixtures', 'api_tests.nt'),
-            },
-            {
-              filename: Path.resolve(
-                basePath,
-                'fixtures',
-                'reasoning',
-                'abox.ttl'
-              ),
-            },
-            {
-              filename: Path.resolve(
-                basePath,
-                'fixtures',
-                'reasoning',
-                'tbox.ttl'
-              ),
-            },
-            {
-              filename: Path.resolve(
-                basePath,
-                'fixtures',
-                'issues',
-                'data.ttl'
-              ),
-            },
-            {
-              filename: Path.resolve(
-                basePath,
-                'fixtures',
-                'issues',
-                'schema.ttl'
-              ),
-            },
-            {
-              filename: Path.resolve(basePath, 'fixtures', 'paths.ttl'),
-            },
-          ],
-        }
+        })
       )
-      .then(res => {
-        expect(res.status).toBe(201);
+      .then(createResponse => {
+        expect(createResponse.ok).toBe(true);
+        expect(createResponse.status).toBe(201);
+        expect(createResponse.body.message || '').not.toContain('Error');
+
+        return db.transaction.begin(conn, database);
+      })
+      .then(transactionResponse => {
+        expect(transactionResponse.ok).toBe(true);
+        expect(transactionResponse.status).toBe(200);
+
+        const { transactionId } = transactionResponse;
+
+        const filePaths = [
+          ...addlFiles,
+          'fixtures/api_tests.nt',
+          'fixtures/reasoning/abox.ttl',
+          'fixtures/reasoning/tbox.ttl',
+          'fixtures/issues/data.ttl',
+          'fixtures/issues/schema.ttl',
+          'fixtures/paths.ttl',
+        ].map(relPath => path.resolve(__dirname, relPath));
+
+        return Promise.all(
+          filePaths.map(filePath => {
+            const data = fs.readFileSync(filePath);
+            return db.add(conn, database, transactionId, data, {
+              contentType: 'text/turtle',
+            });
+          })
+        ).then(addResponses => {
+          if (addResponses.find(resp => !resp.ok)) {
+            return db.transaction.rollback(conn, database, transactionId);
+          }
+          return db.transaction.commit(conn, database, transactionId);
+        });
+
+        return f.then(() =>
+          db.transaction.commit(conn, database, transactionId)
+        );
+      })
+      .then(commitResponse => {
+        expect(commitResponse.ok).toBe(true);
+        expect(commitResponse.status).toBe(200);
       });
   };
 

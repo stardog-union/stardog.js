@@ -137,7 +137,7 @@ describe('virtual_graphs', () => {
       vGraphs.list(conn).then(res => {
         expect(res.status).toBe(200);
         expect(res.body).toHaveProperty('virtual_graphs');
-        expect(res.body.virtual_graphs).toBeInstanceOf(Array);
+        expect(Array.isArray(res.body.virtual_graphs)).toBe(true);
       }));
   });
 
