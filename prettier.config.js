@@ -1,5 +1,5 @@
 module.exports = {
-  arrowParens: 'always',
+  arrowParens: 'avoid',
   overrides: [
     {
       files: '*.scss',
