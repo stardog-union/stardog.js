@@ -33,7 +33,7 @@ describe('db.setOptions()', () => {
           logging: true,
         },
       })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toEqual(404);
       }));
 
@@ -52,7 +52,7 @@ describe('db.setOptions()', () => {
           },
         })
       )
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(200);
       }));
 });

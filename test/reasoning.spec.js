@@ -23,7 +23,7 @@ describe.skip('reasoning commands', () => {
   afterAll(dropDatabase(database));
 
   it('should be able to check consistency', () =>
-    reasoning.consistency(conn, database).then(res => {
+    reasoning.consistency(conn, database).then((res) => {
       expect(res.status).toBe(200);
       expect(res.body).toEqual(true);
     }));
@@ -33,13 +33,13 @@ describe.skip('reasoning commands', () => {
       .explainInference(conn, database, '<urn:A> a <urn:B> .', {
         contentType: 'text/turtle',
       })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(200);
         expect(res.body.proofs).toBeTruthy();
       }));
 
   it('should explain inconsistency', () =>
-    reasoning.explainInconsistency(conn, database).then(res => {
+    reasoning.explainInconsistency(conn, database).then((res) => {
       expect(res.status).toBe(200);
       expect(res.body.proofs).toBeTruthy();
     }));
@@ -49,7 +49,7 @@ describe.skip('reasoning commands', () => {
     let transactionId;
 
     return beginTx()
-      .then(res => {
+      .then((res) => {
         transactionId = res.transactionId;
         expect(res.status).toBe(200);
         return reasoning.explainInferenceInTransaction(
@@ -60,12 +60,12 @@ describe.skip('reasoning commands', () => {
           { contentType: 'text/turtle' }
         );
       })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(200);
         expect(res.body.proofs).toBeTruthy();
         return rollbackTx(transactionId);
       })
-      .catch(err => {
+      .catch((err) => {
         rollbackTx(transactionId);
         throw err;
       });
@@ -76,7 +76,7 @@ describe.skip('reasoning commands', () => {
     let transactionId;
 
     return beginTx()
-      .then(res => {
+      .then((res) => {
         transactionId = res.transactionId;
         expect(res.status).toBe(200);
         return reasoning.explainInconsistencyInTransaction(
@@ -86,19 +86,19 @@ describe.skip('reasoning commands', () => {
           {}
         );
       })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(200);
         expect(res.body.proofs).toBeTruthy();
         return rollbackTx(transactionId);
       })
-      .catch(err => {
+      .catch((err) => {
         rollbackTx(transactionId);
         throw err;
       });
   });
 
   it('should successfully get the schema', () =>
-    reasoning.schema(conn, database).then(res => {
+    reasoning.schema(conn, database).then((res) => {
       expect(res.status).toBe(200);
       expect(res.body).not.toEqual('');
     }));

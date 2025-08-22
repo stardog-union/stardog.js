@@ -109,7 +109,7 @@ describe('virtual_graphs', () => {
   });
 
   const assureExists = () =>
-    vGraphs.list(conn).then(res => {
+    vGraphs.list(conn).then((res) => {
       const exists =
         res.body.virtual_graphs &&
         res.body.virtual_graphs.includes(`virtual://${aVGName}`);
@@ -120,7 +120,7 @@ describe('virtual_graphs', () => {
     });
 
   const assureNotExists = () =>
-    vGraphs.list(conn).then(res => {
+    vGraphs.list(conn).then((res) => {
       const exists =
         res.body.virtual_graphs &&
         res.body.virtual_graphs.includes(`virtual://${aVGName}`);
@@ -132,7 +132,7 @@ describe('virtual_graphs', () => {
 
   describe.only('list', () => {
     it('retrieves a list of VGs', () =>
-      vGraphs.list(conn).then(res => {
+      vGraphs.list(conn).then((res) => {
         expect(res.status).toBe(200);
         expect(res.body).toHaveProperty('virtual_graphs');
         expect(res.body.virtual_graphs).toBeInstanceOf(Array);
@@ -143,7 +143,7 @@ describe('virtual_graphs', () => {
     it('adds a virtual graph', () =>
       assureNotExists()
         .then(() => vGraphs.add(conn, aVGName, aMappings, aOptions))
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(201);
         }));
   });
@@ -152,7 +152,7 @@ describe('virtual_graphs', () => {
     it('updates an existing virtual graph', () =>
       assureExists()
         .then(() => vGraphs.update(conn, aVGName, aMappings, aOptions))
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(204);
         }));
   });
@@ -161,7 +161,7 @@ describe('virtual_graphs', () => {
     it('removes an existing virtual graph', () =>
       assureExists()
         .then(() => vGraphs.remove(conn, aVGName))
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(204);
         }));
   });
@@ -170,7 +170,7 @@ describe('virtual_graphs', () => {
     it('returns true when a VG is available', () =>
       assureExists()
         .then(() => vGraphs.available(conn, aVGName))
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           expect(res.body).toHaveProperty('available');
           expect(res.body.available).toBe(true);
@@ -181,13 +181,13 @@ describe('virtual_graphs', () => {
     it('returns the options/mappings of a VG', () =>
       assureExists()
         .then(() => vGraphs.options(conn, aVGName))
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           expect(res.body).toHaveProperty('options');
           expect(res.body.options).toEqual(aOptions);
           return vGraphs.mappings(conn, aVGName);
         })
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           expect(res.body).toContain('subjectMap');
         }));
@@ -199,7 +199,7 @@ describe('virtual_graphs', () => {
         .then(() =>
           vGraphs.mappings(conn, aVGName, { preferUntransformed: true })
         )
-        .then(res => {
+        .then((res) => {
           expect(res.url).toBe(
             conn.uri(
               'admin',
@@ -214,7 +214,7 @@ describe('virtual_graphs', () => {
             syntax: 'R2RML',
           });
         })
-        .then(res => {
+        .then((res) => {
           expect(res.url).toBe(
             conn.uri(
               'admin',
@@ -228,7 +228,7 @@ describe('virtual_graphs', () => {
             preferUntransformed: false,
           });
         })
-        .then(res => {
+        .then((res) => {
           expect(res.url).toBe(
             conn.uri('admin', 'virtual_graphs', aVGName, 'mappings')
           );

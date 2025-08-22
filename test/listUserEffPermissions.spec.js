@@ -21,7 +21,7 @@ describe('listUserEffPermissions()', () => {
   });
 
   it('should fail trying to get the list of effective permissions of a non-existent user.', () =>
-    user.effectivePermissions(conn, 'myuser').then(res => {
+    user.effectivePermissions(conn, 'myuser').then((res) => {
       expect(res.status).toBe(404);
     }));
 
@@ -38,7 +38,7 @@ describe('listUserEffPermissions()', () => {
       .create(conn, { username, password })
       .then(() => user.assignPermission(conn, username, permission))
       .then(() => user.effectivePermissions(conn, username))
-      .then(res => {
+      .then((res) => {
         expect(res.body.permissions.length).toBeGreaterThan(0);
         expect(res.body.permissions).toContainEqual({
           action: 'WRITE',

@@ -20,7 +20,7 @@ describe('namespaces.get()', () => {
   });
 
   it('should retrieve the namespace prefix bindings for the database', () =>
-    db.namespaces.get(conn, database).then(res => {
+    db.namespaces.get(conn, database).then((res) => {
       expect(res.status).toEqual(200);
       expect(res.body).toEqual({
         '': 'http://example.org/issues#',

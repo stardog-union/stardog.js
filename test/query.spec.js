@@ -1,6 +1,9 @@
 /* eslint-env jest */
 
-const { query, db: { transaction } } = require('../lib');
+const {
+  query,
+  db: { transaction },
+} = require('../lib');
 
 const {
   seedDatabase,
@@ -21,13 +24,13 @@ describe('query.execute()', () => {
   it('A query result should not be empty', () =>
     execute('select distinct ?s where { ?s ?p ?o }', undefined, {
       reasoning: true,
-    }).then(res => {
+    }).then((res) => {
       expect(res.body.results.bindings).toHaveLength(31);
     }));
 
   it('Should be able to query in a transaction', () =>
     begin()
-      .then(res => {
+      .then((res) => {
         expect(res.status).toEqual(200);
         return query.executeInTransaction(
           conn,
@@ -38,7 +41,7 @@ describe('query.execute()', () => {
           { limit: 10 }
         );
       })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(200);
         expect(res.body.results.bindings).toHaveLength(10);
       }));
@@ -55,14 +58,14 @@ describe('query.execute()', () => {
       {
         reasoning: true,
       }
-    ).then(res => {
+    ).then((res) => {
       expect(res.body.results.bindings).toHaveLength(6);
     }));
 
   it('A query result should not have more bindings than its intended limit', () =>
     execute('select * where { ?s ?p ?o }', undefined, {
       limit: 10,
-    }).then(res => {
+    }).then((res) => {
       expect(res.body.results.bindings).toHaveLength(10);
     }));
 
@@ -85,12 +88,12 @@ describe('query.execute()', () => {
   it('Very long queries should be OK', () =>
     execute(
       'select * where { <http://localhost/publications/articles/Journal1/1940/Article1> ?p "unmuzzling measles decentralizing hogfishes gantleted richer succories dwelling scrapped prat islanded burlily thanklessly swiveled polers oinked apnea maxillary dumpers bering evasiveness toto teashop reaccepts gunneries exorcises pirog desexes summable heliocentricity excretions recelebrating dually plateauing reoccupations embossers cerebrum gloves mohairs admiralties bewigged playgoers cheques batting waspishly stilbestrol villainousness miscalling firefanged skeins equalled sandwiching bewitchment cheaters riffled kerneling napoleons rifer unmuzzling measles decentralizing hogfishes gantleted richer succories dwelling scrapped prat islanded burlily thanklessly swiveled polers oinked apnea maxillary dumpers bering evasiveness toto teashop reaccepts gunneries exorcises pirog desexes summable heliocentricity excretions recelebrating dually plateauing reoccupations embossers cerebrum gloves mohairs admiralties bewigged playgoers cheques batting waspishly stilbestrol villainousness miscalling firefanged skeins equalled sandwiching bewitchment cheaters riffled kerneling napoleons rifer unmuzzling measles decentralizing hogfishes gantleted richer succories dwelling scrapped prat islanded burlily thanklessly swiveled polers oinked apnea maxillary dumpers bering evasiveness toto teashop reaccepts gunneries exorcises pirog desexes summable heliocentricity excretions recelebrating dually plateauing reoccupations embossers cerebrum gloves mohairs admiralties bewigged playgoers cheques batting waspishly stilbestrol villainousness miscalling firefanged skeins equalled sandwiching bewitchment cheaters riffled kerneling napoleons rifer unmuzzling measles decentralizing hogfishes gantleted richer succories dwelling scrapped prat islanded burlily thanklessly swiveled polers oinked apnea maxillary dumpers bering evasiveness toto teashop reaccepts gunneries exorcises pirog desexes summable heliocentricity excretions recelebrating dually plateauing reoccupations embossers cerebrum gloves mohairs admiralties bewigged playgoers cheques batting waspishly stilbestrol villainousness miscalling firefanged skeins equalled sandwiching bewitchment cheaters riffled kerneling napoleons rifer unmuzzling measles decentralizing hogfishes gantleted richer succories dwelling scrapped prat islanded burlily thanklessly swiveled polers oinked apnea maxillary dumpers bering evasiveness toto teashop reaccepts gunneries exorcises pirog desexes summable heliocentricity excretions recelebrating dually plateauing reoccupations embossers cerebrum gloves mohairs admiralties bewigged playgoers cheques batting waspishly stilbestrol villainousness miscalling firefanged skeins equalled sandwiching bewitchment cheaters riffled kerneling napoleons rifer unmuzzling measles decentralizing hogfishes gantleted richer succories dwelling scrapped prat islanded burlily thanklessly swiveled polers oinked apnea maxillary burlily thanklessly swiveled polers oinked apnea maxillary burlily thanklessly swiveled polers oinked apnea maxillary" }'
-    ).then(res => expect(res.status).toBe(200)));
+    ).then((res) => expect(res.status).toBe(200)));
 
   it('A query to Articles must have result count to 3', () =>
     execute(
       'select distinct * where { ?s a <http://localhost/vocabulary/bench/Article> }'
-    ).then(res => {
+    ).then((res) => {
       expect(res.body.results.bindings).toHaveLength(3);
     }));
 
@@ -101,14 +104,14 @@ describe('query.execute()', () => {
       {
         reasoning: true,
       }
-    ).then(res => {
+    ).then((res) => {
       expect(res.body.results.bindings).toHaveLength(3);
     }));
 
   it('A query to SportsCar must have result count to 1', () =>
     execute(
       'select distinct * where { ?s a <http://example.org/vehicles/SportsCar> }'
-    ).then(res => {
+    ).then((res) => {
       expect(res.body.results.bindings).toHaveLength(1);
     }));
 
@@ -119,14 +122,14 @@ describe('query.execute()', () => {
       {
         reasoning: true,
       }
-    ).then(res => {
+    ).then((res) => {
       expect(res.body.results.bindings).toHaveLength(3);
     }));
 
   it('A query to SportsCar must have result count to 1', () =>
     execute(
       'select distinct * where { ?s a <http://example.org/vehicles/SportsCar> }'
-    ).then(res => {
+    ).then((res) => {
       expect(res.body.results.bindings).toHaveLength(1);
     }));
 
@@ -137,7 +140,7 @@ describe('query.execute()', () => {
       {
         reasoning: true,
       }
-    ).then(res => {
+    ).then((res) => {
       expect(res.body.results.bindings).toHaveLength(3);
     }));
 
@@ -148,7 +151,7 @@ describe('query.execute()', () => {
       {
         reasoning: true,
       }
-    ).then(res => {
+    ).then((res) => {
       expect(res.body.results.bindings).toHaveLength(3);
     }));
 
@@ -159,21 +162,21 @@ describe('query.execute()', () => {
       {
         reasoning: false,
       }
-    ).then(res => {
+    ).then((res) => {
       expect(res.body.results.bindings).toHaveLength(0);
     }));
 
   it('returns a true boolean for an ASK query', () =>
     execute(
       'ask {<http://myvehicledata.com/FerrariEnzo> a <http://example.org/vehicles/SportsCar>}'
-    ).then(res => {
+    ).then((res) => {
       expect(res.body).toBe(true);
     }));
 
   it('returns a false boolean for an ASK query', () =>
     execute(
       'ask {<http://myvehicledata.com/FerrariEnzo> a <http://example.org/vehicles/Sedan>}'
-    ).then(res => {
+    ).then((res) => {
       expect(res.body).toBe(false);
     }));
 
@@ -221,7 +224,7 @@ describe('query.execute()', () => {
     it('should return values', () =>
       execute(
         `select ?s (Group_Concat(?o ; separator=",") as ?o_s) where { ?s <http://xmlns.com/foaf/0.1/firstName> | <http://xmlns.com/foaf/0.1/lastName> ?o } group by ?s`
-      ).then(res => {
+      ).then((res) => {
         expect(res.status).toBe(200);
         expect(res.body.results.bindings).toHaveLength(3);
       }));
@@ -246,7 +249,7 @@ describe('query.execute()', () => {
         onResponseStart(res) {
           return res;
         },
-      }).then(res => {
+      }).then((res) => {
         expect(res.status).toBe(200);
         expect(res.body.results.bindings).toHaveLength(33);
       });
@@ -257,7 +260,7 @@ describe('query.execute()', () => {
         onResponseStart() {
           return false;
         },
-      }).then(res => {
+      }).then((res) => {
         expect(res.status).toBe(200);
         expect(res.body.results).not.toBeDefined();
       });
@@ -267,15 +270,17 @@ describe('query.execute()', () => {
   describe('paths', () => {
     const prefixes = 'prefix : <urn:paths:> ';
     it('should run a simple paths query', () =>
-      execute(`${prefixes} paths start ?x = :Alice end ?y via ?p`).then(res => {
-        expect(res.status).toBe(200);
-        expect(res.body.results.bindings).toHaveLength(11);
-      }));
+      execute(`${prefixes} paths start ?x = :Alice end ?y via ?p`).then(
+        (res) => {
+          expect(res.status).toBe(200);
+          expect(res.body.results.bindings).toHaveLength(11);
+        }
+      ));
 
     it('should run a more specific query', () =>
       execute(
         `${prefixes} paths start ?x = :Alice end ?y = :David via :knows`
-      ).then(res => {
+      ).then((res) => {
         expect(res.status).toBe(200);
         expect(res.body.results.bindings).toHaveLength(2);
       }));
@@ -283,7 +288,7 @@ describe('query.execute()', () => {
     it('should run a complex query', () =>
       execute(
         `${prefixes} paths start ?x = :Alice end ?y = :David via { {?x ?p ?y} union {?y ?p ?x} }`
-      ).then(res => {
+      ).then((res) => {
         expect(res.status).toBe(200);
         expect(res.body.results.bindings).toHaveLength(2);
       }));
@@ -291,7 +296,7 @@ describe('query.execute()', () => {
     it('should return all paths', () =>
       execute(
         `${prefixes} paths all start ?x = :Alice end ?y = :David via { {?x ?p ?y} union {?y ?p ?x} }`
-      ).then(res => {
+      ).then((res) => {
         expect(res.status).toBe(200);
         expect(res.body.results.bindings).toHaveLength(7);
       }));
@@ -299,14 +304,14 @@ describe('query.execute()', () => {
     it('should return cyclic paths', () =>
       execute(
         `${prefixes} paths cyclic start ?start end ?end via :dependsOn`
-      ).then(res => {
+      ).then((res) => {
         expect(res.status).toBe(200);
         expect(res.body.results.bindings).toHaveLength(17);
       }));
 
     it('runs queries with a limit', () =>
       execute(`${prefixes} paths start ?x = :Alice end ?y via ?p limit 2`).then(
-        res => {
+        (res) => {
           expect(res.status).toBe(200);
           expect(res.body.results.bindings).toHaveLength(4);
         }
@@ -315,7 +320,7 @@ describe('query.execute()', () => {
     it('runs queries with a max length', () =>
       execute(
         `${prefixes} paths start ?x = :Alice end ?y via ?p max length 2`
-      ).then(res => {
+      ).then((res) => {
         expect(res.status).toBe(200);
         expect(res.body.results.bindings).toHaveLength(7);
       }));
@@ -326,12 +331,12 @@ describe('query.execute()', () => {
 
     it('should support "insert data"', () =>
       execute('insert data {:foo :bar :baz}')
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           expect(res.body).toBe(null);
           return execute(`select * {:foo ?p ?o}`);
         })
-        .then(res => {
+        .then((res) => {
           expect(res.body.results.bindings).toHaveLength(1);
         }));
 
@@ -339,24 +344,24 @@ describe('query.execute()', () => {
       const data = '<urn:foo> <urn:bar> <urn:baz>';
       const select = `select * {<urn:foo> ?p ?o}`;
       return execute(select)
-        .then(res => {
+        .then((res) => {
           expect(res.body.results.bindings).toHaveLength(0);
           return execute(`insert data {${data}}`);
         })
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           return execute(select);
         })
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           expect(res.body.results.bindings).toHaveLength(1);
           return execute(`delete data {${data}}`);
         })
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           return execute(select);
         })
-        .then(res => {
+        .then((res) => {
           expect(res.body.results.bindings).toHaveLength(0);
         });
     });
@@ -370,11 +375,11 @@ describe('query.execute()', () => {
           where {?s :someProp ?o}
         `)
         )
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           return execute('select * {:foo :someProp ?o}');
         })
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           expect(res.body.results.bindings).toHaveLength(1);
           expect(res.body.results.bindings[0].o.value).toBe('42');
@@ -383,20 +388,20 @@ describe('query.execute()', () => {
     it('should support "delete where"', () => {
       const bgp = '{:a ?p ?o}';
       return execute('insert data {:a :b :c; :d :e; :f :g}')
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           return execute(`select * ${bgp}`);
         })
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           expect(res.body.results.bindings).toHaveLength(3);
           return execute(`delete where ${bgp}`);
         })
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           return execute(`select * ${bgp}`);
         })
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           expect(res.body.results.bindings).toHaveLength(0);
         });
@@ -405,20 +410,20 @@ describe('query.execute()', () => {
     it('should support "insert where"', () => {
       const select = 'select * {:A ?p :B}';
       return execute('insert data {:A :prop1 :B}')
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           return execute(select);
         })
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           expect(res.body.results.bindings).toHaveLength(1);
           return execute('insert {?s :prop2 ?o} where {?s :prop1 ?o}');
         })
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           return execute(select);
         })
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           expect(res.body.results.bindings).toHaveLength(2);
         });
@@ -426,7 +431,7 @@ describe('query.execute()', () => {
 
     it('should support "load"', () =>
       // Requires a publicly available RDF file, but we can test the failure case
-      execute('load <http://not.a.real.website/at#all>').then(res => {
+      execute('load <http://not.a.real.website/at#all>').then((res) => {
         expect(res.status).toBeGreaterThanOrEqual(400);
         return execute('load silent <http://not.a.real.website/at#all>');
       }));
@@ -438,26 +443,26 @@ describe('query.execute()', () => {
 
     it('should support "clear"', () =>
       execute('insert data {:foo :bar :baz, :qux}')
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           return execute('select * {:foo :bar ?o}');
         })
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           expect(res.body.results.bindings).toHaveLength(2);
           return execute('clear all');
         })
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           return execute('select * {?s ?p ?o}');
         })
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           expect(res.body.results.bindings).toHaveLength(0);
         }));
 
     it('should support "create"', () =>
-      execute('create graph <http://my.graph>').then(res => {
+      execute('create graph <http://my.graph>').then((res) => {
         expect(res.status).toBe(200);
       }));
 
@@ -465,20 +470,20 @@ describe('query.execute()', () => {
       const graph = '<http://test.drop.graph>';
       const select = `select * { graph ${graph} { ?s ?p ?o } }`;
       return execute(`insert data { graph ${graph} {:a :b :c, :d}}`)
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           return execute(select);
         })
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           expect(res.body.results.bindings).toHaveLength(2);
           return execute(`drop graph ${graph}`);
         })
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           return execute(select);
         })
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           expect(res.body.results.bindings).toHaveLength(0);
         });
@@ -488,7 +493,7 @@ describe('query.execute()', () => {
       const graph1 = '<http://test.graph/1>';
       const graph2 = '<http://test.graph/2>';
       return execute(`insert data { graph ${graph1} {:a :b :c, :d}}`)
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           return Promise.all([
             execute(`select * { graph ${graph1} { ?s ?p ?o } }`),
@@ -502,7 +507,7 @@ describe('query.execute()', () => {
           expect(res2.body.results.bindings).toHaveLength(0);
           return execute(`copy ${graph1} to ${graph2}`);
         })
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           return Promise.all([
             execute(`select * { graph ${graph1} { ?s ?p ?o } }`),
@@ -521,7 +526,7 @@ describe('query.execute()', () => {
       const graph1 = '<http://test.graph/1>';
       const graph2 = '<http://test.graph/2>';
       return execute(`insert data { graph ${graph1} {:a :b :c, :d}}`)
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           return Promise.all([
             execute(`select * { graph ${graph1} { ?s ?p ?o } }`),
@@ -535,7 +540,7 @@ describe('query.execute()', () => {
           expect(res2.body.results.bindings).toHaveLength(0);
           return execute(`move ${graph1} to ${graph2}`);
         })
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           return Promise.all([
             execute(`select * { graph ${graph1} { ?s ?p ?o } }`),
@@ -556,7 +561,7 @@ describe('query.execute()', () => {
       return execute(
         `insert data { graph ${graph1} {:a :b :c, :d} . graph ${graph2} {:q :w :e, :r} }`
       )
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           return Promise.all([
             execute(`select * { graph ${graph1} { ?s ?p ?o } }`),
@@ -570,7 +575,7 @@ describe('query.execute()', () => {
           expect(res2.body.results.bindings).toHaveLength(2);
           return execute(`add ${graph1} to ${graph2}`);
         })
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           return Promise.all([
             execute(`select * { graph ${graph1} { ?s ?p ?o } }`),

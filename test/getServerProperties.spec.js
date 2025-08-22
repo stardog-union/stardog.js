@@ -11,7 +11,7 @@ describe('server.properties()', () => {
   });
 
   it('should retrieve a JS object containing server properties', () =>
-    server.properties(conn).then(res => {
+    server.properties(conn).then((res) => {
       expect(res.status).toBe(200);
       expect(res.headers.get('Content-Type')).toBe('application/json');
       const bodyKeys = Object.keys(res.body);
@@ -19,7 +19,7 @@ describe('server.properties()', () => {
     }));
 
   it('should only include the specified properties when names param is set', () =>
-    server.properties(conn, ['query.timeout', 'jwt.conf']).then(res => {
+    server.properties(conn, ['query.timeout', 'jwt.conf']).then((res) => {
       expect(res.status).toBe(200);
       expect(res.headers.get('Content-Type')).toBe('application/json');
 

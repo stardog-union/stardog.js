@@ -29,7 +29,7 @@ describe('assignPermissionToUser()', () => {
       resources: [database],
     };
 
-    return role.assignPermission(conn, 'myuser', permission).then(res => {
+    return role.assignPermission(conn, 'myuser', permission).then((res) => {
       expect(res.status).toEqual(404);
     });
   });
@@ -48,11 +48,11 @@ describe('assignPermissionToUser()', () => {
         username,
         password,
       })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(201);
         return user.assignPermission(conn, username, permission);
       })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(201);
       });
   });

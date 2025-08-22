@@ -13,7 +13,7 @@ describe('listUserRoles()', () => {
   });
 
   it('should return NOT_FOUND if trying to list roles from non-existent user', () =>
-    user.listRoles(conn, generateRandomString()).then(res => {
+    user.listRoles(conn, generateRandomString()).then((res) => {
       expect(res.status).toBe(404);
     }));
 
@@ -28,7 +28,7 @@ describe('listUserRoles()', () => {
       )
       .then(() => user.setRoles(conn, 'anonymous', [r]))
       .then(() => user.listRoles(conn, 'anonymous'))
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(200);
         expect(res.body.roles).toContain(r);
       });

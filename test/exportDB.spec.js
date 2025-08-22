@@ -21,7 +21,7 @@ describe('exportDB()', () => {
   });
 
   it('should return a response with content-disposition header and the attachment export file', () =>
-    db.exportData(conn, database).then(res => {
+    db.exportData(conn, database).then((res) => {
       expect(res.status).toBe(200);
       expect(
         res.headers.get('content-disposition').startsWith('attachment')
@@ -34,7 +34,7 @@ describe('exportDB()', () => {
       .exportData(conn, database, undefined, {
         graphUri: 'tag:stardog:api:context:default',
       })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(200);
         expect(
           res.headers.get('content-disposition').startsWith('attachment')
@@ -65,7 +65,7 @@ describe('exportDB()', () => {
             return res;
           },
         })
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           expect(
             res.headers.get('content-disposition').startsWith('attachment')
@@ -80,7 +80,7 @@ describe('exportDB()', () => {
             return false;
           },
         })
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           expect(res.body['@graph']).toBeUndefined();
         }));

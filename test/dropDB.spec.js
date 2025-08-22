@@ -13,12 +13,12 @@ describe('dropDB()', () => {
 
   beforeAll(seedDatabase(database));
   it('should not drop an non-existent DB', () =>
-    db.drop(conn, 'xxxx').then(res => {
+    db.drop(conn, 'xxxx').then((res) => {
       expect(res.status).toBe(404);
     }));
 
   it('should drop a DB', () =>
-    db.drop(conn, database).then(res => {
+    db.drop(conn, database).then((res) => {
       expect(res.status).toBe(200);
     }));
 });

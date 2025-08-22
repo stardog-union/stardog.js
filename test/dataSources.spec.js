@@ -36,7 +36,7 @@ describe('data_sources', () => {
   });
 
   const assureExists = () =>
-    dataSources.list(conn).then(res => {
+    dataSources.list(conn).then((res) => {
       const exists =
         res.body.data_sources && res.body.data_sources.includes(aDSName);
       if (!exists) {
@@ -46,7 +46,7 @@ describe('data_sources', () => {
     });
 
   const assureNotExists = () =>
-    dataSources.list(conn).then(res => {
+    dataSources.list(conn).then((res) => {
       const exists =
         res.body.data_sources && res.body.data_sources.includes(aDSName);
       if (exists) {
@@ -57,7 +57,7 @@ describe('data_sources', () => {
 
   describe('list', () => {
     it('retrieves a list of data sources', () =>
-      dataSources.list(conn).then(res => {
+      dataSources.list(conn).then((res) => {
         expect(res.status).toBe(200);
         expect(res.body.data_sources).toBeInstanceOf(Array);
       }));
@@ -66,7 +66,7 @@ describe('data_sources', () => {
   // TODO remove .only; test with a real datasource
   describe.only('listInfo', () => {
     it('retrieves a list of data source info', () =>
-      dataSources.listInfo(conn).then(res => {
+      dataSources.listInfo(conn).then((res) => {
         expect(res.status).toBe(200);
         expect(res.body.data_sources).toBeInstanceOf(Array);
       }));
@@ -76,7 +76,7 @@ describe('data_sources', () => {
     it('retrieves an exsiting data source info', () =>
       assureExists()
         .then(() => dataSources.info(conn, aDSName))
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           expect(res.body.info).toBeInstanceOf(Object);
         }));
@@ -86,7 +86,7 @@ describe('data_sources', () => {
     it('adds a data source', () =>
       assureNotExists()
         .then(() => dataSources.add(conn, aDSName, aOptions))
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(201);
         }));
   });
@@ -95,7 +95,7 @@ describe('data_sources', () => {
     it('updates an existing data source', () =>
       assureExists()
         .then(() => dataSources.update(conn, aDSName, aOptions))
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           expect(res.body).toBeInstanceOf(Object);
         }));
@@ -105,7 +105,7 @@ describe('data_sources', () => {
     it('removes an existing data source', () =>
       assureExists()
         .then(() => dataSources.remove(conn, aDSName))
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(204);
         }));
   });
@@ -126,7 +126,7 @@ describe('data_sources', () => {
     it('returns true when a data source is available', () =>
       assureExists()
         .then(() => dataSources.available(conn, aDSName))
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           expect(res.body.available).toBe(true);
         }));
@@ -136,7 +136,7 @@ describe('data_sources', () => {
     it('returns the options of a data source', () =>
       assureExists()
         .then(() => dataSources.options(conn, aDSName))
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           expect(res.body.options).toEqual(aOptions);
         }));
@@ -146,7 +146,7 @@ describe('data_sources', () => {
     it('returns the metadata of a data source', () =>
       assureExists()
         .then(() => dataSources.getMetadata(conn, aDSName))
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           expect(res.body).toEqual(dataSourceMetadata);
         }));
@@ -156,7 +156,7 @@ describe('data_sources', () => {
     it('returns the tables for a data source', () =>
       assureExists()
         .then(() => dataSources.getTables(conn, aDSName))
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           expect(res.body).toEqual(dataSourceTables);
         }));
@@ -173,7 +173,7 @@ describe('data_sources', () => {
             schema: 'schema',
           })
         )
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           expect(res.body).toEqual(dataSourceTableMetadata);
         }));
@@ -185,7 +185,7 @@ describe('data_sources', () => {
         .then(() =>
           dataSources.updateMetadata(conn, aDSName, dataSourceMetadata)
         )
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(204);
         }));
   });
@@ -210,7 +210,7 @@ describe('data_sources', () => {
 }
 `
           )
-          .then(res => {
+          .then((res) => {
             expect(res.status).toBe(200);
           })
       ));

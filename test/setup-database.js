@@ -8,74 +8,81 @@ const dbs = new Set(); // used to keep track of DBs across runs
 const basePath = process.env.CIRCLECI ? '/var/opt/stardog/test/' : __dirname;
 const host = process.env.HOST || 'localhost';
 
-exports.seedDatabase = (database, options = {}, addlFiles = []) => () => {
-  const conn = exports.ConnectionFactory();
+exports.seedDatabase =
+  (database, options = {}, addlFiles = []) =>
+  () => {
+    const conn = exports.ConnectionFactory();
 
-  return db
-    .create(
-      conn,
-      database,
-      Object.assign(options, {
-        index: {
-          type: 'disk',
-        },
-        // override new default value in v10.0.0+ since tests were mostly written before then
-        reasoning: {
-          schema: {
-            graphs: 'tag:stardog:api:context:local',
+    return db
+      .create(
+        conn,
+        database,
+        Object.assign(options, {
+          index: {
+            type: 'disk',
           },
-        },
-      }),
-      {
-        // Load everything into the DB
-        files: [
-          ...addlFiles.map(relPath => ({
-            filename: Path.resolve(basePath, relPath),
-          })),
-          {
-            filename: Path.resolve(basePath, 'fixtures', 'api_tests.nt'),
+          // override new default value in v10.0.0+ since tests were mostly written before then
+          reasoning: {
+            schema: {
+              graphs: 'tag:stardog:api:context:local',
+            },
           },
-          {
-            filename: Path.resolve(
-              basePath,
-              'fixtures',
-              'reasoning',
-              'abox.ttl'
-            ),
-          },
-          {
-            filename: Path.resolve(
-              basePath,
-              'fixtures',
-              'reasoning',
-              'tbox.ttl'
-            ),
-          },
-          {
-            filename: Path.resolve(basePath, 'fixtures', 'issues', 'data.ttl'),
-          },
-          {
-            filename: Path.resolve(
-              basePath,
-              'fixtures',
-              'issues',
-              'schema.ttl'
-            ),
-          },
-          {
-            filename: Path.resolve(basePath, 'fixtures', 'paths.ttl'),
-          },
-        ],
-      }
-    )
-    .then(res => {
-      expect(res.status).toBe(201);
-    });
-};
+        }),
+        {
+          // Load everything into the DB
+          files: [
+            ...addlFiles.map((relPath) => ({
+              filename: Path.resolve(basePath, relPath),
+            })),
+            {
+              filename: Path.resolve(basePath, 'fixtures', 'api_tests.nt'),
+            },
+            {
+              filename: Path.resolve(
+                basePath,
+                'fixtures',
+                'reasoning',
+                'abox.ttl'
+              ),
+            },
+            {
+              filename: Path.resolve(
+                basePath,
+                'fixtures',
+                'reasoning',
+                'tbox.ttl'
+              ),
+            },
+            {
+              filename: Path.resolve(
+                basePath,
+                'fixtures',
+                'issues',
+                'data.ttl'
+              ),
+            },
+            {
+              filename: Path.resolve(
+                basePath,
+                'fixtures',
+                'issues',
+                'schema.ttl'
+              ),
+            },
+            {
+              filename: Path.resolve(basePath, 'fixtures', 'paths.ttl'),
+            },
+          ],
+        }
+      )
+      .then((res) => {
+        expect(res.status).toBe(201);
+      });
+  };
 
-exports.dropDatabase = database => () => {
+exports.dropDatabase = (database) => () => {
   const conn = exports.ConnectionFactory();
-  return db.drop(conn, database).then(res => {
+  return db.drop(conn, database).then((res) => {
     expect(res.status).toBe(200);
   });
 };
@@ -95,7 +102,7 @@ exports.generateProviderIri = () =>
     charset: 'alphabetic',
   })}`;
 
-exports.createAddProviderQuery = providerIri => `\
+exports.createAddProviderQuery = (providerIri) => `\
 insert data {
   graph <tag:stardog:api:catalog:providers>
   {
@@ -106,14 +113,14 @@ insert data {
       <tag:stardog:api:catalog:provider:schedule> "0 0 0 1 0 ?" .
   }
 }`;
-exports.createValidateProviderQuery = providerIri => `\
+exports.createValidateProviderQuery = (providerIri) => `\
 select * where {
   graph <tag:stardog:api:catalog:providers>
   {
     <${providerIri}> ?p ?o .
   }
 }`;
-exports.createClearProviderQuery = providerIri => `\
+exports.createClearProviderQuery = (providerIri) => `\
 delete where {
   graph <tag:stardog:api:catalog:providers>
   {

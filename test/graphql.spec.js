@@ -1,6 +1,9 @@
 /* eslint-env jest */
 
-const { db, query: { graphql } } = require('../lib');
+const {
+  db,
+  query: { graphql },
+} = require('../lib');
 const { server } = require('../lib');
 const semver = require('semver');
 const {
@@ -55,11 +58,11 @@ type Episode {
   beforeAll(() =>
     db
       .create(conn, database)
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(201);
         return graphql.addSchema(conn, database, schemaName, aSimpleSchema);
       })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(201);
       })
   );
@@ -68,31 +71,31 @@ type Episode {
   afterAll(() =>
     graphql
       .removeSchema(conn, database, schemaName)
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(204);
         return graphql.clearSchemas(conn, database);
       })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(204);
         return dropDatabase(database);
       })
   );
 
   it('listSchemas', () =>
-    graphql.listSchemas(conn, database).then(res => {
+    graphql.listSchemas(conn, database).then((res) => {
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('schemas');
       expect(res.body.schemas).toContain(schemaName);
     }));
 
   it('getSchema', () =>
-    graphql.getSchema(conn, database, schemaName).then(res => {
+    graphql.getSchema(conn, database, schemaName).then((res) => {
       expect(res.status).toBe(200);
       expect(res.body.length).toBeGreaterThan(0);
     }));
 
   it('execute', () =>
-    graphql.execute(conn, database, `{ Character { name }}`).then(res => {
+    graphql.execute(conn, database, `{ Character { name }}`).then((res) => {
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('data');
       expect(res.body.data).toBeInstanceOf(Array);
@@ -114,9 +117,9 @@ type Episode {
 
     graphql
       .updateSchema(conn, database, schemaName, simplerSchema)
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(200);
-        graphql.getSchema(conn, database, schemaName).then(response => {
+        graphql.getSchema(conn, database, schemaName).then((response) => {
           expect(response.status).toBe(200);
           expect(response.body.length).toBe(simplerSchema.length);
         });
@@ -130,7 +133,7 @@ type Episode {
         '@explain': true,
         '@explainAsJson': false,
       }),
-    ]).then(results => {
+    ]).then((results) => {
       const [statusRes, res] = results;
       const stardogVersion = statusRes.body['dbms.version'].value;
       // > 6.1.3 captures snapshot versions of 6.1.4
@@ -158,7 +161,7 @@ type Episode {
       graphql.execute(conn, database, '{ Character { name }}', {
         '@explain': true,
       }),
-    ]).then(results => {
+    ]).then((results) => {
       const [statusRes, res] = results;
       const stardogVersion = statusRes.body['dbms.version'].value;
       expect(res.status).toBe(200);

@@ -1,6 +1,8 @@
 /* eslint-env jest */
 
-const { user: { role } } = require('../lib');
+const {
+  user: { role },
+} = require('../lib');
 const {
   ConnectionFactory,
   generateRandomString,
@@ -29,16 +31,16 @@ describe('role.listInfo()', () => {
       .then(() => role.create(conn, { name: rolenameB }))
       .then(() => role.assignPermission(conn, rolenameA, permission))
       .then(() => role.listInfo(conn))
-      .then(res => {
+      .then((res) => {
         expect(res.status).toEqual(200);
         expect(
           res.body.roles.some(
-            r => r.rolename === rolenameA && r.permissions.length === 1
+            (r) => r.rolename === rolenameA && r.permissions.length === 1
           )
         ).toBeTruthy();
         expect(
           res.body.roles.some(
-            r => r.rolename === rolenameB && r.permissions.length === 0
+            (r) => r.rolename === rolenameB && r.permissions.length === 0
           )
         ).toBeTruthy();
       });

@@ -27,7 +27,7 @@ describe('deletePermissionFromUser()', () => {
       resources: [database],
     };
 
-    return user.deletePermission(conn, 'myuser', permission).then(res => {
+    return user.deletePermission(conn, 'myuser', permission).then((res) => {
       expect(res.status).toBe(404);
     });
   });
@@ -43,15 +43,15 @@ describe('deletePermissionFromUser()', () => {
 
     return user
       .create(conn, { username, password })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(201);
         return user.assignPermission(conn, username, permission);
       })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(201);
         return user.deletePermission(conn, username, permission);
       })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(201);
       });
   });

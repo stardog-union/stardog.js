@@ -10,7 +10,7 @@ const {
 
 describe('graph store protocol', () => {
   const database = generateDatabaseName();
-  const makeGraph = name => `http://example.org/namedgraphs#${name}`;
+  const makeGraph = (name) => `http://example.org/namedgraphs#${name}`;
   let conn;
 
   beforeAll(seedDatabase(database, {}, ['fixtures/ng_tests.trig']));
@@ -22,23 +22,23 @@ describe('graph store protocol', () => {
 
   describe('graph.doGet', () => {
     it('should retrieve named graphs', () =>
-      graph.doGet(conn, database, makeGraph('bob')).then(res => {
+      graph.doGet(conn, database, makeGraph('bob')).then((res) => {
         expect(res.body).toMatchSnapshot();
       }));
 
     it('should retrieve the default graph when no graph is specified', () =>
       graph
         .doGet(conn, database)
-        .then(res => {
+        .then((res) => {
           expect(res.body).toMatchSnapshot();
           return graph.doGet(conn, database, null);
         })
-        .then(res => {
+        .then((res) => {
           expect(res.body).toMatchSnapshot();
         }));
 
     it('should retrieve other RDF serializations when specified', () =>
-      graph.doGet(conn, database, null, 'application/rdf+xml').then(res => {
+      graph.doGet(conn, database, null, 'application/rdf+xml').then((res) => {
         expect(res.body).toContain('<rdf:RDF');
       }));
   });
@@ -53,7 +53,7 @@ describe('graph store protocol', () => {
           makeGraph('ed'),
           'text/turtle'
         )
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(201);
         }));
     it('should overwrite an existing graph', () =>
@@ -65,11 +65,11 @@ describe('graph store protocol', () => {
           makeGraph('alice'),
           'text/turtle'
         )
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           return graph.doGet(conn, database, makeGraph('alice'));
         })
-        .then(res => {
+        .then((res) => {
           expect(res.body).toMatchSnapshot();
         }));
   });
@@ -84,7 +84,7 @@ describe('graph store protocol', () => {
           makeGraph('ed'),
           'text/turtle'
         )
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
         }));
     it('should merge into an existing graph', () =>
@@ -96,11 +96,11 @@ describe('graph store protocol', () => {
           makeGraph('bob'),
           'text/turtle'
         )
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           return graph.doGet(conn, database, makeGraph('bob'));
         })
-        .then(res => {
+        .then((res) => {
           expect(res.body).toMatchSnapshot();
         }));
   });
@@ -109,11 +109,11 @@ describe('graph store protocol', () => {
     it('should delete a graph', () =>
       graph
         .doDelete(conn, database, makeGraph('alice'))
-        .then(res => {
+        .then((res) => {
           expect(res.status).toBe(200);
           return graph.doGet(conn, database, makeGraph('alice'));
         })
-        .then(res => {
+        .then((res) => {
           expect(res.body['@graph']).toHaveLength(0);
         }));
   });

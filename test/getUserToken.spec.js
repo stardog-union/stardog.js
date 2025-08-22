@@ -10,13 +10,13 @@ describe('user.token', () => {
     conn = ConnectionFactory();
   });
   it('should return a token when the current connection is valid', () =>
-    user.token(conn).then(res => {
+    user.token(conn).then((res) => {
       expect(res.status).toBe(200);
       expect(res.body.token).not.toBeUndefined();
     }));
   it('should return 401 for invalid creds', () => {
     conn.config({ password: 'bad' });
-    return user.token(conn).then(res => {
+    return user.token(conn).then((res) => {
       expect(res.status).toBe(401);
     });
   });

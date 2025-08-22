@@ -12,7 +12,7 @@ describe('changePwd()', () => {
   });
 
   it('should fail trying to change a password (char[]) from an non-existent user', () =>
-    user.changePassword(conn, 'user', 'password', 'password').then(res => {
+    user.changePassword(conn, 'user', 'password', 'password').then((res) => {
       expect(res.status).toEqual(404);
     }));
 
@@ -22,27 +22,27 @@ describe('changePwd()', () => {
     const newPassword = generateRandomString();
     return user
       .create(conn, { username, password })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toBe(201);
         // Switch to new user
         conn.config({ username, password });
         return user.changePassword(conn, username, '', newPassword);
       })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toEqual(400);
         return user.changePassword(conn, username, newPassword, newPassword);
       })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toEqual(403);
         return user.changePassword(conn, username, password, newPassword);
       })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toEqual(200);
         // Switch to new user
         conn.config({ username, password: newPassword });
         return user.token(conn);
       })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toEqual(200);
       });
   });
@@ -53,17 +53,17 @@ describe('changePwd()', () => {
     const newPassword = generateRandomString();
     return user
       .create(conn, { username, password })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toEqual(201);
         return user.changePassword(conn, username, '', newPassword);
       })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toEqual(200);
         // Switch to new user
         conn.config({ username, password: newPassword });
         return user.token(conn);
       })
-      .then(res => {
+      .then((res) => {
         expect(res.status).toEqual(200);
       });
   });
