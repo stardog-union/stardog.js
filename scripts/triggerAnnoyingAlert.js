@@ -18,7 +18,7 @@ const writeCountdown = () => {
 
 const beAnnoying = () => {
   writeCountdown();
-  countdown--;
+  countdown -= 1;
   if (countdown < 0) {
     console.log(chalk.green('\n\n                                  Publishing!\n'));
     return;

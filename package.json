@@ -84,6 +84,7 @@
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
     "babel-preset-es2015-rollup": "^3.0.0",
     "chalk": "^2.0.1",
+    "del": "^8.0.0",
     "eslint": "^4.2.0",
     "eslint-config-airbnb-base": "^11.2.0",
     "eslint-config-prettier": "^2.3.0",

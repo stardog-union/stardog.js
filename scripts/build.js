@@ -1,8 +1,6 @@
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable no-console */
 const chalk = require('chalk');
 const rollup = require('rollup');
-const del = require('del');
+const { deleteAsync } = require('del');
 const commonJs = require('rollup-plugin-commonjs');
 const resolve = require('rollup-plugin-node-resolve');
 const uglify = require('rollup-plugin-uglify');
@@ -24,9 +22,9 @@ const entries = [
   },
 ];
 
-del('dist/*')
-  .then(() => {
-    return Promise.all(
+deleteAsync('dist/*')
+  .then(() =>
+    Promise.all(
       entries.map(config => {
         console.log(chalk.yellow(`Starting build for ${config.name}...`));
         const plugins = [
@@ -70,13 +68,11 @@ del('dist/*')
             )
           );
       })
-    );
-  })
+    )
+  )
   .then(() => {
     console.log(
-      chalk.bgBlack.greenBright(
-        'All Stardog.js builds completed successfully.'
-      )
+      chalk.bgBlack.greenBright('All Stardog.js builds completed successfully.')
     );
   })
   .catch(e => {
