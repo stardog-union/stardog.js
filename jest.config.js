@@ -1,3 +1,5 @@
+/** @type {import('jest').Config} */
 module.exports = {
-  setupTestFrameworkScriptFile: './jest.setup.js',
+  setupFilesAfterEnv: ['./jest.setup.js'],
+  testRegex: 'test/.*\\.spec\\.js$',
 };
