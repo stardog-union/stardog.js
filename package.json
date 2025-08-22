@@ -90,9 +90,7 @@
     "eslint-config-prettier": "^2.3.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-prettier": "^2.1.2",
-    "husky": "^0.13.4",
     "jest": "^23.5.0",
-    "lint-staged": "^4.0.0",
     "mdchangelog": "^0.8.0",
     "prettier": "^1.4.4",
     "randomstring": "^1.1.5",
@@ -116,18 +114,9 @@
     "test": "eslint '{lib,test}/**/*.js' --fix && jest test/*.spec.js --verbose -i",
     "test:inspect": "node --inspect-brk ./node_modules/.bin/jest test/*.spec.js --verbose -i",
     "test:cluster": "jest test/cluster/*.spec.js --verbose -i",
-    "precommit": "lint-staged",
     "format": "prettier '{lib,test}/**/*.js' --single-quote --trailing-comma es5 --write",
     "version": "node scripts/changelog.js && npm run docs && git add README.md CHANGELOG.md",
     "prepublishOnly": "node scripts/triggerAnnoyingAlert.js && npm run build"
-  },
-  "lint-staged": {
-    "linters": {
-      "{lib,test}/**/*.js": [
-        "prettier --single-quote --trailing-comma es5 --write",
-        "git add"
-      ]
-    }
   },
   "prettier": {
     "singleQuote": true,
