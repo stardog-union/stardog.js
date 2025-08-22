@@ -1,0 +1,10 @@
+{
+  "env": { "jest": true },
+  "rules": {
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+
+    // TODO remove these:
+    "jest/no-conditional-expect": "off",
+    "jest/no-standalone-expect": "off"
+  }
+}

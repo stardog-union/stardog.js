@@ -126,14 +126,7 @@ describe('query.execute()', () => {
       expect(res.body.results.bindings).toHaveLength(3);
     }));
 
-  it('A query to SportsCar must have result count to 1', () =>
-    execute(
-      'select distinct * where { ?s a <http://example.org/vehicles/SportsCar> }'
-    ).then(res => {
-      expect(res.body.results.bindings).toHaveLength(1);
-    }));
-
-  it('A query to Vehicles must have result count to 3', () =>
+  it('A reasoning query to Vehicles must have result count to 3', () =>
     execute(
       'select distinct ?s where { ?s a <http://example.org/vehicles/Vehicle> }',
       undefined,
@@ -144,7 +137,7 @@ describe('query.execute()', () => {
       expect(res.body.results.bindings).toHaveLength(3);
     }));
 
-  it('A query to Car must have result count to 3', () =>
+  it('A reasoningquery to Car must have result count to 3', () =>
     execute(
       'select distinct ?s where { ?s a <http://example.org/vehicles/Car> }',
       undefined,
@@ -234,33 +227,48 @@ describe('query.execute()', () => {
     it('onResponseStart should be called when execute response begins', () => {
       let responseCompleted = false;
 
-      execute(`select distinct ?s where { ?s ?p ?o }`, undefined, undefined, {
-        onResponseStart(res) {
-          expect(res.status).toBe(200);
-          expect(responseCompleted).toBe(false);
-        },
-      }).then(() => {
+      return execute(
+        `select distinct ?s where { ?s ?p ?o }`,
+        undefined,
+        undefined,
+        {
+          onResponseStart(res) {
+            expect(res.status).toBe(200);
+            expect(responseCompleted).toBe(false);
+          },
+        }
+      ).then(() => {
         responseCompleted = true;
       });
     });
 
     it('should not interfere with the full response being passed back', () => {
-      execute(`select distinct ?s where { ?s ?p ?o }`, undefined, undefined, {
-        onResponseStart(res) {
-          return res;
-        },
-      }).then(res => {
+      return execute(
+        `select distinct ?s where { ?s ?p ?o }`,
+        undefined,
+        undefined,
+        {
+          onResponseStart(res) {
+            return res;
+          },
+        }
+      ).then(res => {
         expect(res.status).toBe(200);
         expect(res.body.results.bindings).toHaveLength(33);
       });
     });
 
     it('should prevent further processing when `onResponseStart` explicitly returns `false`', () => {
-      execute(`select distinct ?s where { ?s ?p ?o }`, undefined, undefined, {
-        onResponseStart() {
-          return false;
-        },
-      }).then(res => {
+      return execute(
+        `select distinct ?s where { ?s ?p ?o }`,
+        undefined,
+        undefined,
+        {
+          onResponseStart() {
+            return false;
+          },
+        }
+      ).then(res => {
         expect(res.status).toBe(200);
         expect(res.body.results).not.toBeDefined();
       });

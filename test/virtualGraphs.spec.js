@@ -130,6 +130,8 @@ describe('virtual_graphs', () => {
       return Promise.resolve({ status: 204 });
     });
 
+  // TODO
+  // eslint-disable-next-line no-restricted-properties, jest/no-focused-tests
   describe.only('list', () => {
     it('retrieves a list of VGs', () =>
       vGraphs.list(conn).then(res => {

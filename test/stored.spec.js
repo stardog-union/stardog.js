@@ -25,19 +25,16 @@ const convertToJsonLd = (conn, storedQuery) => {
     types.push('system:ReasoningQuery');
   }
 
-  const keyValuePairs = Object.entries(
-    Object.assign(
-      {
-        'system:queryName': storedQuery.name,
-        'system:queryDescription': storedQuery.description,
-        'system:queryString': storedQuery.query,
-        'system:queryCreator': conn.username,
-        'system:queryDatabase': storedQuery.database,
-      },
-      storedQuery.annotations
-    )
-  ).reduce((obj, [iri, value]) => {
+  const keyValuePairs = Object.entries({
+    'system:queryName': storedQuery.name,
+    'system:queryDescription': storedQuery.description,
+    'system:queryString': storedQuery.query,
+    'system:queryCreator': conn.username,
+    'system:queryDatabase': storedQuery.database,
+    ...storedQuery.annotations,
+  }).reduce((obj, [iri, value]) => {
     if (typeof value !== 'undefined') {
+      // eslint-disable-next-line no-param-reassign
       obj[iri] = { '@value': value };
     }
     return obj;
@@ -48,13 +45,11 @@ const convertToJsonLd = (conn, storedQuery) => {
       system: 'http://system.stardog.com/',
     },
     '@graph': [
-      Object.assign(
-        {
-          '@id': 'system:Query',
-          '@type': types,
-        },
-        keyValuePairs
-      ),
+      {
+        '@id': 'system:Query',
+        '@type': types,
+        ...keyValuePairs,
+      },
     ],
   };
 };

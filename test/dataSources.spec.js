@@ -64,6 +64,7 @@ describe('data_sources', () => {
   });
 
   // TODO remove .only; test with a real datasource
+  // eslint-disable-next-line no-restricted-properties, jest/no-focused-tests
   describe.only('listInfo', () => {
     it('retrieves a list of data source info', () =>
       dataSources.listInfo(conn).then(res => {

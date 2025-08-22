@@ -115,7 +115,7 @@ type Episode {
   name: String!
 }`;
 
-    graphql
+    return graphql
       .updateSchema(conn, database, schemaName, simplerSchema)
       .then(res => {
         expect(res.status).toBe(200);
