@@ -89,7 +89,7 @@ declare namespace Stardog {
      *
      * @param {Object} requestData
      * @param {string} requestData.uri the full URI about to be fetched; includes all URI parts (protocol, hostname, path, query string, etc.)
-     * @param {RequestConstructor} requestData.Request a request constructor, conforming either to the browser's Request spec or to `node-fetch`'s Request, depending on environment
+     * @param {RequestConstructor} requestData.Request a Request constructor
      * @returns {string | Request} a string URI or a Request object
      */
     createRequest?: RequestCreator<RequestConstructor, string | Request>;
@@ -157,7 +157,10 @@ declare namespace Stardog {
       conn: Connection,
       database: string,
       databaseOptions?: object,
-      options?: { files: { filename: string }[] },
+      options?: {
+        files: { filename: string }[];
+        propertiesFile?: Blob;
+      },
       params?: object
     ): Promise<HTTP.Body>;
 
