@@ -75,7 +75,7 @@ function getMilestones(
       variables: { milestoneCursor, issueCursor, prCursor },
     }),
   })
-    .then((res) => res.json())
+    .then(res => res.json())
     .then(
       ({
         data: {
@@ -83,7 +83,7 @@ function getMilestones(
         },
       }) =>
         Promise.all(
-          milestones.nodes.map((milestone) => {
+          milestones.nodes.map(milestone => {
             if (!milestoneAndIssuesData[milestone.title]) {
               milestoneAndIssuesData[milestone.title] = {
                 url: milestone.url,
@@ -91,7 +91,7 @@ function getMilestones(
               };
             }
 
-            milestone.issues.nodes.forEach((issue) => {
+            milestone.issues.nodes.forEach(issue => {
               milestoneAndIssuesData[milestone.title].issues.push({
                 number: issue.number,
                 title: issue.title,
@@ -99,7 +99,7 @@ function getMilestones(
               });
             });
 
-            milestone.pullRequests.nodes.forEach((issue) => {
+            milestone.pullRequests.nodes.forEach(issue => {
               milestoneAndIssuesData[milestone.title].issues.push({
                 number: issue.number,
                 title: issue.title,
@@ -140,7 +140,7 @@ function getMarkdownForMilestone(milestoneName) {
       return issueTwoNumber - issueOneNumber;
     }
   );
-  sortedIssues.forEach((issue) => {
+  sortedIssues.forEach(issue => {
     milestoneString += `- [**${issue.number}**](${issue.url}) ${issue.title}\n`;
   });
 
@@ -184,7 +184,7 @@ getMilestones()
   .then(generateChangelog)
   .then(writeChangelogMd)
   .then(() => console.log(chalk.green('Changelog generated successfully!\n')))
-  .catch((err) => {
+  .catch(err => {
     console.error(chalk.red('Creating changelog FAILED!\n'));
     console.error(err);
     process.exit(1);
