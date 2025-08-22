@@ -76,8 +76,7 @@
   "dependencies": {
     "flat": "^5.0.2",
     "isomorphic-base64": "^1.0.2",
-    "lodash": "^4.17.4",
-    "querystring": "^0.2.0"
+    "lodash": "^4.17.4"
   },
   "devDependencies": {
     "@blueprintjs/eslint-config": "2.11.1",
