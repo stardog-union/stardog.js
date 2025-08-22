@@ -2,12 +2,6 @@
 
 /** stardog.js: The Stardog JS API*/
 
-import {
-    Headers,
-    Request,
-    RequestInit
-} from 'node-fetch';
-
 declare namespace Stardog {
     namespace HTTP {
         export type RdfMimeType = 'application/ld+json'
