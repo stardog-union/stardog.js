@@ -45,7 +45,9 @@ describe('namespaces.add()', () => {
 
   it('should import namespaces from a file', () =>
     fs
-      .openAsBlob(path.join(__dirname, 'fixtures', 'namespace_import.ttl'))
+      .openAsBlob(path.join(__dirname, 'fixtures', 'namespace_import.ttl'), {
+        type: 'text/turtle',
+      })
       .then(file =>
         db.namespaces.add(conn, database, file).then(res => {
           expect(res.status).toBe(200);

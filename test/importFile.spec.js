@@ -29,7 +29,9 @@ describe('virtualGraphs.importFile()', () => {
 
   it('should import CSV files without mappings', () =>
     fs
-      .openAsBlob(path.join(__dirname, 'fixtures', 'csv_import.csv'))
+      .openAsBlob(path.join(__dirname, 'fixtures', 'csv_import.csv'), {
+        type: 'text/csv',
+      })
       .then(file =>
         virtualGraphs
           .importFile(
@@ -58,7 +60,9 @@ describe('virtualGraphs.importFile()', () => {
 
   it('should import CSV files with mappings', () =>
     fs
-      .openAsBlob(path.join(__dirname, 'fixtures', 'csv_import.csv'))
+      .openAsBlob(path.join(__dirname, 'fixtures', 'csv_import.csv'), {
+        type: 'text/csv',
+      })
       .then(file =>
         virtualGraphs
           .importFile(
@@ -69,7 +73,8 @@ describe('virtualGraphs.importFile()', () => {
             database,
             {
               mappings: fs.readFileSync(
-                path.join(__dirname, 'fixtures', 'csv_import_mappings.sms')
+                path.join(__dirname, 'fixtures', 'csv_import_mappings.sms'),
+                'utf8'
               ),
               properties: 'mappings.syntax=sms2',
             }
@@ -92,7 +97,9 @@ describe('virtualGraphs.importFile()', () => {
 
   it('should import JSON files (mappings required)', () =>
     fs
-      .openAsBlob(path.join(__dirname, 'fixtures', 'json_import.json'))
+      .openAsBlob(path.join(__dirname, 'fixtures', 'json_import.json'), {
+        type: 'application/json',
+      })
       .then(file =>
         virtualGraphs
           .importFile(
@@ -102,11 +109,10 @@ describe('virtualGraphs.importFile()', () => {
             'JSON',
             database,
             {
-              mappings: fs
-                .readFileSync(
-                  path.join(__dirname, 'fixtures', 'json_import_mappings.sms')
-                )
-                .toString(),
+              mappings: fs.readFileSync(
+                path.join(__dirname, 'fixtures', 'json_import_mappings.sms'),
+                'utf8'
+              ),
               properties,
             }
           )

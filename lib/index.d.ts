@@ -870,7 +870,8 @@ declare namespace Stardog {
        *
        * @param {Connection} conn the Stardog server connection
        * @param {string} database the name of the database
-       * @param {object|string} fileOrContents an RDF file or RDF string
+       * @param {Blob|string} fileOrContents an RDF file or RDF string.
+       *  If using `Blob`, you must specify the mime type in the Blob.
        * @param {object} options an object specifying the contentType of
        *  the RDF string; used only if `fileOrContents` is a string and
        *  defaults to 'text/turtle'
@@ -878,7 +879,7 @@ declare namespace Stardog {
       function add(
         conn: Connection,
         database: string,
-        fileOrContents: object | string,
+        fileOrContents: Blob | string,
         options?: { contentType?: HTTP.RdfMimeType }
       ): Promise<HTTP.Body>;
     }

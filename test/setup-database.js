@@ -13,6 +13,16 @@ exports.seedDatabase =
   () => {
     const conn = exports.ConnectionFactory();
 
+    const filePaths = [
+      ...addlFiles,
+      'fixtures/api_tests.nt',
+      'fixtures/reasoning/abox.ttl',
+      'fixtures/reasoning/tbox.ttl',
+      'fixtures/issues/data.ttl',
+      'fixtures/issues/schema.ttl',
+      'fixtures/paths.ttl',
+    ].map(relPath => path.resolve(__dirname, relPath));
+
     return db
       .create(
         conn,
@@ -34,36 +44,42 @@ exports.seedDatabase =
         expect(createResponse.status).toBe(201);
         expect(createResponse.body.message || '').not.toContain('Error');
 
-        return db.transaction.begin(conn, database);
+        let f = Promise.resolve();
+        filePaths.forEach(filePath => {
+          const data = fs.readFileSync(filePath, 'utf8');
+
+          f = f.then(() =>
+            db.namespaces.add(conn, database, data).then(namespacesResponse => {
+              expect(namespacesResponse.ok).toBe(true);
+              expect(namespacesResponse.status).toBe(200);
+            })
+          );
+        });
+
+        return f;
       })
+      .then(() => db.transaction.begin(conn, database))
       .then(transactionResponse => {
         expect(transactionResponse.ok).toBe(true);
         expect(transactionResponse.status).toBe(200);
 
         const { transactionId } = transactionResponse;
 
-        const filePaths = [
-          ...addlFiles,
-          'fixtures/api_tests.nt',
-          'fixtures/reasoning/abox.ttl',
-          'fixtures/reasoning/tbox.ttl',
-          'fixtures/issues/data.ttl',
-          'fixtures/issues/schema.ttl',
-          'fixtures/paths.ttl',
-        ].map(relPath => path.resolve(__dirname, relPath));
+        let f = Promise.resolve();
+        filePaths.forEach(filePath => {
+          const data = fs.readFileSync(filePath, 'utf8');
 
-        return Promise.all(
-          filePaths.map(filePath => {
-            const data = fs.readFileSync(filePath);
-            return db.add(conn, database, transactionId, data, {
-              contentType: 'text/turtle',
-            });
-          })
-        ).then(addResponses => {
-          if (addResponses.find(resp => !resp.ok)) {
-            return db.transaction.rollback(conn, database, transactionId);
-          }
-          return db.transaction.commit(conn, database, transactionId);
+          f = f.then(() =>
+            db
+              .add(conn, database, transactionId, data, {
+                // TODO
+                contentType: 'text/turtle',
+              })
+              .then(addResponse => {
+                expect(addResponse.ok).toBe(true);
+                expect(addResponse.status).toBe(200);
+              })
+          );
         });
 
         return f.then(() =>
