@@ -1,6 +1,5 @@
 /** @type {import('jest').Config} */
 module.exports = {
   setupFilesAfterEnv: ['./jest.setup.js'],
-  // don't include subdirs, so we ignore test/cluster/*
-  testRegex: 'test/[^/]+\\.spec\\.js$',
+  testRegex: 'test/cluster/.+\\.spec\\.js$',
 };

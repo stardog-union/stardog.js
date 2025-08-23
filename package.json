@@ -122,7 +122,7 @@
     "format": "prettier --write --config ./prettier.config.js './{lib,test}/**/*.js'",
     "lint": "eslint './{lib,test}/**/*.js'",
     "prepublishOnly": "node scripts/triggerAnnoyingAlert.js && npm run build",
-    "test:cluster": "jest test/cluster/*.spec.js",
+    "test:cluster": "jest --config ./jest.config.cluster.js",
     "test:inspect": "node --inspect-brk ./node_modules/.bin/jest --runInBand",
     "test:unit": "jest --maxWorkers 2",
     "test": "yarn run lint && yarn run test:unit",
