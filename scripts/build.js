@@ -1,70 +1,68 @@
+const { babel } = require('@rollup/plugin-babel');
+const commonjs = require('@rollup/plugin-commonjs');
+const json = require('@rollup/plugin-json');
+const { nodeResolve } = require('@rollup/plugin-node-resolve');
+const terser = require('@rollup/plugin-terser');
 const chalk = require('chalk');
-const rollup = require('rollup');
 const { deleteAsync } = require('del');
-const commonJs = require('rollup-plugin-commonjs');
-const resolve = require('rollup-plugin-node-resolve');
-const uglify = require('rollup-plugin-uglify');
-const babel = require('rollup-plugin-babel');
-const json = require('rollup-plugin-json');
+const rollup = require('rollup');
 
 const entries = [
-  {
-    dest: 'dist/stardog.js',
-    moduleName: 'stardogjs',
-    minify: false,
-    name: 'Uncommpressed UMD',
-  },
-  {
-    dest: 'dist/stardog.min.js',
-    moduleName: 'stardogjs',
-    minify: true,
-    name: 'Minified UMD',
-  },
+  { browser: true, minify: false },
+  { browser: true, minify: true },
+  { browser: false, minify: false },
+  { browser: false, minify: true },
 ];
 
 deleteAsync('dist/*')
   .then(() =>
     Promise.all(
-      entries.map(config => {
-        console.log(chalk.yellow(`Starting build for ${config.name}...`));
+      entries.map(({ browser, minify }) => {
+        const name = `${minify ? 'Minified' : 'Uncompressed'} ${
+          browser ? 'Browser' : 'Node'
+        } UMD`;
+
+        const output = {
+          file: `dist/stardog.${browser ? 'browser' : 'node'}${
+            minify ? '.min' : ''
+          }.js`,
+          name: 'stardogjs',
+          format: 'umd',
+        };
+
+        console.log(chalk.yellow(`Starting build for ${name}...`));
+
         const plugins = [
-          resolve({
-            browser: true,
-            preferBuiltins: false,
+          nodeResolve({
+            browser,
           }),
           json(),
-          commonJs(),
+          commonjs(),
           babel({
-            exclude: 'node_modules/**',
-            presets: ['es2015-rollup'],
+            babelHelpers: 'bundled',
+            targets: browser ? 'defaults' : 'maintained node versions',
           }),
         ];
-        if (config.minify) {
-          plugins.push(uglify());
+        if (minify) {
+          plugins.push(terser());
         }
+
         return rollup
           .rollup({
-            entry: 'lib/index.js',
-            treeshake: true,
+            input: 'lib/index.js',
+            output,
             plugins,
           })
           .then(bundle => {
-            console.log(chalk.green(`${config.name} successfully rolled.`));
-            console.log(chalk.yellow(`Starting write for ${config.name}...`));
-            return bundle.write({
-              format: 'umd',
-              dest: config.dest,
-              // Inject the version here because the JSON plugin here pulls everything in and freezes it, thus adding a lot of bloat.
-              // intro: `global.VERSION = '${pkg.version}';`,
-              sourceMap: config.minify ? 'inline' : false,
-              moduleName: 'stardogjs',
-            });
+            console.log(chalk.green(`${name} successfully rolled.`));
+            console.log(chalk.yellow(`Starting write for ${name}...`));
+            return bundle.write(output);
+            // Inject the version here because the JSON plugin here pulls everything in and freezes it, thus adding a lot of bloat.
+            // intro: `global.VERSION = '${pkg.version}';`,
           })
           .then(() =>
             console.log(
-              chalk.green(
-                `${config.name} successfully written to ${config.dest}.`
-              )
+              chalk.green(`${name} successfully written to ${output.file}.`)
             )
           );
       })
@@ -75,6 +73,7 @@ deleteAsync('dist/*')
       chalk.bgBlack.greenBright('All Stardog.js builds completed successfully.')
     );
   })
-  .catch(e => {
-    console.error(chalk.bgBlack.red(e));
+  .catch(err => {
+    console.error(chalk.bgBlack.red(err));
+    process.exit(1);
   });

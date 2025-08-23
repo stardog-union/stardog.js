@@ -41,8 +41,9 @@ const getPath = obj => {
     obj.parent === null ||
     obj.parent === undefined ||
     obj.parent.name === `"${pathToDeclaration}"`
-  )
+  ) {
     return obj.name;
+  }
   return `${getPath(obj.parent)}.${obj.name}`;
 };
 
@@ -157,7 +158,9 @@ Promise.resolve(typedocs.generate([pathToDeclaration]))
     markdown =>
       new Promise((resolve, reject) => {
         fs.readFile(pathToREADME, 'utf8', (err, data) => {
-          if (err) return reject(err);
+          if (err) {
+            return reject(err);
+          }
           // eslint-disable-next-line no-param-reassign
           data = data.slice(0, data.indexOf('<!--- API Goes Here --->'));
           // eslint-disable-next-line no-param-reassign
@@ -172,4 +175,7 @@ Promise.resolve(typedocs.generate([pathToDeclaration]))
       })
   )
   .then(console.log)
-  .catch(console.err);
+  .catch(e => {
+    console.error(e);
+    process.exit(1);
+  });
