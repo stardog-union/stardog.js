@@ -68,7 +68,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/stardog-union/stardog.js"
+    "url": "git+https://github.com/stardog-union/stardog.js.git"
   },
   "bugs": {
     "url": "https://github.com/stardog-union/stardog.js/issues"
@@ -121,13 +121,13 @@
     "docs": "node scripts/docs.js",
     "format": "prettier --write --config ./prettier.config.js './{lib,test}/**/*.js'",
     "lint": "eslint './{lib,test}/**/*.js'",
-    "prepublishOnly": "node scripts/triggerAnnoyingAlert.js && npm run build",
+    "prepublishOnly": "node scripts/triggerAnnoyingAlert.js && yarn run build",
     "test:cluster": "jest --config ./jest.config.cluster.js",
     "test:inspect": "node --inspect-brk ./node_modules/.bin/jest --runInBand",
     "test:unit": "jest --maxWorkers 2",
     "test": "yarn run lint && yarn run test:unit",
     "wait-for-server": "node scripts/waitForServer.js",
-    "version": "node scripts/changelog.js && npm run docs && git add README.md CHANGELOG.md"
+    "version": "node scripts/changelog.js && yarn run docs && git add README.md CHANGELOG.md"
   },
   "stardog-version": ">=8.0.0"
 }
