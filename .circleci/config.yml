@@ -27,6 +27,10 @@ workflows:
                   docker login -u "$ARTIFACTORY_USERNAME" -p "$ARTIFACTORY_PASSWORD" stardog-eps-docker.jfrog.io
                   docker build -t this/here/starduck ./
                   docker run --name stargoose -p 127.0.0.1:5820:5820 -d -it this/here/starduck
+          post_install_steps:
+            - run:
+                name: Wait for Stardog server to be ready
+                command: yarn run wait-for-server
       - node/run:
           name: Build with Node.js 22
           executor: machine

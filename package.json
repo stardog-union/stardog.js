@@ -126,6 +126,7 @@
     "test:inspect": "node --inspect-brk ./node_modules/.bin/jest --runInBand",
     "test:unit": "jest --maxWorkers 2",
     "test": "yarn run lint && yarn run test:unit",
+    "wait-for-server": "node scripts/waitForServer.js",
     "version": "node scripts/changelog.js && npm run docs && git add README.md CHANGELOG.md"
   },
   "stardog-version": ">=8.0.0"
