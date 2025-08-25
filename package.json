@@ -11,8 +11,8 @@
     "linked data",
     "query"
   ],
-  "main": "lib/index.js",
-  "browser": "dist/stardog.js",
+  "main": "dist/stardog.node.js",
+  "browser": "dist/stardog.browser.js",
   "types": "lib/index.d.ts",
   "author": {
     "name": "Stardog Union",
@@ -117,8 +117,8 @@
     "yarn": ">=1.22"
   },
   "scripts": {
-    "build": "node scripts/build",
-    "docs": "node scripts/docs",
+    "build": "node scripts/build.js",
+    "docs": "node scripts/docs.js",
     "format": "prettier --write --config ./prettier.config.js './{lib,test}/**/*.js'",
     "lint": "eslint './{lib,test}/**/*.js'",
     "prepublishOnly": "node scripts/triggerAnnoyingAlert.js && npm run build",
