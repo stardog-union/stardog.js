@@ -1,6 +1,10 @@
 /* eslint-env jest */
 
-const { Connection, query: { stored }, server } = require('../lib');
+const {
+  Connection,
+  query: { stored },
+  server,
+} = require('../lib');
 const semver = require('semver');
 
 const host = process.env.HOST || 'localhost';
@@ -21,18 +25,14 @@ const convertToJsonLd = (conn, storedQuery) => {
     types.push('system:ReasoningQuery');
   }
 
-  const keyValuePairs = Object.entries(
-    Object.assign(
-      {
+  const keyValuePairs = Object.entries({
     'system:queryName': storedQuery.name,
     'system:queryDescription': storedQuery.description,
     'system:queryString': storedQuery.query,
     'system:queryCreator': conn.username,
     'system:queryDatabase': storedQuery.database,
-      },
-      storedQuery.annotations
-    )
-  ).reduce((obj, [iri, value]) => {
+    ...storedQuery.annotations,
+  }).reduce((obj, [iri, value]) => {
     if (typeof value !== 'undefined') {
       // eslint-disable-next-line no-param-reassign
       obj[iri] = { '@value': value };
@@ -45,13 +45,11 @@ const convertToJsonLd = (conn, storedQuery) => {
       system: 'http://system.stardog.com/',
     },
     '@graph': [
-      Object.assign(
       {
         '@id': 'system:Query',
         '@type': types,
+        ...keyValuePairs,
       },
-        keyValuePairs
-      ),
     ],
   };
 };

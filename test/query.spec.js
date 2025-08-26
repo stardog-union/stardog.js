@@ -1,6 +1,9 @@
 /* eslint-env jest */
 
-const { query, db: { transaction } } = require('../lib');
+const {
+  query,
+  db: { transaction },
+} = require('../lib');
 
 const {
   seedDatabase,
