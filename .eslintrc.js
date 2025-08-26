@@ -31,5 +31,6 @@ module.exports = {
 
     // TODO remove these:
     'no-unused-vars': 'off',
+    'prefer-object-spread': 'warn',
   },
 };

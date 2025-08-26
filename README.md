@@ -129,7 +129,6 @@ query
 ```
 
 <!--- API Goes Here --->
-
 # API
 
 ## <a name="http">HTTP</a>
@@ -144,14 +143,12 @@ One of the following values:
             | 'application/n-triples'
             | 'application/n-quads'
             | 'application/trig'`
-
 #### <a name="sparqlmimetype">SparqlMimeType</a>
 
 One of the following values:
 
 `'application/sparql-results+json'
             | 'application/sparql-results+xml'`
-
 #### <a name="acceptmimetype">AcceptMimeType</a>
 
 One of the following values:
@@ -162,14 +159,12 @@ One of the following values:
             | 'text/boolean'
             | 'application/json'
             | '*/*'`
-
 #### <a name="explainacceptmimetype">ExplainAcceptMimeType</a>
 
 One of the following values:
 
 `'text/plain'
             | 'application/json'`
-
 #### <a name="body">Body</a>
 
 Object with the following values:
@@ -199,13 +194,11 @@ One of the following values:
 `{
       new (input: string | Request, init?: RequestInit): Request;
     }`
-
 #### <a name="requestcreator">RequestCreator</a>
 
 One of the following values:
 
 `({ uri, Request }: { uri: string; Request: Constructor }) => ReturnType`
-
 #### <a name="connectionmeta">ConnectionMeta</a>
 
 Object with the following values:
@@ -216,35 +209,28 @@ Object with the following values:
 ## <a name="connection">Connection</a> (Class)
 
 Constructed with:
-
 - options ([`ConnectionOptions`](#connectionoptions))
-
 ### <a name="config">Connection.config(options, meta)</a>
 
 Takes the following params:
-
 - options ([`ConnectionOptions`](#connectionoptions))
 - meta ([`ConnectionMeta`](#connectionmeta))
 
 Returns [`void`](#void)
-
 ### <a name="headers">Connection.headers()</a>
 
 Returns [`Headers`](#headers)
-
 ### <a name="uri">Connection.uri(resource)</a>
 
 Takes the following params:
-
 - resource (`string[]`)
 
 Returns `string`
-
 ## <a name="server">server</a>
 
 #### <a name="shutdown">`server.shutdown(conn, params)`</a>
 
-Shuts down a Stardog server.
+Shuts down a Stardog server. 
 
 Expects the following parameters:
 
@@ -512,7 +498,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="getavailable">`db.options.getAvailable(conn)`</a>
 
-Gets all available database options with their default values.
+Gets all available database options with their default values. 
 
 Expects the following parameters:
 
@@ -522,7 +508,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="get">`db.options.get(conn, database, params)`</a>
 
-Gets set of options on a database.
+Gets set of options on a database. 
 
 Expects the following parameters:
 
@@ -536,7 +522,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="getall">`db.options.getAll(conn, database)`</a>
 
-Gets all options on a database.
+Gets all options on a database. 
 
 Expects the following parameters:
 
@@ -548,7 +534,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="set">`db.options.set(conn, database, databaseOptions, params)`</a>
 
-Sets options on a database.
+Sets options on a database. 
 
 Expects the following parameters:
 
@@ -647,7 +633,6 @@ One of the following values:
                 'deflate' |
                 'identity' |
                 'br'`
-
 #### <a name="transactionresponse">TransactionResponse</a> extends [HTTP.Body](#body)
 
 Object with the following values:
@@ -1118,7 +1103,6 @@ Returns [`Promise<HTTP.Body>`](#body)
 One of the following values:
 
 `'select' | 'ask' | 'construct' | 'describe' | 'validate' | 'update' | 'paths' | null`
-
 #### <a name="propertyoptions">PropertyOptions</a>
 
 Object with the following values:
@@ -1423,7 +1407,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 #### <a name="removeschema">`query.graphql.removeSchema(conn, database, name, params)`</a>
 
-Removes a GraphQL schemafrom the database
+Removes a GraphQL schemafrom  the database
 
 Expects the following parameters:
 
@@ -1494,7 +1478,6 @@ One of the following values:
             'GRANT' |
             'REVOKE' |
             'EXECUTE'`
-
 #### <a name="resourcetype">ResourceType</a>
 
 One of the following values:
@@ -1506,7 +1489,6 @@ One of the following values:
             'metadata' |
             'named-graph' |
             'icv-constraints'`
-
 #### <a name="list">`user.list(conn, params)`</a>
 
 Gets a list of users.
@@ -1938,7 +1920,6 @@ Object with the following values:
 One of the following values:
 
 `SharedOptions & RdbmsOptions & MongoOptions & CsvOptions`
-
 #### <a name="mappingsrequestoptions">MappingsRequestOptions</a>
 
 Object with the following values:
@@ -2088,10 +2069,10 @@ Expects the following parameters:
 - database (`string`)
 
 - importOptions (`{
-  mappings?: string,
-  properties?: string,
-  namedGraph?: string,
-}`)
+          mappings?: string,
+          properties?: string,
+          namedGraph?: string,
+        }`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -2214,7 +2195,6 @@ Returns [`Promise<HTTP.Body>`](#body)
 One of the following values:
 
 `{ username: string, password: string } | { token: string } | { clientId: string, clientSecret: string }`
-
 #### <a name="addcredential">`catalog.addCredential(conn, credentials, label)`</a>
 
 Adds a provider credential
@@ -2464,7 +2444,6 @@ Returns [`Promise<HTTP.Body>`](#body)
 One of the following values:
 
 `string | { query: string, options: object }`
-
 #### <a name="query">`dataSources.query(conn, name, dataSourceQuery)`</a>
 
 Query data source
@@ -2530,3 +2509,4 @@ Expects the following parameters:
 - conn ([`Connection`](#connection))
 
 Returns [`Promise<HTTP.Body>`](#body)
+

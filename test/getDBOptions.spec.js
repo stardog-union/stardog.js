@@ -1,8 +1,6 @@
 /* eslint-env jest */
 
-const {
-  db: { options },
-} = require('../lib');
+const { db: { options } } = require('../lib');
 const {
   seedDatabase,
   dropDatabase,

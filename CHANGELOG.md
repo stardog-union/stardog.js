@@ -1,152 +1,116 @@
 ## [**v8.1.0**](https://github.com/stardog-union/stardog.js/milestone/82)
-
 - [**313**](https://github.com/stardog-union/stardog.js/pull/313) [VET-5756] feat: add support for fetching endpoint log archive
 
 ## [**v8.0.0**](https://github.com/stardog-union/stardog.js/milestone/81)
-
 - [**311**](https://github.com/stardog-union/stardog.js/pull/311) [VET-5579] require current password for changing passwords
 
 ## [**v7.1.0**](https://github.com/stardog-union/stardog.js/milestone/80)
-
 - [**310**](https://github.com/stardog-union/stardog.js/pull/310) Add get stored query endpoint
 
 ## [**v7.0.0**](https://github.com/stardog-union/stardog.js/milestone/79)
-
 - [**309**](https://github.com/stardog-union/stardog.js/pull/309) [VET-5298] Add `input_file_iri` for virtual file import
 
 ## [**v6.0.0**](https://github.com/stardog-union/stardog.js/milestone/78)
-
 - [**307**](https://github.com/stardog-union/stardog.js/pull/307) [VET-4456] Add DS table endpoints
 - [**305**](https://github.com/stardog-union/stardog.js/pull/305) VET-3936 add jobs endpoint
 
 ## [**v5.3.1**](https://github.com/stardog-union/stardog.js/milestone/77)
-
 - [**306**](https://github.com/stardog-union/stardog.js/pull/306) [VET-3766][VET-4297] Update addCredentials to support Atlan and Purview
 
 ## [**v5.3.0**](https://github.com/stardog-union/stardog.js/milestone/76)
-
 - [**304**](https://github.com/stardog-union/stardog.js/pull/304) [VET-4197] Add testConnection method for Knowledge Catalog
 
 ## [**v5.2.1**](https://github.com/stardog-union/stardog.js/milestone/74)
-
 - [**303**](https://github.com/stardog-union/stardog.js/pull/303) [VET-4121] Avoid internal errors for bad namespace responses
 
 ## [**v5.2.0**](https://github.com/stardog-union/stardog.js/milestone/75)
-
 - [**302**](https://github.com/stardog-union/stardog.js/pull/302) [VET-3627] Add support for catalog endpoints
 
 ## [**v5.1.0**](https://github.com/stardog-union/stardog.js/milestone/73)
-
 - [**301**](https://github.com/stardog-union/stardog.js/pull/301) Allow `delta_options` request option for updating data sources
 
 ## [**v5.0.0**](https://github.com/stardog-union/stardog.js/milestone/72)
-
 - [**300**](https://github.com/stardog-union/stardog.js/pull/300) Stardog 9 updates
 - [**299**](https://github.com/stardog-union/stardog.js/pull/299) [VET-3276] Add `Validate` to Stardog.js
 
 ## [**v4.9.0**](https://github.com/stardog-union/stardog.js/milestone/70)
-
 - [**297**](https://github.com/stardog-union/stardog.js/pull/297) [Cloud-1157] Add `server.properties`
 
 ## [**v4.8.0**](https://github.com/stardog-union/stardog.js/milestone/69)
-
 - [**295**](https://github.com/stardog-union/stardog.js/pull/295) [VET-3070] add `db.listInfo`
 
 ## [**v4.7.1**](https://github.com/stardog-union/stardog.js/milestone/68)
-
 - [**291**](https://github.com/stardog-union/stardog.js/pull/291) [VET-2831] Allow arbitrary metadata for stored queries
 
 ## [**v4.7.0**](https://github.com/stardog-union/stardog.js/milestone/67)
-
 - [**292**](https://github.com/stardog-union/stardog.js/pull/292) [VET-2901] Rename docker environment variables
 - [**290**](https://github.com/stardog-union/stardog.js/pull/290) [VET-2824] Add node 18 compatibility
 
 ## [**v4.6.1**](https://github.com/stardog-union/stardog.js/milestone/66)
-
 - [**289**](https://github.com/stardog-union/stardog.js/pull/289) [VET-2689] Add support for data source query options
 
 ## [**v4.6.0**](https://github.com/stardog-union/stardog.js/milestone/65)
-
 - [**288**](https://github.com/stardog-union/stardog.js/pull/288) Re-add deprecated icv methods
 - [**287**](https://github.com/stardog-union/stardog.js/pull/287) [VET-2765] Add `user.listInfo` and `user.role.listInfo`
 
 ## [**v4.5.0**](https://github.com/stardog-union/stardog.js/milestone/63)
-
 - [**285**](https://github.com/stardog-union/stardog.js/pull/285) Add `user.assignRole`
 
 ## [**v4.4.0**](https://github.com/stardog-union/stardog.js/milestone/62)
-
 - [**283**](https://github.com/stardog-union/stardog.js/pull/283) [VET-2546] **Breaking Change** Do not flatten request body nor unflatten response body for `db.options`
 
 ## [**v4.3.2**](https://github.com/stardog-union/stardog.js/milestone/59)
-
 - [**281**](https://github.com/stardog-union/stardog.js/issues/281) [VET-2486] Update flat package
 
 ## [**v4.3.1**](https://github.com/stardog-union/stardog.js/milestone/56)
-
 - [**279**](https://github.com/stardog-union/stardog.js/pull/279) [VET-2486] Update flat package
 
 ## [**v4.3.0**](https://github.com/stardog-union/stardog.js/milestone/55)
-
 - [**278**](https://github.com/stardog-union/stardog.js/pull/278) [VET-1703] Data source description endpoint
 
 ## [**v4.2.0**](https://github.com/stardog-union/stardog.js/milestone/54)
-
 - [**276**](https://github.com/stardog-union/stardog.js/pull/276) [VET-2029] Stardog.js changes for automapping service
 
 ## [**v4.1.0**](https://github.com/stardog-union/stardog.js/milestone/52)
-
 - [**273**](https://github.com/stardog-union/stardog.js/pull/273) [VET-1900] Remove icv.clear and icv.convert
 - [**271**](https://github.com/stardog-union/stardog.js/pull/271) [VET-1380] Add `admin/status/whoami`
 
 ## [**v4.0.0**](https://github.com/stardog-union/stardog.js/milestone/51)
-
 - [**268**](https://github.com/stardog-union/stardog.js/pull/268) [VET-1900] Remove ICV add/remove
 
 ## [**v3.8.0**](https://github.com/stardog-union/stardog.js/milestone/71)
-
 - [**298**](https://github.com/stardog-union/stardog.js/issues/298) Add `server.properties`
 
 ## [**v3.7.0**](https://github.com/stardog-union/stardog.js/milestone/64)
-
 - [**286**](https://github.com/stardog-union/stardog.js/issues/286) Add `user.assignRole`
 
 ## [**v3.6.0**](https://github.com/stardog-union/stardog.js/milestone/61)
-
 - [**284**](https://github.com/stardog-union/stardog.js/issues/284) [VET-2546] **Breaking Change** Do not flatten request body nor unflatten response body for `db.options`
 
 ## [**v3.5.2**](https://github.com/stardog-union/stardog.js/milestone/58)
-
 - [**282**](https://github.com/stardog-union/stardog.js/issues/282) [VET-2486] Update flat package
 
 ## [**v3.5.1**](https://github.com/stardog-union/stardog.js/milestone/57)
-
 - [**280**](https://github.com/stardog-union/stardog.js/issues/280) [VET-2486] Update flat package
 
 ## [**v3.5.0**](https://github.com/stardog-union/stardog.js/milestone/53)
-
 - [**275**](https://github.com/stardog-union/stardog.js/issues/275) [VET-1380] Add `admin/status/whoami`
 
 ## [**v3.4.0**](https://github.com/stardog-union/stardog.js/milestone/50)
-
 - [**270**](https://github.com/stardog-union/stardog.js/pull/270) [VET-1921] Add rename stored query to stardog.js
 - [**267**](https://github.com/stardog-union/stardog.js/pull/267) [VET-1899] Deprecate ICV add/remove
 
 ## [**v3.3.0**](https://github.com/stardog-union/stardog.js/milestone/49)
-
 - [**265**](https://github.com/stardog-union/stardog.js/pull/265) [VET-1472] Implement new data source query API
 
 ## [**v3.2.0**](https://github.com/stardog-union/stardog.js/milestone/48)
-
 - [**261**](https://github.com/stardog-union/stardog.js/issues/261) Add token auth support
 
 ## [**v3.1.0**](https://github.com/stardog-union/stardog.js/milestone/47)
-
 - [**258**](https://github.com/stardog-union/stardog.js/issues/258) Expose native `fetch` in the browser
 - [**255**](https://github.com/stardog-union/stardog.js/issues/255) Update `new Buffer` to `Buffer.from`
 
 ## [**v3.0.0**](https://github.com/stardog-union/stardog.js/milestone/46)
-
 - [**254**](https://github.com/stardog-union/stardog.js/issues/254) Remove `db.versioning` API (not supported in Stardog 7)
 - [**253**](https://github.com/stardog-union/stardog.js/issues/253) Add support for importing namespaces from string or file
 - [**252**](https://github.com/stardog-union/stardog.js/issues/252) Add dataSources API support
@@ -158,7 +122,6 @@
 - [**204**](https://github.com/stardog-union/stardog.js/issues/204) Add ability to send properties file on db.create
 
 ## [**v2.0.0**](https://github.com/stardog-union/stardog.js/milestone/17)
-
 - [**245**](https://github.com/stardog-union/stardog.js/issues/245) Add `db.options.getAvailable` and `db.options.getAll`
 - [**244**](https://github.com/stardog-union/stardog.js/issues/244) Add `additionalHandlers` support to graphql execute
 - [**243**](https://github.com/stardog-union/stardog.js/issues/243) Automatically set utf-8 when adding/updating stored query
@@ -176,66 +139,51 @@
 - [**154**](https://github.com/stardog-union/stardog.js/issues/154) Upgrade fetch-ponyfill
 
 ## [**v1.4.0**](https://github.com/stardog-union/stardog.js/milestone/23)
-
 - [**180**](https://github.com/stardog-union/stardog.js/issues/180) Update mappings call to support requesting untransformed mappings
 
 ## [**v1.3.2**](https://github.com/stardog-union/stardog.js/milestone/22)
-
 - [**178**](https://github.com/stardog-union/stardog.js/issues/178) query.executeInTransaction sends update queries to query endpoint
 
 ## [**v1.3.1**](https://github.com/stardog-union/stardog.js/milestone/21)
-
 - [**173**](https://github.com/stardog-union/stardog.js/issues/173) Upgrade CI configuration to CircleCI v2
 - [**170**](https://github.com/stardog-union/stardog.js/issues/170) In-browser usage is undocumented
 - [**169**](https://github.com/stardog-union/stardog.js/issues/169) Typescript problems
 
 ## [**v1.3.0**](https://github.com/stardog-union/stardog.js/milestone/20)
-
 - [**165**](https://github.com/stardog-union/stardog.js/issues/165) Add method for retrieving server status info
 - [**164**](https://github.com/stardog-union/stardog.js/issues/164) Typing for role creation is incorrect
 
 ## [**v1.2.4**](https://github.com/stardog-union/stardog.js/milestone/19)
-
 - [**168**](https://github.com/stardog-union/stardog.js/issues/168) Fix documentation query.execute example
 
 ## [**v1.2.3**](https://github.com/stardog-union/stardog.js/milestone/18)
-
 - [**162**](https://github.com/stardog-union/stardog.js/issues/162) Typings bug: status type in HTTP.Body should be number, not string
 
 ## [**1.2.2**](https://github.com/stardog-union/stardog.js/milestone/16)
-
 - [**158**](https://github.com/stardog-union/stardog.js/issues/158) Resolve security vulnerability in transitive dependency (marked 0.3.6)
 
 ## [**1.2.1**](https://github.com/stardog-union/stardog.js/milestone/15)
-
 - [**152**](https://github.com/stardog-union/stardog.js/issues/152) db.add/remove not handling certain content correctly
 
 ## [**1.2.0**](https://github.com/stardog-union/stardog.js/milestone/14)
-
 - [**150**](https://github.com/stardog-union/stardog.js/issues/150) Should allow other authorization methods besides 'Basic'
 
 ## [**1.1.1**](https://github.com/stardog-union/stardog.js/milestone/13)
-
 - [**148**](https://github.com/stardog-union/stardog.js/issues/148) Typings for Connection are missing the (new) `meta` property
 
 ## [**1.1.0**](https://github.com/stardog-union/stardog.js/milestone/12)
-
 - [**146**](https://github.com/stardog-union/stardog.js/pull/146) Support fetch from behind proxies and/or to endpoints with self-signed certs
 
 ## [**1.0.3**](https://github.com/stardog-union/stardog.js/milestone/10)
-
 - [**144**](https://github.com/stardog-union/stardog.js/pull/144) Expose utils for use by consumers of Stardog.js
 
 ## [**1.0.2**](https://github.com/stardog-union/stardog.js/milestone/8)
-
 - [**142**](https://github.com/stardog-union/stardog.js/issues/142) Null pointer when query is unknown type
 
 ## [**1.0.1**](https://github.com/stardog-union/stardog.js/milestone/9)
-
 - [**139**](https://github.com/stardog-union/stardog.js/issues/139) mimeType issue
 
 ## [**1.0.0**](https://github.com/stardog-union/stardog.js/milestone/7)
-
 - [**135**](https://github.com/stardog-union/stardog.js/issues/135) Handle duplicate vars in paths query responses
 - [**131**](https://github.com/stardog-union/stardog.js/issues/131) Stored Functions
 - [**130**](https://github.com/stardog-union/stardog.js/issues/130) GraphQL
@@ -245,7 +193,6 @@
 - [**120**](https://github.com/stardog-union/stardog.js/issues/120) Graph store protocol
 
 ## [**1.0.0-rc3**](https://github.com/stardog-union/stardog.js/milestone/6)
-
 - [**117**](https://github.com/stardog-union/stardog.js/issues/117) Support for PATHS query
 - [**115**](https://github.com/stardog-union/stardog.js/issues/115) ReadMe out of sync with npm repository
 - [**112**](https://github.com/stardog-union/stardog.js/pull/112) Fix incorrect `Role` param for user.role functions
@@ -253,7 +200,6 @@
 - [**109**](https://github.com/stardog-union/stardog.js/issues/109) Allow to customize accept header
 
 ## [**1.0.0-rc2**](https://github.com/stardog-union/stardog.js/milestone/5)
-
 - [**104**](https://github.com/stardog-union/stardog.js/issues/104) Check if user is valid
 - [**103**](https://github.com/stardog-union/stardog.js/pull/103) ✨ - Flesh out ICV endpoint and consolidate its tests
 - [**102**](https://github.com/stardog-union/stardog.js/pull/102) ✨ - Add reasoning endpoints and tests as part of #85
@@ -261,7 +207,6 @@
 - [**97**](https://github.com/stardog-union/stardog.js/issues/97) Function parameter documentation
 
 ## [**1.0.0-rc1**](https://github.com/stardog-union/stardog.js/milestone/4)
-
 - [**95**](https://github.com/stardog-union/stardog.js/issues/95) HTTP Body
 - [**88**](https://github.com/stardog-union/stardog.js/issues/88) SPARQL Updates
 - [**82**](https://github.com/stardog-union/stardog.js/issues/82) Expose More Headers
@@ -285,7 +230,6 @@
 - [**47**](https://github.com/stardog-union/stardog.js/issues/47) isomorphic-fetch
 
 ## [**stardog.js-0.1.2**](https://github.com/stardog-union/stardog.js/milestone/3)
-
 - [**37**](https://github.com/stardog-union/stardog.js/issues/37) Call to `getPrefixes` is returning a fixed set of namespaces
 - [**33**](https://github.com/stardog-union/stardog.js/issues/33) Implement Query Management API
 - [**32**](https://github.com/stardog-union/stardog.js/issues/32) (feature req) Specifying reasoning level per-query
@@ -295,13 +239,11 @@
 - [**26**](https://github.com/stardog-union/stardog.js/issues/26) Async: false option
 
 ## [**stardog.js-0.0.5**](https://github.com/stardog-union/stardog.js/milestone/2)
-
 - [**24**](https://github.com/stardog-union/stardog.js/issues/24) Set up automated testing for the browser
 - [**23**](https://github.com/stardog-union/stardog.js/issues/23) Add AMD compatibility
 - [**18**](https://github.com/stardog-union/stardog.js/issues/18) Named parameters object?
 - [**13**](https://github.com/stardog-union/stardog.js/issues/13) Better error reporting & exception handling
 
 ## [**stardog.js-0.0.3**](https://github.com/stardog-union/stardog.js/milestone/1)
-
 - [**6**](https://github.com/stardog-union/stardog.js/issues/6) Add doc as JSDoc in the code
 - [**3**](https://github.com/stardog-union/stardog.js/issues/3) Support reasoning in query answering

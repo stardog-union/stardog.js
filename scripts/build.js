@@ -1,31 +1,21 @@
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable no-console */
 const { babel } = require('@rollup/plugin-babel');
 const commonjs = require('@rollup/plugin-commonjs');
 const json = require('@rollup/plugin-json');
 const { nodeResolve } = require('@rollup/plugin-node-resolve');
-const terser = require('@rollup/plugin-terser');
 const chalk = require('chalk');
 const { deleteAsync } = require('del');
 const rollup = require('rollup');
 
-const entries = [
-  { browser: true, minify: false },
-  { browser: true, minify: true },
-  { browser: false, minify: false },
-  { browser: false, minify: true },
-];
-
 deleteAsync('dist/*')
   .then(() =>
     Promise.all(
-      entries.map(({ browser, minify }) => {
-        const name = `${minify ? 'Minified' : 'Uncompressed'} ${
-          browser ? 'Browser' : 'Node'
-        } UMD`;
+      [true, false].map(browser => {
+        const name = `${browser ? 'Browser' : 'Node'} UMD`;
 
         const output = {
-          file: `dist/stardog.${browser ? 'browser' : 'node'}${
-            minify ? '.min' : ''
-          }.js`,
+          file: `dist/stardog.${browser ? 'browser' : 'node'}.js`,
           name: 'stardogjs',
           format: 'umd',
         };
@@ -43,9 +33,6 @@ deleteAsync('dist/*')
             targets: browser ? 'defaults' : 'maintained node versions',
           }),
         ];
-        if (minify) {
-          plugins.push(terser());
-        }
 
         return rollup
           .rollup({

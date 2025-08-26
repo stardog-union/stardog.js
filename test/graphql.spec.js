@@ -1,9 +1,6 @@
 /* eslint-env jest */
 
-const {
-  db,
-  query: { graphql },
-} = require('../lib');
+const { db, query: { graphql } } = require('../lib');
 const { server } = require('../lib');
 const semver = require('semver');
 const {

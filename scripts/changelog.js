@@ -1,3 +1,5 @@
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable no-console */
 const fs = require('fs');
 const path = require('path');
 const semver = require('semver');
@@ -76,12 +78,7 @@ function getMilestones(
     }),
   })
     .then(res => res.json())
-    .then(
-      ({
-        data: {
-          repository: { milestones },
-        },
-      }) =>
+    .then(({ data: { repository: { milestones } } }) =>
         Promise.all(
           milestones.nodes.map(milestone => {
             if (!milestoneAndIssuesData[milestone.title]) {

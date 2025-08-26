@@ -85,7 +85,6 @@
     "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.1",
-    "@rollup/plugin-terser": "^0.4.4",
     "@types/jest": "^28.1.8",
     "chalk": "^2.0.1",
     "del": "^8.0.0",

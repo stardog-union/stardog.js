@@ -1,7 +1,7 @@
 version: '3'
 services:
   stardog1:
-    command: ['--port', '5821', '--home', '/var/opt/stardog']
+    command: ["--port", "5821", "--home", "/var/opt/stardog"]
     depends_on:
       - zoo1
     environment:
@@ -18,7 +18,7 @@ services:
       - ../stardog-license-key.bin:/var/opt/stardog/stardog-license-key.bin
       - ./cluster.properties:/var/opt/stardog/stardog.properties
   stardog2:
-    command: ['--port', '5822', '--home', '/var/opt/stardog']
+    command: ["--port", "5822", "--home", "/var/opt/stardog"]
     depends_on:
       - zoo1
     environment:
@@ -71,6 +71,7 @@ services:
     working_dir: /app
     environment:
       - HOST=stardog1
+      - CIRCLECI=true
     volumes:
       - ../:/app/
     depends_on:
