@@ -40,7 +40,6 @@ exports.seedDatabase =
         })
       )
       .then(createResponse => {
-        expect(createResponse.ok).toBe(true);
         expect(createResponse.status).toBe(201);
         expect(createResponse.body.message || '').not.toContain('Error');
 
@@ -50,7 +49,6 @@ exports.seedDatabase =
 
           f = f.then(() =>
             db.namespaces.add(conn, database, data).then(namespacesResponse => {
-              expect(namespacesResponse.ok).toBe(true);
               expect(namespacesResponse.status).toBe(200);
             })
           );
@@ -60,7 +58,6 @@ exports.seedDatabase =
       })
       .then(() => db.transaction.begin(conn, database))
       .then(transactionResponse => {
-        expect(transactionResponse.ok).toBe(true);
         expect(transactionResponse.status).toBe(200);
 
         const { transactionId } = transactionResponse;
@@ -72,11 +69,9 @@ exports.seedDatabase =
           f = f.then(() =>
             db
               .add(conn, database, transactionId, data, {
-                // TODO
                 contentType: 'text/turtle',
               })
               .then(addResponse => {
-                expect(addResponse.ok).toBe(true);
                 expect(addResponse.status).toBe(200);
               })
           );
@@ -87,7 +82,6 @@ exports.seedDatabase =
         );
       })
       .then(commitResponse => {
-        expect(commitResponse.ok).toBe(true);
         expect(commitResponse.status).toBe(200);
       });
   };
