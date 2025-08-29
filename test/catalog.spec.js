@@ -87,7 +87,8 @@ describe('catalog', () => {
       })
       .then(statusBeforeResponse => {
         expect(statusBeforeResponse.status).toBe(200);
-        const providerThatShouldExist = statusBeforeResponse.body.providers.find(
+        const providerThatShouldExist =
+          statusBeforeResponse.body.providers.find(
             provider => provider.name === providerIri
           );
         expect(providerThatShouldExist).not.toBeUndefined();

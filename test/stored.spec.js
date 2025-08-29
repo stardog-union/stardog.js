@@ -1,6 +1,10 @@
 /* eslint-env jest */
 
-const { Connection, query: { stored }, server } = require('../lib');
+const {
+  Connection,
+  query: { stored },
+  server,
+} = require('../lib');
 const semver = require('semver');
 
 const host = process.env.HOST || 'localhost';
@@ -24,11 +28,11 @@ const convertToJsonLd = (conn, storedQuery) => {
   const keyValuePairs = Object.entries(
     Object.assign(
       {
-    'system:queryName': storedQuery.name,
-    'system:queryDescription': storedQuery.description,
-    'system:queryString': storedQuery.query,
-    'system:queryCreator': conn.username,
-    'system:queryDatabase': storedQuery.database,
+        'system:queryName': storedQuery.name,
+        'system:queryDescription': storedQuery.description,
+        'system:queryString': storedQuery.query,
+        'system:queryCreator': conn.username,
+        'system:queryDatabase': storedQuery.database,
       },
       storedQuery.annotations
     )
@@ -46,10 +50,10 @@ const convertToJsonLd = (conn, storedQuery) => {
     },
     '@graph': [
       Object.assign(
-      {
-        '@id': 'system:Query',
-        '@type': types,
-      },
+        {
+          '@id': 'system:Query',
+          '@type': types,
+        },
         keyValuePairs
       ),
     ],

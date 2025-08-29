@@ -1,6 +1,9 @@
 /* eslint-env jest */
 
-const { query, db: { transaction } } = require('../lib');
+const {
+  query,
+  db: { transaction },
+} = require('../lib');
 
 const {
   seedDatabase,
@@ -134,7 +137,7 @@ describe('query.execute()', () => {
       expect(res.body.results.bindings).toHaveLength(3);
     }));
 
-  it('A reasoningquery to Car must have result count to 3', () =>
+  it('A reasoning query to Car must have result count to 3', () =>
     execute(
       'select distinct ?s where { ?s a <http://example.org/vehicles/Car> }',
       undefined,
