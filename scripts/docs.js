@@ -1,6 +1,3 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable import/no-extraneous-dependencies */
-
 const typedocs = require('typedocs/out');
 const fs = require('fs');
 const path = require('path');
@@ -44,8 +41,9 @@ const getPath = obj => {
     obj.parent === null ||
     obj.parent === undefined ||
     obj.parent.name === `"${pathToDeclaration}"`
-  )
+  ) {
     return obj.name;
+  }
   return `${getPath(obj.parent)}.${obj.name}`;
 };
 
@@ -57,11 +55,9 @@ const getMarkdown = (obj, parent = null) => {
     const typeName = type.slice(type.indexOf('<') + 1, type.lastIndexOf('>'));
     const typeHeading = typeName.split('.').pop();
     return ''.concat(
-      `#### <a name="${obj.name.toLowerCase()}">\`${getPath(
-        parent
-      )}.${obj.name}(${obj.parameters
-        .map(param => param.name)
-        .join(', ')})\`</a>\n\n`,
+      `#### <a name="${obj.name.toLowerCase()}">\`${getPath(parent)}.${
+        obj.name
+      }(${obj.parameters.map(param => param.name).join(', ')})\`</a>\n\n`,
       `${obj.documentation}\n\n`,
       `Expects the following parameters:\n\n${obj.parameters.reduce(
         (acc, val) => acc.concat(`- ${val.name} (${getType(val.type)})\n\n`),
@@ -162,8 +158,12 @@ Promise.resolve(typedocs.generate([pathToDeclaration]))
     markdown =>
       new Promise((resolve, reject) => {
         fs.readFile(pathToREADME, 'utf8', (err, data) => {
-          if (err) return reject(err);
+          if (err) {
+            return reject(err);
+          }
+          // eslint-disable-next-line no-param-reassign
           data = data.slice(0, data.indexOf('<!--- API Goes Here --->'));
+          // eslint-disable-next-line no-param-reassign
           data = data.concat('<!--- API Goes Here --->\n# API\n\n', markdown);
           return fs.writeFile(pathToREADME, data, error => {
             if (error) {
@@ -175,4 +175,7 @@ Promise.resolve(typedocs.generate([pathToDeclaration]))
       })
   )
   .then(console.log)
-  .catch(console.err);
+  .catch(e => {
+    console.error(e);
+    process.exit(1);
+  });
