@@ -86,6 +86,7 @@ Each release of stardog.js is tested against the most recent version of Stardog 
 
 | stardog.js Version | Supported Stardog Version(s) |
 | ------------------ | ---------------------------- |
+| 9.x.x              | 11.1.x                       |
 | 8.x.x              | 11.1.x                       |
 | 7.x.x              | 11.0.x                       |
 | 6.x.x              | 10.x.x                       |
