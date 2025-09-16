@@ -168,7 +168,7 @@ describe('transactions', () => {
   it('Should be able to clean and insert all data in the DB using a transaction.', () => {
     const dbContent = fs.readFileSync(
       `${process.cwd()}/test/fixtures/api_tests.nt`,
-      'utf-8'
+      'utf8'
     );
     return begin()
       .then(res => {

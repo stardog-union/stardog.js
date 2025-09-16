@@ -14,11 +14,11 @@ const writeCountdown = () => {
   process.stdout.clearLine();
   process.stdout.cursorTo(0);
   process.stdout.write(`                         ...\u0007Publishing in ${countdown} seconds!`);
-}
+};
 
 const beAnnoying = () => {
   writeCountdown();
-  countdown--;
+  countdown -= 1;
   if (countdown < 0) {
     console.log(chalk.green('\n\n                                  Publishing!\n'));
     return;
