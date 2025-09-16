@@ -1,3 +1,6 @@
+## [**v9.0.0**](https://github.com/stardog-union/stardog.js/milestone/83)
+- [**315**](https://github.com/stardog-union/stardog.js/pull/315) [VET-5931] Upgrade Stardog.js to node 22
+
 ## [**v8.1.0**](https://github.com/stardog-union/stardog.js/milestone/82)
 - [**313**](https://github.com/stardog-union/stardog.js/pull/313) [VET-5756] feat: add support for fetching endpoint log archive
 
