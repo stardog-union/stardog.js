@@ -1,3 +1,6 @@
+## [**v9.0.1**](https://github.com/stardog-union/stardog.js/milestone/84)
+- [**316**](https://github.com/stardog-union/stardog.js/pull/316) [VET-5931] whitespace changes
+
 ## [**v9.0.0**](https://github.com/stardog-union/stardog.js/milestone/83)
 - [**315**](https://github.com/stardog-union/stardog.js/pull/315) [VET-5931] Upgrade Stardog.js to node 22
 
