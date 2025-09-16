@@ -24,6 +24,7 @@ describe('listDBInfo()', () => {
 
   it('should list info for available databases', () =>
     db.listInfo(conn).then(res => {
+      expect(res.status).toBe(200);
       expect(res.body.databases).toEqual(
         expect.arrayContaining([
           expect.objectContaining({ 'database.name': one }),

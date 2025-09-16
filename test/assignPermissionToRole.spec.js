@@ -8,7 +8,9 @@ const {
   ConnectionFactory,
 } = require('./setup-database');
 
-const { user: { role } } = require('../lib');
+const {
+  user: { role },
+} = require('../lib');
 
 describe('assignPermissionToRole()', () => {
   const database = generateDatabaseName();

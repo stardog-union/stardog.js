@@ -59,16 +59,17 @@ describe('data_sources', () => {
     it('retrieves a list of data sources', () =>
       dataSources.list(conn).then(res => {
         expect(res.status).toBe(200);
-        expect(res.body.data_sources).toBeInstanceOf(Array);
+        expect(Array.isArray(res.body.data_sources)).toBe(true);
       }));
   });
 
   // TODO remove .only; test with a real datasource
+  // eslint-disable-next-line no-restricted-properties, jest/no-focused-tests
   describe.only('listInfo', () => {
     it('retrieves a list of data source info', () =>
       dataSources.listInfo(conn).then(res => {
         expect(res.status).toBe(200);
-        expect(res.body.data_sources).toBeInstanceOf(Array);
+        expect(Array.isArray(res.body.data_sources)).toBe(true);
       }));
   });
 
@@ -78,7 +79,7 @@ describe('data_sources', () => {
         .then(() => dataSources.info(conn, aDSName))
         .then(res => {
           expect(res.status).toBe(200);
-          expect(res.body.info).toBeInstanceOf(Object);
+          expect(typeof res.body.info).toBe('object');
         }));
   });
 
@@ -97,7 +98,7 @@ describe('data_sources', () => {
         .then(() => dataSources.update(conn, aDSName, aOptions))
         .then(res => {
           expect(res.status).toBe(200);
-          expect(res.body).toBeInstanceOf(Object);
+          expect(typeof res.body).toBe('object');
         }));
   });
 

@@ -3,7 +3,7 @@ services:
   stardog1:
     command: ["--port", "5821", "--home", "/var/opt/stardog"]
     depends_on:
-    - zoo1
+      - zoo1
     environment:
       STARDOG_SERVER_JAVA_ARGS: -Xms2g -Xmx2g -XX:MaxDirectMemorySize=1g
       THIS_HOST: stardog1
@@ -11,16 +11,16 @@ services:
       ZK_HOST_PORT: zoo1:2181
     image: stardog/stardog:latest
     ports:
-    - 5821:5821
+      - 5821:5821
     restart: always
     privileged: true
     volumes:
-    - ../stardog-license-key.bin:/var/opt/stardog/stardog-license-key.bin
-    - ./cluster.properties:/var/opt/stardog/stardog.properties
+      - ../stardog-license-key.bin:/var/opt/stardog/stardog-license-key.bin
+      - ./cluster.properties:/var/opt/stardog/stardog.properties
   stardog2:
     command: ["--port", "5822", "--home", "/var/opt/stardog"]
     depends_on:
-    - zoo1
+      - zoo1
     environment:
       STARDOG_SERVER_JAVA_ARGS: -Xms2g -Xmx2g -XX:MaxDirectMemorySize=1g
       THIS_HOST: stardog2
@@ -28,46 +28,45 @@ services:
       ZK_HOST_PORT: zoo1:2181
     image: stardog/stardog:latest
     ports:
-    - 5822:5822
+      - 5822:5822
     restart: always
     privileged: true
     volumes:
-    - ../stardog-license-key.bin:/var/opt/stardog/stardog-license-key.bin
-    - ./cluster.properties:/var/opt/stardog/stardog.properties
+      - ../stardog-license-key.bin:/var/opt/stardog/stardog-license-key.bin
+      - ./cluster.properties:/var/opt/stardog/stardog.properties
   stardog3:
     image: stardog/stardog:latest
     ports:
-    - 5820:5820
+      - 5820:5820
     restart: always
     privileged: true
     volumes:
-    - ../stardog-license-key.bin:/var/opt/stardog/stardog-license-key.bin
-    - ../test/fixtures/:/var/opt/stardog/test/fixtures/
-    - ./token.properties:/var/opt/stardog/stardog.properties
-    - ./jwt.yaml:/var/opt/stardog/jwt.yaml
+      - ../stardog-license-key.bin:/var/opt/stardog/stardog-license-key.bin
+      - ../test/fixtures/:/var/opt/stardog/test/fixtures/
+      - ./token.properties:/var/opt/stardog/stardog.properties
+      - ./jwt.yaml:/var/opt/stardog/jwt.yaml
   zoo1:
     environment:
       ZOO_MY_ID: 1
       ZOO_SERVERS: server.1=zoo1:2888:3888
     image: zookeeper:3.4.14
     ports:
-    - 2181
+      - 2181
     restart: always
 
   test-unit:
-    image: circleci/node:carbon-stretch
+    image: node:22
     command: npm test
     working_dir: /app
     volumes:
       - ../:/app/
     environment:
       - HOST=stardog3
-      - CIRCLECI=true
     depends_on:
       - stardog3
 
   test-cluster:
-    image: circleci/node:carbon-stretch
+    image: node:22
     command: npm test:cluster
     working_dir: /app
     environment:

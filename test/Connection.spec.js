@@ -162,7 +162,7 @@ describe('Stardog.Connection', () => {
         createRequest: ({ Request }) => Request,
       };
       const Result = c.request('admin', 'databases', 'foo', 'bar');
-      expect(Result).toBeInstanceOf(Function);
+      expect(typeof Result).toBe('function');
       expect(Result.name).toBe('Request');
       expect(new Result(c.uri('admin', 'databases', 'foo', 'bar')).method).toBe(
         'GET'

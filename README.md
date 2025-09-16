@@ -138,33 +138,32 @@ query
 One of the following values:
 
 `'application/ld+json'
-            | 'text/turtle'
-            | 'application/rdf+xml'
-            | 'application/n-triples'
-            | 'application/n-quads'
-            | 'application/trig'`
+      | 'text/turtle'
+      | 'application/rdf+xml'
+      | 'application/n-triples'
+      | 'application/n-quads'
+      | 'application/trig'`
 #### <a name="sparqlmimetype">SparqlMimeType</a>
 
 One of the following values:
 
 `'application/sparql-results+json'
-            | 'application/sparql-results+xml'`
+      | 'application/sparql-results+xml'`
 #### <a name="acceptmimetype">AcceptMimeType</a>
 
 One of the following values:
 
 `RdfMimeType
-            | SparqlMimeType
-            | 'text/plain'
-            | 'text/boolean'
-            | 'application/json'
-            | '*/*'`
+      | SparqlMimeType
+      | 'text/plain'
+      | 'text/boolean'
+      | 'application/json'
+      | '*/*'`
 #### <a name="explainacceptmimetype">ExplainAcceptMimeType</a>
 
 One of the following values:
 
-`'text/plain'
-            | 'application/json'`
+`'text/plain' | 'application/json'`
 #### <a name="body">Body</a>
 
 Object with the following values:
@@ -192,19 +191,25 @@ Object with the following values:
 One of the following values:
 
 `{
-      new (input: string | Request, init?: RequestInit): Request;
-    }`
+    new (input: string | Request, init?: RequestInit): Request;
+  }`
 #### <a name="requestcreator">RequestCreator</a>
 
 One of the following values:
 
-`({ uri, Request }: { uri: string; Request: Constructor }) => ReturnType`
+`({
+    uri,
+    Request,
+  }: {
+    uri: string;
+    Request: Constructor;
+  }) => ReturnType`
 #### <a name="connectionmeta">ConnectionMeta</a>
 
 Object with the following values:
 
 - createRequest (`RequestCreator<RequestConstructor, string | Request>`)
-- createHeaders (`(defaults: { headers: Headers; }) => Headers`)
+- createHeaders (`(defaults: { headers: Headers }) => Headers`)
 
 ## <a name="connection">Connection</a> (Class)
 
@@ -251,7 +256,7 @@ Expects the following parameters:
 
 - conn ([`Connection`](#connection))
 
-- params (`{ databases?: boolean; }`)
+- params (`{ databases?: boolean }`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -292,7 +297,11 @@ Expects the following parameters:
 
 - databaseOptions (`object`)
 
-- options (`{ files: { filename: string}[] }`)
+- options ({
+        files: { filename: string }[];
+        propertiesFile?: [`Blob;
+`](#blob;
+)      })
 
 - params (`object`)
 
@@ -628,11 +637,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 One of the following values:
 
-`'gzip' |
-                'compress' |
-                'deflate' |
-                'identity' |
-                'br'`
+`'gzip' | 'compress' | 'deflate' | 'identity' | 'br'`
 #### <a name="transactionresponse">TransactionResponse</a> extends [HTTP.Body](#body)
 
 Object with the following values:
@@ -855,7 +860,11 @@ Expects the following parameters:
 
 - constraints (`string`)
 
-- options ({ contentType?: HTTP.RdfMimeType, accept?: [`AcceptMimeType`](#acceptmimetype) })
+- options ({
+          contentType?: HTTP.RdfMimeType;
+          accept?: [`AcceptMimeType;
+`](#acceptmimetype;
+)        })
 
 - params (`{ graphUri: string }`)
 
@@ -875,7 +884,11 @@ Expects the following parameters:
 
 - constraints (`string`)
 
-- options ({ contentType?: HTTP.RdfMimeType, accept?: [`AcceptMimeType`](#acceptmimetype) })
+- options ({
+          contentType?: HTTP.RdfMimeType;
+          accept?: [`AcceptMimeType;
+`](#acceptmimetype;
+)        })
 
 - params (`{ graphUri: string }`)
 
@@ -1090,7 +1103,7 @@ Expects the following parameters:
 
 - database (`string`)
 
-- fileOrContents (`object | string`)
+- fileOrContents ([`Blob | string`](#blob | string))
 
 - options ({ contentType?: [`RdfMimeType`](#rdfmimetype) })
 
@@ -1102,7 +1115,14 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 One of the following values:
 
-`'select' | 'ask' | 'construct' | 'describe' | 'validate' | 'update' | 'paths' | null`
+`'select'
+      | 'ask'
+      | 'construct'
+      | 'describe'
+      | 'validate'
+      | 'update'
+      | 'paths'
+      | null`
 #### <a name="propertyoptions">PropertyOptions</a>
 
 Object with the following values:
@@ -1247,7 +1267,7 @@ Expects the following parameters:
 
 - storedQuery ([`StoredQueryOptions | object`](#storedqueryoptions | object))
 
-- options (`{ accept?: string, contentType?: string }`)
+- options (`{ accept?: string; contentType?: string }`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -1273,7 +1293,7 @@ Expects the following parameters:
 
 - storedQuery ([`StoredQueryOptions | object`](#storedqueryoptions | object))
 
-- options (`{ accept?: string, contentType?: string }`)
+- options (`{ accept?: string; contentType?: string }`)
 
 - useUpdateMethod (`boolean`)
 
@@ -1471,24 +1491,24 @@ Object with the following values:
 
 One of the following values:
 
-`'CREATE' |
-            'DELETE' |
-            'READ' |
-            'WRITE' |
-            'GRANT' |
-            'REVOKE' |
-            'EXECUTE'`
+`'CREATE'
+      | 'DELETE'
+      | 'READ'
+      | 'WRITE'
+      | 'GRANT'
+      | 'REVOKE'
+      | 'EXECUTE'`
 #### <a name="resourcetype">ResourceType</a>
 
 One of the following values:
 
-`'db' |
-            'user' |
-            'role' |
-            'admin' |
-            'metadata' |
-            'named-graph' |
-            'icv-constraints'`
+`'db'
+      | 'user'
+      | 'role'
+      | 'admin'
+      | 'metadata'
+      | 'named-graph'
+      | 'icv-constraints'`
 #### <a name="list">`user.list(conn, params)`</a>
 
 Gets a list of users.
@@ -1919,7 +1939,10 @@ Object with the following values:
 
 One of the following values:
 
-`SharedOptions & RdbmsOptions & MongoOptions & CsvOptions`
+`SharedOptions &
+      RdbmsOptions &
+      MongoOptions &
+      CsvOptions`
 #### <a name="mappingsrequestoptions">MappingsRequestOptions</a>
 
 Object with the following values:
@@ -2069,10 +2092,10 @@ Expects the following parameters:
 - database (`string`)
 
 - importOptions (`{
-          mappings?: string,
-          properties?: string,
-          namedGraph?: string,
-        }`)
+        mappings?: string;
+        properties?: string;
+        namedGraph?: string;
+      }`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
@@ -2194,7 +2217,9 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 One of the following values:
 
-`{ username: string, password: string } | { token: string } | { clientId: string, clientSecret: string }`
+`{ username: string; password: string }
+      | { token: string }
+      | { clientId: string; clientSecret: string }`
 #### <a name="addcredential">`catalog.addCredential(conn, credentials, label)`</a>
 
 Adds a provider credential
@@ -2443,7 +2468,7 @@ Returns [`Promise<HTTP.Body>`](#body)
 
 One of the following values:
 
-`string | { query: string, options: object }`
+`string | { query: string; options: object }`
 #### <a name="query">`dataSources.query(conn, name, dataSourceQuery)`</a>
 
 Query data source

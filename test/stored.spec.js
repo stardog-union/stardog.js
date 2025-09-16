@@ -1,6 +1,10 @@
 /* eslint-env jest */
 
-const { Connection, query: { stored }, server } = require('../lib');
+const {
+  Connection,
+  query: { stored },
+  server,
+} = require('../lib');
 const semver = require('semver');
 
 const host = process.env.HOST || 'localhost';
@@ -34,6 +38,7 @@ const convertToJsonLd = (conn, storedQuery) => {
     )
   ).reduce((obj, [iri, value]) => {
     if (typeof value !== 'undefined') {
+      // eslint-disable-next-line no-param-reassign
       obj[iri] = { '@value': value };
     }
     return obj;

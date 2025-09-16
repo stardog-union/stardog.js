@@ -2,7 +2,6 @@
 /* eslint-disable no-console */
 const fs = require('fs');
 const path = require('path');
-const { fetch } = require('fetch-ponyfill')();
 const semver = require('semver');
 const chalk = require('chalk');
 
@@ -80,46 +79,46 @@ function getMilestones(
   })
     .then(res => res.json())
     .then(({ data: { repository: { milestones } } }) =>
-      Promise.all(
-        milestones.nodes.map(milestone => {
-          if (!milestoneAndIssuesData[milestone.title]) {
-            milestoneAndIssuesData[milestone.title] = {
-              url: milestone.url,
-              issues: [],
-            };
+        Promise.all(
+          milestones.nodes.map(milestone => {
+            if (!milestoneAndIssuesData[milestone.title]) {
+              milestoneAndIssuesData[milestone.title] = {
+                url: milestone.url,
+                issues: [],
+              };
+            }
+
+            milestone.issues.nodes.forEach(issue => {
+              milestoneAndIssuesData[milestone.title].issues.push({
+                number: issue.number,
+                title: issue.title,
+                url: issue.url,
+              });
+            });
+
+            milestone.pullRequests.nodes.forEach(issue => {
+              milestoneAndIssuesData[milestone.title].issues.push({
+                number: issue.number,
+                title: issue.title,
+                url: issue.url,
+              });
+            });
+
+            return milestone.issues.pageInfo.hasNextPage ||
+              milestone.pullRequests.pageInfo.hasNextPage
+              ? getMilestones(
+                  milestoneCursor,
+                  milestone.issues.pageInfo.endCursor,
+                  milestone.pullRequests.pageInfo.endCursor
+                )
+              : Promise.resolve();
+          })
+        ).then(() => {
+          if (milestones.pageInfo.hasNextPage) {
+            return getMilestones(milestones.pageInfo.endCursor);
           }
-
-          milestone.issues.nodes.forEach(issue => {
-            milestoneAndIssuesData[milestone.title].issues.push({
-              number: issue.number,
-              title: issue.title,
-              url: issue.url,
-            });
-          });
-
-          milestone.pullRequests.nodes.forEach(issue => {
-            milestoneAndIssuesData[milestone.title].issues.push({
-              number: issue.number,
-              title: issue.title,
-              url: issue.url,
-            });
-          });
-
-          return milestone.issues.pageInfo.hasNextPage ||
-            milestone.pullRequests.pageInfo.hasNextPage
-            ? getMilestones(
-                milestoneCursor,
-                milestone.issues.pageInfo.endCursor,
-                milestone.pullRequests.pageInfo.endCursor
-              )
-            : Promise.resolve();
+          return milestoneAndIssuesData;
         })
-      ).then(() => {
-        if (milestones.pageInfo.hasNextPage) {
-          return getMilestones(milestones.pageInfo.endCursor);
-        }
-        return milestoneAndIssuesData;
-      })
     );
 }
 

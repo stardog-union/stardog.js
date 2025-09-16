@@ -1,6 +1,9 @@
 /* eslint-env jest */
 
-const { db, query: { graphql } } = require('../lib');
+const {
+  db,
+  query: { graphql },
+} = require('../lib');
 const { server } = require('../lib');
 const semver = require('semver');
 const {
@@ -95,7 +98,7 @@ type Episode {
     graphql.execute(conn, database, `{ Character { name }}`).then(res => {
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('data');
-      expect(res.body.data).toBeInstanceOf(Array);
+      expect(Array.isArray(res.body.data)).toBe(true);
     }));
 
   it('updateSchema', () => {
@@ -112,7 +115,7 @@ type Episode {
   name: String!
 }`;
 
-    graphql
+    return graphql
       .updateSchema(conn, database, schemaName, simplerSchema)
       .then(res => {
         expect(res.status).toBe(200);
