@@ -171,7 +171,12 @@ type Episode {
           1: 'name',
         },
       });
-      if (semver.gt(semver.coerce(stardogVersion), semver.coerce('6.1.3'))) {
+      if (semver.gte(semver.coerce(stardogVersion), semver.coerce('11.2.0'))) {
+        expect(res.body.data.plan.map).toHaveProperty('dataset');
+        expect(res.body.data.plan.map).toHaveProperty('prefixes');
+        expect(res.body.data.plan.map.plan.map).toHaveProperty('cardinality');
+        expect(() => JSON.stringify(res.body.data.plan.plan)).not.toThrow();
+      } else if (semver.gt(semver.coerce(stardogVersion), semver.coerce('6.1.3'))) {
         expect(res.body.data.plan).toHaveProperty('dataset');
         expect(res.body.data.plan).toHaveProperty('prefixes');
         expect(res.body.data.plan.plan).toHaveProperty('cardinality');
