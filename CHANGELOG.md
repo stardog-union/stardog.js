@@ -1,3 +1,7 @@
+## [**v9.1.0**](https://github.com/stardog-union/stardog.js/milestone/85)
+- [**318**](https://github.com/stardog-union/stardog.js/pull/318) [VET-6222] Investigate and fix issue with special characters in questions
+- [**317**](https://github.com/stardog-union/stardog.js/pull/317) [VET-6143] chore: add editorconfig
+
 ## [**v9.0.1**](https://github.com/stardog-union/stardog.js/milestone/84)
 - [**316**](https://github.com/stardog-union/stardog.js/pull/316) [VET-5931] whitespace changes
 
