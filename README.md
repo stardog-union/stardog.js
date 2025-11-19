@@ -192,7 +192,7 @@ Object with the following values:
 One of the following values:
 
 `{
-    new (input: string | Request, init?: RequestInit): Request;
+    new(input: string | Request, init?: RequestInit): Request;
   }`
 #### <a name="requestcreator">RequestCreator</a>
 
@@ -202,9 +202,9 @@ One of the following values:
     uri,
     Request,
   }: {
-    uri: string;
-    Request: Constructor;
-  }) => ReturnType`
+      uri: string;
+      Request: Constructor;
+    }) => ReturnType`
 #### <a name="connectionmeta">ConnectionMeta</a>
 
 Object with the following values:
