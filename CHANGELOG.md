@@ -1,3 +1,6 @@
+## [**v9.1.1**](https://github.com/stardog-union/stardog.js/milestone/86)
+- [**319**](https://github.com/stardog-union/stardog.js/pull/319) [VET-6222] Investigate and fix issue with special characters in questions
+
 ## [**v9.1.0**](https://github.com/stardog-union/stardog.js/milestone/85)
 - [**318**](https://github.com/stardog-union/stardog.js/pull/318) [VET-6222] Investigate and fix issue with special characters in questions
 - [**317**](https://github.com/stardog-union/stardog.js/pull/317) [VET-6143] chore: add editorconfig
