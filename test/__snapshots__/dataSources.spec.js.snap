@@ -1,0 +1,121 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`data_sources getMetadata returns the metadata of a data source 1`] = `
+"@prefix tbl: <http://system.stardog.com/registry/jdbcDataSource/tableMetadata/table/> .
+@prefix sqlcase: <http://system.stardog.com/registry/vegaSqlDialect/casing/> .
+@prefix sdialect: <http://system.stardog.com/registry/vegaSqlDialect/> .
+@prefix : <http://api.stardog.com/> .
+@prefix tbldef: <http://system.stardog.com/registry/jdbcDataSource/tableMetadata/table#> .
+@prefix jdbcmd: <http://system.stardog.com/registry/jdbcDataSourceMetadata/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix ds: <http://system.stardog.com/registry/dataSource/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix coldef: <http://system.stardog.com/registry/jdbcDataSource/tableMetadata/column#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix swrl: <http://www.w3.org/2003/11/swrl#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix qt: <http://system.stardog.com/registry/jdbcDataSource/table/> .
+@prefix jdbcds: <http://system.stardog.com/registry/jdbcDataSource/> .
+@prefix stardog: <tag:stardog:api:> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix md: <http://system.stardog.com/registry/metadata/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix swrlb: <http://www.w3.org/2003/11/swrlb#> .
+@prefix so: <https://schema.org/> .
+@prefix col: <http://system.stardog.com/registry/jdbcDataSource/tableMetadata/column/> .
+@prefix sqldbprd: <http://system.stardog.com/registry/vegaSqlDialect/databaseProduct/> .
+@prefix qtdef: <http://system.stardog.com/registry/jdbcDataSource/table/table#> .
+@prefix sqlnullc: <http://system.stardog.com/registry/vegaSqlDialect/nullCollation/> .
+@prefix tblmd: <http://system.stardog.com/registry/jdbcDataSource/tableMetadata/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix tbltype: <http://system.stardog.com/registry/jdbcDataSource/table/tableType/> .
+@prefix sqldb: <http://system.stardog.com/registry/vegaSqlDialect/db/> .
+@prefix dialect: <http://system.stardog.com/registry/dataSource/dialect/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix reg: <http://system.stardog.com/registry/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+
+<http://system.stardog.com/registry/catalogSchema/stardogjs_test%5Cstardogjs_test%5C> jdbcmd:tableCount \\"1\\"^^xsd:int .
+<data-source://stardogjs_test> jdbcmd:defaultCatalog \\"stardogjs_test\\" ;
+   jdbcmd:name \\"stardogjs_test\\" ;
+   jdbcmd:defaultSchema <http://system.stardog.com/registry/catalogSchema/stardogjs_test%5Cstardogjs_test%5C> .
+qtdef:stardogjs_test%5CTABLE%5Cstardogjs_test%5C%5Ctest_table qt:tableName \\"test_table\\" .
+<http://system.stardog.com/registry/catalogSchema/stardogjs_test%5Cstardogjs_test%5C> <http://system.stardog.com/registry/catalogSchema/catalogName> \\"stardogjs_test\\" .
+<data-source://stardogjs_test> jdbcmd:table qtdef:stardogjs_test%5CTABLE%5Cstardogjs_test%5C%5Ctest_table .
+qtdef:stardogjs_test%5CTABLE%5Cstardogjs_test%5C%5Ctest_table qt:catalog \\"stardogjs_test\\" .
+<data-source://stardogjs_test> jdbcmd:version \\"11.1.0\\" .
+qtdef:stardogjs_test%5CTABLE%5Cstardogjs_test%5C%5Ctest_table qt:tableType tbltype:TABLE ."
+`;
+
+exports[`data_sources getTableMetadata returns the metadata of a table 1`] = `
+"@prefix tbl: <http://system.stardog.com/registry/jdbcDataSource/tableMetadata/table/> .
+@prefix sqlcase: <http://system.stardog.com/registry/vegaSqlDialect/casing/> .
+@prefix sdialect: <http://system.stardog.com/registry/vegaSqlDialect/> .
+@prefix : <http://api.stardog.com/> .
+@prefix tbldef: <http://system.stardog.com/registry/jdbcDataSource/tableMetadata/table#> .
+@prefix jdbcmd: <http://system.stardog.com/registry/jdbcDataSourceMetadata/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix ds: <http://system.stardog.com/registry/dataSource/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix coldef: <http://system.stardog.com/registry/jdbcDataSource/tableMetadata/column#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix swrl: <http://www.w3.org/2003/11/swrl#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix qt: <http://system.stardog.com/registry/jdbcDataSource/table/> .
+@prefix jdbcds: <http://system.stardog.com/registry/jdbcDataSource/> .
+@prefix stardog: <tag:stardog:api:> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix md: <http://system.stardog.com/registry/metadata/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix swrlb: <http://www.w3.org/2003/11/swrlb#> .
+@prefix so: <https://schema.org/> .
+@prefix col: <http://system.stardog.com/registry/jdbcDataSource/tableMetadata/column/> .
+@prefix sqldbprd: <http://system.stardog.com/registry/vegaSqlDialect/databaseProduct/> .
+@prefix qtdef: <http://system.stardog.com/registry/jdbcDataSource/table/table#> .
+@prefix sqlnullc: <http://system.stardog.com/registry/vegaSqlDialect/nullCollation/> .
+@prefix tblmd: <http://system.stardog.com/registry/jdbcDataSource/tableMetadata/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix tbltype: <http://system.stardog.com/registry/jdbcDataSource/table/tableType/> .
+@prefix sqldb: <http://system.stardog.com/registry/vegaSqlDialect/db/> .
+@prefix dialect: <http://system.stardog.com/registry/dataSource/dialect/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix reg: <http://system.stardog.com/registry/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+
+<http://system.stardog.com/registry/jdbcDataSource/tableMetadata/index#stardogjs_test%5CTABLE%5Cstardogjs_test%5C%5Ctest_table%5C0> tblmd:indexedColumn <http://system.stardog.com/registry/jdbcDataSource/tableMetadata/indexedColumn#stardogjs_test%5CTABLE%5Cstardogjs_test%5C%5Ctest_table%5C0-0> ;
+   tblmd:isUnique true .
+tbldef:stardogjs_test%5CTABLE%5Cstardogjs_test%5C%5Ctest_table tblmd:column coldef:stardogjs_test%5CTABLE%5Cstardogjs_test%5C%5Ctest_table%5C1 .
+coldef:stardogjs_test%5CTABLE%5Cstardogjs_test%5C%5Ctest_table%5C1 col:columnNullability false .
+<http://system.stardog.com/registry/jdbcDataSource/tableMetadata/uniqueKeySet/#stardogjs_test%5CTABLE%5Cstardogjs_test%5C%5Ctest_table%5C0> col:uniqueKey \\"0\\"^^xsd:int .
+tbldef:stardogjs_test%5CTABLE%5Cstardogjs_test%5C%5Ctest_table col:uniqueKeySet <http://system.stardog.com/registry/jdbcDataSource/tableMetadata/uniqueKeySet/#stardogjs_test%5CTABLE%5Cstardogjs_test%5C%5Ctest_table%5C0> .
+<http://system.stardog.com/registry/jdbcDataSource/tableMetadata/indexedColumn#stardogjs_test%5CTABLE%5Cstardogjs_test%5C%5Ctest_table%5C0-0> tblmd:indexColumnId \\"0\\"^^xsd:int .
+tbldef:stardogjs_test%5CTABLE%5Cstardogjs_test%5C%5Ctest_table qt:tableType tbltype:TABLE ;
+   tblmd:primaryKey \\"0\\"^^xsd:int ;
+   qt:catalog \\"stardogjs_test\\" ;
+   tblmd:rowCount 0.0E0 ;
+   tblmd:hasIndex <http://system.stardog.com/registry/jdbcDataSource/tableMetadata/index#stardogjs_test%5CTABLE%5Cstardogjs_test%5C%5Ctest_table%5C0> .
+coldef:stardogjs_test%5CTABLE%5Cstardogjs_test%5C%5Ctest_table%5C1 col:columnDataType \\"4\\"^^xsd:int ;
+   col:columnSize \\"10\\"^^xsd:int ;
+   col:columnOrdinalPosition \\"1\\"^^xsd:int .
+<http://system.stardog.com/registry/jdbcDataSource/tableMetadata/index#stardogjs_test%5CTABLE%5Cstardogjs_test%5C%5Ctest_table%5C0> tblmd:indexType \\"3\\" .
+tbldef:stardogjs_test%5CTABLE%5Cstardogjs_test%5C%5Ctest_table qt:tableName \\"test_table\\" .
+coldef:stardogjs_test%5CTABLE%5Cstardogjs_test%5C%5Ctest_table%5C1 col:columnTypeString \\"INT\\" ;
+   col:columnDecimalDigits \\"0\\"^^xsd:int ;
+   col:columnName \\"id\\" .
+<http://system.stardog.com/registry/jdbcDataSource/tableMetadata/index#stardogjs_test%5CTABLE%5Cstardogjs_test%5C%5Ctest_table%5C0> tblmd:indexName \\"PRIMARY\\" .
+<http://system.stardog.com/registry/jdbcDataSource/tableMetadata/indexedColumn#stardogjs_test%5CTABLE%5Cstardogjs_test%5C%5Ctest_table%5C0-0> tblmd:indexCardinality 0.0E0 .
+tbldef:stardogjs_test%5CTABLE%5Cstardogjs_test%5C%5Ctest_table tblmd:dataSourceName \\"stardogjs_test\\" .
+<http://system.stardog.com/registry/jdbcDataSource/tableMetadata/indexedColumn#stardogjs_test%5CTABLE%5Cstardogjs_test%5C%5Ctest_table%5C0-0> tblmd:indexOrdinalPosition \\"0\\"^^xsd:int ."
+`;
+
+exports[`data_sources getTables returns the tables for a data source 1`] = `
+Array [
+  Object {
+    "catalog": "stardogjs_test",
+    "table_name": "test_table",
+    "table_type": "TABLE",
+  },
+]
+`;
