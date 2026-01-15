@@ -9,7 +9,8 @@ const {
   ConnectionFactory,
 } = require('./setup-database');
 
-describe('checkPermission()', () => {
+// TODO skipped until Stardog v12 is released
+describe.skip('checkPermission()', () => {
   const database = generateDatabaseName();
   let conn;
 
