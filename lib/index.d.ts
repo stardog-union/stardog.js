@@ -1230,22 +1230,36 @@ declare namespace Stardog {
     }
 
     type Action =
+      | 'ALL'
       | 'CREATE'
       | 'DELETE'
-      | 'READ'
-      | 'WRITE'
+      | 'EXECUTE'
       | 'GRANT'
+      | 'READ'
       | 'REVOKE'
-      | 'EXECUTE';
+      | 'WRITE';
 
     type ResourceType =
-      | 'db'
-      | 'user'
-      | 'role'
+      | '*'
       | 'admin'
+      | 'cache'
+      | 'cache-target'
+      | 'data-source'
+      | 'db'
+      | 'db-export'
+      | 'dbms-admin'
+      | 'entity-resolution'
+      | 'icv-constraints'
       | 'metadata'
+      | 'modeling'
       | 'named-graph'
-      | 'icv-constraints';
+      | 'permission'
+      | 'role'
+      | 'role-assignment'
+      | 'sensitive-properties'
+      | 'stored-query'
+      | 'user'
+      | 'virtual-graph';
 
     /**
      * Gets a list of users.
@@ -1438,6 +1452,21 @@ declare namespace Stardog {
       conn: Connection,
       username: string,
       params?: object
+    ): Promise<HTTP.Body>;
+
+    /**
+     * Checks if the current user has a specific permission.
+     *
+     * @param {Connection} conn the Stardog server connection
+     * @param {Action} action the action to check
+     * @param {ResourceType} resourceType the type of resource
+     * @param {string} resource the resource name
+     */
+    function checkPermission(
+      conn: Connection,
+      action: Action,
+      resourceType: ResourceType,
+      resource: string
     ): Promise<HTTP.Body>;
 
     /**
