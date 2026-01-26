@@ -1,3 +1,6 @@
+## [**v10.0.0**](https://github.com/stardog-union/stardog.js/milestone/87)
+- [**320**](https://github.com/stardog-union/stardog.js/pull/320) [VET-6374] Stardog 12 Permission changes for Designer
+
 ## [**v9.1.1**](https://github.com/stardog-union/stardog.js/milestone/86)
 - [**319**](https://github.com/stardog-union/stardog.js/pull/319) [VET-6222] Investigate and fix issue with special characters in questions
 

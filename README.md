@@ -1493,24 +1493,38 @@ Object with the following values:
 
 One of the following values:
 
-`'CREATE'
+`'ALL'
+      | 'CREATE'
       | 'DELETE'
-      | 'READ'
-      | 'WRITE'
+      | 'EXECUTE'
       | 'GRANT'
+      | 'READ'
       | 'REVOKE'
-      | 'EXECUTE'`
+      | 'WRITE'`
 #### <a name="resourcetype">ResourceType</a>
 
 One of the following values:
 
-`'db'
-      | 'user'
-      | 'role'
+`'*'
       | 'admin'
+      | 'cache'
+      | 'cache-target'
+      | 'data-source'
+      | 'db'
+      | 'db-export'
+      | 'dbms-admin'
+      | 'entity-resolution'
+      | 'icv-constraints'
       | 'metadata'
+      | 'modeling'
       | 'named-graph'
-      | 'icv-constraints'`
+      | 'permission'
+      | 'role'
+      | 'role-assignment'
+      | 'sensitive-properties'
+      | 'stored-query'
+      | 'user'
+      | 'virtual-graph'`
 #### <a name="list">`user.list(conn, params)`</a>
 
 Gets a list of users.
@@ -1724,6 +1738,22 @@ Expects the following parameters:
 - username (`string`)
 
 - params (`object`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="checkpermission">`user.checkPermission(conn, action, resourceType, resource)`</a>
+
+Checks if the current user has a specific permission.
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- action ([`Action`](#action))
+
+- resourceType ([`ResourceType`](#resourcetype))
+
+- resource (`string`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 
