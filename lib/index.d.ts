@@ -2016,6 +2016,14 @@ declare namespace Stardog {
     function available(conn: Connection, name: string): Promise<HTTP.Body>;
 
     /**
+     * Test the connection for the named data source
+     *
+     * @param {Connection} conn the Stardog server connection
+     * @param {string} name the data source name
+     */
+    function test(conn: Connection, name: string): Promise<HTTP.Body>;
+
+    /**
      * Retrieve the named data source options
      *
      * @param {Connection} conn the Stardog server connection

@@ -129,6 +129,16 @@ describe('data_sources', () => {
         }));
   });
 
+  describe('test', () => {
+    it('tests the connection of a reachable data source', () =>
+      assureExists()
+        .then(() => dataSources.test(conn, aDSName))
+        .then(res => {
+          expect(res.ok).toBe(true);
+          expect(res.status).toBe(204);
+        }));
+  });
+
   describe('options', () => {
     it('returns the options of a data source', () =>
       assureExists()
