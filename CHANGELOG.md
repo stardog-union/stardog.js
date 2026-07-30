@@ -1,3 +1,6 @@
+## [**v10.1.0**](https://github.com/stardog-union/stardog.js/milestone/88)
+- [**321**](https://github.com/stardog-union/stardog.js/pull/321) [VET-7246] Add dataSources.test method
+
 ## [**v10.0.0**](https://github.com/stardog-union/stardog.js/milestone/87)
 - [**320**](https://github.com/stardog-union/stardog.js/pull/320) [VET-6374] Stardog 12 Permission changes for Designer
 
