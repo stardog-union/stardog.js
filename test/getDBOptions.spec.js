@@ -66,7 +66,7 @@ describe('options.getAvailable', () => {
       expect(res.status).toEqual(200);
       expect(typeof res.body).toEqual('object');
       expect(res.body).toMatchObject({
-        'docs.path': {},
+        'database.online': {},
       });
     }));
 });
