@@ -8,7 +8,8 @@ const {
   ConnectionFactory,
 } = require('./setup-database');
 
-describe('doc store', () => {
+// skipped as this is no longer supported in Stardog 12.0.0+
+describe.skip('doc store', () => {
   const database = generateDatabaseName();
   const aFileName = 'myFile.txt';
   let conn;

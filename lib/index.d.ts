@@ -111,6 +111,13 @@ declare namespace Stardog {
 
     config(options: ConnectionOptions, meta?: ConnectionMeta): void;
     headers(): Headers;
+    /**
+     * Builds the request to pass to `fetch` for a resource path. Returns the
+     * bare URI unless the connection was given a `meta.createRequest`, in
+     * which case that hook decides what `fetch` receives -- which is why every
+     * method in this library goes through here rather than through `uri`.
+     */
+    request(...resource: string[]): string | Request;
     uri(...resource: string[]): string;
   }
 
@@ -2014,6 +2021,14 @@ declare namespace Stardog {
      * @param {string} name the data source name
      */
     function available(conn: Connection, name: string): Promise<HTTP.Body>;
+
+    /**
+     * Test the connection for the named data source
+     *
+     * @param {Connection} conn the Stardog server connection
+     * @param {string} name the data source name
+     */
+    function test(conn: Connection, name: string): Promise<HTTP.Body>;
 
     /**
      * Retrieve the named data source options
