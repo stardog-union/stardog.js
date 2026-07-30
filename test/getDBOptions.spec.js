@@ -30,9 +30,11 @@ describe('options.get()', () => {
     options.get(conn, database).then(res => {
       expect(res.status).toEqual(200);
       expect(typeof res.body).toEqual('object');
-      expect(res.body).toMatchObject({
-        'index.type': 'Disk',
-      });
+      expect(res.body).toMatchObject(
+        expect.objectContaining({
+          'index.type': 'Disk',
+        })
+      );
     }));
 });
 
@@ -50,9 +52,11 @@ describe('options.getAll()', () => {
     options.getAll(conn, database).then(res => {
       expect(res.status).toEqual(200);
       expect(typeof res.body).toEqual('object');
-      expect(res.body).toMatchObject({
-        'index.type': 'Disk',
-      });
+      expect(res.body).toMatchObject(
+        expect.objectContaining({
+          'index.type': 'Disk',
+        })
+      );
     }));
 });
 
@@ -65,8 +69,10 @@ describe('options.getAvailable', () => {
     options.getAvailable(conn).then(res => {
       expect(res.status).toEqual(200);
       expect(typeof res.body).toEqual('object');
-      expect(res.body).toMatchObject({
-        'database.online': {},
-      });
+      expect(res.body).toMatchObject(
+        expect.objectContaining({
+          'database.online': expect.any(Object),
+        })
+      );
     }));
 });
