@@ -32,7 +32,7 @@ describe('options.get()', () => {
       expect(typeof res.body).toEqual('object');
       expect(res.body).toMatchObject(
         expect.objectContaining({
-          'index.type': 'Disk',
+          'database.online': true,
         })
       );
     }));
@@ -54,7 +54,7 @@ describe('options.getAll()', () => {
       expect(typeof res.body).toEqual('object');
       expect(res.body).toMatchObject(
         expect.objectContaining({
-          'index.type': 'Disk',
+          'database.online': true,
         })
       );
     }));
