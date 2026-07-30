@@ -227,6 +227,12 @@ Returns [`void`](#void)
 ### <a name="headers">Connection.headers()</a>
 
 Returns [`Headers`](#headers)
+### <a name="request">Connection.request(resource)</a>
+
+Takes the following params:
+- resource (`string[]`)
+
+Returns `string | Request`
 ### <a name="uri">Connection.uri(resource)</a>
 
 Takes the following params:
@@ -2417,6 +2423,18 @@ Returns [`Promise<HTTP.Body>`](#body)
 #### <a name="available">`dataSources.available(conn, name)`</a>
 
 Determine if the named data source is available
+
+Expects the following parameters:
+
+- conn ([`Connection`](#connection))
+
+- name (`string`)
+
+Returns [`Promise<HTTP.Body>`](#body)
+
+#### <a name="test">`dataSources.test(conn, name)`</a>
+
+Test the connection for the named data source
 
 Expects the following parameters:
 
