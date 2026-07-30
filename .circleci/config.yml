@@ -31,6 +31,15 @@ workflows:
             - run:
                 name: Wait for Stardog server to be ready
                 command: yarn run wait-for-server
+            # `when: always` so the logs are still collected when the wait
+            # above fails, which is the only time they matter.
+            - run:
+                name: Show Stardog container logs
+                when: always
+                command: |
+                  docker ps -a
+                  docker logs stargoose || true
+                  docker cp stargoose:/var/opt/stardog/stardog.log /tmp/stardog.log && cat /tmp/stardog.log || true
       - node/run:
           name: Build with Node.js 22
           executor: machine
