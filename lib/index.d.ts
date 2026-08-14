@@ -2071,12 +2071,12 @@ declare namespace Stardog {
      *
      * @param {Connection} conn the Stardog server connection
      * @param {string} name the data source name
-     * @param {object} options additional options if needed
+     * @param {object} params optional `search` and `limit` query parameters; `search` is a case-insensitive substring matched against the table name, and `limit` caps how many tables are returned. `limit` must be a non-negative integer; the response carries no truncation flag, so request `limit + 1` to detect whether more tables exist
      */
     function getTables(
       conn: Connection,
       name: string,
-      options: object
+      params?: object
     ): Promise<HTTP.Body>;
 
     /**

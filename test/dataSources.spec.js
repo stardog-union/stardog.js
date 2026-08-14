@@ -171,6 +171,36 @@ describe('data_sources', () => {
           expect(res.status).toBe(200);
           expect(res.body).toMatchSnapshot();
         }));
+
+    // `search` and `limit` are ignored by servers that don't implement them,
+    // which would make a filtering assertion fail against a released Stardog.
+    // These only cover that the request is accepted and the shape is intact;
+    // the filtering semantics belong with the server that supports them.
+    it('accepts a search term', () =>
+      assureExists()
+        .then(() => dataSources.getTables(conn, aDSName, { search: 'test' }))
+        .then(res => {
+          expect(res.status).toBe(200);
+          expect(Array.isArray(res.body)).toBe(true);
+        }));
+
+    it('accepts a limit', () =>
+      assureExists()
+        .then(() => dataSources.getTables(conn, aDSName, { limit: 1 }))
+        .then(res => {
+          expect(res.status).toBe(200);
+          expect(res.body.length).toBeLessThanOrEqual(1);
+        }));
+
+    it('accepts a search term and a limit together', () =>
+      assureExists()
+        .then(() =>
+          dataSources.getTables(conn, aDSName, { search: 'test', limit: 1 })
+        )
+        .then(res => {
+          expect(res.status).toBe(200);
+          expect(res.body.length).toBeLessThanOrEqual(1);
+        }));
   });
 
   describe('getTableMetadata', () => {
