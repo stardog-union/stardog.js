@@ -2,9 +2,8 @@
 
 const { encodeQueryString } = require('../lib/utils');
 
-// The query string built for the data source `tables` request; the no-param
-// case must stay byte-identical to the URL built before `search` and `limit`
-// existed.
+// The helper itself; the URLs it is used to build are asserted in
+// `dataSources.spec.js`.
 describe('encodeQueryString', () => {
   it('produces no query string when no params are given', () => {
     expect(encodeQueryString({})).toBe('');
