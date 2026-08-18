@@ -221,13 +221,14 @@ describe('data_sources', () => {
           expect(res.body).toMatchSnapshot();
         }));
 
-    // `search` and `limit` are ignored by servers that don't implement them,
-    // which would make a filtering assertion fail against a released Stardog.
-    // These only cover that the request is accepted and the shape is intact;
-    // the filtering semantics belong with the server that supports them. Like
-    // the rest of this file, they only run once a real MySQL data source exists
-    // and the `.only` above is lifted — the params themselves are covered by
-    // `getTables request URL`.
+    // A server that doesn't implement `search` and `limit` ignores them and
+    // returns every table, so these assert only what holds either way: the
+    // request is accepted and the shape is intact. Asserting the cap or the
+    // filter here fails against such a server as soon as the data source has
+    // more than one table. The params themselves are covered by `getTables
+    // request URL`; the filtering semantics belong with the server that
+    // supports them. Like the rest of this file, these only run once a real
+    // MySQL data source exists and the `.only` above is lifted.
     it('accepts a search term', () =>
       assureExists()
         .then(() => dataSources.getTables(conn, aDSName, { search: 'test' }))
@@ -241,7 +242,7 @@ describe('data_sources', () => {
         .then(() => dataSources.getTables(conn, aDSName, { limit: 1 }))
         .then(res => {
           expect(res.status).toBe(200);
-          expect(res.body.length).toBeLessThanOrEqual(1);
+          expect(Array.isArray(res.body)).toBe(true);
         }));
 
     it('accepts a search term and a limit together', () =>
@@ -251,7 +252,7 @@ describe('data_sources', () => {
         )
         .then(res => {
           expect(res.status).toBe(200);
-          expect(res.body.length).toBeLessThanOrEqual(1);
+          expect(Array.isArray(res.body)).toBe(true);
         }));
   });
 
