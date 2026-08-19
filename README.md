@@ -2486,7 +2486,7 @@ Expects the following parameters:
 
 Returns [`Promise<HTTP.Body>`](#body)
 
-#### <a name="gettables">`dataSources.getTables(conn, name, options)`</a>
+#### <a name="gettables">`dataSources.getTables(conn, name, params)`</a>
 
 Retrieve tables
 
@@ -2496,7 +2496,7 @@ Expects the following parameters:
 
 - name (`string`)
 
-- options (`object`)
+- params (`object`)
 
 Returns [`Promise<HTTP.Body>`](#body)
 

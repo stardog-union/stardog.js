@@ -1,5 +1,6 @@
 /* eslint-env jest */
 
+const { Connection } = require('../lib');
 const dataSources = require('../lib/dataSources');
 const { ConnectionFactory } = require('./setup-database');
 const snapshots = require('./__snapshots__/dataSources.spec.js.snap');
@@ -67,6 +68,54 @@ describe('data_sources', () => {
         expect(res.status).toBe(200);
         expect(Array.isArray(res.body.data_sources)).toBe(true);
       }));
+  });
+
+  // The `getTables` integration cases below can't tell a server that honors
+  // `search` and `limit` from one that ignores them, so the query string is
+  // asserted here against a stubbed fetch instead. Focused like `listInfo` so
+  // it runs without the MySQL data source the rest of this file needs.
+  // eslint-disable-next-line no-restricted-properties, jest/no-focused-tests
+  describe.only('getTables request URL', () => {
+    const stubConn = new Connection({
+      username: 'admin',
+      password: 'admin',
+      endpoint: 'http://localhost:5820',
+    });
+    const tablesUrl = `http://localhost:5820/admin/data_sources/${aDSName}/tables`;
+    let fetchSpy;
+
+    beforeEach(() => {
+      fetchSpy = jest.spyOn(global, 'fetch').mockResolvedValue({
+        status: 200,
+        ok: true,
+        headers: new Headers({ 'content-type': 'application/json' }),
+        json: () => Promise.resolve([]),
+      });
+    });
+
+    afterEach(() => {
+      fetchSpy.mockRestore();
+    });
+
+    it('requests the bare tables path when no params are given', () =>
+      dataSources.getTables(stubConn, aDSName).then(() => {
+        expect(fetchSpy).toHaveBeenCalledTimes(1);
+        expect(fetchSpy.mock.calls[0][0]).toBe(tablesUrl);
+      }));
+
+    it('requests the bare tables path when params are empty', () =>
+      dataSources.getTables(stubConn, aDSName, {}).then(() => {
+        expect(fetchSpy.mock.calls[0][0]).toBe(tablesUrl);
+      }));
+
+    it('appends search and limit to the tables path', () =>
+      dataSources
+        .getTables(stubConn, aDSName, { search: 'a b&c', limit: 1000 })
+        .then(() => {
+          expect(fetchSpy.mock.calls[0][0]).toBe(
+            `${tablesUrl}?search=a%20b%26c&limit=1000`
+          );
+        }));
   });
 
   describe('info', () => {
@@ -170,6 +219,40 @@ describe('data_sources', () => {
         .then(res => {
           expect(res.status).toBe(200);
           expect(res.body).toMatchSnapshot();
+        }));
+
+    // A server that doesn't implement `search` and `limit` ignores them and
+    // returns every table, so these assert only what holds either way: the
+    // request is accepted and the shape is intact. Asserting the cap or the
+    // filter here fails against such a server as soon as the data source has
+    // more than one table. The params themselves are covered by `getTables
+    // request URL`; the filtering semantics belong with the server that
+    // supports them. Like the rest of this file, these only run once a real
+    // MySQL data source exists and the `.only` above is lifted.
+    it('accepts a search term', () =>
+      assureExists()
+        .then(() => dataSources.getTables(conn, aDSName, { search: 'test' }))
+        .then(res => {
+          expect(res.status).toBe(200);
+          expect(Array.isArray(res.body)).toBe(true);
+        }));
+
+    it('accepts a limit', () =>
+      assureExists()
+        .then(() => dataSources.getTables(conn, aDSName, { limit: 1 }))
+        .then(res => {
+          expect(res.status).toBe(200);
+          expect(Array.isArray(res.body)).toBe(true);
+        }));
+
+    it('accepts a search term and a limit together', () =>
+      assureExists()
+        .then(() =>
+          dataSources.getTables(conn, aDSName, { search: 'test', limit: 1 })
+        )
+        .then(res => {
+          expect(res.status).toBe(200);
+          expect(Array.isArray(res.body)).toBe(true);
         }));
   });
 
